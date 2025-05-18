@@ -1,74 +1,106 @@
 package dev.slne.surf.friends.api
 
-import dev.slne.surf.friends.api.user.FriendUser
+import dev.slne.surf.friends.api.model.FriendRequest
+import dev.slne.surf.friends.api.model.FriendShip
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.UUID
 
 interface SurfFriendsApi {
     /**
-     * Sends a friend request from the sender to the target user.
+     * Creates a friendship between two users.
      *
-     * @param sender The user sending the friend request.
-     * @param target The user receiving the friend request.
+     * @param uuid The UUID of the first user.
+     * @param friend The UUID of the friend.
+     * @return The created FriendShip object.
      */
-    suspend fun sendFriendRequest(sender: FriendUser, target: FriendUser)
+    suspend fun createFriendShip(uuid: UUID, friend: UUID): FriendShip
 
     /**
-     * Accepts a friend request from the sender to the target user.
+     * Removes a friendship between two users.
      *
-     * @param sender The user whose friend request is being accepted.
-     * @param target The user accepting the friend request.
+     * @param uuid The UUID of the first user.
+     * @param friend The UUID of the friend.
      */
-    suspend fun acceptFriendRequest(sender: FriendUser, target: FriendUser)
+    suspend fun removeFriendShip(uuid: UUID, friend: UUID)
 
     /**
-     * Declines a friend request from the sender to the target user.
+     * Retrieves all friendships of a user.
      *
-     * @param sender The user whose friend request is being declined.
-     * @param target The user declining the friend request.
+     * @param uuid The UUID of the user.
+     * @return A set of FriendShips representing the user's friends.
      */
-    suspend fun declineFriendRequest(sender: FriendUser, target: FriendUser)
-
-    suspend fun revokeFriendRequest(player: FriendUser, sender: FriendUser)
+    suspend fun getFriendShips(uuid: UUID): ObjectSet<FriendShip>
 
     /**
-     * Creates a friendship between the player and the friend.
+     * Sends a friend request from one user to another.
      *
-     * @param player The user adding a friend.
-     * @param friend The user being added as a friend.
+     * @param sender The UUID of the sender.
+     * @param receiver The UUID of the receiver.
+     * @return The created FriendRequest object.
      */
-    suspend fun createFriendShip(player: FriendUser, friend: FriendUser)
+    suspend fun sendFriendRequest(sender: UUID, receiver: UUID): FriendRequest
 
     /**
-     * Removes a friend from the player's friend list.
+     * Accepts a friend request.
      *
-     * @param player The user removing a friend.
-     * @param friend The user being removed as a friend.
+     * @param sender The UUID of the sender of the request.
+     * @param receiver The UUID of the receiver of the request.
      */
-    suspend fun removeFriend(player: FriendUser, friend: FriendUser)
+    suspend fun acceptFriendRequest(sender: UUID, receiver: UUID)
 
     /**
-     * Retrieves the list of friends for the specified player.
+     * Declines a friend request.
      *
-     * @param player The user whose friends are being retrieved.
-     *
-     * @return The list of friends for the specified player.
+     * @param sender The UUID of the sender of the request.
+     * @param receiver The UUID of the receiver of the request.
      */
-    suspend fun getFriends(player: FriendUser): ObjectSet<UUID>
+    suspend fun declineFriendRequest(sender: UUID, receiver: UUID)
 
     /**
-     * Toggles the announcement settings for the specified player.
+     * Revokes a sent friend request.
      *
-     * @param player The user toggling announcements.
-     * @return The new announcement setting for the player.
+     * @param sender The UUID of the sender of the request.
+     * @param receiver The UUID of the receiver of the request.
      */
-    suspend fun toggleAnnouncements(player: FriendUser): Boolean
+    suspend fun revokeFriendRequest(sender: UUID, receiver: UUID)
 
     /**
-     * Toggles the announcement sound settings for the specified player.
+     * Retrieves all sent friend requests of a user.
      *
-     * @param player The user toggling announcement sounds.
-     * @return The new announcement sound setting for the player.
+     * @param uuid The UUID of the user.
+     * @return A set of FriendRequests representing the recipients of the sent requests.
      */
-    suspend fun toggleAnnouncementSounds(player: FriendUser): Boolean
+    suspend fun getSentFriendRequests(uuid: UUID): ObjectSet<FriendRequest>
+
+    /**
+     * Retrieves all received friend requests of a user.
+     *
+     * @param uuid The UUID of the user.
+     * @return A set of FriendRequests representing the senders of the received requests.
+     */
+    suspend fun getReceivedFriendRequests(uuid: UUID): ObjectSet<FriendRequest>
+
+    /**
+     * Toggles announcements for a user.
+     *
+     * @param uuid The UUID of the user.
+     * @return The new status of announcements (true if enabled, false if disabled).
+     */
+    suspend fun toggleAnnouncements(uuid: UUID): Boolean
+
+    /**
+     * Toggles sounds for a user.
+     *
+     * @param uuid The UUID of the user.
+     * @return The new status of sounds (true if enabled, false if disabled).
+     */
+    suspend fun toggleSounds(uuid: UUID): Boolean
+
+    /**
+     * Retrieves the friend user object for a given UUID.
+     *
+     * @param uuid The UUID of the user.
+     * @return The FriendUser object representing the user.
+     */
+    suspend fun areFriends(uuid: UUID, friend: UUID): FriendShip
 }
