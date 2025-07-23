@@ -12,7 +12,7 @@ import dev.slne.surf.chat.bukkit.util.user
 import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 
 fun CommandAPICommand.settingsPingCommand() = subcommand("pings") {
-    withPermission(SurfChatPermissionRegistry.COMMAND_SETTINGS)
+    withPermission(SurfChatPermissionRegistry.COMMAND_SETTINGS_PING)
     niceToggleArgument("newValue", true)
 
     playerExecutor { player, args ->
