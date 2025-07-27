@@ -10,12 +10,15 @@ import dev.slne.surf.chat.core.Constants
 import dev.slne.surf.chat.core.DirectMessageUpdateType
 import dev.slne.surf.chat.velocity.command.argument.playerArgument
 import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
+import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
 private val channel = MinecraftChannelIdentifier.from(Constants.CHANNEL_DM)
+
+val latestDirectMessages = mutableObject2ObjectMapOf<UUID, UUID>()
 
 fun directMessageCommand() = commandAPICommand("msg") {
     withAliases("dm", "w", "whisper", "tell")
@@ -51,6 +54,8 @@ fun directMessageCommand() = commandAPICommand("msg") {
                 }
             }
         }
+
+        latestDirectMessages[target.uniqueId] = player.uniqueId
 
         senderServer.sendPluginMessage(
             channel,
