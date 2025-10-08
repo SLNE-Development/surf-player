@@ -25,6 +25,7 @@ fun CommandAPICommand.denylistClearCommand() = subcommand("clear") {
                     clickEvent(ClickEvent.callback {
                         plugin.launch {
                             denylistService.clearEntries()
+                            denylistService.clearLocalEntries()
                             executor.sendText {
                                 appendPrefix()
                                 success("Die Denylist wurde geleert.")
