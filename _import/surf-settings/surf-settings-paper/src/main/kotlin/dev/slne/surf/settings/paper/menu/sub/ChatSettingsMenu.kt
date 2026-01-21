@@ -14,10 +14,13 @@ import dev.slne.surf.surfapi.bukkit.api.builder.displayName
 import dev.slne.surf.surfapi.bukkit.api.inventory.dsl.menu
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
+import dev.slne.surf.surfapi.core.api.messages.adventure.playSound
+import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 import dev.slne.surf.surfapi.core.api.messages.builder.SurfComponentBuilder
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.entity.HumanEntity
 
 // TODO: Settings Menu
@@ -56,12 +59,26 @@ fun openChatSettingsMenu(player: HumanEntity) =
             ToggleButton(
                 2, 2, 1, 1, chatPingsEnabled
             ).apply {
-                setDisabledItem(GuiItem(chatPingItem(false)) {
+                setDisabledItem(GuiItem(chatPingsItem(false)) {
                     chatPingsEnabled = true
+                    it.whoClicked.sendText {
+                        appendPrefix()
+                        success("Du hast Chat Pings nun ")
+                        variableValue("aktiviert")
+                        success(".")
+                    }
+                    it.whoClicked.playClickSound()
                 })
 
-                setEnabledItem(GuiItem(chatPingItem(true)) {
+                setEnabledItem(GuiItem(chatPingsItem(true)) {
                     chatPingsEnabled = false
+                    it.whoClicked.sendText {
+                        appendPrefix()
+                        success("Du hast Chat Pings nun ")
+                        variableValue("deaktiviert")
+                        success(".")
+                    }
+                    it.whoClicked.playClickSound()
                 })
             })
 
@@ -71,10 +88,25 @@ fun openChatSettingsMenu(player: HumanEntity) =
             ).apply {
                 setDisabledItem(GuiItem(directMessagesItem(false)) {
                     directMessagesEnabled = true
+                    it.whoClicked.sendText {
+                        appendPrefix()
+                        success("Du hast Direktnachrichten nun ")
+                        variableValue("aktiviert")
+                        success(".")
+                    }
+                    it.whoClicked.playClickSound()
                 })
 
                 setEnabledItem(GuiItem(directMessagesItem(true)) {
                     directMessagesEnabled = false
+
+                    it.whoClicked.sendText {
+                        appendPrefix()
+                        success("Du hast Direktnachrichten nun ")
+                        variableValue("deaktiviert")
+                        success(".")
+                    }
+                    it.whoClicked.playClickSound()
                 })
             })
 
@@ -96,7 +128,13 @@ fun openChatSettingsMenu(player: HumanEntity) =
         }
     }
 
-private fun chatPingItem(currentState: Boolean) = buildItem(Material.BELL) {
+private fun HumanEntity.playClickSound() {
+    this.playSound(true) {
+        type(Sound.UI_BUTTON_CLICK)
+    }
+}
+
+private fun chatPingsItem(currentState: Boolean) = buildItem(Material.BELL) {
     displayName {
         localColored("Chat Pings".toSmallCaps(), TextDecoration.BOLD)
     }
