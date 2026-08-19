@@ -1,33 +1,20 @@
 package dev.slne.surf.tab.paper.command
 
-import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
-import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.tab.paper.plugin
-import dev.slne.surf.tab.paper.service.tablistService
-import dev.slne.surf.tab.paper.tablistConfiguration
-import org.bukkit.Bukkit
+import dev.slne.surf.tab.core.client.command.reloadTablist
+import dev.slne.surf.tab.core.client.command.sendTablistReloaded
+import dev.slne.surf.tab.core.client.permission.TabPermissions
 
 fun surfTabCommand() = commandTree("surftab") {
-    withPermission("surf.tab.command.surftab")
+    withPermission(TabPermissions.COMMAND_SURFTAB)
 
     literalArgument("reload") {
         anyExecutor { executor, _ ->
-            tablistConfiguration.reload()
+            reloadTablist()
 
-            plugin.launch {
-                Bukkit.getOnlinePlayers().forEach {
-                    tablistService.sendAdditions(it)
-                    tablistService.formatPlayer(it)
-                }
-            }
-
-            executor.sendText {
-                appendSuccessPrefix()
-                success("Die Tablist wurde neu geladen.")
-            }
+            executor.sendTablistReloaded()
         }
     }
 }
