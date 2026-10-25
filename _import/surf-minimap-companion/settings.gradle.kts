@@ -2,6 +2,7 @@ rootProject.name = "surf-minimap-companion"
 
 include("surf-minimap-companion-api")
 include("surf-minimap-companion-core")
+include("surf-minimap-companion-paper")
 
 pluginManagement {
     repositories {
