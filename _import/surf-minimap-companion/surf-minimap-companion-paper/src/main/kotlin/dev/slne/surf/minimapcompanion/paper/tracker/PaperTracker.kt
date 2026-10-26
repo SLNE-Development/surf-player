@@ -40,6 +40,7 @@ object PaperTracker {
     /**
      * Reads the tracker config and starts refreshing the relations of the enabled sources.
      * Called again on reload; players stop or start seeing each other on their next tick.
+     * Sources still enabled keep their relations, so their players stay on the map meanwhile.
      */
     fun configure() {
         val config = CompanionConfig.getConfig().tracker
@@ -56,10 +57,14 @@ object PaperTracker {
 
         relationRefresh?.cancel()
         relationRefresh = null
+        val previous = relations
         relations = null
 
         if (sources.isNotEmpty()) {
-            val relations = TrackerRelations(sources)
+            val relations = TrackerRelations(sources, previous)
+            for (player in Bukkit.getOnlinePlayers()) {
+                relations.add(player.uniqueId)
+            }
             this.relations = relations
 
             relationRefresh = plugin.launch(plugin.asyncDispatcher) {
@@ -91,6 +96,7 @@ object PaperTracker {
      */
     fun track(player: Player) {
         relations?.let { relations ->
+            relations.add(player.uniqueId)
             plugin.launch(plugin.asyncDispatcher) { relations.refresh(listOf(player.uniqueId)) }
         }
 
