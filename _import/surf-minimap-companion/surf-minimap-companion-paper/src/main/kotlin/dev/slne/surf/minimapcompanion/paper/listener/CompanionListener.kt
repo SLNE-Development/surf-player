@@ -5,6 +5,7 @@ import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.plugin
+import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -24,13 +25,18 @@ object CompanionListener : Listener {
 
         // The event can fire off the player's region thread, so read the world on it.
         val player = event.player
-        player.scheduler.run(plugin, { XaeroSyncService.sync(PaperCompanionPlayer(player), listOf(channel)) }, null)
+        player.scheduler.run(plugin, {
+            if (XaeroChannels.isMap(channel)) PaperTracker.reset(player)
+            XaeroSyncService.sync(PaperCompanionPlayer(player), listOf(channel))
+        }, null)
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
         XaeroSyncService.sync(PaperCompanionPlayer(player))
+        PaperTracker.reset(player)
+        PaperTracker.track(player)
 
         for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
             val ticks = delay.inWholeMilliseconds / 50
@@ -48,5 +54,6 @@ object CompanionListener : Listener {
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
         XaeroSyncService.forget(event.player.uniqueId)
+        PaperTracker.forget(event.player)
     }
 }

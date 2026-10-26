@@ -7,6 +7,7 @@ import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.paper.listener.CompanionListener
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
+import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)
@@ -21,9 +22,14 @@ class PaperMain : SuspendingJavaPlugin() {
         }
 
         CompanionListener.register()
+        PaperTracker.start()
 
         for (player in server.onlinePlayers) {
-            player.scheduler.run(this, { XaeroSyncService.sync(PaperCompanionPlayer(player)) }, null)
+            player.scheduler.run(this, {
+                XaeroSyncService.sync(PaperCompanionPlayer(player))
+                PaperTracker.reset(player)
+            }, null)
+            PaperTracker.track(player)
         }
     }
 

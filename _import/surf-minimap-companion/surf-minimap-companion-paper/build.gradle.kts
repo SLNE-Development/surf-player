@@ -1,3 +1,5 @@
+import dev.slne.surf.api.gradle.util.registerSoft
+
 plugins {
     id("dev.slne.surf.api.gradle.paper-plugin")
 }
@@ -7,8 +9,15 @@ surfPaperPluginApi {
     authors.add("Keviro")
     foliaSupported(true)
     generateLibraryLoader(false)
+
+    serverDependencies {
+        registerSoft("surf-friends-paper")
+        registerSoft("surf-clan-paper")
+    }
 }
 
 dependencies {
     api(projects.surfMinimapCompanionCore)
+    compileOnly("dev.slne.surf.friends:surf-friends-api:+")
+    compileOnly("dev.slne.surf.clan:surf-clan-api:+")
 }
