@@ -7,6 +7,8 @@ import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
+import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects
 import dev.slne.surf.minimapcompanion.minestom.platform.MinestomCompanionPlayer
@@ -34,8 +36,8 @@ object CompanionListener : EventRegistrar {
             val player = event.player
 
             if (event.identifier != REGISTER_CHANNEL) {
-                // JourneyMap's requests for its permissions and world ID.
-                if (!JourneyMapChannels.isJourneyMap(event.identifier)) return@addListener
+                // JourneyMap's requests for its permissions, and the world ID JourneyMap and VoxelMap ask for.
+                if (event.identifier != WorldInfo.CHANNEL && !JourneyMapChannels.isJourneyMap(event.identifier)) return@addListener
                 val instance = player.instance ?: return@addListener
                 MapSyncService.answer(MinestomCompanionPlayer(player, instance), event.identifier)
                 return@addListener
@@ -45,7 +47,9 @@ object CompanionListener : EventRegistrar {
             RegisteredChannels.register(player.uuid, channels)
 
             val instance = player.instance ?: return@addListener
-            val modChannels = channels.filter { XaeroChannels.isXaero(it) || JourneyMapChannels.isJourneyMap(it) }
+            val modChannels = channels.filter {
+                XaeroChannels.isXaero(it) || JourneyMapChannels.isJourneyMap(it) || VoxelMapChannels.isVoxelMap(it)
+            }
             if (modChannels.isNotEmpty()) {
                 val companionPlayer = MinestomCompanionPlayer(player, instance)
                 if (modChannels.any(XaeroChannels::isMap)) tracker.reset(companionPlayer)
@@ -62,7 +66,9 @@ object CompanionListener : EventRegistrar {
             if (event.isFirstSpawn) {
                 player.sendPluginMessage(
                     REGISTER_CHANNEL,
-                    RegisteredChannels.registerPayload(XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED),
+                    RegisteredChannels.registerPayload(
+                        XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED + VoxelMapChannels.SETTINGS
+                    ),
                 )
             }
 

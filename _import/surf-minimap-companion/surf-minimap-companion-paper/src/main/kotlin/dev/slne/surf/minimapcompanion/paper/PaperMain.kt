@@ -5,6 +5,7 @@ import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.paper.command.minimapCompanionCommand
 import dev.slne.surf.minimapcompanion.paper.listener.CompanionListener
@@ -25,13 +26,18 @@ class PaperMain : SuspendingJavaPlugin() {
             server.messenger.registerIncomingPluginChannel(this, channel) { _, _, _ -> }
         }
 
-        // JourneyMap's client only sends its requests on channels the server announced.
+        // JourneyMap's client only sends its requests on channels the server announced, and VoxelMap's only asks
+        // for the world ID on the shared channel among them.
         for (channel in JourneyMapChannels.ANNOUNCED) {
             server.messenger.registerOutgoingPluginChannel(this, channel)
             server.messenger.registerIncomingPluginChannel(this, channel) { _, player, _ ->
                 player.scheduler.run(this, { MapSyncService.answer(PaperCompanionPlayer(player), channel) }, null)
             }
         }
+
+        // VoxelMap's server part only sends on its channel; announcing it costs nothing.
+        server.messenger.registerOutgoingPluginChannel(this, VoxelMapChannels.SETTINGS)
+        server.messenger.registerIncomingPluginChannel(this, VoxelMapChannels.SETTINGS) { _, _, _ -> }
 
         CompanionListener.register()
         PaperTracker.configure()

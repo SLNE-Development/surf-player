@@ -6,6 +6,7 @@ import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
@@ -26,7 +27,9 @@ object CompanionListener : Listener {
     @EventHandler
     fun onRegisterChannel(event: PlayerRegisterChannelEvent) {
         val channel = event.channel
-        if (!XaeroChannels.isXaero(channel) && !JourneyMapChannels.isJourneyMap(channel)) return
+        if (!XaeroChannels.isXaero(channel) && !JourneyMapChannels.isJourneyMap(channel) && !VoxelMapChannels.isVoxelMap(channel)) {
+            return
+        }
 
         // The event can fire off the player's region thread, so read the world on it.
         val player = event.player

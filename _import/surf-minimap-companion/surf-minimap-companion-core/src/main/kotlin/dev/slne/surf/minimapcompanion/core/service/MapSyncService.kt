@@ -5,6 +5,8 @@ import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapSyncService
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import dev.slne.surf.minimapcompanion.core.platform.MinimapCompanionPlatform
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapSyncService
 import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import java.util.*
@@ -24,10 +26,12 @@ object MapSyncService {
         config: MinimapCompanionConfig = CompanionConfig.getConfig(),
         xaero: XaeroConfig = CompanionXaeroConfig.getConfig(),
         journeyMap: JourneyMapConfig = CompanionJourneyMapConfig.getConfig(),
+        voxelMap: VoxelMapConfig = CompanionVoxelMapConfig.getConfig(),
         tracksPlayers: Boolean = MinimapCompanionPlatform.tracksPlayers,
     ) {
         XaeroSyncService.sync(player, XaeroChannels.ALL, config, xaero)
         JourneyMapSyncService.sync(player, config, journeyMap, playerRadar(config, tracksPlayers))
+        VoxelMapSyncService.sync(player, config, voxelMap)
     }
 
     /**
@@ -39,6 +43,7 @@ object MapSyncService {
         config: MinimapCompanionConfig = CompanionConfig.getConfig(),
         xaero: XaeroConfig = CompanionXaeroConfig.getConfig(),
         journeyMap: JourneyMapConfig = CompanionJourneyMapConfig.getConfig(),
+        voxelMap: VoxelMapConfig = CompanionVoxelMapConfig.getConfig(),
         tracksPlayers: Boolean = MinimapCompanionPlatform.tracksPlayers,
     ) {
         val xaeroChannels = channels.filter(XaeroChannels::isXaero)
@@ -47,6 +52,9 @@ object MapSyncService {
         }
         if (JourneyMapChannels.PERMISSIONS in channels) {
             JourneyMapSyncService.sync(player, config, journeyMap, playerRadar(config, tracksPlayers))
+        }
+        if (VoxelMapChannels.SETTINGS in channels) {
+            VoxelMapSyncService.sync(player, config, voxelMap)
         }
     }
 

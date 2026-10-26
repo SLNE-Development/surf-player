@@ -30,6 +30,7 @@ fun minimapCompanionCommand() = commandTree("minimapcompanion") {
                             config = result.config,
                             xaero = result.xaero,
                             journeyMap = result.journeyMap,
+                            voxelMap = result.voxelMap,
                         )
                     }, null)
                 }
