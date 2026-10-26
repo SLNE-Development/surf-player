@@ -79,6 +79,16 @@ class XaeroServerProfileTest {
     }
 
     @Test
+    fun `profile of a config remembers its warnings`() {
+        val config = MinimapCompanionConfig(
+            enforcedOptions = EnforcedOptionsConfig(minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw("yes")))
+        )
+        val profile = XaeroServerProfile.of(config)
+        assertEquals(1, profile.warnings.size)
+        assertEquals(emptyMap(), profile.minimap.values)
+    }
+
+    @Test
     fun `profile of the same config is parsed once`() {
         val config = MinimapCompanionConfig()
         assertSame(XaeroServerProfile.of(config), XaeroServerProfile.of(config))

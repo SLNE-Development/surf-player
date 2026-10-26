@@ -8,8 +8,13 @@ import dev.slne.surf.minimapcompanion.core.xaero.option.WorldMapOptions
 
 /**
  * What this server enforces on Xaero's mods, like the enforced server profile of a server with the mods installed.
+ * [warnings] lists the configured options that are not sent, or sent unchecked.
  */
-data class XaeroServerProfile(val minimap: EnforcedOptions, val worldMap: EnforcedOptions) {
+data class XaeroServerProfile(
+    val minimap: EnforcedOptions,
+    val worldMap: EnforcedOptions,
+    val warnings: List<String> = emptyList(),
+) {
 
     fun minimapRules(): ByteArray {
         val (caveMode, netherCaveMode) = caveRules(minimap, "minimap_cave_mode_allowed", "minimap_cave_mode_allowed_dimensions")
@@ -52,10 +57,14 @@ data class XaeroServerProfile(val minimap: EnforcedOptions, val worldMap: Enforc
             cached?.let { (cachedConfig, profile) -> if (cachedConfig === config) return profile }
 
             val options = config.enforcedOptions
+            val warnings = mutableListOf<String>()
             val profile = parse(
                 options.minimap.mapValues { it.value.raw() },
                 options.worldMap.mapValues { it.value.raw() },
-            ) { log.atWarning().log("%s", it) }
+            ) { warning ->
+                warnings += warning
+                log.atWarning().log("%s", warning)
+            }.copy(warnings = warnings)
             cached = config to profile
             return profile
         }

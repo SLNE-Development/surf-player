@@ -10,6 +10,7 @@ import dev.slne.surf.minimapcompanion.core.tracker.TrackedPosition
 import dev.slne.surf.minimapcompanion.core.tracker.TrackerRelations
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.plugin
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.bukkit.Bukkit
@@ -28,16 +29,19 @@ object PaperTracker {
     private val log = logger()
     private val tracker = PlayerTracker()
 
+    @Volatile
     private var everyoneTracksEveryone = false
-    private var relations: TrackerRelations? = null
-    private var isVanished: ((Player) -> Boolean)? = null
 
-    private val active get() = everyoneTracksEveryone || relations != null
+    @Volatile
+    private var relations: TrackerRelations? = null
+    private var relationRefresh: Job? = null
+    private var isVanished: ((Player) -> Boolean)? = null
 
     /**
      * Reads the tracker config and starts refreshing the relations of the enabled sources.
+     * Called again on reload; players stop or start seeing each other on their next tick.
      */
-    fun start() {
+    fun configure() {
         val config = CompanionConfig.getConfig().tracker
         everyoneTracksEveryone = config.everyoneTracksEveryone
 
@@ -50,11 +54,15 @@ object PaperTracker {
             if (config.clanMembers) source("clan-members", "surf-clan-paper") { ClanRelationSource }?.let(::add)
         }
 
+        relationRefresh?.cancel()
+        relationRefresh = null
+        relations = null
+
         if (sources.isNotEmpty()) {
             val relations = TrackerRelations(sources)
             this.relations = relations
 
-            plugin.launch(plugin.asyncDispatcher) {
+            relationRefresh = plugin.launch(plugin.asyncDispatcher) {
                 while (isActive) {
                     relations.refresh(Bukkit.getOnlinePlayers().map { it.uniqueId })
                     delay(RELATION_REFRESH_INTERVAL)
@@ -78,11 +86,10 @@ object PaperTracker {
     }
 
     /**
-     * Starts syncing [player]'s position to others and the players they see to them.
+     * Starts syncing [player]'s position to others and the players they see to them. The task runs even
+     * while the tracker is off, so a reload can turn it on and off for players already online.
      */
     fun track(player: Player) {
-        if (!active) return
-
         relations?.let { relations ->
             plugin.launch(plugin.asyncDispatcher) { relations.refresh(listOf(player.uniqueId)) }
         }

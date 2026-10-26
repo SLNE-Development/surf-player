@@ -5,6 +5,7 @@ import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
+import dev.slne.surf.minimapcompanion.paper.command.minimapCompanionCommand
 import dev.slne.surf.minimapcompanion.paper.listener.CompanionListener
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
@@ -24,7 +25,8 @@ class PaperMain : SuspendingJavaPlugin() {
         }
 
         CompanionListener.register()
-        PaperTracker.start()
+        PaperTracker.configure()
+        minimapCompanionCommand()
 
         for (player in server.onlinePlayers) {
             player.scheduler.run(this, {
