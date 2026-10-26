@@ -1,0 +1,71 @@
+package dev.slne.surf.minimapcompanion.core.journeymap
+
+import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
+import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
+import dev.slne.surf.minimapcompanion.core.service.FakePlayer
+import kotlinx.serialization.json.JsonPrimitive
+import net.kyori.adventure.key.Key
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+
+class JourneyMapSyncServiceTest {
+    private val config = MinimapCompanionConfig()
+    private val journeyMap = JourneyMapConfig()
+
+    private val lobbyWorldId = JourneyMapChannels.WORLD_ID to JourneyMapPackets.worldId("829346366").toList()
+    private val defaultPermissions = JourneyMapChannels.PERMISSIONS to
+        JourneyMapPackets.permissions(JourneyMapPermissions.json(JourneyMapProfile(emptyMap()), false, false)).toList()
+
+    private fun lobbyPlayer() = FakePlayer(
+        worldIdentity = "surf:space_lobby",
+        worldKey = Key.key("surf:space_lobby"),
+        channels = setOf(JourneyMapChannels.PERMISSIONS, JourneyMapChannels.WORLD_ID),
+    )
+
+    @Test
+    fun `sync sends the world id, then the permissions`() {
+        val player = lobbyPlayer()
+        JourneyMapSyncService.sync(player, config, journeyMap, playerRadar = false)
+        assertEquals(listOf(lobbyWorldId, defaultPermissions), player.sentContent)
+    }
+
+    @Test
+    fun `client without journeymap gets nothing`() {
+        val player = FakePlayer()
+        JourneyMapSyncService.sync(player, config, journeyMap, playerRadar = false)
+        JourneyMapSyncService.answer(player, JourneyMapChannels.PERMISSIONS, config, journeyMap, playerRadar = false)
+        assertEquals(emptyList(), player.sent)
+    }
+
+    @Test
+    fun `world id request is answered with the world id only`() {
+        val player = lobbyPlayer()
+        JourneyMapSyncService.answer(player, JourneyMapChannels.WORLD_ID, config, journeyMap, playerRadar = false)
+        assertEquals(listOf(lobbyWorldId), player.sentContent)
+    }
+
+    @Test
+    fun `permissions request is answered with world id and permissions`() {
+        val player = lobbyPlayer()
+        JourneyMapSyncService.answer(player, JourneyMapChannels.PERMISSIONS, config, journeyMap, playerRadar = false)
+        assertEquals(listOf(lobbyWorldId, defaultPermissions), player.sentContent)
+    }
+
+    @Test
+    fun `version handshake is never answered`() {
+        val player = lobbyPlayer()
+        JourneyMapSyncService.answer(player, JourneyMapChannels.VERSION, config, journeyMap, playerRadar = false)
+        assertEquals(emptyList(), player.sent)
+    }
+
+    @Test
+    fun `sync after disable-maps is turned off enables journeymap again`() {
+        val player = lobbyPlayer()
+        JourneyMapSyncService.sync(player, MinimapCompanionConfig(disableMaps = true), journeyMap, playerRadar = false)
+        JourneyMapSyncService.sync(player, config, journeyMap, playerRadar = false)
+
+        val (first, last) = player.sent.filter { it.first == JourneyMapChannels.PERMISSIONS }.map { permissionsJson(it.second) }
+        assertEquals(JsonPrimitive("false"), first["journeymapEnabled"])
+        assertEquals(JsonPrimitive("true"), last["journeymapEnabled"])
+    }
+}
