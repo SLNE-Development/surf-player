@@ -20,6 +20,14 @@ class RegisteredChannelsTest {
     }
 
     @Test
+    fun `register payload separates the channels with null bytes`() {
+        assertEquals(
+            "xaerolib:main\u0000xaerominimap:main",
+            RegisteredChannels.registerPayload(listOf("xaerolib:main", "xaerominimap:main")).toString(Charsets.UTF_8),
+        )
+    }
+
+    @Test
     fun `empty entries in the register payload are dropped`() {
         val payload = "\u0000xaerominimap:main\u0000".toByteArray(Charsets.UTF_8)
         assertEquals(listOf("xaerominimap:main"), RegisteredChannels.parseRegisterPayload(payload))

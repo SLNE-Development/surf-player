@@ -45,6 +45,12 @@ object CompanionListener : EventRegistrar {
         node.addListener<PlayerSpawnEvent> { event ->
             val player = event.player
             val companionPlayer = MinestomCompanionPlayer(player, event.instance)
+
+            // The mods answer the handshake, so announce the channels as a server with the mods does.
+            if (event.isFirstSpawn) {
+                player.sendPluginMessage(REGISTER_CHANNEL, RegisteredChannels.registerPayload(XaeroChannels.ALL))
+            }
+
             XaeroSyncService.sync(companionPlayer)
             if (!event.isFirstSpawn) return@addListener
 

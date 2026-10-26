@@ -16,6 +16,12 @@ object RegisteredChannels {
     fun parseRegisterPayload(payload: ByteArray): List<String> =
         payload.toString(Charsets.UTF_8).split('\u0000').filter { it.isNotEmpty() }
 
+    /**
+     * Builds the `minecraft:register` payload that announces [channels] to a client.
+     */
+    fun registerPayload(channels: Collection<String>): ByteArray =
+        channels.joinToString("\u0000").toByteArray(Charsets.UTF_8)
+
     fun register(playerUuid: UUID, channels: Collection<String>) {
         this.channels.computeIfAbsent(playerUuid) { ConcurrentHashMap.newKeySet() }.addAll(channels)
     }

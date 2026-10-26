@@ -19,6 +19,8 @@ class PaperMain : SuspendingJavaPlugin() {
 
         for (channel in XaeroChannels.ALL) {
             server.messenger.registerOutgoingPluginChannel(this, channel)
+            // The mods answer the handshake; registering the channels announces them, as a server with the mods does.
+            server.messenger.registerIncomingPluginChannel(this, channel) { _, _, _ -> }
         }
 
         CompanionListener.register()
@@ -35,5 +37,6 @@ class PaperMain : SuspendingJavaPlugin() {
 
     override fun onDisable() {
         server.messenger.unregisterOutgoingPluginChannel(this)
+        server.messenger.unregisterIncomingPluginChannel(this)
     }
 }
