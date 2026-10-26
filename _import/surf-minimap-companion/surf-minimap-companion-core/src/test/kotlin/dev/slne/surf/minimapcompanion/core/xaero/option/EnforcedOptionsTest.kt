@@ -85,6 +85,13 @@ class EnforcedOptionsTest {
     }
 
     @Test
+    fun `dimensions copied from a xaero config file keep their brackets`() {
+        val expected = setOf("minecraft:overworld", "minecraft:the_nether")
+        assertEquals(expected, parse("dims" to "[minecraft:overworld, minecraft:the_nether]").identifiers("dims"))
+        assertEquals(emptyList(), warnings)
+    }
+
+    @Test
     fun `dimension keys without namespace get the minecraft namespace`() {
         assertEquals(setOf("minecraft:overworld"), parse("dims" to listOf("overworld")).identifiers("dims"))
     }

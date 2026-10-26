@@ -31,8 +31,9 @@ enum class XaeroOptionType(val description: String) {
 
     private fun identifiers(value: Any): Set<String>? {
         val entries = when (value) {
-            // Xaero's own config files separate the keys with commas.
-            is String -> value.split(',').map(String::trim).filter(String::isNotEmpty)
+            // Xaero's own config files separate the keys with commas and wrap them in brackets.
+            is String -> value.trim().removeSurrounding("[", "]")
+                .split(',').map(String::trim).filter(String::isNotEmpty)
             is List<*> -> value.map { it as? String ?: return null }
             else -> return null
         }
