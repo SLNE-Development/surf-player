@@ -4,6 +4,8 @@ import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
+import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapPlayer
+import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapTracker
 import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
 import dev.slne.surf.minimapcompanion.core.tracker.RelationSource
 import dev.slne.surf.minimapcompanion.core.tracker.TrackedPosition
@@ -28,9 +30,14 @@ object PaperTracker {
 
     private val log = logger()
     private val tracker = PlayerTracker()
+    private val journeyMapTracker = JourneyMapTracker()
 
     @Volatile
     private var everyoneTracksEveryone = false
+
+    // JourneyMap shows only server-sent players while any switch is on, matching the permissions MapSyncService sends.
+    @Volatile
+    private var journeyMapRadar = false
 
     @Volatile
     private var relations: TrackerRelations? = null
@@ -45,6 +52,7 @@ object PaperTracker {
     fun configure() {
         val config = CompanionConfig.getConfig().tracker
         everyoneTracksEveryone = config.everyoneTracksEveryone
+        journeyMapRadar = config.isEnabled
 
         if (Bukkit.getPluginManager().isPluginEnabled("surf-vanish-paper")) {
             isVanished = VanishCheck::isVanished
@@ -105,15 +113,33 @@ object PaperTracker {
 
     private fun tick(player: Player) {
         val location = player.location
-        tracker.update(player.uniqueId, TrackedPosition(location.x, location.y, location.z, player.world.key.asString()))
-        tracker.tick(PaperCompanionPlayer(player)) { viewer, target -> isTracked(player, viewer, target) }
+        val world = player.world.key.asString()
+        tracker.update(player.uniqueId, TrackedPosition(location.x, location.y, location.z, world))
+        journeyMapTracker.update(
+            player.uniqueId,
+            JourneyMapPlayer(player.entityId, location.x, location.y, location.z, location.yaw, location.pitch, world),
+        )
+
+        val viewer = PaperCompanionPlayer(player)
+        tracker.tick(viewer) { viewerUuid, target -> isShownByTracker(viewerUuid, target) && isVisibleOnMap(player, target) }
+
+        if (journeyMapRadar) {
+            // JourneyMap then shows only the players listed here, so the ones the client sees itself stay visible too.
+            // Players track each other within the same range, so the players tracking the viewer are the ones the
+            // viewer's client sees, and they can be read on the viewer's own thread.
+            val seenByClient by lazy { player.trackedBy.mapTo(HashSet()) { it.uniqueId } }
+            journeyMapTracker.tick(viewer) { target ->
+                isVisibleOnMap(player, target) && (isShownByTracker(player.uniqueId, target) || target in seenByClient)
+            }
+        }
     }
+
+    private fun isShownByTracker(viewer: UUID, target: UUID) =
+        everyoneTracksEveryone || relations?.isRelated(viewer, target) == true
 
     // Vanished players are never tracked: surf-vanish hides them from other players only a little
     // after they join. Players hidden from the viewer in any other way stay off the map too.
-    private fun isTracked(player: Player, viewer: UUID, target: UUID): Boolean {
-        if (!everyoneTracksEveryone && relations?.isRelated(viewer, target) != true) return false
-
+    private fun isVisibleOnMap(player: Player, target: UUID): Boolean {
         val targetPlayer = Bukkit.getPlayer(target) ?: return false
         if (isVanished?.invoke(targetPlayer) == true) return false
         return player.canSee(targetPlayer)
@@ -128,6 +154,7 @@ object PaperTracker {
 
     fun forget(player: Player) {
         tracker.forget(player.uniqueId)
+        journeyMapTracker.forget(player.uniqueId)
         relations?.forget(player.uniqueId)
     }
 }
