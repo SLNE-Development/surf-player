@@ -1,0 +1,14 @@
+package dev.slne.surf.minimapcompanion.core.config
+
+import org.spongepowered.configurate.ConfigurationNode
+import org.spongepowered.configurate.objectmapping.ConfigSerializable
+import org.spongepowered.configurate.objectmapping.meta.Comment
+
+/**
+ * What `voxelmap.yml` holds: the VoxelMap settings this server enforces.
+ */
+@ConfigSerializable
+data class VoxelMapConfig(
+    @param:Comment("Settings this server enforces on VoxelMap, by VoxelMap's key (for example cavesAllowed: false). voxelmap-options.md lists them all.")
+    val options: Map<String, ConfigurationNode> = emptyMap(),
+)

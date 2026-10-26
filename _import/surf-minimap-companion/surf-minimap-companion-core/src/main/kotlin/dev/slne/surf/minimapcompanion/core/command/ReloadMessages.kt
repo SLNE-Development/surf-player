@@ -23,7 +23,8 @@ fun Audience.sendReloadResult(result: ReloadResult) {
                 success("Die Konfiguration wurde neu geladen (${result.duration.inWholeMilliseconds}ms).")
             }
 
-            val warnings = result.profile.warnings.size + result.journeyMapProfile.warnings.size
+            val warnings = result.profile.warnings.size + result.journeyMapProfile.warnings.size +
+                result.voxelMapProfile.warnings.size
             if (warnings == 0) return
 
             sendText {

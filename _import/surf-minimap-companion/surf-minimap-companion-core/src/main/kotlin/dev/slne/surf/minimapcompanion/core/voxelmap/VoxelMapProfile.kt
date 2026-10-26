@@ -1,5 +1,8 @@
 package dev.slne.surf.minimapcompanion.core.voxelmap
 
+import dev.slne.surf.api.core.util.logger
+import dev.slne.surf.minimapcompanion.core.config.VoxelMapConfig
+
 /**
  * What this server enforces on VoxelMap: `Boolean` values for the keys in [BOOLEANS] and a `String` for
  * [TELEPORT_COMMAND]. [warnings] lists the configured options that are not sent.
@@ -9,6 +12,8 @@ data class VoxelMapProfile(
     val warnings: List<String> = emptyList(),
 ) {
     companion object {
+        private val log = logger()
+
         /**
          * VoxelMap's switches, in the order its server part sends them. VoxelMap allows all of them by default.
          */
@@ -27,6 +32,24 @@ data class VoxelMapProfile(
 
         // serverIdentity would move the client's map data; the sub-world comes from the world ID instead of worldName.
         private val COMPANION_OWNED = setOf("serverIdentity", "worldName")
+
+        @Volatile
+        private var cached: Pair<VoxelMapConfig, VoxelMapProfile>? = null
+
+        /**
+         * Returns the profile [config] describes. Each config instance is parsed once, so its warnings are logged once.
+         */
+        fun of(config: VoxelMapConfig): VoxelMapProfile {
+            cached?.let { (cachedConfig, profile) -> if (cachedConfig === config) return profile }
+
+            val warnings = mutableListOf<String>()
+            val profile = parse(config.options.mapValues { it.value.raw() }) { warning ->
+                warnings += warning
+                log.atWarning().log("%s", warning)
+            }.copy(warnings = warnings)
+            cached = config to profile
+            return profile
+        }
 
         /**
          * Reads the options in [raw] as the config holds them. VoxelMap disconnects on a value of the wrong type

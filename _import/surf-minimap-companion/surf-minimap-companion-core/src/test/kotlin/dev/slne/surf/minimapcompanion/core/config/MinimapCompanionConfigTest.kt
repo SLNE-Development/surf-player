@@ -2,6 +2,7 @@ package dev.slne.surf.minimapcompanion.core.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapProfile
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapProfile
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -68,6 +69,32 @@ class MinimapCompanionConfigTest {
     fun `default journeymap yml writes an empty option map`(@TempDir folder: Path) {
         SpongeConfigManager.yaml(JourneyMapConfig::class.java, folder, "journeymap.yml")
         val written = folder.resolve("journeymap.yml").readText()
+
+        assertTrue("options: {}" in written, written)
+    }
+
+    @Test
+    fun `voxelmap options load from voxelmap yml`(@TempDir folder: Path) {
+        folder.resolve("voxelmap.yml").writeText(
+            """
+            options:
+              cavesAllowed: false
+              teleportCommand: "tp %p %x %y %z"
+            """.trimIndent()
+        )
+
+        val config = SpongeConfigManager.yaml(VoxelMapConfig::class.java, folder, "voxelmap.yml").config
+
+        assertEquals(
+            mapOf<String, Any>("cavesAllowed" to false, "teleportCommand" to "tp %p %x %y %z"),
+            VoxelMapProfile.of(config).values,
+        )
+    }
+
+    @Test
+    fun `default voxelmap yml writes an empty option map`(@TempDir folder: Path) {
+        SpongeConfigManager.yaml(VoxelMapConfig::class.java, folder, "voxelmap.yml")
+        val written = folder.resolve("voxelmap.yml").readText()
 
         assertTrue("options: {}" in written, written)
     }

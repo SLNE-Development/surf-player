@@ -2,6 +2,7 @@ package dev.slne.surf.minimapcompanion.core.config
 
 import dev.slne.surf.api.core.config.SpongeConfigClass
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapProfile
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapProfile
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
 import java.io.UncheckedIOException
 import kotlin.time.Duration
@@ -21,8 +22,8 @@ private fun <C> SpongeConfigClass<C>.reloadable(fileName: String) =
     ReloadableConfig(fileName, ::reloadFromFile, ::getConfig) { manager.config = it }
 
 /**
- * Loads the companion's config files: `config.yml` for every map mod, `xaero.yml` for Xaero's mods and
- * `journeymap.yml` for JourneyMap.
+ * Loads the companion's config files: `config.yml` for every map mod, `xaero.yml` for Xaero's mods,
+ * `journeymap.yml` for JourneyMap and `voxelmap.yml` for VoxelMap.
  */
 object CompanionConfigs {
 
@@ -35,6 +36,8 @@ object CompanionConfigs {
             val profile: XaeroServerProfile,
             val journeyMap: JourneyMapConfig,
             val journeyMapProfile: JourneyMapProfile,
+            val voxelMap: VoxelMapConfig,
+            val voxelMapProfile: VoxelMapProfile,
             override val duration: Duration,
         ) : ReloadResult
 
@@ -51,8 +54,10 @@ object CompanionConfigs {
         CompanionConfig.init()
         CompanionXaeroConfig.init()
         CompanionJourneyMapConfig.init()
+        CompanionVoxelMapConfig.init()
         XaeroServerProfile.of(CompanionXaeroConfig.getConfig())
         JourneyMapProfile.of(CompanionJourneyMapConfig.getConfig())
+        VoxelMapProfile.of(CompanionVoxelMapConfig.getConfig())
     }
 
     /**
@@ -63,6 +68,7 @@ object CompanionConfigs {
         main: ReloadableConfig<MinimapCompanionConfig> = CompanionConfig.reloadable("config.yml"),
         xaero: ReloadableConfig<XaeroConfig> = CompanionXaeroConfig.reloadable("xaero.yml"),
         journeyMap: ReloadableConfig<JourneyMapConfig> = CompanionJourneyMapConfig.reloadable("journeymap.yml"),
+        voxelMap: ReloadableConfig<VoxelMapConfig> = CompanionVoxelMapConfig.reloadable("voxelmap.yml"),
     ): ReloadResult {
         val start = TimeSource.Monotonic.markNow()
         val reload = FileReload()
@@ -71,12 +77,15 @@ object CompanionConfigs {
             val config = reload.load(main)
             val xaeroConfig = reload.load(xaero)
             val journeyMapConfig = reload.load(journeyMap)
+            val voxelMapConfig = reload.load(voxelMap)
             ReloadResult.Reloaded(
                 config,
                 xaeroConfig,
                 XaeroServerProfile.of(xaeroConfig),
                 journeyMapConfig,
                 JourneyMapProfile.of(journeyMapConfig),
+                voxelMapConfig,
+                VoxelMapProfile.of(voxelMapConfig),
                 start.elapsedNow(),
             )
         } catch (e: FileFailed) {

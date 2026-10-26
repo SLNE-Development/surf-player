@@ -29,3 +29,12 @@ object CompanionJourneyMapConfig : SpongeYmlConfigClass<JourneyMapConfig>(
     MinimapCompanionPlatform.dataPath,
     "journeymap.yml"
 )
+
+/**
+ * Loads [VoxelMapConfig] from `voxelmap.yml` in the plugin's data directory.
+ */
+object CompanionVoxelMapConfig : SpongeYmlConfigClass<VoxelMapConfig>(
+    VoxelMapConfig::class.java,
+    MinimapCompanionPlatform.dataPath,
+    "voxelmap.yml"
+)
