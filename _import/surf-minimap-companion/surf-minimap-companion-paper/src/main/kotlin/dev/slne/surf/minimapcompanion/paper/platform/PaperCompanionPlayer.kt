@@ -21,4 +21,10 @@ class PaperCompanionPlayer(
     override fun sendPluginMessage(channel: String, payload: ByteArray) {
         player.sendPluginMessage(plugin, channel, payload)
     }
+
+    override val vanillaEffectCount get() = PaperClientEffects.vanillaEffectCount(player)
+
+    override fun addClientEffect(networkId: Int) = PaperClientEffects.add(player, networkId)
+
+    override fun removeClientEffect(networkId: Int) = PaperClientEffects.remove(player, networkId)
 }

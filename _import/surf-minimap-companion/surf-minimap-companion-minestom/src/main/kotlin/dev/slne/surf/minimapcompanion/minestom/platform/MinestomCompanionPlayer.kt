@@ -23,4 +23,10 @@ class MinestomCompanionPlayer(
             player.sendPluginMessage(channel, payload)
         }
     }
+
+    override val vanillaEffectCount get() = MinestomClientEffects.vanillaEffectCount
+
+    override fun addClientEffect(networkId: Int) = MinestomClientEffects.add(player, networkId)
+
+    override fun removeClientEffect(networkId: Int) = MinestomClientEffects.remove(player, networkId)
 }

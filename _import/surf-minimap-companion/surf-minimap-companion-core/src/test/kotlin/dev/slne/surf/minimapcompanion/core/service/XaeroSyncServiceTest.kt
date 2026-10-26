@@ -128,6 +128,20 @@ class XaeroSyncServiceTest {
     }
 
     @Test
+    fun `sync hides the maps while disable-maps is on`() {
+        val player = lobbyPlayer()
+        sync(player, config = MinimapCompanionConfig(disableMaps = true))
+        assertEquals(setOf(40, 48), player.addedEffects.toSet())
+    }
+
+    @Test
+    fun `sync leaves the maps alone by default`() {
+        val player = lobbyPlayer()
+        sync(player)
+        assertEquals(emptyList(), player.addedEffects)
+    }
+
+    @Test
     fun `forget removes the last sent level id`() {
         val player = FakePlayer()
         sync(player)

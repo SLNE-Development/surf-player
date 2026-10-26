@@ -25,4 +25,18 @@ interface CompanionPlayer {
     fun hasChannel(channel: String): Boolean
 
     fun sendPluginMessage(channel: String, payload: ByteArray)
+
+    /**
+     * How many status effects the client's Minecraft has, which is where the IDs of the effects mods add start,
+     * or `null` if the client may run another version than the server.
+     */
+    val vanillaEffectCount: Int?
+
+    /**
+     * Gives the client the status effect with [networkId] until [removeClientEffect], hidden from its HUD.
+     * Only the client knows the effect: it is for effects mods add, which the server has never heard of.
+     */
+    fun addClientEffect(networkId: Int)
+
+    fun removeClientEffect(networkId: Int)
 }

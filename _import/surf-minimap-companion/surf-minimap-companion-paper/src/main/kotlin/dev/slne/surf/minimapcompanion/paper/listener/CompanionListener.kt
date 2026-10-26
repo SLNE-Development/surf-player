@@ -1,8 +1,11 @@
 package dev.slne.surf.minimapcompanion.paper.listener
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
+import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.plugin
 import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
@@ -49,6 +52,12 @@ object CompanionListener : Listener {
     fun onAddToWorld(event: EntityAddToWorldEvent) {
         val player = event.entity as? Player ?: return
         XaeroSyncService.sync(PaperCompanionPlayer(player, event.world))
+    }
+
+    // The client drops every effect on respawn, so the maps would come back.
+    @EventHandler
+    fun onPostRespawn(event: PlayerPostRespawnEvent) {
+        XaeroMapEffects.sync(PaperCompanionPlayer(event.player), CompanionConfig.getConfig().disableMaps)
     }
 
     @EventHandler

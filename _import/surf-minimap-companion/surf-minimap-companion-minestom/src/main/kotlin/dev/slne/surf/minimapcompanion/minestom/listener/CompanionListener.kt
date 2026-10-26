@@ -2,15 +2,18 @@ package dev.slne.surf.minimapcompanion.minestom.listener
 
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
+import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects
 import dev.slne.surf.minimapcompanion.minestom.platform.MinestomCompanionPlayer
 import dev.slne.surf.minimapcompanion.minestom.platform.RegisteredChannels
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
 import net.minestom.server.event.player.PlayerDisconnectEvent
 import net.minestom.server.event.player.PlayerPluginMessageEvent
+import net.minestom.server.event.player.PlayerRespawnEvent
 import net.minestom.server.event.player.PlayerSpawnEvent
 import net.minestom.server.timer.TaskSchedule
 
@@ -62,6 +65,13 @@ object CompanionListener : EventRegistrar {
                     XaeroSyncService.sync(MinestomCompanionPlayer(player, instance))
                 }.delay(TaskSchedule.millis(delay.inWholeMilliseconds)).schedule()
             }
+        }
+
+        // The client drops every effect on respawn, and a respawn in the same instance fires no spawn event.
+        node.addListener<PlayerRespawnEvent> { event ->
+            val player = event.player
+            val instance = player.instance ?: return@addListener
+            XaeroMapEffects.sync(MinestomCompanionPlayer(player, instance), CompanionConfig.getConfig().disableMaps)
         }
 
         node.addListener<PlayerDisconnectEvent> { event ->

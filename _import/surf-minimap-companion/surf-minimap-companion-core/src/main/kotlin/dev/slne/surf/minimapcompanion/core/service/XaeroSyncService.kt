@@ -8,6 +8,7 @@ import dev.slne.surf.minimapcompanion.core.id.LevelIds
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroLibPackets
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroPackets
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
 import java.util.*
@@ -28,7 +29,8 @@ object XaeroSyncService {
 
     /**
      * Sends [player] the Xaero data of their current world on each of [channels]: handshake, rules and level ID
-     * on the map channels, then the enforced config through Xaero's Lib.
+     * on the map channels, then the enforced config through Xaero's Lib. While `disable-maps` is on, the maps
+     * are hidden too.
      */
     fun sync(
         player: CompanionPlayer,
@@ -55,6 +57,8 @@ object XaeroSyncService {
         if (mapChannels.isNotEmpty()) {
             lastSentLevelIds[player.uuid] = levelId
         }
+
+        XaeroMapEffects.sync(player, config.disableMaps)
     }
 
     // Resent on every world join: the client drops the enforced config whenever a new world
@@ -77,5 +81,6 @@ object XaeroSyncService {
 
     fun forget(playerUuid: UUID) {
         lastSentLevelIds.remove(playerUuid)
+        XaeroMapEffects.forget(playerUuid)
     }
 }
