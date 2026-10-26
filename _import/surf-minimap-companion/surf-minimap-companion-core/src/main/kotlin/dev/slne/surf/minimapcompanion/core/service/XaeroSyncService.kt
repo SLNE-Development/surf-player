@@ -37,7 +37,8 @@ object XaeroSyncService {
         val levelId = LevelIds.resolve(player.worldKey, player.worldIdentity, config)
         val levelIdPayload = XaeroPackets.levelId(levelId)
 
-        for (channel in channels.filter(XaeroChannels::isMap)) {
+        val mapChannels = channels.filter(XaeroChannels::isMap)
+        for (channel in mapChannels) {
             val rules = if (channel == XaeroChannels.MINIMAP) profile.minimapRules() else profile.worldMapRules()
             player.sendPluginMessage(channel, XaeroPackets.handshake())
             player.sendPluginMessage(channel, rules)
@@ -48,7 +49,9 @@ object XaeroSyncService {
             syncLib(player, profile)
         }
 
-        lastSentLevelIds[player.uuid] = levelId
+        if (mapChannels.isNotEmpty()) {
+            lastSentLevelIds[player.uuid] = levelId
+        }
     }
 
     // Resent on every world join: the client drops the enforced config whenever a new world

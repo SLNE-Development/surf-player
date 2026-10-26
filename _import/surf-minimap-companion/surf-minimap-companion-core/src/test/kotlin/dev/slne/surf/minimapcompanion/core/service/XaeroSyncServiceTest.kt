@@ -109,6 +109,13 @@ class XaeroSyncServiceTest {
     }
 
     @Test
+    fun `lib only sync sends no level id, so none is remembered`() {
+        val player = lobbyPlayer()
+        XaeroSyncService.sync(player, listOf(XaeroChannels.LIB), config)
+        assertNull(XaeroSyncService.lastSentLevelId(player.uuid))
+    }
+
+    @Test
     fun `sync uses the configured override for the world`() {
         val player = FakePlayer(worldKey = Key.key("minecraft:overworld"))
         XaeroSyncService.sync(player, config = MinimapCompanionConfig(worldIds = mapOf("minecraft:overworld" to 7)))
