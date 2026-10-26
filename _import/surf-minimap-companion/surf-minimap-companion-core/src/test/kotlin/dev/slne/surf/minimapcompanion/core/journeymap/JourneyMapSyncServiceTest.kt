@@ -3,6 +3,7 @@ package dev.slne.surf.minimapcompanion.core.journeymap
 import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.service.FakePlayer
+import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
 import kotlinx.serialization.json.JsonPrimitive
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test
@@ -12,14 +13,14 @@ class JourneyMapSyncServiceTest {
     private val config = MinimapCompanionConfig()
     private val journeyMap = JourneyMapConfig()
 
-    private val lobbyWorldId = JourneyMapChannels.WORLD_ID to JourneyMapPackets.worldId("829346366").toList()
+    private val lobbyWorldId = WorldInfo.CHANNEL to WorldInfo.payload("space_lobby-829346366").toList()
     private val defaultPermissions = JourneyMapChannels.PERMISSIONS to
         JourneyMapPackets.permissions(JourneyMapPermissions.json(JourneyMapProfile(emptyMap()), false, false)).toList()
 
     private fun lobbyPlayer() = FakePlayer(
         worldIdentity = "surf:space_lobby",
         worldKey = Key.key("surf:space_lobby"),
-        channels = setOf(JourneyMapChannels.PERMISSIONS, JourneyMapChannels.WORLD_ID),
+        channels = setOf(JourneyMapChannels.PERMISSIONS, WorldInfo.CHANNEL),
     )
 
     @Test
@@ -35,13 +36,6 @@ class JourneyMapSyncServiceTest {
         JourneyMapSyncService.sync(player, config, journeyMap, playerRadar = false)
         JourneyMapSyncService.answer(player, JourneyMapChannels.PERMISSIONS, config, journeyMap, playerRadar = false)
         assertEquals(emptyList(), player.sent)
-    }
-
-    @Test
-    fun `world id request is answered with the world id only`() {
-        val player = lobbyPlayer()
-        JourneyMapSyncService.answer(player, JourneyMapChannels.WORLD_ID, config, journeyMap, playerRadar = false)
-        assertEquals(listOf(lobbyWorldId), player.sentContent)
     }
 
     @Test

@@ -6,8 +6,10 @@ import dev.slne.surf.minimapcompanion.core.config.TrackerConfig
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.journeymap.permissionsJson
+import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import kotlinx.serialization.json.JsonPrimitive
+import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -31,7 +33,7 @@ class MapSyncServiceTest {
 
         val channels = player.sent.map { it.first }.toSet()
         assertTrue(
-            channels.containsAll(listOf(XaeroChannels.WORLD_MAP, XaeroChannels.LIB, JourneyMapChannels.WORLD_ID, JourneyMapChannels.PERMISSIONS)),
+            channels.containsAll(listOf(XaeroChannels.WORLD_MAP, XaeroChannels.LIB, WorldInfo.CHANNEL, JourneyMapChannels.PERMISSIONS)),
             channels.toString(),
         )
     }
@@ -57,7 +59,18 @@ class MapSyncServiceTest {
     fun `registering journeymap's permission channel syncs only journeymap`() {
         val player = player()
         MapSyncService.syncChannels(player, listOf(JourneyMapChannels.PERMISSIONS), MinimapCompanionConfig(), xaero, journeyMap, false)
-        assertEquals(setOf(JourneyMapChannels.WORLD_ID, JourneyMapChannels.PERMISSIONS), player.sent.map { it.first }.toSet())
+        assertEquals(setOf(WorldInfo.CHANNEL, JourneyMapChannels.PERMISSIONS), player.sent.map { it.first }.toSet())
+    }
+
+    @Test
+    fun `world id requests are answered for every client that asks`() {
+        val player = FakePlayer(
+            worldIdentity = "surf:space_lobby",
+            worldKey = Key.key("surf:space_lobby"),
+            channels = setOf(WorldInfo.CHANNEL),
+        )
+        MapSyncService.answer(player, WorldInfo.CHANNEL, MinimapCompanionConfig(), journeyMap, false)
+        assertEquals(listOf(WorldInfo.CHANNEL to WorldInfo.payload("space_lobby-829346366").toList()), player.sentContent)
     }
 
     @Test

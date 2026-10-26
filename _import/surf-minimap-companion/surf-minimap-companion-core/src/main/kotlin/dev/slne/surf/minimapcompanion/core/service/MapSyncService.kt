@@ -5,6 +5,7 @@ import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapSyncService
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import dev.slne.surf.minimapcompanion.core.platform.MinimapCompanionPlatform
+import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import java.util.*
 
@@ -50,7 +51,8 @@ object MapSyncService {
     }
 
     /**
-     * Answers a request the client sent on [channel].
+     * Answers a request the client sent on [channel]. World ID requests are answered for every client that asks,
+     * whichever mod sent them.
      */
     fun answer(
         player: CompanionPlayer,
@@ -59,6 +61,10 @@ object MapSyncService {
         journeyMap: JourneyMapConfig = CompanionJourneyMapConfig.getConfig(),
         tracksPlayers: Boolean = MinimapCompanionPlatform.tracksPlayers,
     ) {
+        if (channel == WorldInfo.CHANNEL) {
+            WorldInfo.send(player, config)
+            return
+        }
         JourneyMapSyncService.answer(player, channel, config, journeyMap, playerRadar(config, tracksPlayers))
     }
 

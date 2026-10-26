@@ -21,11 +21,6 @@ class JourneyMapPacketsTest {
     }
 
     @Test
-    fun `world id is marked and length prefixed`() {
-        assertContentEquals(bytes(0, 42, 9) + "829346366".toByteArray(), JourneyMapPackets.worldId("829346366"))
-    }
-
-    @Test
     fun `remove player writes the uuid`() {
         assertContentEquals(
             bytes(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16),

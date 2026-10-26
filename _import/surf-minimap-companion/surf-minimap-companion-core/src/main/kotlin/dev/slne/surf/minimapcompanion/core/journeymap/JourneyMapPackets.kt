@@ -36,12 +36,6 @@ object JourneyMapPackets {
         writeBoolean(false)
     }
 
-    fun worldId(id: String) = payload {
-        writeByte(0)
-        writeByte(MARKER)
-        writeUtf(id)
-    }
-
     /**
      * Lists [players] for the player radar; a `null` position lists the player as hidden.
      */
