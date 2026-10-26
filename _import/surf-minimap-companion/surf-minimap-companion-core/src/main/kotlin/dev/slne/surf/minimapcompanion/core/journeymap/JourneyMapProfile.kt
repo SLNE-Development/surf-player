@@ -1,5 +1,8 @@
 package dev.slne.surf.minimapcompanion.core.journeymap
 
+import dev.slne.surf.api.core.util.logger
+import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
+
 /**
  * What this server enforces on JourneyMap, as the strings JourneyMap's permissions JSON carries:
  * `true`/`false`, enum names and decimal integers. [warnings] lists the configured options that are
@@ -10,8 +13,28 @@ data class JourneyMapProfile(
     val warnings: List<String> = emptyList(),
 ) {
     companion object {
+        private val log = logger()
+
         private val SERVER_OPTIONS = setOf("ALL", "NONE")
         private val TELEPORT_OPTIONS = setOf("NONE", "ALL", "OPS", "WAYPOINT_ONLY", "GLOBAL_ONLY")
+
+        @Volatile
+        private var cached: Pair<JourneyMapConfig, JourneyMapProfile>? = null
+
+        /**
+         * Returns the profile [config] describes. Each config instance is parsed once, so its warnings are logged once.
+         */
+        fun of(config: JourneyMapConfig): JourneyMapProfile {
+            cached?.let { (cachedConfig, profile) -> if (cachedConfig === config) return profile }
+
+            val warnings = mutableListOf<String>()
+            val profile = parse(config.options.mapValues { it.value.raw() }) { warning ->
+                warnings += warning
+                log.atWarning().log("%s", warning)
+            }.copy(warnings = warnings)
+            cached = config to profile
+            return profile
+        }
 
         /**
          * Reads the options in [raw] as the config holds them. Known options are checked against what JourneyMap

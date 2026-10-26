@@ -20,3 +20,12 @@ object CompanionXaeroConfig : SpongeYmlConfigClass<XaeroConfig>(
     MinimapCompanionPlatform.dataPath,
     "xaero.yml"
 )
+
+/**
+ * Loads [JourneyMapConfig] from `journeymap.yml` in the plugin's data directory.
+ */
+object CompanionJourneyMapConfig : SpongeYmlConfigClass<JourneyMapConfig>(
+    JourneyMapConfig::class.java,
+    MinimapCompanionPlatform.dataPath,
+    "journeymap.yml"
+)

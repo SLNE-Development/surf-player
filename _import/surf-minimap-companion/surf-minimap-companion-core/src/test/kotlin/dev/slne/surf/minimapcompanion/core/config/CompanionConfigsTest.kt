@@ -29,6 +29,8 @@ class CompanionConfigsTest {
         )
     }
 
+    private fun journeyMapFile() = FakeFile("journeymap.yml", JourneyMapConfig()) { JourneyMapConfig() }
+
     private fun broken(): Nothing = throw UncheckedIOException(IOException("mapping values are not allowed here"))
 
     @Test
@@ -40,10 +42,12 @@ class CompanionConfigsTest {
             )
         )
         val main = MinimapCompanionConfig(disableMaps = true)
+        val journeyMap = JourneyMapConfig(options = mapOf("caveMapping" to BasicConfigurationNode.root().raw("NONE")))
 
         val result = CompanionConfigs.reload(
             FakeFile("config.yml", MinimapCompanionConfig()) { main }.reloadable(),
             FakeFile("xaero.yml", XaeroConfig()) { xaero }.reloadable(),
+            FakeFile("journeymap.yml", JourneyMapConfig()) { journeyMap }.reloadable(),
         )
 
         assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
@@ -52,6 +56,8 @@ class CompanionConfigsTest {
         assertSame(XaeroServerProfile.of(xaero), result.profile)
         assertEquals(mapOf<String, Any>("display_radar" to false), result.profile.minimap.values)
         assertEquals(1, result.profile.warnings.size)
+        assertSame(journeyMap, result.journeyMap)
+        assertEquals(mapOf("caveMapping" to "NONE"), result.journeyMapProfile.values)
     }
 
     @Test
@@ -60,7 +66,7 @@ class CompanionConfigsTest {
         val main = FakeFile("config.yml", previous) { MinimapCompanionConfig(disableMaps = true) }
         val xaero = FakeFile("xaero.yml", XaeroConfig()) { broken() }
 
-        val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable())
+        val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable(), journeyMapFile().reloadable())
 
         assertIs<CompanionConfigs.ReloadResult.Failed>(result)
         assertEquals("xaero.yml", result.fileName)
@@ -73,10 +79,26 @@ class CompanionConfigsTest {
         val main = FakeFile("config.yml", MinimapCompanionConfig()) { broken() }
         val xaero = FakeFile("xaero.yml", XaeroConfig()) { XaeroConfig() }
 
-        val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable())
+        val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable(), journeyMapFile().reloadable())
 
         assertIs<CompanionConfigs.ReloadResult.Failed>(result)
         assertEquals("config.yml", result.fileName)
         assertEquals(0, xaero.loads)
+    }
+
+    @Test
+    fun `broken journeymap yml keeps the other files' previous configs`() {
+        val previousMain = MinimapCompanionConfig()
+        val previousXaero = XaeroConfig()
+        val main = FakeFile("config.yml", previousMain) { MinimapCompanionConfig(disableMaps = true) }
+        val xaero = FakeFile("xaero.yml", previousXaero) { XaeroConfig() }
+        val journeyMap = FakeFile("journeymap.yml", JourneyMapConfig()) { broken() }
+
+        val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable(), journeyMap.reloadable())
+
+        assertIs<CompanionConfigs.ReloadResult.Failed>(result)
+        assertEquals("journeymap.yml", result.fileName)
+        assertSame(previousMain, main.current)
+        assertSame(previousXaero, xaero.current)
     }
 }

@@ -5,7 +5,7 @@ import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs.ReloadResult
 import net.kyori.adventure.audience.Audience
 
 /**
- * Tells whoever ran the reload how long it took and how many Xaero options were not sent as configured,
+ * Tells whoever ran the reload how long it took and how many options of the map mods were not sent as configured,
  * or which file could not be read.
  */
 fun Audience.sendReloadResult(result: ReloadResult) {
@@ -23,13 +23,13 @@ fun Audience.sendReloadResult(result: ReloadResult) {
                 success("Die Konfiguration wurde neu geladen (${result.duration.inWholeMilliseconds}ms).")
             }
 
-            val warnings = result.profile.warnings.size
+            val warnings = result.profile.warnings.size + result.journeyMapProfile.warnings.size
             if (warnings == 0) return
 
             sendText {
                 appendWarningPrefix()
                 variableValue("$warnings")
-                warning(" Warnung(en) zu den Xaero-Optionen, siehe Konsole.")
+                warning(" Warnung(en) zu den Optionen der Karten-Mods, siehe Konsole.")
             }
         }
     }

@@ -1,6 +1,7 @@
 package dev.slne.surf.minimapcompanion.core.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
+import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapProfile
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -46,6 +47,29 @@ class MinimapCompanionConfigTest {
 
         assertEquals(mapOf<String, Any>("display_radar" to false, "radar_name_scale" to 2.0), profile.minimap.values)
         assertEquals(setOf("minecraft:overworld"), profile.worldMap.identifiers("cave_mode_allowed_dimensions"))
+    }
+
+    @Test
+    fun `journeymap options load from journeymap yml`(@TempDir folder: Path) {
+        folder.resolve("journeymap.yml").writeText(
+            """
+            options:
+              caveMapping: NONE
+              radarLateralDistance: 64
+            """.trimIndent()
+        )
+
+        val config = SpongeConfigManager.yaml(JourneyMapConfig::class.java, folder, "journeymap.yml").config
+
+        assertEquals(mapOf("caveMapping" to "NONE", "radarLateralDistance" to "64"), JourneyMapProfile.of(config).values)
+    }
+
+    @Test
+    fun `default journeymap yml writes an empty option map`(@TempDir folder: Path) {
+        SpongeConfigManager.yaml(JourneyMapConfig::class.java, folder, "journeymap.yml")
+        val written = folder.resolve("journeymap.yml").readText()
+
+        assertTrue("options: {}" in written, written)
     }
 
     @Test
