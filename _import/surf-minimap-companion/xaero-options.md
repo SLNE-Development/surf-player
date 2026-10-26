@@ -1,12 +1,12 @@
 # Enforceable Xaero options
 
-Every option below can go under `enforced-options` in `config.yml`, keyed by its ID. Enforced options override the
+Every option below can go into `xaero.yml`, keyed by its ID. Enforced options override the
 player's own setting, as on a server with Xaero's mods installed. Integers are the positions of Xaero's sliders and
 buttons, as Xaero writes them to its own config files.
 
 Taken from Xaero's Minimap 26.6.2, Xaero's World Map 1.47.2 and Xaero's Lib 1.8.5 for Minecraft 26.3.
 
-## Minimap (`enforced-options.minimap`)
+## Minimap (`minimap`)
 
 The minimap's `entity_radar_categories` and `info_display_config` are not supported.
 
@@ -126,7 +126,7 @@ The minimap's `entity_radar_categories` and `info_display_config` are not suppor
 | `discovered_waystone_waypoints` | `true`, `false` | `true` | Discovered Waystone Waypoints |
 | `other_waystone_waypoints` | `true`, `false` | `true` | Other Waystone Waypoints |
 
-## World map (`enforced-options.world-map`)
+## World map (`world-map`)
 
 | Option | Accepted values | Xaero default | In Xaero's settings |
 | --- | --- | --- | --- |
