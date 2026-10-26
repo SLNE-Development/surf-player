@@ -1,6 +1,7 @@
 package dev.slne.surf.minimapcompanion.core.xaero.option
 
 import net.kyori.adventure.key.Key
+import kotlin.math.pow
 
 /**
  * The value types Xaero's enforced options have, with the Kotlin types the companion keeps them as.
@@ -87,6 +88,11 @@ class XaeroOption(
         fun dimensions(id: String) = XaeroOption(id, XaeroOptionType.IDENTIFIER_SET)
     }
 }
+
+/**
+ * The distance at which Xaero switches to kilometres for slider position [index]: never, always, or a power of ten.
+ */
+internal fun kilometreThreshold(index: Int) = if (index <= 0) index else 10.0.pow(index - 1).toInt()
 
 /**
  * The options one of Xaero's mods lets a server enforce.
