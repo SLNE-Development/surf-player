@@ -28,45 +28,95 @@ class JourneyMapTrackerTest {
 
     private fun removed(uuid: UUID) = JourneyMapChannels.REMOVE_PLAYER to JourneyMapPackets.removePlayer(uuid).toList()
 
+    private fun tickShowingAll() = tracker.tick(viewer, isTracked = { true }, isNearby = { false })
+
+    // The first listing of a player is cleared first; most tests only look at what follows.
+    private fun tickedOnce() = apply {
+        tickShowingAll()
+        viewer.sent.clear()
+    }
+
     @Test
-    fun `lists every other player in the viewer's dimension`() {
-        tracker.tick(viewer) { true }
+    fun `newly listed players are cleared first, so the client builds them in its current world`() {
+        tickShowingAll()
+        assertEquals(listOf(removed(a), locations(mapOf(a to posA))), viewer.sentContent)
+    }
+
+    @Test
+    fun `players listed before are listed again without being cleared`() {
+        tickedOnce()
+        tickShowingAll()
         assertEquals(listOf(locations(mapOf(a to posA))), viewer.sentContent)
     }
 
     @Test
-    fun `hidden players are listed without a position`() {
-        tracker.tick(viewer) { false }
-        assertEquals(listOf(locations(mapOf(a to null))), viewer.sentContent)
+    fun `players the client sees nearby are listed`() {
+        tracker.tick(viewer, isTracked = { false }, isNearby = { true })
+        assertEquals(locations(mapOf(a to posA)), viewer.sentContent.last())
     }
 
     @Test
-    fun `players who leave the viewer's dimension are removed`() {
-        tracker.tick(viewer) { true }
-        tracker.update(a, posA.copy(dimension = nether))
-        viewer.sent.clear()
+    fun `sneaking, invisible or spectating players nearby stay off the radar`() {
+        tracker.update(a, posA, concealed = true)
+        tracker.tick(viewer, isTracked = { false }, isNearby = { true })
+        assertEquals(emptyList(), viewer.sent)
+    }
 
-        tracker.tick(viewer) { true }
+    @Test
+    fun `concealed players the tracker shows stay on the radar`() {
+        tracker.update(a, posA, concealed = true)
+        tracker.tick(viewer, isTracked = { true }, isNearby = { false })
+        assertEquals(locations(mapOf(a to posA)), viewer.sentContent.last())
+    }
+
+    @Test
+    fun `players the viewer may not see are never sent`() {
+        tracker.tick(viewer, isTracked = { false }, isNearby = { false })
+        assertEquals(emptyList(), viewer.sent)
+    }
+
+    @Test
+    fun `players who become hidden are removed`() {
+        tickedOnce()
+        tracker.tick(viewer, isTracked = { false }, isNearby = { false })
         assertEquals(listOf(removed(a)), viewer.sentContent)
     }
 
     @Test
-    fun `viewer changing worlds removes the old world's players`() {
-        tracker.tick(viewer) { true }
-        tracker.update(viewer.uuid, viewerPosition.copy(dimension = nether))
-        viewer.sent.clear()
+    fun `players who leave the viewer's dimension are removed`() {
+        tickedOnce()
+        tracker.update(a, posA.copy(dimension = nether))
+        tickShowingAll()
+        assertEquals(listOf(removed(a)), viewer.sentContent)
+    }
 
-        tracker.tick(viewer) { true }
-        assertEquals(setOf(locations(mapOf(b to posB)), removed(a)), viewer.sentContent.toSet())
+    @Test
+    fun `players who change worlds with the viewer are cleared before they are listed again`() {
+        tickedOnce()
+        val movedA = posA.copy(dimension = nether)
+        tracker.update(viewer.uuid, viewerPosition.copy(dimension = nether))
+        tracker.update(a, movedA)
+
+        tracker.tick(viewer, isTracked = { it == a }, isNearby = { false })
+        assertEquals(listOf(removed(a), locations(mapOf(a to movedA))), viewer.sentContent)
+    }
+
+    @Test
+    fun `viewer changing worlds removes the old world's players before listing the new one's`() {
+        tickedOnce()
+        tracker.update(viewer.uuid, viewerPosition.copy(dimension = nether))
+        tickShowingAll()
+
+        val sent = viewer.sentContent
+        assertEquals(setOf(removed(a), removed(b)), sent.dropLast(1).toSet())
+        assertEquals(locations(mapOf(b to posB)), sent.last())
     }
 
     @Test
     fun `forgotten players are removed from other viewers`() {
-        tracker.tick(viewer) { true }
+        tickedOnce()
         tracker.forget(a)
-        viewer.sent.clear()
-
-        tracker.tick(viewer) { true }
+        tickShowingAll()
         assertEquals(listOf(removed(a)), viewer.sentContent)
     }
 
@@ -74,14 +124,14 @@ class JourneyMapTrackerTest {
     fun `viewer without journeymap gets nothing`() {
         val xaeroOnly = FakePlayer()
         tracker.update(xaeroOnly.uuid, viewerPosition)
-        tracker.tick(xaeroOnly) { true }
+        tracker.tick(xaeroOnly, isTracked = { true }, isNearby = { true })
         assertEquals(emptyList(), xaeroOnly.sent)
     }
 
     @Test
     fun `viewer without a position gets nothing`() {
         val newcomer = FakePlayer(channels = setOf(JourneyMapChannels.PERMISSIONS))
-        tracker.tick(newcomer) { true }
+        tracker.tick(newcomer, isTracked = { true }, isNearby = { true })
         assertEquals(emptyList(), newcomer.sent)
     }
 }

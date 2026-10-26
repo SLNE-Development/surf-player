@@ -16,6 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
@@ -115,9 +116,12 @@ object PaperTracker {
         val location = player.location
         val world = player.world.key.asString()
         tracker.update(player.uniqueId, TrackedPosition(location.x, location.y, location.z, world))
+        // Read on the player's own thread; JourneyMap's own radar leaves such players out.
+        val concealed = player.isSneaking || player.isInvisible || player.gameMode == GameMode.SPECTATOR
         journeyMapTracker.update(
             player.uniqueId,
             JourneyMapPlayer(player.entityId, location.x, location.y, location.z, location.yaw, location.pitch, world),
+            concealed,
         )
 
         val viewer = PaperCompanionPlayer(player)
@@ -128,9 +132,11 @@ object PaperTracker {
             // Players track each other within the same range, so the players tracking the viewer are the ones the
             // viewer's client sees, and they can be read on the viewer's own thread.
             val seenByClient by lazy { player.trackedBy.mapTo(HashSet()) { it.uniqueId } }
-            journeyMapTracker.tick(viewer) { target ->
-                isVisibleOnMap(player, target) && (isShownByTracker(player.uniqueId, target) || target in seenByClient)
-            }
+            journeyMapTracker.tick(
+                viewer,
+                isTracked = { target -> isShownByTracker(player.uniqueId, target) && isVisibleOnMap(player, target) },
+                isNearby = { target -> target in seenByClient && isVisibleOnMap(player, target) },
+            )
         }
     }
 
