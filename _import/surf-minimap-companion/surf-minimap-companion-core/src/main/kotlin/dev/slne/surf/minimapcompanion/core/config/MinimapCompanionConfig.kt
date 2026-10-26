@@ -9,13 +9,13 @@ import org.spongepowered.configurate.objectmapping.meta.Comment
  */
 @ConfigSerializable
 data class MinimapCompanionConfig(
-    @param:Comment("Turns every supported map mod (Xaero's mods and JourneyMap) off completely, for events such as a maze where players must not see the map. To restrict single map features, use the mod's own file, such as xaero.yml or journeymap.yml.")
+    @param:Comment("Turns every supported map mod (Xaero's mods, JourneyMap and VoxelMap) off completely, for events such as a maze where players must not see the map. To restrict single map features, use the mod's own file, such as xaero.yml, journeymap.yml or voxelmap.yml.")
     val disableMaps: Boolean = false,
 
     @param:Comment("Mixed into every computed level ID. Set it only when servers share worlds copied from one template, since copies keep the same world UUID.")
     val serverId: String = "",
 
-    @param:Comment("Fixed level IDs by world key, as Xaero shows it (for example \"minecraft:overworld\"). An entry here replaces the computed ID, for Xaero's mods and for JourneyMap's world ID.")
+    @param:Comment("Fixed level IDs by world key, as Xaero shows it (for example \"minecraft:overworld\"). An entry here replaces the computed ID, for Xaero's mods and in the world ID JourneyMap and VoxelMap get.")
     val worldIds: Map<String, Int> = emptyMap(),
 
     @param:Comment("Which other players each player sees on Xaero's maps and JourneyMap beyond their view distance. Only players on this server are shown.")
