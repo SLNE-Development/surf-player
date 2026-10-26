@@ -30,6 +30,7 @@ object PaperTracker {
 
     private var everyoneTracksEveryone = false
     private var relations: TrackerRelations? = null
+    private var isVanished: ((Player) -> Boolean)? = null
 
     private val active get() = everyoneTracksEveryone || relations != null
 
@@ -39,6 +40,10 @@ object PaperTracker {
     fun start() {
         val config = CompanionConfig.getConfig().tracker
         everyoneTracksEveryone = config.everyoneTracksEveryone
+
+        if (Bukkit.getPluginManager().isPluginEnabled("surf-vanish-paper")) {
+            isVanished = VanishCheck::isVanished
+        }
 
         val sources = buildList {
             if (config.friends) source("friends", "surf-friends-paper") { FriendsRelationSource }?.let(::add)
@@ -91,11 +96,13 @@ object PaperTracker {
         tracker.tick(PaperCompanionPlayer(player)) { viewer, target -> isTracked(player, viewer, target) }
     }
 
-    // Players hidden from the viewer, such as vanished staff, stay off their map too.
+    // Vanished players are never tracked: surf-vanish hides them from other players only a little
+    // after they join. Players hidden from the viewer in any other way stay off the map too.
     private fun isTracked(player: Player, viewer: UUID, target: UUID): Boolean {
         if (!everyoneTracksEveryone && relations?.isRelated(viewer, target) != true) return false
 
         val targetPlayer = Bukkit.getPlayer(target) ?: return false
+        if (isVanished?.invoke(targetPlayer) == true) return false
         return player.canSee(targetPlayer)
     }
 

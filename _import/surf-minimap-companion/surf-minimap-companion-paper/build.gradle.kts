@@ -13,6 +13,7 @@ surfPaperPluginApi {
     serverDependencies {
         registerSoft("surf-friends-paper")
         registerSoft("surf-clan-paper")
+        registerSoft("surf-vanish-paper")
     }
 }
 
@@ -20,4 +21,5 @@ dependencies {
     api(projects.surfMinimapCompanionCore)
     compileOnly("dev.slne.surf.friends:surf-friends-api:+")
     compileOnly("dev.slne.surf.clan:surf-clan-api:+")
+    compileOnly("dev.slne.surf.vanish:surf-vanish-api:+")
 }
