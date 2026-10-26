@@ -33,7 +33,7 @@ object XaeroSyncService {
         val levelId = LevelIds.resolve(player.worldKey, player.worldIdentity, config)
         val payload = XaeroPackets.levelId(levelId)
 
-        for (channel in channels) {
+        for (channel in channels.filter(XaeroChannels::isMap)) {
             player.sendPluginMessage(channel, payload)
         }
 
