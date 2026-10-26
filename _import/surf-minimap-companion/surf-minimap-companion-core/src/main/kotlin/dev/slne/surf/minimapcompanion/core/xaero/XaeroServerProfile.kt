@@ -1,7 +1,7 @@
 package dev.slne.surf.minimapcompanion.core.xaero
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
+import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.xaero.option.EnforcedOptions
 import dev.slne.surf.minimapcompanion.core.xaero.option.MinimapOptions
 import dev.slne.surf.minimapcompanion.core.xaero.option.WorldMapOptions
@@ -48,19 +48,18 @@ data class XaeroServerProfile(
         private val log = logger()
 
         @Volatile
-        private var cached: Pair<MinimapCompanionConfig, XaeroServerProfile>? = null
+        private var cached: Pair<XaeroConfig, XaeroServerProfile>? = null
 
         /**
          * Returns the profile [config] describes. Each config instance is parsed once, so its warnings are logged once.
          */
-        fun of(config: MinimapCompanionConfig): XaeroServerProfile {
+        fun of(config: XaeroConfig): XaeroServerProfile {
             cached?.let { (cachedConfig, profile) -> if (cachedConfig === config) return profile }
 
-            val options = config.enforcedOptions
             val warnings = mutableListOf<String>()
             val profile = parse(
-                options.minimap.mapValues { it.value.raw() },
-                options.worldMap.mapValues { it.value.raw() },
+                config.minimap.mapValues { it.value.raw() },
+                config.worldMap.mapValues { it.value.raw() },
             ) { warning ->
                 warnings += warning
                 log.atWarning().log("%s", warning)

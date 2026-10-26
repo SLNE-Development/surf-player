@@ -11,3 +11,12 @@ object CompanionConfig : SpongeYmlConfigClass<MinimapCompanionConfig>(
     MinimapCompanionPlatform.dataPath,
     "config.yml"
 )
+
+/**
+ * Loads [XaeroConfig] from `xaero.yml` in the plugin's data directory.
+ */
+object CompanionXaeroConfig : SpongeYmlConfigClass<XaeroConfig>(
+    XaeroConfig::class.java,
+    MinimapCompanionPlatform.dataPath,
+    "xaero.yml"
+)

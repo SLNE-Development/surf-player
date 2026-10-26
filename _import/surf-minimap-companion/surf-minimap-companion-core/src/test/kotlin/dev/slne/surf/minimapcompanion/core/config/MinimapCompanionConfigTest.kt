@@ -13,36 +13,57 @@ import kotlin.test.assertTrue
 class MinimapCompanionConfigTest {
 
     @Test
-    fun `enforced options and tracker load from yaml`(@TempDir folder: Path) {
+    fun `disable-maps and tracker load from config yml`(@TempDir folder: Path) {
         folder.resolve("config.yml").writeText(
             """
+            disable-maps: true
             tracker:
               friends: true
-            enforced-options:
-              minimap:
-                display_radar: false
-                radar_name_scale: 2
-              world-map:
-                cave_mode_allowed_dimensions:
-                  - minecraft:overworld
             """.trimIndent()
         )
 
         val config = SpongeConfigManager.yaml(MinimapCompanionConfig::class.java, folder, "config.yml").config
+
+        assertEquals(true, config.disableMaps)
+        assertEquals(TrackerConfig(friends = true), config.tracker)
+    }
+
+    @Test
+    fun `enforced options load from xaero yml`(@TempDir folder: Path) {
+        folder.resolve("xaero.yml").writeText(
+            """
+            minimap:
+              display_radar: false
+              radar_name_scale: 2
+            world-map:
+              cave_mode_allowed_dimensions:
+                - minecraft:overworld
+            """.trimIndent()
+        )
+
+        val config = SpongeConfigManager.yaml(XaeroConfig::class.java, folder, "xaero.yml").config
         val profile = XaeroServerProfile.of(config)
 
-        assertEquals(TrackerConfig(friends = true), config.tracker)
         assertEquals(mapOf<String, Any>("display_radar" to false, "radar_name_scale" to 2.0), profile.minimap.values)
         assertEquals(setOf("minecraft:overworld"), profile.worldMap.identifiers("cave_mode_allowed_dimensions"))
     }
 
     @Test
-    fun `default config writes empty option maps and disabled tracker`(@TempDir folder: Path) {
+    fun `default config yml writes maps enabled and the tracker disabled`(@TempDir folder: Path) {
         SpongeConfigManager.yaml(MinimapCompanionConfig::class.java, folder, "config.yml")
         val written = folder.resolve("config.yml").readText()
 
+        assertTrue("disable-maps: false" in written, written)
         assertTrue("everyone-tracks-everyone: false" in written, written)
         assertTrue("clan-members: false" in written, written)
+    }
+
+    @Test
+    fun `default xaero yml writes empty option maps`(@TempDir folder: Path) {
+        SpongeConfigManager.yaml(XaeroConfig::class.java, folder, "xaero.yml")
+        val written = folder.resolve("xaero.yml").readText()
+
+        assertTrue("minimap: {}" in written, written)
         assertTrue("world-map: {}" in written, written)
     }
 }

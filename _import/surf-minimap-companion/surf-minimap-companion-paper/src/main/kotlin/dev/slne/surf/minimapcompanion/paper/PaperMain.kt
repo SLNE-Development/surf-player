@@ -2,7 +2,7 @@ package dev.slne.surf.minimapcompanion.paper
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
+import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.paper.command.minimapCompanionCommand
@@ -16,7 +16,7 @@ val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)
 class PaperMain : SuspendingJavaPlugin() {
 
     override fun onEnable() {
-        CompanionConfig.init()
+        CompanionConfigs.init()
 
         for (channel in XaeroChannels.ALL) {
             server.messenger.registerOutgoingPluginChannel(this, channel)

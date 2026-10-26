@@ -1,7 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.xaero
 
-import dev.slne.surf.minimapcompanion.core.config.EnforcedOptionsConfig
-import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
+import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.xaero.option.EnforcedOptions
 import org.junit.jupiter.api.Test
 import org.spongepowered.configurate.BasicConfigurationNode
@@ -67,11 +66,9 @@ class XaeroServerProfileTest {
 
     @Test
     fun `profile reads the enforced options from the config`() {
-        val config = MinimapCompanionConfig(
-            enforcedOptions = EnforcedOptionsConfig(
-                minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw(false)),
-                worldMap = mapOf("cave_mode_allowed_dimensions" to BasicConfigurationNode.root().raw(listOf("minecraft:overworld"))),
-            )
+        val config = XaeroConfig(
+            minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw(false)),
+            worldMap = mapOf("cave_mode_allowed_dimensions" to BasicConfigurationNode.root().raw(listOf("minecraft:overworld"))),
         )
         val profile = XaeroServerProfile.of(config)
         assertEquals(mapOf<String, Any>("display_radar" to false), profile.minimap.values)
@@ -80,9 +77,7 @@ class XaeroServerProfileTest {
 
     @Test
     fun `profile of a config remembers its warnings`() {
-        val config = MinimapCompanionConfig(
-            enforcedOptions = EnforcedOptionsConfig(minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw("yes")))
-        )
+        val config = XaeroConfig(minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw("yes")))
         val profile = XaeroServerProfile.of(config)
         assertEquals(1, profile.warnings.size)
         assertEquals(emptyMap(), profile.minimap.values)
@@ -90,8 +85,8 @@ class XaeroServerProfileTest {
 
     @Test
     fun `profile of the same config is parsed once`() {
-        val config = MinimapCompanionConfig()
+        val config = XaeroConfig()
         assertSame(XaeroServerProfile.of(config), XaeroServerProfile.of(config))
-        assertNotSame(XaeroServerProfile.of(config), XaeroServerProfile.of(MinimapCompanionConfig()))
+        assertNotSame(XaeroServerProfile.of(config), XaeroServerProfile.of(XaeroConfig()))
     }
 }

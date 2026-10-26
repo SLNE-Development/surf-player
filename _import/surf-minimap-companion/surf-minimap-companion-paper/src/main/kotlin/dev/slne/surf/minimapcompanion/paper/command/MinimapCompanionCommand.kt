@@ -5,7 +5,7 @@ import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.slne.surf.minimapcompanion.core.command.CompanionPermissions
 import dev.slne.surf.minimapcompanion.core.command.sendReloadResult
-import dev.slne.surf.minimapcompanion.core.config.CompanionReload
+import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.plugin
@@ -18,13 +18,16 @@ fun minimapCompanionCommand() = commandTree("minimapcompanion") {
     literalArgument("reload") {
         withPermission(CompanionPermissions.COMMAND_RELOAD)
         anyExecutor { sender, _ ->
-            val result = CompanionReload.reload()
-            PaperTracker.configure()
+            val result = CompanionConfigs.reload()
 
-            for (player in Bukkit.getOnlinePlayers()) {
-                player.scheduler.run(plugin, {
-                    XaeroSyncService.sync(PaperCompanionPlayer(player), config = result.config)
-                }, null)
+            if (result is CompanionConfigs.ReloadResult.Reloaded) {
+                PaperTracker.configure()
+
+                for (player in Bukkit.getOnlinePlayers()) {
+                    player.scheduler.run(plugin, {
+                        XaeroSyncService.sync(PaperCompanionPlayer(player), config = result.config, xaero = result.xaero)
+                    }, null)
+                }
             }
 
             sender.sendReloadResult(result)

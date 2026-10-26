@@ -1,6 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.service
 
-import dev.slne.surf.minimapcompanion.core.config.EnforcedOptionsConfig
+import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroLibPackets
@@ -17,6 +17,14 @@ import kotlin.test.assertTrue
 
 class XaeroSyncServiceTest {
     private val config = MinimapCompanionConfig()
+    private val xaero = XaeroConfig()
+
+    private fun sync(
+        player: FakePlayer,
+        channels: Collection<String> = XaeroChannels.ALL,
+        config: MinimapCompanionConfig = this.config,
+        xaero: XaeroConfig = this.xaero,
+    ) = XaeroSyncService.sync(player, channels, config, xaero)
 
     private val lobbyLevelId = XaeroPackets.levelId(829346366)
 
@@ -34,7 +42,7 @@ class XaeroSyncServiceTest {
     @Test
     fun `sync sends handshake, rules and level id on each map channel`() {
         val player = lobbyPlayer()
-        XaeroSyncService.sync(player, XaeroChannels.MAPS, config)
+        sync(player, XaeroChannels.MAPS)
         assertEquals(
             listOf(
                 XaeroChannels.WORLD_MAP to XaeroPackets.handshake().toList(),
@@ -51,14 +59,14 @@ class XaeroSyncServiceTest {
     @Test
     fun `sync limited to one channel only sends on that channel`() {
         val player = FakePlayer()
-        XaeroSyncService.sync(player, listOf(XaeroChannels.MINIMAP), config)
+        sync(player, listOf(XaeroChannels.MINIMAP))
         assertEquals(listOf(XaeroChannels.MINIMAP), player.sent.map { it.first }.distinct())
     }
 
     @Test
     fun `lib sync sends the handshakes and every config channel`() {
         val player = lobbyPlayer()
-        XaeroSyncService.sync(player, listOf(XaeroChannels.LIB), config)
+        sync(player, listOf(XaeroChannels.LIB))
         assertEquals(
             listOf(
                 lib(XaeroLibPackets.dimensionHandshake()),
@@ -71,7 +79,7 @@ class XaeroSyncServiceTest {
     @Test
     fun `full sync sends the map channels before the lib sequence`() {
         val player = lobbyPlayer()
-        XaeroSyncService.sync(player, config = config)
+        sync(player)
         val channels = player.sent.map { it.first }
         assertEquals(listOf(XaeroChannels.WORLD_MAP, XaeroChannels.MINIMAP, XaeroChannels.LIB), channels.distinct())
         assertEquals(6, channels.count(XaeroChannels::isMap))
@@ -80,7 +88,7 @@ class XaeroSyncServiceTest {
     @Test
     fun `lib sync skips config channels of mods the client lacks`() {
         val player = lobbyPlayer(channels = setOf(XaeroChannels.LIB, XaeroChannels.WORLD_MAP))
-        XaeroSyncService.sync(player, listOf(XaeroChannels.LIB), config)
+        sync(player, listOf(XaeroChannels.LIB))
         val selected = player.sentContent.filter { it.first == XaeroChannels.LIB && it.second.first() == 2.toByte() }
         assertEquals(
             listOf(XaeroChannels.LIB, XaeroChannels.WORLD_MAP).map { lib(XaeroLibPackets.configChannel(it)) },
@@ -91,10 +99,7 @@ class XaeroSyncServiceTest {
     @Test
     fun `enforced options reach the client`() {
         val player = lobbyPlayer()
-        val config = MinimapCompanionConfig(
-            enforcedOptions = EnforcedOptionsConfig(minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw(false)))
-        )
-        XaeroSyncService.sync(player, config = config)
+        sync(player, xaero = XaeroConfig(minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw(false))))
 
         val sent = player.sentContent
         assertTrue(XaeroChannels.MINIMAP to XaeroPackets.minimapRules(caveMode = true, netherCaveMode = true, radar = false).toList() in sent)
@@ -104,28 +109,28 @@ class XaeroSyncServiceTest {
     @Test
     fun `sync remembers the last sent level id per player`() {
         val player = lobbyPlayer()
-        XaeroSyncService.sync(player, config = config)
+        sync(player)
         assertEquals(829346366, XaeroSyncService.lastSentLevelId(player.uuid))
     }
 
     @Test
     fun `lib only sync sends no level id, so none is remembered`() {
         val player = lobbyPlayer()
-        XaeroSyncService.sync(player, listOf(XaeroChannels.LIB), config)
+        sync(player, listOf(XaeroChannels.LIB))
         assertNull(XaeroSyncService.lastSentLevelId(player.uuid))
     }
 
     @Test
     fun `sync uses the configured override for the world`() {
         val player = FakePlayer(worldKey = Key.key("minecraft:overworld"))
-        XaeroSyncService.sync(player, config = MinimapCompanionConfig(worldIds = mapOf("minecraft:overworld" to 7)))
+        sync(player, config = MinimapCompanionConfig(worldIds = mapOf("minecraft:overworld" to 7)))
         assertEquals(7, XaeroSyncService.lastSentLevelId(player.uuid))
     }
 
     @Test
     fun `forget removes the last sent level id`() {
         val player = FakePlayer()
-        XaeroSyncService.sync(player, config = config)
+        sync(player)
         XaeroSyncService.forget(player.uuid)
         assertNull(XaeroSyncService.lastSentLevelId(player.uuid))
     }

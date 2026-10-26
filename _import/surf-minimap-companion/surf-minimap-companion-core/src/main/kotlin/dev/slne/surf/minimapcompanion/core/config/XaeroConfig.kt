@@ -4,8 +4,12 @@ import org.spongepowered.configurate.ConfigurationNode
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import org.spongepowered.configurate.objectmapping.meta.Comment
 
+/**
+ * The Xaero settings this server enforces, as a server with Xaero's mods installed would. Clients cannot change
+ * enforced settings; settings left out stay theirs.
+ */
 @ConfigSerializable
-data class EnforcedOptionsConfig(
+data class XaeroConfig(
     @param:Comment("Options enforced on Xaero's Minimap, by Xaero's option ID (for example display_radar: false). xaero-options.md lists them all.")
     val minimap: Map<String, ConfigurationNode> = emptyMap(),
 
