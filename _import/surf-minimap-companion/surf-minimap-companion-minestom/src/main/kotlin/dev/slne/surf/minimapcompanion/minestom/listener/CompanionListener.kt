@@ -25,8 +25,6 @@ import net.minestom.server.timer.TaskSchedule
  * Syncs players whenever their client could have lost or not yet received what the map mods need.
  */
 object CompanionListener : EventRegistrar {
-    private const val REGISTER_CHANNEL = "minecraft:register"
-
     // Minestom does not track players itself; it only clears what other servers sent.
     private val tracker = PlayerTracker()
 
@@ -35,7 +33,7 @@ object CompanionListener : EventRegistrar {
         node.addListener<PlayerPluginMessageEvent> { event ->
             val player = event.player
 
-            if (event.identifier != REGISTER_CHANNEL) {
+            if (event.identifier != ChannelAnnouncer.REGISTER_CHANNEL) {
                 // JourneyMap's requests for its permissions, and the world ID JourneyMap and VoxelMap ask for.
                 if (event.identifier != WorldInfo.CHANNEL && !JourneyMapChannels.isJourneyMap(event.identifier)) return@addListener
                 val instance = player.instance ?: return@addListener
@@ -61,16 +59,6 @@ object CompanionListener : EventRegistrar {
         node.addListener<PlayerSpawnEvent> { event ->
             val player = event.player
             val companionPlayer = MinestomCompanionPlayer(player, event.instance)
-
-            // The mods answer the handshake, so announce the channels as a server with the mods does.
-            if (event.isFirstSpawn) {
-                player.sendPluginMessage(
-                    REGISTER_CHANNEL,
-                    RegisteredChannels.registerPayload(
-                        XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED + VoxelMapChannels.SETTINGS
-                    ),
-                )
-            }
 
             MapSyncService.sync(companionPlayer)
             if (!event.isFirstSpawn) return@addListener
