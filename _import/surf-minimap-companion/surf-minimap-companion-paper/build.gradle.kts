@@ -1,4 +1,3 @@
-import dev.slne.surf.api.gradle.util.registerRequired
 import dev.slne.surf.api.gradle.util.registerSoft
 
 plugins {
@@ -12,8 +11,6 @@ surfPaperPluginApi {
     generateLibraryLoader(false)
 
     serverDependencies {
-        // Sends the effects disable-maps hides the maps with; surf-api requires it as well.
-        registerRequired("packetevents")
         registerSoft("surf-friends-paper")
         registerSoft("surf-clan-paper")
         registerSoft("surf-vanish-paper")
