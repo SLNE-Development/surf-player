@@ -16,6 +16,8 @@ class PaperCompanionPlayer(
     override val worldKey get() = world.key
     override val worldIdentity get() = world.uid.toString()
 
+    override fun hasChannel(channel: String) = channel in player.listeningPluginChannels
+
     override fun sendPluginMessage(channel: String, payload: ByteArray) {
         player.sendPluginMessage(plugin, channel, payload)
     }

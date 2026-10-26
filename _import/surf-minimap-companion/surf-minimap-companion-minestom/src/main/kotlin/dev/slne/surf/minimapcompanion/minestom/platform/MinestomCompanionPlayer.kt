@@ -16,8 +16,10 @@ class MinestomCompanionPlayer(
     override val worldKey get() = Key.key(instance.dimensionName)
     override val worldIdentity get() = instance.dimensionName
 
+    override fun hasChannel(channel: String) = RegisteredChannels.isRegistered(uuid, channel)
+
     override fun sendPluginMessage(channel: String, payload: ByteArray) {
-        if (RegisteredChannels.isRegistered(uuid, channel)) {
+        if (hasChannel(channel)) {
             player.sendPluginMessage(channel, payload)
         }
     }

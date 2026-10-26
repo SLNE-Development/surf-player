@@ -19,5 +19,10 @@ interface CompanionPlayer {
      */
     val worldIdentity: String
 
+    /**
+     * Returns whether the client registered [channel], which tells the companion which of Xaero's mods it has.
+     */
+    fun hasChannel(channel: String): Boolean
+
     fun sendPluginMessage(channel: String, payload: ByteArray)
 }

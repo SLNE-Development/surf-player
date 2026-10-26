@@ -5,13 +5,15 @@ import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.id.LevelIds
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroLibPackets
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroPackets
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Sends players the Xaero data for the world they are in.
+ * Sends players the Xaero data for the world they are in, as a server with Xaero's mods would on every world join.
  */
 object XaeroSyncService {
 
@@ -23,21 +25,46 @@ object XaeroSyncService {
     private val lastSentLevelIds = ConcurrentHashMap<UUID, Int>()
 
     /**
-     * Sends [player] the level ID of their current world on each of [channels].
+     * Sends [player] the Xaero data of their current world on each of [channels]: handshake, rules and level ID
+     * on the map channels, then the enforced config through Xaero's Lib.
      */
     fun sync(
         player: CompanionPlayer,
         channels: Collection<String> = XaeroChannels.ALL,
         config: MinimapCompanionConfig = CompanionConfig.getConfig(),
     ) {
+        val profile = XaeroServerProfile.of(config)
         val levelId = LevelIds.resolve(player.worldKey, player.worldIdentity, config)
-        val payload = XaeroPackets.levelId(levelId)
+        val levelIdPayload = XaeroPackets.levelId(levelId)
 
         for (channel in channels.filter(XaeroChannels::isMap)) {
-            player.sendPluginMessage(channel, payload)
+            val rules = if (channel == XaeroChannels.MINIMAP) profile.minimapRules() else profile.worldMapRules()
+            player.sendPluginMessage(channel, XaeroPackets.handshake())
+            player.sendPluginMessage(channel, rules)
+            player.sendPluginMessage(channel, levelIdPayload)
+        }
+
+        if (XaeroChannels.LIB in channels) {
+            syncLib(player, profile)
         }
 
         lastSentLevelIds[player.uuid] = levelId
+    }
+
+    // Resent on every world join: the client drops the enforced config whenever a new world
+    // reaches it before the dimension handshake does.
+    private fun syncLib(player: CompanionPlayer, profile: XaeroServerProfile) {
+        player.sendPluginMessage(XaeroChannels.LIB, XaeroLibPackets.dimensionHandshake())
+        player.sendPluginMessage(XaeroChannels.LIB, XaeroLibPackets.serverHandshake())
+
+        for ((channel, options) in profile.configChannels()) {
+            // A client without the mod would log the unknown config channel.
+            if (channel != XaeroChannels.LIB && !player.hasChannel(channel)) continue
+
+            player.sendPluginMessage(XaeroChannels.LIB, XaeroLibPackets.configChannel(channel))
+            player.sendPluginMessage(XaeroChannels.LIB, XaeroLibPackets.profileInfoReset())
+            player.sendPluginMessage(XaeroChannels.LIB, XaeroLibPackets.enforcedConfig(options.toNbt(), reset = true))
+        }
     }
 
     fun lastSentLevelId(playerUuid: UUID): Int? = lastSentLevelIds[playerUuid]
