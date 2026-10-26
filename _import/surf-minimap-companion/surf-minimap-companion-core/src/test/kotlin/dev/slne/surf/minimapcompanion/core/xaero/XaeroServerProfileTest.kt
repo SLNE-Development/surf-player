@@ -43,6 +43,12 @@ class XaeroServerProfileTest {
     }
 
     @Test
+    fun `dimensions without namespace restrict cave mode like full keys`() {
+        val profile = profile(minimap = mapOf("minimap_cave_mode_allowed_dimensions" to "overworld"))
+        assertContentEquals(XaeroPackets.minimapRules(caveMode = true, netherCaveMode = false, radar = true), profile.minimapRules())
+    }
+
+    @Test
     fun `disabling the radar only affects the minimap rules`() {
         val profile = profile(minimap = mapOf("display_radar" to false))
         assertContentEquals(XaeroPackets.minimapRules(caveMode = true, netherCaveMode = true, radar = false), profile.minimapRules())

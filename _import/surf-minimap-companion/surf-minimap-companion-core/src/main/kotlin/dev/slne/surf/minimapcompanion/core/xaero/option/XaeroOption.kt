@@ -36,7 +36,8 @@ enum class XaeroOptionType(val description: String) {
             is List<*> -> value.map { it as? String ?: return null }
             else -> return null
         }
-        return entries.takeIf { it.all(Key::parseable) }?.toSet()
+        // Xaero reads "overworld" as "minecraft:overworld", so the rules have to as well.
+        return entries.takeIf { it.all(Key::parseable) }?.mapTo(LinkedHashSet()) { Key.key(it).asString() }
     }
 }
 

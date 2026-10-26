@@ -85,6 +85,11 @@ class EnforcedOptionsTest {
     }
 
     @Test
+    fun `dimension keys without namespace get the minecraft namespace`() {
+        assertEquals(setOf("minecraft:overworld"), parse("dims" to listOf("overworld")).identifiers("dims"))
+    }
+
+    @Test
     fun `invalid dimension key is skipped with a warning`() {
         assertEquals(emptyMap(), parse("dims" to listOf("Not A Key")).values)
         assertTrue("dims" in warnings.single())
