@@ -13,4 +13,6 @@ class MinestomMinimapCompanionPlatform : MinimapCompanionPlatform {
     override fun worldIdentity(worldKey: Key) = MinecraftServer.getInstanceManager().instances
         .firstOrNull { it.dimensionName == worldKey.asString() }
         ?.dimensionName
+
+    override val tracksPlayers = false
 }

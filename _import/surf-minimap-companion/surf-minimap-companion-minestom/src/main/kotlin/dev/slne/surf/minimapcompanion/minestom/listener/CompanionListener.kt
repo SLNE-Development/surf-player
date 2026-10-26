@@ -3,6 +3,8 @@ package dev.slne.surf.minimapcompanion.minestom.listener
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
+import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
+import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
@@ -18,7 +20,7 @@ import net.minestom.server.event.player.PlayerSpawnEvent
 import net.minestom.server.timer.TaskSchedule
 
 /**
- * Syncs players whenever their client could have lost or not yet received the Xaero data.
+ * Syncs players whenever their client could have lost or not yet received what the map mods need.
  */
 object CompanionListener : EventRegistrar {
     private const val REGISTER_CHANNEL = "minecraft:register"
@@ -29,18 +31,25 @@ object CompanionListener : EventRegistrar {
     override fun register(node: EventNode<Event>) {
         // Also fires during the configuration phase, before the player has an instance.
         node.addListener<PlayerPluginMessageEvent> { event ->
-            if (event.identifier != REGISTER_CHANNEL) return@addListener
-
             val player = event.player
+
+            if (event.identifier != REGISTER_CHANNEL) {
+                // JourneyMap's requests for its permissions and world ID.
+                if (!JourneyMapChannels.isJourneyMap(event.identifier)) return@addListener
+                val instance = player.instance ?: return@addListener
+                MapSyncService.answer(MinestomCompanionPlayer(player, instance), event.identifier)
+                return@addListener
+            }
+
             val channels = RegisteredChannels.parseRegisterPayload(event.message)
             RegisteredChannels.register(player.uuid, channels)
 
             val instance = player.instance ?: return@addListener
-            val xaeroChannels = channels.filter(XaeroChannels::isXaero)
-            if (xaeroChannels.isNotEmpty()) {
+            val modChannels = channels.filter { XaeroChannels.isXaero(it) || JourneyMapChannels.isJourneyMap(it) }
+            if (modChannels.isNotEmpty()) {
                 val companionPlayer = MinestomCompanionPlayer(player, instance)
-                if (xaeroChannels.any(XaeroChannels::isMap)) tracker.reset(companionPlayer)
-                XaeroSyncService.sync(companionPlayer, xaeroChannels)
+                if (modChannels.any(XaeroChannels::isMap)) tracker.reset(companionPlayer)
+                MapSyncService.syncChannels(companionPlayer, modChannels)
             }
         }
 
@@ -51,10 +60,13 @@ object CompanionListener : EventRegistrar {
 
             // The mods answer the handshake, so announce the channels as a server with the mods does.
             if (event.isFirstSpawn) {
-                player.sendPluginMessage(REGISTER_CHANNEL, RegisteredChannels.registerPayload(XaeroChannels.ALL))
+                player.sendPluginMessage(
+                    REGISTER_CHANNEL,
+                    RegisteredChannels.registerPayload(XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED),
+                )
             }
 
-            XaeroSyncService.sync(companionPlayer)
+            MapSyncService.sync(companionPlayer)
             if (!event.isFirstSpawn) return@addListener
 
             tracker.reset(companionPlayer)
@@ -62,7 +74,7 @@ object CompanionListener : EventRegistrar {
             for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
                 player.scheduler().buildTask {
                     val instance = player.instance ?: return@buildTask
-                    XaeroSyncService.sync(MinestomCompanionPlayer(player, instance))
+                    MapSyncService.sync(MinestomCompanionPlayer(player, instance))
                 }.delay(TaskSchedule.millis(delay.inWholeMilliseconds)).schedule()
             }
         }
@@ -77,7 +89,7 @@ object CompanionListener : EventRegistrar {
         node.addListener<PlayerDisconnectEvent> { event ->
             val uuid = event.player.uuid
             RegisteredChannels.forget(uuid)
-            XaeroSyncService.forget(uuid)
+            MapSyncService.forget(uuid)
             tracker.forget(uuid)
         }
     }

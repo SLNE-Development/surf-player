@@ -3,7 +3,8 @@ package dev.slne.surf.minimapcompanion.paper
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
-import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
+import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
+import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.paper.command.minimapCompanionCommand
 import dev.slne.surf.minimapcompanion.paper.listener.CompanionListener
@@ -24,13 +25,21 @@ class PaperMain : SuspendingJavaPlugin() {
             server.messenger.registerIncomingPluginChannel(this, channel) { _, _, _ -> }
         }
 
+        // JourneyMap's client only sends its requests on channels the server announced.
+        for (channel in JourneyMapChannels.ANNOUNCED) {
+            server.messenger.registerOutgoingPluginChannel(this, channel)
+            server.messenger.registerIncomingPluginChannel(this, channel) { _, player, _ ->
+                player.scheduler.run(this, { MapSyncService.answer(PaperCompanionPlayer(player), channel) }, null)
+            }
+        }
+
         CompanionListener.register()
         PaperTracker.configure()
         minimapCompanionCommand()
 
         for (player in server.onlinePlayers) {
             player.scheduler.run(this, {
-                XaeroSyncService.sync(PaperCompanionPlayer(player))
+                MapSyncService.sync(PaperCompanionPlayer(player))
                 PaperTracker.reset(player)
             }, null)
             PaperTracker.track(player)

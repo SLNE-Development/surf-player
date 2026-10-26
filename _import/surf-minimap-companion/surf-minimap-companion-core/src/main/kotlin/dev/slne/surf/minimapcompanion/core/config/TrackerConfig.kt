@@ -13,4 +13,9 @@ data class TrackerConfig(
 
     @param:Comment("Shows players the members of their clan from surf-clan. Needs surf-clan-paper on this server.")
     val clanMembers: Boolean = false,
-)
+) {
+    /**
+     * Whether any switch shows players beyond view distance.
+     */
+    val isEnabled: Boolean get() = everyoneTracksEveryone || friends || clanMembers
+}

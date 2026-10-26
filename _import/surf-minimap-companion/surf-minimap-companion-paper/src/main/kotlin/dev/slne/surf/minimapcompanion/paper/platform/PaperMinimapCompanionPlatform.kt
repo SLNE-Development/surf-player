@@ -11,4 +11,6 @@ class PaperMinimapCompanionPlatform : MinimapCompanionPlatform {
     override val dataPath get() = plugin.dataPath
 
     override fun worldIdentity(worldKey: Key) = Bukkit.getWorld(worldKey)?.uid?.toString()
+
+    override val tracksPlayers = true
 }

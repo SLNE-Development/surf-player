@@ -3,6 +3,8 @@ package dev.slne.surf.minimapcompanion.paper.listener
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
+import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
+import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects
@@ -17,33 +19,33 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRegisterChannelEvent
 
 /**
- * Syncs players whenever their client could have lost or not yet received the Xaero data.
+ * Syncs players whenever their client could have lost or not yet received what the map mods need.
  */
 object CompanionListener : Listener {
 
     @EventHandler
     fun onRegisterChannel(event: PlayerRegisterChannelEvent) {
         val channel = event.channel
-        if (!XaeroChannels.isXaero(channel)) return
+        if (!XaeroChannels.isXaero(channel) && !JourneyMapChannels.isJourneyMap(channel)) return
 
         // The event can fire off the player's region thread, so read the world on it.
         val player = event.player
         player.scheduler.run(plugin, {
             if (XaeroChannels.isMap(channel)) PaperTracker.reset(player)
-            XaeroSyncService.sync(PaperCompanionPlayer(player), listOf(channel))
+            MapSyncService.syncChannels(PaperCompanionPlayer(player), listOf(channel))
         }, null)
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
-        XaeroSyncService.sync(PaperCompanionPlayer(player))
+        MapSyncService.sync(PaperCompanionPlayer(player))
         PaperTracker.reset(player)
         PaperTracker.track(player)
 
         for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
             val ticks = delay.inWholeMilliseconds / 50
-            player.scheduler.runDelayed(plugin, { XaeroSyncService.sync(PaperCompanionPlayer(player)) }, null, ticks)
+            player.scheduler.runDelayed(plugin, { MapSyncService.sync(PaperCompanionPlayer(player)) }, null, ticks)
         }
     }
 
@@ -51,7 +53,7 @@ object CompanionListener : Listener {
     @EventHandler
     fun onAddToWorld(event: EntityAddToWorldEvent) {
         val player = event.entity as? Player ?: return
-        XaeroSyncService.sync(PaperCompanionPlayer(player, event.world))
+        MapSyncService.sync(PaperCompanionPlayer(player, event.world))
     }
 
     // The client drops every effect on respawn, so the maps would come back.
@@ -62,7 +64,7 @@ object CompanionListener : Listener {
 
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
-        XaeroSyncService.forget(event.player.uniqueId)
+        MapSyncService.forget(event.player.uniqueId)
         PaperTracker.forget(event.player)
     }
 }

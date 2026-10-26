@@ -6,7 +6,7 @@ import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.slne.surf.minimapcompanion.core.command.CompanionPermissions
 import dev.slne.surf.minimapcompanion.core.command.sendReloadResult
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
-import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
+import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.plugin
 import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
@@ -25,7 +25,12 @@ fun minimapCompanionCommand() = commandTree("minimapcompanion") {
 
                 for (player in Bukkit.getOnlinePlayers()) {
                     player.scheduler.run(plugin, {
-                        XaeroSyncService.sync(PaperCompanionPlayer(player), config = result.config, xaero = result.xaero)
+                        MapSyncService.sync(
+                            PaperCompanionPlayer(player),
+                            config = result.config,
+                            xaero = result.xaero,
+                            journeyMap = result.journeyMap,
+                        )
                     }, null)
                 }
             }

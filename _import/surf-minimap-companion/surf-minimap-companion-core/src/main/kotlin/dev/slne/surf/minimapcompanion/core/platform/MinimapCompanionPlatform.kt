@@ -22,5 +22,10 @@ interface MinimapCompanionPlatform {
      */
     fun worldIdentity(worldKey: Key): String?
 
+    /**
+     * Whether this platform runs the player tracker. Only then may a map mod rely on the server for players.
+     */
+    val tracksPlayers: Boolean
+
     companion object : MinimapCompanionPlatform by platform
 }
