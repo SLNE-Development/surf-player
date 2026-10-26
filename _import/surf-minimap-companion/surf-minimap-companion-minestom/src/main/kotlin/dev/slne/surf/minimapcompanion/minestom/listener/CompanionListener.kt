@@ -3,6 +3,7 @@ package dev.slne.surf.minimapcompanion.minestom.listener
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
 import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
+import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.minestom.platform.MinestomCompanionPlayer
 import dev.slne.surf.minimapcompanion.minestom.platform.RegisteredChannels
@@ -19,6 +20,9 @@ import net.minestom.server.timer.TaskSchedule
 object CompanionListener : EventRegistrar {
     private const val REGISTER_CHANNEL = "minecraft:register"
 
+    // Minestom does not track players itself; it only clears what other servers sent.
+    private val tracker = PlayerTracker()
+
     override fun register(node: EventNode<Event>) {
         // Also fires during the configuration phase, before the player has an instance.
         node.addListener<PlayerPluginMessageEvent> { event ->
@@ -31,15 +35,20 @@ object CompanionListener : EventRegistrar {
             val instance = player.instance ?: return@addListener
             val xaeroChannels = channels.filter(XaeroChannels::isXaero)
             if (xaeroChannels.isNotEmpty()) {
-                XaeroSyncService.sync(MinestomCompanionPlayer(player, instance), xaeroChannels)
+                val companionPlayer = MinestomCompanionPlayer(player, instance)
+                if (xaeroChannels.any(XaeroChannels::isMap)) tracker.reset(companionPlayer)
+                XaeroSyncService.sync(companionPlayer, xaeroChannels)
             }
         }
 
         // Fires on the first spawn and on every instance change.
         node.addListener<PlayerSpawnEvent> { event ->
             val player = event.player
-            XaeroSyncService.sync(MinestomCompanionPlayer(player, event.instance))
+            val companionPlayer = MinestomCompanionPlayer(player, event.instance)
+            XaeroSyncService.sync(companionPlayer)
             if (!event.isFirstSpawn) return@addListener
+
+            tracker.reset(companionPlayer)
 
             for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
                 player.scheduler().buildTask {
@@ -53,6 +62,7 @@ object CompanionListener : EventRegistrar {
             val uuid = event.player.uuid
             RegisteredChannels.forget(uuid)
             XaeroSyncService.forget(uuid)
+            tracker.forget(uuid)
         }
     }
 }
