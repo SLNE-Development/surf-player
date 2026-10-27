@@ -1,6 +1,8 @@
 package dev.slne.surf.minimapcompanion.core.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
+import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapProfile
 import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapProfile
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
@@ -107,6 +109,59 @@ class MinimapCompanionConfigTest {
         assertTrue("disable-maps: false" in written, written)
         assertTrue("everyone-tracks-everyone: false" in written, written)
         assertTrue("clan-members: false" in written, written)
+    }
+
+    @Test
+    fun `default config yml writes per-mod for every global setting`(@TempDir folder: Path) {
+        SpongeConfigManager.yaml(MinimapCompanionConfig::class.java, folder, "config.yml")
+        val written = folder.resolve("config.yml").readText()
+
+        assertTrue("global-settings:" in written, written)
+        for (feature in GlobalFeature.entries) {
+            assertTrue("${feature.key}: per-mod" in written, written)
+        }
+    }
+
+    @Test
+    fun `config yml from an earlier version gets the global settings as per-mod`(@TempDir folder: Path) {
+        folder.resolve("config.yml").writeText("disable-maps: false\n")
+
+        val config = SpongeConfigManager.yaml(MinimapCompanionConfig::class.java, folder, "config.yml").config
+
+        assertEquals(emptyMap(), GlobalSettings.of(config.globalSettings).overrides)
+        assertTrue("cave-mode: per-mod" in folder.resolve("config.yml").readText())
+    }
+
+    @Test
+    fun `global settings load from config yml`(@TempDir folder: Path) {
+        folder.resolve("config.yml").writeText(
+            """
+            global-settings:
+              cave-mode: false
+              minimap: true
+            """.trimIndent()
+        )
+
+        val config = SpongeConfigManager.yaml(MinimapCompanionConfig::class.java, folder, "config.yml").config
+
+        assertEquals(
+            mapOf(GlobalFeature.CAVE_MODE to false, GlobalFeature.MINIMAP to true),
+            GlobalSettings.of(config.globalSettings).overrides,
+        )
+    }
+
+    @Test
+    fun `a typo in the global settings stays in config yml`(@TempDir folder: Path) {
+        folder.resolve("config.yml").writeText(
+            """
+            global-settings:
+              cave-mode: flase
+            """.trimIndent()
+        )
+
+        SpongeConfigManager.yaml(MinimapCompanionConfig::class.java, folder, "config.yml")
+
+        assertTrue("cave-mode: flase" in folder.resolve("config.yml").readText())
     }
 
     @Test

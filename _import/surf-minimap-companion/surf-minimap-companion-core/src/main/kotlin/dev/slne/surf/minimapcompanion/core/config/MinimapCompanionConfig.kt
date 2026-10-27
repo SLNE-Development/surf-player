@@ -9,8 +9,11 @@ import org.spongepowered.configurate.objectmapping.meta.Comment
  */
 @ConfigSerializable
 data class MinimapCompanionConfig(
-    @param:Comment("Turns every supported map mod (Xaero's mods, JourneyMap and VoxelMap) off completely, for events such as a maze where players must not see the map. To restrict single map features, use the mod's own file, such as xaero.yml, journeymap.yml or voxelmap.yml.")
+    @param:Comment("Turns every supported map mod (Xaero's mods, JourneyMap and VoxelMap) off completely, for events such as a maze where players must not see the map. To restrict single map features, use global-settings for every mod at once, or the mod's own file, such as xaero.yml, journeymap.yml or voxelmap.yml.")
     val disableMaps: Boolean = false,
+
+    @param:Comment("Switches a map feature for every supported mod at once. per-mod leaves it to xaero.yml, journeymap.yml and voxelmap.yml; true allows it and false forbids it in every mod that has it, whatever the mod files say. disable-maps still turns everything off. map-features.md lists what each entry changes in each mod.")
+    val globalSettings: GlobalSettingsConfig = GlobalSettingsConfig(),
 
     @param:Comment("Mixed into every computed level ID. Set it only when servers share worlds copied from one template, since copies keep the same world UUID.")
     val serverId: String = "",
