@@ -12,16 +12,21 @@ import java.util.concurrent.ConcurrentHashMap
  * Positions come in through [update]; each viewer is synced by its own [tick], so a platform can run both
  * on the thread that owns the player.
  */
-class PlayerTracker {
+class PlayerTracker(
+    private val encode: (uuid: UUID, position: TrackedPosition) -> ByteArray = { uuid, position ->
+        XaeroPackets.trackedPlayer(uuid, position.x, position.y, position.z, position.dimension)
+    },
+) {
     private val positions = ConcurrentHashMap<UUID, Published>()
     private val sentPositions = ConcurrentHashMap<UUID, MutableMap<UUID, Published>>()
 
     /**
-     * A target's position as viewers get it, encoded once for all of them. Viewers compare it by identity.
+     * A target's position as viewers get it. It is encoded when the first viewer gets it, and only once for all of
+     * them, since positions are published even while nobody tracks the player. Viewers compare it by identity.
      */
-    private class Published(uuid: UUID, val position: TrackedPosition) {
-        val payload = XaeroPackets.trackedPlayer(uuid, position.x, position.y, position.z, position.dimension)
-        val removal = XaeroPackets.trackedPlayerRemoved(uuid)
+    private inner class Published(uuid: UUID, val position: TrackedPosition) {
+        val payload by lazy { encode(uuid, position) }
+        val removal by lazy { XaeroPackets.trackedPlayerRemoved(uuid) }
     }
 
     /**

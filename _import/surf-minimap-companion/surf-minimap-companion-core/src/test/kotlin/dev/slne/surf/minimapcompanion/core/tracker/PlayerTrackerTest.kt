@@ -114,6 +114,23 @@ class PlayerTrackerTest {
     }
 
     @Test
+    fun `a position is only encoded once a viewer gets it`() {
+        var encoded = 0
+        val tracker = PlayerTracker { uuid, at ->
+            encoded++
+            XaeroPackets.trackedPlayer(uuid, at.x, at.y, at.z, at.dimension)
+        }
+
+        tracker.update(friend, position)
+        tracker.update(friend, position.copy(x = 5.0))
+        assertEquals(0, encoded)
+
+        tracker.tick(viewer, setOf(friend)) { true }
+        tracker.tick(FakePlayer(), setOf(friend)) { true }
+        assertEquals(1, encoded)
+    }
+
+    @Test
     fun `player no longer tracked is removed`() {
         tracker.update(friend, position)
         tick()
