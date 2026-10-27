@@ -1,13 +1,22 @@
 package dev.slne.surf.minimapcompanion.minestom.platform
 
+import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
+import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * Tracks the plugin channels each client registered. Minestom sends to any channel,
- * so the companion checks here first to reach only clients with Xaero's mods.
+ * Tracks which of the map mods' channels each client registered. Minestom sends to any channel,
+ * so the companion checks here first to reach only clients with the mod.
  */
 object RegisteredChannels {
+    /**
+     * The channels of the supported map mods, which the companion announces and asks clients about.
+     */
+    val MOD_CHANNELS = XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED + VoxelMapChannels.SETTINGS
+
+    private val modChannels = MOD_CHANNELS.toSet()
     private val channels = ConcurrentHashMap<UUID, MutableSet<String>>()
 
     /**
@@ -22,11 +31,19 @@ object RegisteredChannels {
     fun registerPayload(channels: Collection<String>): ByteArray =
         channels.joinToString("\u0000").toByteArray(Charsets.UTF_8)
 
+    /**
+     * Remembers the [channels] of supported mods among the ones a client registered. Anything else is dropped, so a
+     * client cannot grow this with names it makes up.
+     */
     fun register(playerUuid: UUID, channels: Collection<String>) {
-        this.channels.computeIfAbsent(playerUuid) { ConcurrentHashMap.newKeySet() }.addAll(channels)
+        val known = channels.filter { it in modChannels }
+        if (known.isEmpty()) return
+        this.channels.computeIfAbsent(playerUuid) { ConcurrentHashMap.newKeySet() }.addAll(known)
     }
 
     fun isRegistered(playerUuid: UUID, channel: String) = channels[playerUuid]?.contains(channel) == true
+
+    fun registered(playerUuid: UUID): Set<String> = channels[playerUuid].orEmpty().toSet()
 
     fun forget(playerUuid: UUID) {
         channels.remove(playerUuid)

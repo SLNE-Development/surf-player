@@ -34,6 +34,19 @@ class RegisteredChannelsTest {
     }
 
     @Test
+    fun `channels of no supported mod are not remembered`() {
+        RegisteredChannels.register(uuid, listOf("foo:bar", "xaerominimap:main"))
+        assertFalse(RegisteredChannels.isRegistered(uuid, "foo:bar"))
+        assertTrue(RegisteredChannels.isRegistered(uuid, "xaerominimap:main"))
+    }
+
+    @Test
+    fun `endless registrations of unknown channels keep no state`() {
+        repeat(1_000) { RegisteredChannels.register(uuid, listOf("spam:$it")) }
+        assertEquals(emptySet(), RegisteredChannels.registered(uuid))
+    }
+
+    @Test
     fun `registered channels are remembered per player`() {
         RegisteredChannels.register(uuid, listOf("xaerominimap:main"))
         assertTrue(RegisteredChannels.isRegistered(uuid, "xaerominimap:main"))

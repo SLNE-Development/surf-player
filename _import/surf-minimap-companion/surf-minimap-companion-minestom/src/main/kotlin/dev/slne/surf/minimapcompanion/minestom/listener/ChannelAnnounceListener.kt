@@ -2,9 +2,6 @@ package dev.slne.surf.minimapcompanion.minestom.listener
 
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.minestom.platform.RegisteredChannels
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
@@ -17,14 +14,12 @@ import net.minestom.server.event.player.PlayerSkinInitEvent
 object ChannelAnnounceListener : EventRegistrar {
     const val REGISTER_CHANNEL = "minecraft:register"
 
-    private val ANNOUNCED = XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED + VoxelMapChannels.SETTINGS
-
     override fun register(node: EventNode<Event>) {
         // The only event between the join game packet and the spawn, which waits for the spawn chunks to load.
         // VoxelMap asks for the world ID once, on its first tick in the new world, so the channels must reach it
         // together with the join, as on Paper.
         node.addListener<PlayerSkinInitEvent> { event ->
-            event.player.sendPluginMessage(REGISTER_CHANNEL, RegisteredChannels.registerPayload(ANNOUNCED))
+            event.player.sendPluginMessage(REGISTER_CHANNEL, RegisteredChannels.registerPayload(RegisteredChannels.MOD_CHANNELS))
         }
     }
 }
