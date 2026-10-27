@@ -80,6 +80,39 @@ class JourneyMapTrackerTest {
     }
 
     @Test
+    fun `only the players that changed are resent`() {
+        val c = UUID.randomUUID()
+        val posC = JourneyMapPlayer(4, -20.0, 70.0, 3.0, 0f, 0f, overworld)
+        tracker.update(c, posC)
+        tickedOnce()
+
+        val movedA = posA.copy(x = 11.0)
+        tracker.update(a, movedA)
+        tickShowingAll()
+        assertEquals(listOf(locations(mapOf(a to movedA))), viewer.sentContent)
+    }
+
+    @Test
+    fun `the keep-alive lists every player, not only the changed ones`() {
+        val c = UUID.randomUUID()
+        val posC = JourneyMapPlayer(4, -20.0, 70.0, 3.0, 0f, 0f, overworld)
+        tracker.update(c, posC)
+        tickedOnce()
+
+        val movedA = posA.copy(x = 11.0)
+        tracker.update(a, movedA)
+        tickShowingAll()
+        repeat(JourneyMapTracker.KEEP_ALIVE_RUNS - 1) { tickShowingAll() }
+
+        val keepAlive = viewer.sentContent.last()
+        assertEquals(JourneyMapChannels.PLAYER_LOCATIONS, keepAlive.first)
+        assertEquals(
+            setOf(locations(mapOf(a to movedA, c to posC)), locations(mapOf(c to posC, a to movedA))).contains(keepAlive),
+            true,
+        )
+    }
+
+    @Test
     fun `a small turn is not resent`() {
         tickedOnce()
         tracker.update(a, posA.copy(yaw = posA.yaw + 5f))
