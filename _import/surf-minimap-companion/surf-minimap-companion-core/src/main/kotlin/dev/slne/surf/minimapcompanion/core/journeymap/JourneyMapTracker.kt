@@ -3,6 +3,7 @@ package dev.slne.surf.minimapcompanion.core.journeymap
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.abs
 
 /**
  * Feeds JourneyMap's player radar while the server provides the players, as JourneyMap's server addon does.
@@ -15,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap
 class JourneyMapTracker {
     private val players = ConcurrentHashMap<UUID, Entry>()
     private val concealed: MutableSet<UUID> = ConcurrentHashMap.newKeySet()
+    private val trackers = ConcurrentHashMap<UUID, Set<UUID>>()
     private val listed = ConcurrentHashMap<UUID, Listing>()
 
     /**
@@ -28,12 +30,21 @@ class JourneyMapTracker {
 
     /**
      * Records where the player with [uuid] is. A [concealed] player is sneaking, invisible or spectating, whom
-     * JourneyMap's own radar would leave out.
+     * JourneyMap's own radar would leave out. [trackedBy] are the players whose clients see this player, read on
+     * this player's own thread.
      */
-    fun update(uuid: UUID, player: JourneyMapPlayer, concealed: Boolean = false) {
-        if (players[uuid]?.player != player) players[uuid] = Entry(uuid, player)
+    fun update(uuid: UUID, player: JourneyMapPlayer, concealed: Boolean = false, trackedBy: Set<UUID> = emptySet()) {
+        val current = players[uuid]
+        if (current == null || !current.player.looksLike(player)) players[uuid] = Entry(uuid, player)
         if (concealed) this.concealed += uuid else this.concealed -= uuid
+        trackers[uuid] = trackedBy
     }
+
+    /**
+     * Whether [viewer]'s client sees [target] in the world, as [target]'s last [update] said. Tracking is not always
+     * mutual: a player with a short view distance can be seen by others without seeing them.
+     */
+    fun sees(viewer: UUID, target: UUID) = trackers[target]?.contains(viewer) == true
 
     /**
      * Sends [viewer] the players in their dimension that [isTracked] shows them, and the ones [isNearby] says their
@@ -73,6 +84,7 @@ class JourneyMapTracker {
     fun forget(uuid: UUID) {
         players.remove(uuid)
         concealed.remove(uuid)
+        trackers.remove(uuid)
         listed.remove(uuid)
     }
 
@@ -81,5 +93,19 @@ class JourneyMapTracker {
          * After how many runs without a change a viewer gets the list again: 2 seconds at the Paper tracker's 5 ticks.
          */
         const val KEEP_ALIVE_RUNS = 8
+
+        /**
+         * How far a player must turn before viewers get their new heading. The radar draws players as small arrows.
+         */
+        const val MIN_TURN_DEGREES = 10f
+
+        // The radar shows where a player is and which way they face; looking up or down shows nowhere.
+        private fun JourneyMapPlayer.looksLike(other: JourneyMapPlayer): Boolean {
+            if (entityId != other.entityId || x != other.x || y != other.y || z != other.z || dimension != other.dimension) {
+                return false
+            }
+            val turn = ((yaw - other.yaw) % 360f + 540f) % 360f - 180f
+            return abs(turn) < MIN_TURN_DEGREES
+        }
     }
 }

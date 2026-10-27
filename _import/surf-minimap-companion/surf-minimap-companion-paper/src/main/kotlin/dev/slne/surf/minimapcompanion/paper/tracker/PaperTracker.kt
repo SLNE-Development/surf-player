@@ -145,16 +145,15 @@ object PaperTracker {
                 player.uniqueId,
                 JourneyMapPlayer(player.entityId, location.x, location.y, location.z, location.yaw, location.pitch, world),
                 concealed,
+                // Who sees this player, read on this player's own thread for the other players' ticks.
+                trackedBy = player.trackedBy.mapTo(HashSet()) { it.uniqueId },
             )
 
             // JourneyMap then shows only the players listed here, so the ones the client sees itself stay visible too.
-            // Players track each other within the same range, so the players tracking the viewer are the ones the
-            // viewer's client sees, and they can be read on the viewer's own thread.
-            val seenByClient by lazy { player.trackedBy.mapTo(HashSet()) { it.uniqueId } }
             journeyMapTracker.tick(
                 viewer,
                 isTracked = { target -> isShownByTracker(player.uniqueId, target) && isVisibleOnMap(player, target) },
-                isNearby = { target -> target in seenByClient && isVisibleOnMap(player, target) },
+                isNearby = { target -> journeyMapTracker.sees(player.uniqueId, target) && isVisibleOnMap(player, target) },
             )
         }
     }

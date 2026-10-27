@@ -4,6 +4,8 @@ import dev.slne.surf.minimapcompanion.core.service.FakePlayer
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class JourneyMapTrackerTest {
     private val overworld = "minecraft:overworld"
@@ -75,6 +77,41 @@ class JourneyMapTrackerTest {
         tracker.update(a, turnedA)
         tickShowingAll()
         assertEquals(listOf(locations(mapOf(a to turnedA))), viewer.sentContent)
+    }
+
+    @Test
+    fun `a small turn is not resent`() {
+        tickedOnce()
+        tracker.update(a, posA.copy(yaw = posA.yaw + 5f))
+        tickShowingAll()
+        assertEquals(emptyList(), viewer.sent)
+    }
+
+    @Test
+    fun `looking up or down is not resent`() {
+        tickedOnce()
+        tracker.update(a, posA.copy(pitch = 60f))
+        tickShowingAll()
+        assertEquals(emptyList(), viewer.sent)
+    }
+
+    @Test
+    fun `turning across north counts the short way round`() {
+        tracker.update(a, posA.copy(yaw = 358f))
+        tickedOnce()
+        tracker.update(a, posA.copy(yaw = 2f))
+        tickShowingAll()
+        assertEquals(emptyList(), viewer.sent)
+    }
+
+    @Test
+    fun `a viewer sees the players whose client tracks them, not the other way round`() {
+        // a's client tracks the viewer, but the viewer's client does not track a.
+        tracker.update(viewer.uuid, viewerPosition, trackedBy = setOf(a))
+        tracker.update(a, posA, trackedBy = emptySet())
+
+        assertFalse(tracker.sees(viewer.uuid, a))
+        assertTrue(tracker.sees(a, viewer.uuid))
     }
 
     @Test
