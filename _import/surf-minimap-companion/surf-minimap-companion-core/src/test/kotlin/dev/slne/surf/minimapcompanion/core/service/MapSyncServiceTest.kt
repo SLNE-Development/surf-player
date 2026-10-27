@@ -1,5 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.service
 
+import dev.slne.surf.minimapcompanion.core.config.CompanionSettings
 import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.config.TrackerConfig
@@ -20,12 +21,13 @@ class MapSyncServiceTest {
     private val xaero = XaeroConfig()
     private val journeyMap = JourneyMapConfig()
     private val voxelMap = VoxelMapConfig()
+    private val settings = CompanionSettings(MinimapCompanionConfig(), xaero, journeyMap, voxelMap)
 
     private fun player() =
         FakePlayer(channels = (XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED + VoxelMapChannels.SETTINGS).toSet())
 
     private fun sync(player: FakePlayer, config: MinimapCompanionConfig = MinimapCompanionConfig(), tracksPlayers: Boolean = false) =
-        MapSyncService.sync(player, config, xaero, journeyMap, voxelMap, tracksPlayers)
+        MapSyncService.sync(player, CompanionSettings(config, xaero, journeyMap, voxelMap), tracksPlayers)
 
     private fun FakePlayer.playerRadar() =
         permissionsJson(sent.last { it.first == JourneyMapChannels.PERMISSIONS }.second)["worldPlayerRadar"]
@@ -64,7 +66,7 @@ class MapSyncServiceTest {
     @Test
     fun `registering journeymap's permission channel syncs only journeymap`() {
         val player = player()
-        MapSyncService.syncChannels(player, listOf(JourneyMapChannels.PERMISSIONS), MinimapCompanionConfig(), xaero, journeyMap, voxelMap, false)
+        MapSyncService.syncChannels(player, listOf(JourneyMapChannels.PERMISSIONS), settings, false)
         assertEquals(setOf(WorldInfo.CHANNEL, JourneyMapChannels.PERMISSIONS), player.sent.map { it.first }.toSet())
     }
 
@@ -75,7 +77,7 @@ class MapSyncServiceTest {
             worldKey = Key.key("surf:space_lobby"),
             channels = setOf(WorldInfo.CHANNEL),
         )
-        MapSyncService.answer(player, WorldInfo.CHANNEL, MinimapCompanionConfig(), journeyMap, false)
+        MapSyncService.answer(player, WorldInfo.CHANNEL, settings, false)
         assertEquals(listOf(WorldInfo.CHANNEL to WorldInfo.payload("space_lobby-829346366").toList()), player.sentContent)
     }
 
@@ -90,14 +92,14 @@ class MapSyncServiceTest {
     @Test
     fun `registering voxelmap's settings channel syncs only voxelmap`() {
         val player = player()
-        MapSyncService.syncChannels(player, listOf(VoxelMapChannels.SETTINGS), MinimapCompanionConfig(), xaero, journeyMap, voxelMap, false)
+        MapSyncService.syncChannels(player, listOf(VoxelMapChannels.SETTINGS), settings, false)
         assertEquals(setOf(VoxelMapChannels.SETTINGS), player.sent.map { it.first }.toSet())
     }
 
     @Test
     fun `registering a xaero channel syncs only that channel`() {
         val player = player()
-        MapSyncService.syncChannels(player, listOf(XaeroChannels.MINIMAP), MinimapCompanionConfig(), xaero, journeyMap, voxelMap, false)
+        MapSyncService.syncChannels(player, listOf(XaeroChannels.MINIMAP), settings, false)
         assertEquals(setOf(XaeroChannels.MINIMAP), player.sent.map { it.first }.toSet())
     }
 }

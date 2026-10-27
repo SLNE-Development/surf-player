@@ -21,13 +21,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
             if (result is CompanionConfigs.ReloadResult.Reloaded) {
                 for (player in MinecraftServer.getConnectionManager().onlinePlayers) {
                     val instance = player.instance ?: continue
-                    MapSyncService.sync(
-                        MinestomCompanionPlayer(player, instance),
-                        config = result.config,
-                        xaero = result.xaero,
-                        journeyMap = result.journeyMap,
-                        voxelMap = result.voxelMap,
-                    )
+                    MapSyncService.sync(MinestomCompanionPlayer(player, instance), result.settings)
                 }
             }
 

@@ -100,6 +100,40 @@ class CompanionConfigsTest {
     }
 
     @Test
+    fun `a reload publishes the settings once every file loaded`() {
+        val result = CompanionConfigs.reload(
+            FakeFile("config.yml", MinimapCompanionConfig()) { MinimapCompanionConfig() }.reloadable(),
+            FakeFile("xaero.yml", XaeroConfig()) { XaeroConfig() }.reloadable(),
+            journeyMapFile().reloadable(),
+            voxelMapFile().reloadable(),
+        )
+
+        assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
+        assertSame(result.settings, CompanionConfigs.current)
+    }
+
+    @Test
+    fun `a failed reload keeps the published settings`() {
+        val first = CompanionConfigs.reload(
+            FakeFile("config.yml", MinimapCompanionConfig()) { MinimapCompanionConfig() }.reloadable(),
+            FakeFile("xaero.yml", XaeroConfig()) { XaeroConfig() }.reloadable(),
+            journeyMapFile().reloadable(),
+            voxelMapFile().reloadable(),
+        )
+        assertIs<CompanionConfigs.ReloadResult.Reloaded>(first)
+
+        val failed = CompanionConfigs.reload(
+            FakeFile("config.yml", MinimapCompanionConfig()) { MinimapCompanionConfig(disableMaps = true) }.reloadable(),
+            FakeFile("xaero.yml", XaeroConfig()) { broken() }.reloadable(),
+            journeyMapFile().reloadable(),
+            voxelMapFile().reloadable(),
+        )
+
+        assertIs<CompanionConfigs.ReloadResult.Failed>(failed)
+        assertSame(first.settings, CompanionConfigs.current)
+    }
+
+    @Test
     fun `broken xaero yml keeps the previous config yml active`() {
         val previous = MinimapCompanionConfig()
         val main = FakeFile("config.yml", previous) { MinimapCompanionConfig(disableMaps = true) }

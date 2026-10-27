@@ -3,7 +3,7 @@ package dev.slne.surf.minimapcompanion.paper.tracker
 import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
+import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapPlayer
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapTracker
 import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
@@ -57,7 +57,7 @@ object PaperTracker {
      * Sources still enabled keep their relations, so their players stay on the map meanwhile.
      */
     fun configure() {
-        val config = CompanionConfig.getConfig().tracker
+        val config = CompanionConfigs.current.config.tracker
         everyoneTracksEveryone = config.everyoneTracksEveryone
         journeyMapRadar = config.isEnabled
 

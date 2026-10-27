@@ -1,10 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.config
 
 import dev.slne.surf.api.core.config.SpongeConfigClass
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapProfile
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapProfile
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
 import java.io.UncheckedIOException
 import kotlin.time.Duration
 import kotlin.time.TimeSource
@@ -31,23 +27,31 @@ object CompanionConfigs {
     sealed interface ReloadResult {
         val duration: Duration
 
-        data class Reloaded(
-            val config: MinimapCompanionConfig,
-            val globalSettings: GlobalSettings,
-            val xaero: XaeroConfig,
-            val profile: XaeroServerProfile,
-            val journeyMap: JourneyMapConfig,
-            val journeyMapProfile: JourneyMapProfile,
-            val voxelMap: VoxelMapConfig,
-            val voxelMapProfile: VoxelMapProfile,
-            override val duration: Duration,
-        ) : ReloadResult
+        data class Reloaded(val settings: CompanionSettings, override val duration: Duration) : ReloadResult {
+            val config get() = settings.config
+            val globalSettings get() = settings.global
+            val xaero get() = settings.xaero
+            val profile get() = settings.xaeroProfile
+            val journeyMap get() = settings.journeyMap
+            val journeyMapProfile get() = settings.journeyMapProfile
+            val voxelMap get() = settings.voxelMap
+            val voxelMapProfile get() = settings.voxelMapProfile
+        }
 
         /**
          * [fileName] could not be read; every file keeps the config it had before.
          */
         data class Failed(val fileName: String, val reason: String, override val duration: Duration) : ReloadResult
     }
+
+    @Volatile
+    private var settings: CompanionSettings? = null
+
+    /**
+     * The settings every sync reads: all four files as they were last loaded together.
+     */
+    val current: CompanionSettings
+        get() = settings ?: error("The companion's config files are not loaded yet")
 
     /**
      * Loads every file and checks the global settings and the options of the map mods, so their warnings and the
@@ -58,16 +62,21 @@ object CompanionConfigs {
         CompanionXaeroConfig.init()
         CompanionJourneyMapConfig.init()
         CompanionVoxelMapConfig.init()
-        val global = GlobalSettings.of(CompanionConfig.getConfig().globalSettings)
-        XaeroServerProfile.of(CompanionXaeroConfig.getConfig(), global)
-        JourneyMapProfile.of(CompanionJourneyMapConfig.getConfig(), global)
-        VoxelMapProfile.of(CompanionVoxelMapConfig.getConfig(), global)
+        settings = CompanionSettings(
+            CompanionConfig.getConfig(),
+            CompanionXaeroConfig.getConfig(),
+            CompanionJourneyMapConfig.getConfig(),
+            CompanionVoxelMapConfig.getConfig(),
+        )
     }
 
     /**
-     * Reads every file again and checks the options of the map mods, which logs their warnings. The platforms
-     * then sync every player again, since the reloaded files can change the level IDs and what each mod enforces.
+     * Reads every file again and checks the global settings and the options of the map mods, which logs their
+     * warnings. Only once every file loaded do the new settings become [current]; the platforms then sync every
+     * player again, since the reloaded files can change the level IDs and what each mod enforces. One reload runs
+     * at a time.
      */
+    @Synchronized
     fun reload(
         main: ReloadableConfig<MinimapCompanionConfig> = CompanionConfig.reloadable("config.yml"),
         xaero: ReloadableConfig<XaeroConfig> = CompanionXaeroConfig.reloadable("xaero.yml"),
@@ -82,18 +91,9 @@ object CompanionConfigs {
             val xaeroConfig = reload.load(xaero)
             val journeyMapConfig = reload.load(journeyMap)
             val voxelMapConfig = reload.load(voxelMap)
-            val global = GlobalSettings.of(config.globalSettings)
-            ReloadResult.Reloaded(
-                config,
-                global,
-                xaeroConfig,
-                XaeroServerProfile.of(xaeroConfig, global),
-                journeyMapConfig,
-                JourneyMapProfile.of(journeyMapConfig, global),
-                voxelMapConfig,
-                VoxelMapProfile.of(voxelMapConfig, global),
-                start.elapsedNow(),
-            )
+            val loaded = CompanionSettings(config, xaeroConfig, journeyMapConfig, voxelMapConfig)
+            settings = loaded
+            ReloadResult.Reloaded(loaded, start.elapsedNow())
         } catch (e: FileFailed) {
             reload.restore()
             // The config manager already logged the cause; the admin only needs to know what broke.

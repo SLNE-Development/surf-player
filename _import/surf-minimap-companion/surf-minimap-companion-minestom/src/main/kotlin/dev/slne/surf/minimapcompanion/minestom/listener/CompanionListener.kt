@@ -2,7 +2,7 @@ package dev.slne.surf.minimapcompanion.minestom.listener
 
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
+import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroSyncService
@@ -77,7 +77,7 @@ object CompanionListener : EventRegistrar {
         node.addListener<PlayerRespawnEvent> { event ->
             val player = event.player
             val instance = player.instance ?: return@addListener
-            XaeroMapEffects.sync(MinestomCompanionPlayer(player, instance), CompanionConfig.getConfig().disableMaps)
+            XaeroMapEffects.sync(MinestomCompanionPlayer(player, instance), CompanionConfigs.current.config.disableMaps)
         }
 
         node.addListener<PlayerDisconnectEvent> { event ->

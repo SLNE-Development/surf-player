@@ -1,7 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.xaero
 
-import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
-import dev.slne.surf.minimapcompanion.core.config.CompanionXaeroConfig
+import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
@@ -31,8 +30,8 @@ object XaeroSyncService {
     fun sync(
         player: CompanionPlayer,
         channels: Collection<String> = XaeroChannels.ALL,
-        config: MinimapCompanionConfig = CompanionConfig.getConfig(),
-        xaero: XaeroConfig = CompanionXaeroConfig.getConfig(),
+        config: MinimapCompanionConfig = CompanionConfigs.current.config,
+        xaero: XaeroConfig = CompanionConfigs.current.xaero,
     ) {
         val profile = XaeroServerProfile.of(xaero, GlobalSettings.of(config.globalSettings))
         val levelId = LevelIds.resolve(player.worldKey, player.worldIdentity, config)

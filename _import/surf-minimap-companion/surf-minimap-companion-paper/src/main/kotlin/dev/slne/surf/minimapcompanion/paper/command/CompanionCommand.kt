@@ -25,13 +25,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
 
                 for (player in Bukkit.getOnlinePlayers()) {
                     player.scheduler.run(plugin, {
-                        MapSyncService.sync(
-                            PaperCompanionPlayer(player),
-                            config = result.config,
-                            xaero = result.xaero,
-                            journeyMap = result.journeyMap,
-                            voxelMap = result.voxelMap,
-                        )
+                        MapSyncService.sync(PaperCompanionPlayer(player), result.settings)
                     }, null)
                 }
             }
