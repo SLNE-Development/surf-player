@@ -2,6 +2,7 @@ package dev.slne.surf.minimapcompanion.core.voxelmap
 
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.config.VoxelMapConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 
 /**
@@ -16,7 +17,8 @@ object VoxelMapSyncService {
     fun sync(player: CompanionPlayer, config: MinimapCompanionConfig, voxelMap: VoxelMapConfig) {
         if (!VoxelMapChannels.hasVoxelMap(player)) return
 
-        val json = VoxelMapSettings.json(VoxelMapProfile.of(voxelMap), config.disableMaps)
+        val profile = VoxelMapProfile.of(voxelMap, GlobalSettings.of(config.globalSettings))
+        val json = VoxelMapSettings.json(profile, config.disableMaps)
         player.sendPluginMessage(VoxelMapChannels.SETTINGS, VoxelMapPackets.settings(json))
     }
 }

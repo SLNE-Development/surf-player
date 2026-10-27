@@ -1,5 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.voxelmap
 
+import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.config.VoxelMapConfig
 import dev.slne.surf.minimapcompanion.core.service.FakePlayer
@@ -7,6 +8,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.Test
+import org.spongepowered.configurate.BasicConfigurationNode
 import kotlin.test.assertEquals
 
 class VoxelMapSyncServiceTest {
@@ -33,6 +35,25 @@ class VoxelMapSyncServiceTest {
         val player = FakePlayer()
         VoxelMapSyncService.sync(player, config, voxelMap)
         assertEquals(emptyList(), player.sent)
+    }
+
+    private fun withGlobal(caveMode: Any, disableMaps: Boolean = false) = MinimapCompanionConfig(
+        disableMaps = disableMaps,
+        globalSettings = GlobalSettingsConfig(caveMode = BasicConfigurationNode.root().raw(caveMode)),
+    )
+
+    @Test
+    fun `sync applies the global settings of config yml`() {
+        val player = voxelMapPlayer()
+        VoxelMapSyncService.sync(player, withGlobal(false), voxelMap)
+        assertEquals(JsonPrimitive(false), settingsJson(player.sent.single().second)["cavesAllowed"])
+    }
+
+    @Test
+    fun `disable-maps beats a global true`() {
+        val player = voxelMapPlayer()
+        VoxelMapSyncService.sync(player, withGlobal(true, disableMaps = true), voxelMap)
+        assertEquals(JsonPrimitive(false), settingsJson(player.sent.single().second)["cavesAllowed"])
     }
 
     @Test

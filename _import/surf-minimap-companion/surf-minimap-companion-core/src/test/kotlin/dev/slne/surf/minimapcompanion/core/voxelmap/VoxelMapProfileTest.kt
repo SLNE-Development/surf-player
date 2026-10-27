@@ -1,7 +1,12 @@
 package dev.slne.surf.minimapcompanion.core.voxelmap
 
+import dev.slne.surf.minimapcompanion.core.config.VoxelMapConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import org.junit.jupiter.api.Test
+import org.spongepowered.configurate.BasicConfigurationNode
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class VoxelMapProfileTest {
@@ -55,5 +60,19 @@ class VoxelMapProfileTest {
     fun `null enforces nothing`() {
         assertEquals(emptyMap(), parse("cavesAllowed" to null).values)
         assertEquals(emptyList(), warnings)
+    }
+
+    @Test
+    fun `global settings override the options before they are checked`() {
+        val config = VoxelMapConfig(options = mapOf("cavesAllowed" to BasicConfigurationNode.root().raw(true)))
+        val profile = VoxelMapProfile.of(config, GlobalSettings(mapOf(GlobalFeature.CAVE_MODE to false)))
+        assertEquals(mapOf<String, Any>("cavesAllowed" to false), profile.values)
+    }
+
+    @Test
+    fun `each config and global settings pair is parsed once`() {
+        val config = VoxelMapConfig()
+        val global = GlobalSettings(mapOf(GlobalFeature.RADAR to false))
+        assertSame(VoxelMapProfile.of(config, global), VoxelMapProfile.of(config, global))
     }
 }

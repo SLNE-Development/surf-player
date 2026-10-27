@@ -2,6 +2,7 @@ package dev.slne.surf.minimapcompanion.core.voxelmap
 
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.minimapcompanion.core.config.VoxelMapConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 
 /**
  * What this server enforces on VoxelMap: `Boolean` values for the keys in [BOOLEANS] and a `String` for
@@ -34,20 +35,27 @@ data class VoxelMapProfile(
         private val COMPANION_OWNED = setOf("serverIdentity", "worldName")
 
         @Volatile
-        private var cached: Pair<VoxelMapConfig, VoxelMapProfile>? = null
+        private var cached: Triple<VoxelMapConfig, GlobalSettings, VoxelMapProfile>? = null
 
         /**
-         * Returns the profile [config] describes. Each config instance is parsed once, so its warnings are logged once.
+         * Returns the profile [config] describes, with the entries [global] sets applied. Each pair of instances is
+         * parsed once, so its warnings and the options the global settings override are logged once.
          */
-        fun of(config: VoxelMapConfig): VoxelMapProfile {
-            cached?.let { (cachedConfig, profile) -> if (cachedConfig === config) return profile }
+        fun of(config: VoxelMapConfig, global: GlobalSettings = GlobalSettings.NONE): VoxelMapProfile {
+            cached?.let { (cachedConfig, cachedGlobal, profile) ->
+                if (cachedConfig === config && cachedGlobal === global) return profile
+            }
+
+            val options = VoxelMapGlobalSettings.apply(config.options.mapValues { it.value.raw() }, global) { hint ->
+                log.atInfo().log("%s", hint)
+            }
 
             val warnings = mutableListOf<String>()
-            val profile = parse(config.options.mapValues { it.value.raw() }) { warning ->
+            val profile = parse(options) { warning ->
                 warnings += warning
                 log.atWarning().log("%s", warning)
             }.copy(warnings = warnings)
-            cached = config to profile
+            cached = Triple(config, global, profile)
             return profile
         }
 
