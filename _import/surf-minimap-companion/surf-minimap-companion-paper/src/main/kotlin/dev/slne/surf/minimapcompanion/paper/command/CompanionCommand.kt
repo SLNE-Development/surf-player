@@ -28,9 +28,8 @@ fun companionCommand() = commandTree("minimapcompanion") {
                     PaperTracker.configure()
 
                     for (player in Bukkit.getOnlinePlayers()) {
-                        player.scheduler.run(plugin, {
-                            MapSyncService.sync(PaperCompanionPlayer(player), result.settings)
-                        }, null)
+                        // Reads the settings when it runs, so a later reload that overtook this one wins.
+                        player.scheduler.run(plugin, { MapSyncService.sync(PaperCompanionPlayer(player)) }, null)
                     }
                 }
 

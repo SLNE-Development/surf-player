@@ -24,10 +24,11 @@ fun companionCommand() = commandTree("minimapcompanion") {
 
                 if (result is CompanionConfigs.ReloadResult.Reloaded) {
                     for (player in MinecraftServer.getConnectionManager().onlinePlayers) {
-                        // The player's instance is only safe to read in their own tick.
+                        // The player's instance is only safe to read in their own tick. The settings are read then
+                        // too, so a later reload that overtook this one wins.
                         player.scheduler().scheduleNextTick {
                             val instance = player.instance ?: return@scheduleNextTick
-                            MapSyncService.sync(MinestomCompanionPlayer(player, instance), result.settings)
+                            MapSyncService.sync(MinestomCompanionPlayer(player, instance))
                         }
                     }
                 }
