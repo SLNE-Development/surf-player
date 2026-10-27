@@ -1,6 +1,7 @@
 package dev.slne.surf.minimapcompanion.core.config
 
 import dev.slne.surf.api.core.config.SpongeConfigClass
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapProfile
 import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapProfile
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
@@ -32,6 +33,7 @@ object CompanionConfigs {
 
         data class Reloaded(
             val config: MinimapCompanionConfig,
+            val globalSettings: GlobalSettings,
             val xaero: XaeroConfig,
             val profile: XaeroServerProfile,
             val journeyMap: JourneyMapConfig,
@@ -48,16 +50,18 @@ object CompanionConfigs {
     }
 
     /**
-     * Loads every file and checks the options of the map mods, so their warnings show up at startup.
+     * Loads every file and checks the global settings and the options of the map mods, so their warnings and the
+     * options the global settings override show up at startup.
      */
     fun init() {
         CompanionConfig.init()
         CompanionXaeroConfig.init()
         CompanionJourneyMapConfig.init()
         CompanionVoxelMapConfig.init()
-        XaeroServerProfile.of(CompanionXaeroConfig.getConfig())
-        JourneyMapProfile.of(CompanionJourneyMapConfig.getConfig())
-        VoxelMapProfile.of(CompanionVoxelMapConfig.getConfig())
+        val global = GlobalSettings.of(CompanionConfig.getConfig().globalSettings)
+        XaeroServerProfile.of(CompanionXaeroConfig.getConfig(), global)
+        JourneyMapProfile.of(CompanionJourneyMapConfig.getConfig(), global)
+        VoxelMapProfile.of(CompanionVoxelMapConfig.getConfig(), global)
     }
 
     /**
@@ -78,14 +82,16 @@ object CompanionConfigs {
             val xaeroConfig = reload.load(xaero)
             val journeyMapConfig = reload.load(journeyMap)
             val voxelMapConfig = reload.load(voxelMap)
+            val global = GlobalSettings.of(config.globalSettings)
             ReloadResult.Reloaded(
                 config,
+                global,
                 xaeroConfig,
-                XaeroServerProfile.of(xaeroConfig),
+                XaeroServerProfile.of(xaeroConfig, global),
                 journeyMapConfig,
-                JourneyMapProfile.of(journeyMapConfig),
+                JourneyMapProfile.of(journeyMapConfig, global),
                 voxelMapConfig,
-                VoxelMapProfile.of(voxelMapConfig),
+                VoxelMapProfile.of(voxelMapConfig, global),
                 start.elapsedNow(),
             )
         } catch (e: FileFailed) {

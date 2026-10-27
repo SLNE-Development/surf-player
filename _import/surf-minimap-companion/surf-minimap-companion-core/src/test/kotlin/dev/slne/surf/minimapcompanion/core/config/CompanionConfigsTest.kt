@@ -57,13 +57,46 @@ class CompanionConfigsTest {
         assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
         assertSame(main, result.config)
         assertSame(xaero, result.xaero)
-        assertSame(XaeroServerProfile.of(xaero), result.profile)
+        assertSame(XaeroServerProfile.of(xaero, result.globalSettings), result.profile)
         assertEquals(mapOf<String, Any>("display_radar" to false), result.profile.minimap.values)
         assertEquals(1, result.profile.warnings.size)
         assertSame(journeyMap, result.journeyMap)
         assertEquals(mapOf("caveMapping" to "NONE"), result.journeyMapProfile.values)
         assertSame(voxelMap, result.voxelMap)
         assertEquals(mapOf<String, Any>("cavesAllowed" to false), result.voxelMapProfile.values)
+    }
+
+    @Test
+    fun `reload applies the global settings of the reloaded config yml to every mod`() {
+        val main = MinimapCompanionConfig(globalSettings = GlobalSettingsConfig(caveMode = BasicConfigurationNode.root().raw(false)))
+
+        val result = CompanionConfigs.reload(
+            FakeFile("config.yml", MinimapCompanionConfig()) { main }.reloadable(),
+            FakeFile("xaero.yml", XaeroConfig()) { XaeroConfig() }.reloadable(),
+            journeyMapFile().reloadable(),
+            voxelMapFile().reloadable(),
+        )
+
+        assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
+        assertEquals(mapOf<String, Any>("minimap_cave_mode_allowed" to false), result.profile.minimap.values)
+        assertEquals(mapOf<String, Any>("cave_mode_allowed" to false), result.profile.worldMap.values)
+        assertEquals(mapOf("caveMapping" to "NONE"), result.journeyMapProfile.values)
+        assertEquals(mapOf<String, Any>("cavesAllowed" to false), result.voxelMapProfile.values)
+    }
+
+    @Test
+    fun `reload reports unknown global values`() {
+        val main = MinimapCompanionConfig(globalSettings = GlobalSettingsConfig(radar = BasicConfigurationNode.root().raw("flase")))
+
+        val result = CompanionConfigs.reload(
+            FakeFile("config.yml", MinimapCompanionConfig()) { main }.reloadable(),
+            FakeFile("xaero.yml", XaeroConfig()) { XaeroConfig() }.reloadable(),
+            journeyMapFile().reloadable(),
+            voxelMapFile().reloadable(),
+        )
+
+        assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
+        assertEquals(listOf("Unknown value \"flase\" for global-settings.radar, using per-mod"), result.globalSettings.warnings)
     }
 
     @Test
