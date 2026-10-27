@@ -4,6 +4,7 @@ import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
 import dev.slne.surf.minimapcompanion.core.config.CompanionXaeroConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.id.LevelIds
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
@@ -38,7 +39,7 @@ object XaeroSyncService {
         config: MinimapCompanionConfig = CompanionConfig.getConfig(),
         xaero: XaeroConfig = CompanionXaeroConfig.getConfig(),
     ) {
-        val profile = XaeroServerProfile.of(xaero)
+        val profile = XaeroServerProfile.of(xaero, GlobalSettings.of(config.globalSettings))
         val levelId = LevelIds.resolve(player.worldKey, player.worldIdentity, config)
         val levelIdPayload = XaeroPackets.levelId(levelId)
 

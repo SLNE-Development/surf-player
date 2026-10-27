@@ -1,6 +1,8 @@
 package dev.slne.surf.minimapcompanion.core.xaero
 
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.xaero.option.EnforcedOptions
 import org.junit.jupiter.api.Test
 import org.spongepowered.configurate.BasicConfigurationNode
@@ -88,5 +90,23 @@ class XaeroServerProfileTest {
         val config = XaeroConfig()
         assertSame(XaeroServerProfile.of(config), XaeroServerProfile.of(config))
         assertNotSame(XaeroServerProfile.of(config), XaeroServerProfile.of(XaeroConfig()))
+    }
+
+    @Test
+    fun `global cave mode reaches the rules`() {
+        val profile = XaeroServerProfile.of(XaeroConfig(), GlobalSettings(mapOf(GlobalFeature.CAVE_MODE to false)))
+        assertContentEquals(XaeroPackets.minimapRules(caveMode = false, netherCaveMode = false, radar = true), profile.minimapRules())
+        assertContentEquals(XaeroPackets.worldMapRules(caveMode = false, netherCaveMode = false), profile.worldMapRules())
+    }
+
+    @Test
+    fun `each config and global settings pair is parsed once`() {
+        val config = XaeroConfig()
+        val global = GlobalSettings(mapOf(GlobalFeature.RADAR to false))
+        assertSame(XaeroServerProfile.of(config, global), XaeroServerProfile.of(config, global))
+        assertNotSame(
+            XaeroServerProfile.of(config, global),
+            XaeroServerProfile.of(config, GlobalSettings(mapOf(GlobalFeature.RADAR to false))),
+        )
     }
 }

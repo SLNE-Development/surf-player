@@ -2,6 +2,7 @@ package dev.slne.surf.minimapcompanion.core.xaero
 
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.xaero.option.EnforcedOptions
 import dev.slne.surf.minimapcompanion.core.xaero.option.MinimapOptions
 import dev.slne.surf.minimapcompanion.core.xaero.option.WorldMapOptions
@@ -48,23 +49,29 @@ data class XaeroServerProfile(
         private val log = logger()
 
         @Volatile
-        private var cached: Pair<XaeroConfig, XaeroServerProfile>? = null
+        private var cached: Triple<XaeroConfig, GlobalSettings, XaeroServerProfile>? = null
 
         /**
-         * Returns the profile [config] describes. Each config instance is parsed once, so its warnings are logged once.
+         * Returns the profile [config] describes, with the entries [global] sets applied. Each pair of instances is
+         * parsed once, so its warnings and the options the global settings override are logged once.
          */
-        fun of(config: XaeroConfig): XaeroServerProfile {
-            cached?.let { (cachedConfig, profile) -> if (cachedConfig === config) return profile }
+        fun of(config: XaeroConfig, global: GlobalSettings = GlobalSettings.NONE): XaeroServerProfile {
+            cached?.let { (cachedConfig, cachedGlobal, profile) ->
+                if (cachedConfig === config && cachedGlobal === global) return profile
+            }
 
-            val warnings = mutableListOf<String>()
-            val profile = parse(
+            val (minimap, worldMap) = XaeroGlobalSettings.apply(
                 config.minimap.mapValues { it.value.raw() },
                 config.worldMap.mapValues { it.value.raw() },
-            ) { warning ->
+                global,
+            ) { hint -> log.atInfo().log("%s", hint) }
+
+            val warnings = mutableListOf<String>()
+            val profile = parse(minimap, worldMap) { warning ->
                 warnings += warning
                 log.atWarning().log("%s", warning)
             }.copy(warnings = warnings)
-            cached = config to profile
+            cached = Triple(config, global, profile)
             return profile
         }
 

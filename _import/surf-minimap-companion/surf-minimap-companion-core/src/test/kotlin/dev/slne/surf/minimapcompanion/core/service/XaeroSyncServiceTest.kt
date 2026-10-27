@@ -1,5 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.service
 
+import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
@@ -100,6 +101,16 @@ class XaeroSyncServiceTest {
     fun `enforced options reach the client`() {
         val player = lobbyPlayer()
         sync(player, xaero = XaeroConfig(minimap = mapOf("display_radar" to BasicConfigurationNode.root().raw(false))))
+
+        val sent = player.sentContent
+        assertTrue(XaeroChannels.MINIMAP to XaeroPackets.minimapRules(caveMode = true, netherCaveMode = true, radar = false).toList() in sent)
+        assertTrue(lib(XaeroLibPackets.enforcedConfig(nbtCompound("display_radar" to NbtByte.of(false)), reset = true)) in sent)
+    }
+
+    @Test
+    fun `sync applies the global settings of config yml`() {
+        val player = lobbyPlayer()
+        sync(player, config = MinimapCompanionConfig(globalSettings = GlobalSettingsConfig(radar = BasicConfigurationNode.root().raw(false))))
 
         val sent = player.sentContent
         assertTrue(XaeroChannels.MINIMAP to XaeroPackets.minimapRules(caveMode = true, netherCaveMode = true, radar = false).toList() in sent)
