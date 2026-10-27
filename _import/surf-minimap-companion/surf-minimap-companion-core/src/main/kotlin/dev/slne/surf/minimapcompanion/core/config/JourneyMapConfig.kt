@@ -9,6 +9,6 @@ import org.spongepowered.configurate.objectmapping.meta.Comment
  */
 @ConfigSerializable
 data class JourneyMapConfig(
-    @param:Comment("Settings this server enforces on JourneyMap, by JourneyMap's field name (for example caveMapping: NONE). journeymap-options.md lists them all.")
+    @param:Comment("Settings this server enforces on JourneyMap, by JourneyMap's field name (for example caveMapping: NONE). docs/journeymap-options.md lists them all.")
     val options: Map<String, ConfigurationNode> = emptyMap(),
 )

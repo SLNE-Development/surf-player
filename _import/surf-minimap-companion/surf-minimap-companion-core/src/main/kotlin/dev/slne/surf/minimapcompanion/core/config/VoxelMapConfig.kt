@@ -9,6 +9,6 @@ import org.spongepowered.configurate.objectmapping.meta.Comment
  */
 @ConfigSerializable
 data class VoxelMapConfig(
-    @param:Comment("Settings this server enforces on VoxelMap, by VoxelMap's key (for example cavesAllowed: false). voxelmap-options.md lists them all.")
+    @param:Comment("Settings this server enforces on VoxelMap, by VoxelMap's key (for example cavesAllowed: false). docs/voxelmap-options.md lists them all.")
     val options: Map<String, ConfigurationNode> = emptyMap(),
 )
