@@ -48,14 +48,19 @@ object PaperTracker {
 
     @Volatile
     private var relations: TrackerRelations? = null
+
+    @Volatile
     private var relationRefresh: Job? = null
+
+    @Volatile
     private var isVanished: ((Player) -> Boolean)? = null
 
     /**
      * Reads the tracker config and starts refreshing the relations of the enabled sources.
-     * Called again on reload; players stop or start seeing each other on their next tick.
+     * Called again on reload, off the players' threads; players stop or start seeing each other on their next tick.
      * Sources still enabled keep their relations, so their players stay on the map meanwhile.
      */
+    @Synchronized
     fun configure() {
         val config = CompanionConfigs.current.config.tracker
         everyoneTracksEveryone = config.everyoneTracksEveryone
@@ -70,21 +75,19 @@ object PaperTracker {
             if (config.clanMembers) source("clan-members", "surf-clan-paper", isClanHook) { ClanHook }?.let(::add)
         }
 
-        relationRefresh?.cancel()
-        relationRefresh = null
-        val previous = relations
-        relations = null
-
-        if (sources.isNotEmpty()) {
-            val relations = TrackerRelations(sources, previous)
+        // Built in full before it replaces the old relations, so a tick on another thread sees either, never none.
+        val next = if (sources.isEmpty()) null else TrackerRelations(sources, relations).also { next ->
             for (player in Bukkit.getOnlinePlayers()) {
-                relations.add(player.uniqueId)
+                next.add(player.uniqueId)
             }
-            this.relations = relations
+        }
+        relations = next
 
-            relationRefresh = plugin.launch(plugin.asyncDispatcher) {
+        relationRefresh?.cancel()
+        relationRefresh = next?.let { refreshed ->
+            plugin.launch(plugin.asyncDispatcher) {
                 while (isActive) {
-                    relations.refresh(Bukkit.getOnlinePlayers().map { it.uniqueId })
+                    refreshed.refresh(Bukkit.getOnlinePlayers().map { it.uniqueId })
                     delay(RELATION_REFRESH_INTERVAL)
                 }
             }

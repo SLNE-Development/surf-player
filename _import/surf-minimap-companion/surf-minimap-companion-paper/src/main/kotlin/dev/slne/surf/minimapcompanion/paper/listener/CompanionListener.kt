@@ -57,12 +57,23 @@ object CompanionListener : Listener {
     fun onAddToWorld(event: EntityAddToWorldEvent) {
         val player = event.entity as? Player ?: return
         MapSyncService.sync(PaperCompanionPlayer(player, event.world))
+        resendMapEffects(player)
     }
 
     // The client drops every effect on respawn, so the maps would come back.
     @EventHandler
     fun onPostRespawn(event: PlayerPostRespawnEvent) {
         XaeroMapEffects.sync(PaperCompanionPlayer(event.player), CompanionConfigs.current.config.disableMaps)
+        resendMapEffects(event.player)
+    }
+
+    // PacketEvents writes the effects straight to the connection, past packets Paper may still hold back, such as
+    // chunks Anti-Xray is still working on. An effect that overtakes the respawn packet is dropped by the client,
+    // so the effects go out once more on the next tick.
+    private fun resendMapEffects(player: Player) {
+        player.scheduler.run(plugin, {
+            XaeroMapEffects.sync(PaperCompanionPlayer(player), CompanionConfigs.current.config.disableMaps)
+        }, null)
     }
 
     @EventHandler
