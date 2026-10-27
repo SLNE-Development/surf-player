@@ -23,6 +23,7 @@ data class JourneyMapPlayer(
 object JourneyMapPackets {
     // JourneyMap starts most of its payloads with this marker byte.
     private const val MARKER = 42
+    private const val MAX_VAR_INT_SIZE = 5
 
     /**
      * The permissions JourneyMap applies, as the JSON [json]. The companion never claims to be a server admin,
@@ -39,20 +40,37 @@ object JourneyMapPackets {
     /**
      * Lists [players] for the player radar; a `null` position lists the player as hidden.
      */
-    fun playerLocations(players: Map<UUID, JourneyMapPlayer?>) = payload {
-        writeVarInt(players.size)
-        for ((uuid, player) in players) {
-            writeBoolean(player != null)
-            writeUuid(uuid)
-            if (player == null) continue
+    fun playerLocations(players: Map<UUID, JourneyMapPlayer?>) =
+        playerLocations(players.map { (uuid, player) -> playerEntry(uuid, player) })
 
-            writeVarInt(player.entityId)
-            writeDouble(player.x)
-            writeDouble(player.y)
-            writeDouble(player.z)
-            writeByte(angle(player.yaw))
-            writeByte(angle(player.pitch))
+    /**
+     * Lists the [entries] [playerEntry] encoded for the player radar.
+     */
+    fun playerLocations(entries: Collection<ByteArray>): ByteArray {
+        val bytes = ByteArrayOutputStream(MAX_VAR_INT_SIZE + entries.sumOf { it.size })
+        DataOutputStream(bytes).use { out ->
+            out.writeVarInt(entries.size)
+            for (entry in entries) {
+                out.write(entry)
+            }
         }
+        return bytes.toByteArray()
+    }
+
+    /**
+     * One player of [playerLocations]; a `null` position lists the player as hidden.
+     */
+    fun playerEntry(uuid: UUID, player: JourneyMapPlayer?) = payload {
+        writeBoolean(player != null)
+        writeUuid(uuid)
+        if (player == null) return@payload
+
+        writeVarInt(player.entityId)
+        writeDouble(player.x)
+        writeDouble(player.y)
+        writeDouble(player.z)
+        writeByte(angle(player.yaw))
+        writeByte(angle(player.pitch))
     }
 
     fun removePlayer(uuid: UUID) = payload { writeUuid(uuid) }

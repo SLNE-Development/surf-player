@@ -45,8 +45,36 @@ class JourneyMapTrackerTest {
     @Test
     fun `players listed before are listed again without being cleared`() {
         tickedOnce()
+        val movedA = posA.copy(x = 11.0)
+        tracker.update(a, movedA)
+        tickShowingAll()
+        assertEquals(listOf(locations(mapOf(a to movedA))), viewer.sentContent)
+    }
+
+    @Test
+    fun `an unchanged listing is not resent`() {
+        tickedOnce()
+        tickShowingAll()
+        assertEquals(emptyList(), viewer.sent)
+    }
+
+    @Test
+    fun `an unchanged listing is resent after the keep-alive`() {
+        tickedOnce()
+        repeat(JourneyMapTracker.KEEP_ALIVE_RUNS - 1) { tickShowingAll() }
+        assertEquals(emptyList(), viewer.sent)
+
         tickShowingAll()
         assertEquals(listOf(locations(mapOf(a to posA))), viewer.sentContent)
+    }
+
+    @Test
+    fun `a player who only turned is resent`() {
+        tickedOnce()
+        val turnedA = posA.copy(yaw = 180f)
+        tracker.update(a, turnedA)
+        tickShowingAll()
+        assertEquals(listOf(locations(mapOf(a to turnedA))), viewer.sentContent)
     }
 
     @Test

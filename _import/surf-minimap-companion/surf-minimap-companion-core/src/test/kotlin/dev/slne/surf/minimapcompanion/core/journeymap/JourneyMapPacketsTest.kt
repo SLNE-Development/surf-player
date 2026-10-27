@@ -51,4 +51,17 @@ class JourneyMapPacketsTest {
             payload,
         )
     }
+
+    @Test
+    fun `entries encoded on their own join to the same list`() {
+        val a = UUID(1, 2)
+        val b = UUID(3, 4)
+        val posA = JourneyMapPlayer(300, 1.5, 64.0, -2.25, 90f, -45f, "minecraft:overworld")
+        val posB = JourneyMapPlayer(7, -8.0, 70.0, 3.0, 0f, 10f, "minecraft:overworld")
+
+        assertContentEquals(
+            JourneyMapPackets.playerLocations(linkedMapOf(a to posA, b to posB)),
+            JourneyMapPackets.playerLocations(listOf(JourneyMapPackets.playerEntry(a, posA), JourneyMapPackets.playerEntry(b, posB))),
+        )
+    }
 }

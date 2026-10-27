@@ -13,18 +13,25 @@ import java.util.concurrent.ConcurrentHashMap
  * on the thread that owns the player.
  */
 class JourneyMapTracker {
-    private val players = ConcurrentHashMap<UUID, JourneyMapPlayer>()
+    private val players = ConcurrentHashMap<UUID, Entry>()
     private val concealed: MutableSet<UUID> = ConcurrentHashMap.newKeySet()
     private val listed = ConcurrentHashMap<UUID, Listing>()
 
-    private data class Listing(val dimension: String, val players: Set<UUID>)
+    /**
+     * A player as viewers get them, encoded once for all of them. Viewers compare it by identity.
+     */
+    private class Entry(uuid: UUID, val player: JourneyMapPlayer) {
+        val bytes = JourneyMapPackets.playerEntry(uuid, player)
+    }
+
+    private class Listing(val dimension: String, val entries: Map<UUID, Entry>, val runsSinceSend: Int)
 
     /**
      * Records where the player with [uuid] is. A [concealed] player is sneaking, invisible or spectating, whom
      * JourneyMap's own radar would leave out.
      */
     fun update(uuid: UUID, player: JourneyMapPlayer, concealed: Boolean = false) {
-        players[uuid] = player
+        if (players[uuid]?.player != player) players[uuid] = Entry(uuid, player)
         if (concealed) this.concealed += uuid else this.concealed -= uuid
     }
 
@@ -34,31 +41,45 @@ class JourneyMapTracker {
      */
     fun tick(viewer: CompanionPlayer, isTracked: (target: UUID) -> Boolean, isNearby: (target: UUID) -> Boolean) {
         if (!JourneyMapChannels.hasJourneyMap(viewer)) return
-        val dimension = players[viewer.uuid]?.dimension ?: return
+        val dimension = players[viewer.uuid]?.player?.dimension ?: return
 
-        val visible = LinkedHashMap<UUID, JourneyMapPlayer?>()
-        for ((target, player) in players) {
-            if (target == viewer.uuid || player.dimension != dimension) continue
-            if (isTracked(target) || (isNearby(target) && target !in concealed)) visible[target] = player
+        val visible = LinkedHashMap<UUID, Entry>()
+        for ((target, entry) in players) {
+            if (target == viewer.uuid || entry.player.dimension != dimension) continue
+            if (isTracked(target) || (isNearby(target) && target !in concealed)) visible[target] = entry
         }
 
         // The client keeps every listed player in the world it first saw them in and drops them from the radar
         // once the viewer is elsewhere. So only players listed in the same world before are kept; everyone else
         // is removed, and new ones are cleared first, before the list arrives.
-        val previous = listed[viewer.uuid]
-        val kept = if (previous?.dimension == dimension) previous.players intersect visible.keys else emptySet()
-        for (target in previous?.players.orEmpty() + visible.keys - kept) {
+        val previous = listed[viewer.uuid]?.takeIf { it.dimension == dimension }
+        val kept = previous?.entries?.keys.orEmpty() intersect visible.keys
+        for (target in listed[viewer.uuid]?.entries?.keys.orEmpty() + visible.keys - kept) {
             viewer.sendPluginMessage(JourneyMapChannels.REMOVE_PLAYER, JourneyMapPackets.removePlayer(target))
         }
-        if (visible.isNotEmpty()) {
-            viewer.sendPluginMessage(JourneyMapChannels.PLAYER_LOCATIONS, JourneyMapPackets.playerLocations(visible))
+
+        // The client keeps listed players until they are removed, so the list only goes out when an entry changed,
+        // and now and then in case the client skipped a player it did not know from the tab list yet.
+        val changed = previous == null || visible.any { (target, entry) -> previous.entries[target] !== entry }
+        val keepAlive = previous != null && previous.runsSinceSend + 1 >= KEEP_ALIVE_RUNS
+        val send = visible.isNotEmpty() && (changed || keepAlive)
+        if (send) {
+            val locations = JourneyMapPackets.playerLocations(visible.values.map(Entry::bytes))
+            viewer.sendPluginMessage(JourneyMapChannels.PLAYER_LOCATIONS, locations)
         }
-        listed[viewer.uuid] = Listing(dimension, visible.keys.toSet())
+        listed[viewer.uuid] = Listing(dimension, visible, if (send || previous == null) 0 else previous.runsSinceSend + 1)
     }
 
     fun forget(uuid: UUID) {
         players.remove(uuid)
         concealed.remove(uuid)
         listed.remove(uuid)
+    }
+
+    companion object {
+        /**
+         * After how many runs without a change a viewer gets the list again: 2 seconds at the Paper tracker's 5 ticks.
+         */
+        const val KEEP_ALIVE_RUNS = 8
     }
 }
