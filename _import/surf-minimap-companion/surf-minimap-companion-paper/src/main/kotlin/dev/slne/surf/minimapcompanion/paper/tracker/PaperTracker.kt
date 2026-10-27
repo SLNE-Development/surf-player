@@ -6,6 +6,7 @@ import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapPlayer
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapTracker
+import dev.slne.surf.minimapcompanion.core.tracker.MapVisibility
 import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
 import dev.slne.surf.minimapcompanion.core.tracker.RelationSource
 import dev.slne.surf.minimapcompanion.core.tracker.TrackedPosition
@@ -25,7 +26,10 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeSource
 
 /**
  * Runs Xaero's player tracker on Paper and Folia. Every player syncs on their own scheduler, so positions
@@ -54,6 +58,8 @@ object PaperTracker {
 
     @Volatile
     private var isVanished: ((Player) -> Boolean)? = null
+
+    private val joinedAt = ConcurrentHashMap<UUID, TimeSource.Monotonic.ValueTimeMark>()
 
     /**
      * Reads the tracker config and starts refreshing the relations of the enabled sources.
@@ -113,6 +119,7 @@ object PaperTracker {
      * while the tracker is off, so a reload can turn it on and off for players already online.
      */
     fun track(player: Player) {
+        joinedAt[player.uniqueId] = TimeSource.Monotonic.markNow()
         relations?.let { relations ->
             relations.add(player.uniqueId)
             plugin.launch(plugin.asyncDispatcher) { relations.refresh(listOf(player.uniqueId)) }
@@ -155,12 +162,12 @@ object PaperTracker {
     private fun isShownByTracker(viewer: UUID, target: UUID) =
         everyoneTracksEveryone || relations?.isRelated(viewer, target) == true
 
-    // Vanished players are never tracked: surf-vanish hides them from other players only a little
-    // after they join. Players hidden from the viewer in any other way stay off the map too.
+    // The maps show whom the viewer sees in the world. surf-vanish hides vanished players only from the viewers whose
+    // level may not see them, a little after they join, so vanished players stay off every map until then.
     private fun isVisibleOnMap(player: Player, target: UUID): Boolean {
         val targetPlayer = Bukkit.getPlayer(target) ?: return false
-        if (isVanished?.invoke(targetPlayer) == true) return false
-        return player.canSee(targetPlayer)
+        val onlineFor = joinedAt[target]?.elapsedNow() ?: Duration.ZERO
+        return MapVisibility.isShown(player.canSee(targetPlayer), onlineFor) { isVanished?.invoke(targetPlayer) == true }
     }
 
     /**
@@ -171,6 +178,7 @@ object PaperTracker {
     }
 
     fun forget(player: Player) {
+        joinedAt.remove(player.uniqueId)
         tracker.forget(player.uniqueId)
         journeyMapTracker.forget(player.uniqueId)
         relations?.forget(player.uniqueId)
