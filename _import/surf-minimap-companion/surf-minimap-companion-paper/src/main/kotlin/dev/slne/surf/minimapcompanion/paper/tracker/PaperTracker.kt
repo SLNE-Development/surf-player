@@ -10,6 +10,12 @@ import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
 import dev.slne.surf.minimapcompanion.core.tracker.RelationSource
 import dev.slne.surf.minimapcompanion.core.tracker.TrackedPosition
 import dev.slne.surf.minimapcompanion.core.tracker.TrackerRelations
+import dev.slne.surf.minimapcompanion.paper.hook.ClanHook
+import dev.slne.surf.minimapcompanion.paper.hook.FriendsHook
+import dev.slne.surf.minimapcompanion.paper.hook.VanishHook
+import dev.slne.surf.minimapcompanion.paper.isClanHook
+import dev.slne.surf.minimapcompanion.paper.isFriendsHook
+import dev.slne.surf.minimapcompanion.paper.isVanishHook
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.plugin
 import kotlinx.coroutines.Job
@@ -55,13 +61,13 @@ object PaperTracker {
         everyoneTracksEveryone = config.everyoneTracksEveryone
         journeyMapRadar = config.isEnabled
 
-        if (Bukkit.getPluginManager().isPluginEnabled("surf-vanish-paper")) {
-            isVanished = VanishCheck::isVanished
+        if (isVanishHook) {
+            isVanished = VanishHook::isVanished
         }
 
         val sources = buildList {
-            if (config.friends) source("friends", "surf-friends-paper") { FriendsRelationSource }?.let(::add)
-            if (config.clanMembers) source("clan-members", "surf-clan-paper") { ClanRelationSource }?.let(::add)
+            if (config.friends) source("friends", "surf-friends-paper", isFriendsHook) { FriendsHook }?.let(::add)
+            if (config.clanMembers) source("clan-members", "surf-clan-paper", isClanHook) { ClanHook }?.let(::add)
         }
 
         relationRefresh?.cancel()
@@ -91,9 +97,9 @@ object PaperTracker {
         }
     }
 
-    // The supplier keeps the source's class, which needs the other plugin, from loading without it.
-    private fun source(option: String, pluginName: String, source: () -> RelationSource): RelationSource? {
-        if (Bukkit.getPluginManager().isPluginEnabled(pluginName)) return source()
+    // The supplier keeps the hook's class, which needs the other plugin, from loading without it.
+    private fun source(option: String, pluginName: String, enabled: Boolean, source: () -> RelationSource): RelationSource? {
+        if (enabled) return source()
 
         log.atWarning().log("tracker.%s is on, but %s is not enabled on this server", option, pluginName)
         return null

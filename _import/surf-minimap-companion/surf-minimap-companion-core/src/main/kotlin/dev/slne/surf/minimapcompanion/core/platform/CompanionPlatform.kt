@@ -4,12 +4,12 @@ import dev.slne.surf.api.core.util.requiredService
 import net.kyori.adventure.key.Key
 import java.nio.file.Path
 
-private val platform = requiredService<MinimapCompanionPlatform>()
+private val platform = requiredService<CompanionPlatform>()
 
 /**
  * The platform specific calls the shared companion logic depends on.
  */
-interface MinimapCompanionPlatform {
+interface CompanionPlatform {
 
     /**
      * The directory this plugin keeps its files in.
@@ -27,5 +27,5 @@ interface MinimapCompanionPlatform {
      */
     val tracksPlayers: Boolean
 
-    companion object : MinimapCompanionPlatform by platform
+    companion object : CompanionPlatform by platform
 }

@@ -7,7 +7,7 @@ import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 
 /**
  * Sends VoxelMap clients the settings VoxelMap's server part sends. The world ID is only sent when the client
- * asks for it, through [dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo].
+ * asks for it, through [dev.slne.surf.minimapcompanion.core.world.WorldInfo].
  */
 object VoxelMapSyncService {
 

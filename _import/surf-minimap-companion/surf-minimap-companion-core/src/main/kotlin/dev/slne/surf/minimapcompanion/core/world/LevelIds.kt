@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.id
+package dev.slne.surf.minimapcompanion.core.world
 
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import net.kyori.adventure.key.Key

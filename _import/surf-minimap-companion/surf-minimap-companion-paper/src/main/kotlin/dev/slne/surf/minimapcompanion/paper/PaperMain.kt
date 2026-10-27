@@ -2,47 +2,39 @@ package dev.slne.surf.minimapcompanion.paper
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
+import dev.slne.surf.api.paper.extensions.pluginManager
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
-import dev.slne.surf.minimapcompanion.paper.command.minimapCompanionCommand
+import dev.slne.surf.minimapcompanion.paper.command.companionCommand
 import dev.slne.surf.minimapcompanion.paper.listener.CompanionListener
+import dev.slne.surf.minimapcompanion.paper.listener.PluginChannelListener
 import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)
 
+val isVanishHook get() = pluginManager.isPluginEnabled("surf-vanish-paper")
+val isFriendsHook get() = pluginManager.isPluginEnabled("surf-friends-paper")
+val isClanHook get() = pluginManager.isPluginEnabled("surf-clan-paper")
+
 class PaperMain : SuspendingJavaPlugin() {
 
     override fun onEnable() {
         CompanionConfigs.init()
-
-        for (channel in XaeroChannels.ALL) {
-            server.messenger.registerOutgoingPluginChannel(this, channel)
-            // The mods answer the handshake; registering the channels announces them, as a server with the mods does.
-            server.messenger.registerIncomingPluginChannel(this, channel) { _, _, _ -> }
-        }
-
-        // JourneyMap's client only sends its requests on channels the server announced, and VoxelMap's only asks
-        // for the world ID on the shared channel among them.
-        for (channel in JourneyMapChannels.ANNOUNCED) {
-            server.messenger.registerOutgoingPluginChannel(this, channel)
-            server.messenger.registerIncomingPluginChannel(this, channel) { _, player, _ ->
-                player.scheduler.run(this, { MapSyncService.answer(PaperCompanionPlayer(player), channel) }, null)
-            }
-        }
-
-        // VoxelMap's server part only sends on its channel; announcing it costs nothing.
-        server.messenger.registerOutgoingPluginChannel(this, VoxelMapChannels.SETTINGS)
-        server.messenger.registerIncomingPluginChannel(this, VoxelMapChannels.SETTINGS) { _, _, _ -> }
-
+        PluginChannelListener.register()
         CompanionListener.register()
         PaperTracker.configure()
-        minimapCompanionCommand()
+        companionCommand()
+        syncOnlinePlayers()
+    }
 
+    override fun onDisable() {
+        PluginChannelListener.unregister()
+    }
+
+    // Players already online when the plugin loads late, such as after a plugin reload.
+    private fun syncOnlinePlayers() {
         for (player in server.onlinePlayers) {
             player.scheduler.run(this, {
                 MapSyncService.sync(PaperCompanionPlayer(player))
@@ -50,10 +42,5 @@ class PaperMain : SuspendingJavaPlugin() {
             }, null)
             PaperTracker.track(player)
         }
-    }
-
-    override fun onDisable() {
-        server.messenger.unregisterOutgoingPluginChannel(this)
-        server.messenger.unregisterIncomingPluginChannel(this)
     }
 }

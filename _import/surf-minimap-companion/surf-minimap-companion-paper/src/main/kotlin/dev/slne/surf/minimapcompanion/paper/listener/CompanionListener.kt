@@ -5,7 +5,7 @@ import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
-import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects

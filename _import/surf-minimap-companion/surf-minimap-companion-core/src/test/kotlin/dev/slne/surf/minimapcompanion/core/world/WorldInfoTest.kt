@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.worldinfo
+package dev.slne.surf.minimapcompanion.core.world
 
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test

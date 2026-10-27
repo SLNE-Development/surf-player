@@ -4,11 +4,12 @@ import dev.slne.surf.minimapcompanion.core.config.*
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapSyncService
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
-import dev.slne.surf.minimapcompanion.core.platform.MinimapCompanionPlatform
+import dev.slne.surf.minimapcompanion.core.platform.CompanionPlatform
 import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
 import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapSyncService
-import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
+import dev.slne.surf.minimapcompanion.core.world.WorldInfo
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroSyncService
 import java.util.*
 
 /**
@@ -27,7 +28,7 @@ object MapSyncService {
         xaero: XaeroConfig = CompanionXaeroConfig.getConfig(),
         journeyMap: JourneyMapConfig = CompanionJourneyMapConfig.getConfig(),
         voxelMap: VoxelMapConfig = CompanionVoxelMapConfig.getConfig(),
-        tracksPlayers: Boolean = MinimapCompanionPlatform.tracksPlayers,
+        tracksPlayers: Boolean = CompanionPlatform.tracksPlayers,
     ) {
         XaeroSyncService.sync(player, XaeroChannels.ALL, config, xaero)
         JourneyMapSyncService.sync(player, config, journeyMap, playerRadar(config, tracksPlayers))
@@ -44,7 +45,7 @@ object MapSyncService {
         xaero: XaeroConfig = CompanionXaeroConfig.getConfig(),
         journeyMap: JourneyMapConfig = CompanionJourneyMapConfig.getConfig(),
         voxelMap: VoxelMapConfig = CompanionVoxelMapConfig.getConfig(),
-        tracksPlayers: Boolean = MinimapCompanionPlatform.tracksPlayers,
+        tracksPlayers: Boolean = CompanionPlatform.tracksPlayers,
     ) {
         val xaeroChannels = channels.filter(XaeroChannels::isXaero)
         if (xaeroChannels.isNotEmpty()) {
@@ -67,7 +68,7 @@ object MapSyncService {
         channel: String,
         config: MinimapCompanionConfig = CompanionConfig.getConfig(),
         journeyMap: JourneyMapConfig = CompanionJourneyMapConfig.getConfig(),
-        tracksPlayers: Boolean = MinimapCompanionPlatform.tracksPlayers,
+        tracksPlayers: Boolean = CompanionPlatform.tracksPlayers,
     ) {
         if (channel == WorldInfo.CHANNEL) {
             WorldInfo.send(player, config)

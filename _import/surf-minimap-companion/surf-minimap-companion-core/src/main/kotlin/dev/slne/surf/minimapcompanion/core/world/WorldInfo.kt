@@ -1,7 +1,6 @@
-package dev.slne.surf.minimapcompanion.core.worldinfo
+package dev.slne.surf.minimapcompanion.core.world
 
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
-import dev.slne.surf.minimapcompanion.core.id.LevelIds
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import net.kyori.adventure.key.Key
 

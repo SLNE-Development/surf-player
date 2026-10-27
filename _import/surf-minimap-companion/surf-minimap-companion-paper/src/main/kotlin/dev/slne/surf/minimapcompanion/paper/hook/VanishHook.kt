@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.paper.tracker
+package dev.slne.surf.minimapcompanion.paper.hook
 
 import dev.slne.surf.vanish.api.SurfVanishApi
 import org.bukkit.entity.Player
@@ -6,6 +6,6 @@ import org.bukkit.entity.Player
 /**
  * Asks surf-vanish whether a player is vanished. Only load it when surf-vanish-paper is enabled.
  */
-object VanishCheck {
+object VanishHook {
     fun isVanished(player: Player) = SurfVanishApi.isVanished(player)
 }

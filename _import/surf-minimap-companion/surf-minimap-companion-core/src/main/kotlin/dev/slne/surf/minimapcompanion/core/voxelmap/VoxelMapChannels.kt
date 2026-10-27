@@ -4,7 +4,7 @@ import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 
 /**
  * The plugin channel VoxelMap's server side sends its settings on. The world ID goes through
- * [dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo], which VoxelMap shares with JourneyMap.
+ * [dev.slne.surf.minimapcompanion.core.world.WorldInfo], which VoxelMap shares with JourneyMap.
  */
 object VoxelMapChannels {
     const val SETTINGS = "voxelmap:settings"

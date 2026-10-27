@@ -8,7 +8,7 @@ import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.journeymap.permissionsJson
 import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
+import dev.slne.surf.minimapcompanion.core.world.WorldInfo
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import kotlinx.serialization.json.JsonPrimitive
 import net.kyori.adventure.key.Key

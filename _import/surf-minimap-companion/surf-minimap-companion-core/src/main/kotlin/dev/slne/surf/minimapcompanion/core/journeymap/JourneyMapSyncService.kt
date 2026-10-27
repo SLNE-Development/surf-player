@@ -4,7 +4,7 @@ import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
-import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
+import dev.slne.surf.minimapcompanion.core.world.WorldInfo
 
 /**
  * Sends JourneyMap clients what JourneyMap's server addon sends: the world ID, then the permissions.

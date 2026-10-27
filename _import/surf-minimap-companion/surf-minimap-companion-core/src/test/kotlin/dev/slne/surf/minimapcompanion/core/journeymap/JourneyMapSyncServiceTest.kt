@@ -4,7 +4,7 @@ import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
 import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.service.FakePlayer
-import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
+import dev.slne.surf.minimapcompanion.core.world.WorldInfo
 import kotlinx.serialization.json.JsonPrimitive
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test

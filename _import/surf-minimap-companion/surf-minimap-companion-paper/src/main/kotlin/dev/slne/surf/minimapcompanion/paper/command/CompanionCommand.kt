@@ -3,7 +3,7 @@ package dev.slne.surf.minimapcompanion.paper.command
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
-import dev.slne.surf.minimapcompanion.core.command.CompanionPermissions
+import dev.slne.surf.minimapcompanion.core.permission.CompanionPermissions
 import dev.slne.surf.minimapcompanion.core.command.sendReloadResult
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
@@ -12,7 +12,7 @@ import dev.slne.surf.minimapcompanion.paper.plugin
 import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
 import org.bukkit.Bukkit
 
-fun minimapCompanionCommand() = commandTree("minimapcompanion") {
+fun companionCommand() = commandTree("minimapcompanion") {
     withPermission(CompanionPermissions.COMMAND)
 
     literalArgument("reload") {

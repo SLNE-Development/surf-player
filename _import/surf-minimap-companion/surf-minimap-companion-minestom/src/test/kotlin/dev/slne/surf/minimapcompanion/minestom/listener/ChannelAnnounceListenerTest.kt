@@ -15,14 +15,14 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @EnvTest
-class ChannelAnnouncerTest {
+class ChannelAnnounceListenerTest {
 
     // VoxelMap asks for the world ID only on its first tick in a new world, and only if the channel was announced
     // by then. Minestom spawns a player whose chunks still load only on a later tick, starting with the view position,
     // so the announcement has to come with the join game packet instead.
     @Test
     fun `channels are announced with the join, before the spawn`(env: Env) {
-        ChannelAnnouncer.register(env.process().eventHandler())
+        ChannelAnnounceListener.register(env.process().eventHandler())
         val connection = env.createConnection()
         val packets = connection.trackIncoming()
 

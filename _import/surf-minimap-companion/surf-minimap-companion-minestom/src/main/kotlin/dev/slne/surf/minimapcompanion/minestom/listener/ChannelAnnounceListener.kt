@@ -14,7 +14,7 @@ import net.minestom.server.event.player.PlayerSkinInitEvent
  * Announces the map mods' channels, as a server with the mods does. The mods answer the handshake and ask for
  * the world ID only on channels the server announced.
  */
-object ChannelAnnouncer : EventRegistrar {
+object ChannelAnnounceListener : EventRegistrar {
     const val REGISTER_CHANNEL = "minecraft:register"
 
     private val ANNOUNCED = XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED + VoxelMapChannels.SETTINGS

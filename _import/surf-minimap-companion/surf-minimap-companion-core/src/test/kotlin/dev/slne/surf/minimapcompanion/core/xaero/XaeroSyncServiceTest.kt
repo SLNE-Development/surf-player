@@ -1,11 +1,9 @@
-package dev.slne.surf.minimapcompanion.core.service
+package dev.slne.surf.minimapcompanion.core.xaero
 
 import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroLibPackets
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroPackets
+import dev.slne.surf.minimapcompanion.core.service.FakePlayer
 import dev.slne.surf.minimapcompanion.core.xaero.nbt.NbtByte
 import dev.slne.surf.minimapcompanion.core.xaero.nbt.NbtCompound
 import dev.slne.surf.minimapcompanion.core.xaero.nbt.nbtCompound

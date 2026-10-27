@@ -5,10 +5,10 @@ import dev.slne.surf.api.minestom.extension.addListener
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfig
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
 import dev.slne.surf.minimapcompanion.core.service.MapSyncService
-import dev.slne.surf.minimapcompanion.core.service.XaeroSyncService
+import dev.slne.surf.minimapcompanion.core.xaero.XaeroSyncService
 import dev.slne.surf.minimapcompanion.core.tracker.PlayerTracker
 import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
+import dev.slne.surf.minimapcompanion.core.world.WorldInfo
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
 import dev.slne.surf.minimapcompanion.core.xaero.XaeroMapEffects
 import dev.slne.surf.minimapcompanion.minestom.platform.MinestomCompanionPlayer
@@ -33,7 +33,7 @@ object CompanionListener : EventRegistrar {
         node.addListener<PlayerPluginMessageEvent> { event ->
             val player = event.player
 
-            if (event.identifier != ChannelAnnouncer.REGISTER_CHANNEL) {
+            if (event.identifier != ChannelAnnounceListener.REGISTER_CHANNEL) {
                 // JourneyMap's requests for its permissions, and the world ID JourneyMap and VoxelMap ask for.
                 if (event.identifier != WorldInfo.CHANNEL && !JourneyMapChannels.isJourneyMap(event.identifier)) return@addListener
                 val instance = player.instance ?: return@addListener
