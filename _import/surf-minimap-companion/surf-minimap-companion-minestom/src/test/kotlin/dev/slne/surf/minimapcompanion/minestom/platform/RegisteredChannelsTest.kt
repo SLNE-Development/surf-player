@@ -43,7 +43,7 @@ class RegisteredChannelsTest {
     @Test
     fun `endless registrations of unknown channels keep no state`() {
         repeat(1_000) { RegisteredChannels.register(uuid, listOf("spam:$it")) }
-        assertEquals(emptySet(), RegisteredChannels.registered(uuid))
+        assertTrue((0 until 1_000).none { RegisteredChannels.isRegistered(uuid, "spam:$it") })
     }
 
     @Test

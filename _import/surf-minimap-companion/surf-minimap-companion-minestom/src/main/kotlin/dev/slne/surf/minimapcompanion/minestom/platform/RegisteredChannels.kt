@@ -43,8 +43,6 @@ object RegisteredChannels {
 
     fun isRegistered(playerUuid: UUID, channel: String) = channels[playerUuid]?.contains(channel) == true
 
-    fun registered(playerUuid: UUID): Set<String> = channels[playerUuid].orEmpty().toSet()
-
     fun forget(playerUuid: UUID) {
         channels.remove(playerUuid)
     }
