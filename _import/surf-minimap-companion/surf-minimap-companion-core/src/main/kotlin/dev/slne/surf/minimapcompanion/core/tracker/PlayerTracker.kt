@@ -73,6 +73,11 @@ class PlayerTracker(
     }
 
     /**
+     * Whether [viewer]'s client still shows players this tracker sent, which a [tick] would have to remove.
+     */
+    fun hasSent(viewer: UUID) = sentPositions[viewer]?.isNotEmpty() == true
+
+    /**
      * Clears the tracked players [viewer]'s client knows, including ones another server sent.
      */
     fun reset(viewer: CompanionPlayer) {

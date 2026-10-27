@@ -129,6 +129,10 @@ object PaperTracker {
     }
 
     private fun tick(player: Player) {
+        // With every switch off there is nothing to read or send, once the players sent before are removed.
+        val trackerOn = everyoneTracksEveryone || relations != null
+        if (!trackerOn && !journeyMapRadar && !tracker.hasSent(player.uniqueId)) return
+
         val location = player.location
         val world = player.world.key.asString()
         tracker.update(player.uniqueId, TrackedPosition(location.x, location.y, location.z, world))

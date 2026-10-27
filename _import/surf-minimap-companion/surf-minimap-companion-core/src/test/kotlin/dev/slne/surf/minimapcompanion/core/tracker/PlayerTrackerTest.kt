@@ -6,7 +6,9 @@ import dev.slne.surf.minimapcompanion.core.xaero.XaeroPackets
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class PlayerTrackerTest {
     private val tracker = PlayerTracker()
@@ -128,6 +130,18 @@ class PlayerTrackerTest {
         tracker.tick(viewer, setOf(friend)) { true }
         tracker.tick(FakePlayer(), setOf(friend)) { true }
         assertEquals(1, encoded)
+    }
+
+    @Test
+    fun `a viewer has sent players until they are all removed`() {
+        assertFalse(tracker.hasSent(viewer.uuid))
+
+        tracker.update(friend, position)
+        tick()
+        assertTrue(tracker.hasSent(viewer.uuid))
+
+        tick(candidates = emptySet())
+        assertFalse(tracker.hasSent(viewer.uuid))
     }
 
     @Test
