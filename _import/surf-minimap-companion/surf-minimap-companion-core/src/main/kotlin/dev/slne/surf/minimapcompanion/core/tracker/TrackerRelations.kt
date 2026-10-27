@@ -79,6 +79,14 @@ class TrackerRelations(
 
     fun isRelated(viewer: UUID, target: UUID) = cachesBySource.any { target in it[viewer].orEmpty() }
 
+    /**
+     * Every player [viewer] is related to by any source.
+     */
+    fun relatedOf(viewer: UUID): Set<UUID> = when (cachesBySource.size) {
+        1 -> cachesBySource[0][viewer].orEmpty()
+        else -> cachesBySource.flatMapTo(HashSet()) { it[viewer].orEmpty() }
+    }
+
     fun forget(player: UUID) {
         players -= player
         for (cache in cachesBySource) {

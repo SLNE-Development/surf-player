@@ -13,40 +13,57 @@ import java.util.concurrent.ConcurrentHashMap
  * on the thread that owns the player.
  */
 class PlayerTracker {
-    private val positions = ConcurrentHashMap<UUID, TrackedPosition>()
-    private val sentPositions = ConcurrentHashMap<UUID, MutableMap<UUID, TrackedPosition>>()
+    private val positions = ConcurrentHashMap<UUID, Published>()
+    private val sentPositions = ConcurrentHashMap<UUID, MutableMap<UUID, Published>>()
 
-    fun update(uuid: UUID, position: TrackedPosition) {
-        positions[uuid] = position
+    /**
+     * A target's position as viewers get it, encoded once for all of them. Viewers compare it by identity.
+     */
+    private class Published(uuid: UUID, val position: TrackedPosition) {
+        val payload = XaeroPackets.trackedPlayer(uuid, position.x, position.y, position.z, position.dimension)
+        val removal = XaeroPackets.trackedPlayerRemoved(uuid)
     }
 
     /**
-     * Sends [viewer] the players [isTracked] lets them see that are new or moved, and removes the ones they no longer see.
+     * Records where the player with [uuid] is. Moves under [MIN_MOVE] blocks within a dimension keep the position
+     * viewers already have, since the maps show tracked players as icons.
      */
-    fun tick(viewer: CompanionPlayer, isTracked: (viewer: UUID, target: UUID) -> Boolean) {
+    fun update(uuid: UUID, position: TrackedPosition) {
+        val current = positions[uuid]
+        if (current != null && current.position.isNear(position)) return
+        positions[uuid] = Published(uuid, position)
+    }
+
+    /**
+     * Sends [viewer] the [candidates] [isShown] lets them see that are new or moved, and removes the ones they no
+     * longer see. `null` candidates are every tracked player.
+     */
+    fun tick(viewer: CompanionPlayer, candidates: Collection<UUID>?, isShown: (target: UUID) -> Boolean) {
+        val sent = sentPositions[viewer.uuid]
+        if (candidates != null && candidates.isEmpty() && sent.isNullOrEmpty()) return
+
         val channel = trackerChannel(viewer) ?: return
-        val sent = sentPositions.computeIfAbsent(viewer.uuid) { ConcurrentHashMap() }
+        val viewerSent = sent ?: sentPositions.computeIfAbsent(viewer.uuid) { ConcurrentHashMap() }
         val tracked = HashSet<UUID>()
 
-        for ((target, position) in positions) {
-            if (target == viewer.uuid || !isTracked(viewer.uuid, target)) continue
+        for (target in candidates ?: positions.keys) {
+            if (target == viewer.uuid) continue
+            val published = positions[target] ?: continue
+            if (!isShown(target)) continue
 
             tracked += target
-            if (sent.put(target, position) != position) {
-                viewer.sendPluginMessage(
-                    channel,
-                    XaeroPackets.trackedPlayer(target, position.x, position.y, position.z, position.dimension)
-                )
+            if (viewerSent.put(target, published) !== published) {
+                viewer.sendPluginMessage(channel, published.payload)
             }
         }
 
-        val iterator = sent.keys.iterator()
+        val iterator = viewerSent.entries.iterator()
         while (iterator.hasNext()) {
-            val target = iterator.next()
+            val (target, published) = iterator.next()
             if (target in tracked) continue
 
             iterator.remove()
-            viewer.sendPluginMessage(channel, XaeroPackets.trackedPlayerRemoved(target))
+            viewer.sendPluginMessage(channel, published.removal)
         }
     }
 
@@ -69,6 +86,11 @@ class PlayerTracker {
 
     companion object {
         /**
+         * How far a player must move before viewers get the new position.
+         */
+        const val MIN_MOVE = 1.0
+
+        /**
          * The channel the mods expect tracked players on: the minimap's when the client has it, as the world map
          * then reads them from the minimap.
          */
@@ -76,6 +98,14 @@ class PlayerTracker {
             player.hasChannel(XaeroChannels.MINIMAP) -> XaeroChannels.MINIMAP
             player.hasChannel(XaeroChannels.WORLD_MAP) -> XaeroChannels.WORLD_MAP
             else -> null
+        }
+
+        private fun TrackedPosition.isNear(other: TrackedPosition): Boolean {
+            if (dimension != other.dimension) return false
+            val dx = x - other.x
+            val dy = y - other.y
+            val dz = z - other.z
+            return dx * dx + dy * dy + dz * dz < MIN_MOVE * MIN_MOVE
         }
     }
 }

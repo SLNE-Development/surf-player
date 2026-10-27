@@ -32,6 +32,16 @@ class TrackerRelationsTest {
     }
 
     @Test
+    fun `relatedOf unites every source's relations`() = runBlocking {
+        val relations = relations(RelationSource { setOf(friend) }, RelationSource { setOf(clanMate) })
+        relations.add(player)
+        relations.refresh(listOf(player))
+
+        assertEquals(setOf(friend, clanMate), relations.relatedOf(player))
+        assertEquals(emptySet(), relations.relatedOf(UUID.randomUUID()))
+    }
+
+    @Test
     fun `players are unrelated before the first refresh`() {
         val relations = relations(RelationSource { setOf(friend) })
         relations.add(player)

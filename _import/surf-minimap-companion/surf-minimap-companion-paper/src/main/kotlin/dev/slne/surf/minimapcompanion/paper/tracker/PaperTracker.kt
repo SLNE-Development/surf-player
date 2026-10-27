@@ -122,18 +122,21 @@ object PaperTracker {
         val location = player.location
         val world = player.world.key.asString()
         tracker.update(player.uniqueId, TrackedPosition(location.x, location.y, location.z, world))
-        // Read on the player's own thread; JourneyMap's own radar leaves such players out.
-        val concealed = player.isSneaking || player.isInvisible || player.gameMode == GameMode.SPECTATOR
-        journeyMapTracker.update(
-            player.uniqueId,
-            JourneyMapPlayer(player.entityId, location.x, location.y, location.z, location.yaw, location.pitch, world),
-            concealed,
-        )
 
         val viewer = PaperCompanionPlayer(player)
-        tracker.tick(viewer) { viewerUuid, target -> isShownByTracker(viewerUuid, target) && isVisibleOnMap(player, target) }
+        // Only the players related to the viewer, unless everyone tracks everyone.
+        val candidates = if (everyoneTracksEveryone) null else relations?.relatedOf(player.uniqueId).orEmpty()
+        tracker.tick(viewer, candidates) { target -> isVisibleOnMap(player, target) }
 
         if (journeyMapRadar) {
+            // Read on the player's own thread; JourneyMap's own radar leaves such players out.
+            val concealed = player.isSneaking || player.isInvisible || player.gameMode == GameMode.SPECTATOR
+            journeyMapTracker.update(
+                player.uniqueId,
+                JourneyMapPlayer(player.entityId, location.x, location.y, location.z, location.yaw, location.pitch, world),
+                concealed,
+            )
+
             // JourneyMap then shows only the players listed here, so the ones the client sees itself stay visible too.
             // Players track each other within the same range, so the players tracking the viewer are the ones the
             // viewer's client sees, and they can be read on the viewer's own thread.
