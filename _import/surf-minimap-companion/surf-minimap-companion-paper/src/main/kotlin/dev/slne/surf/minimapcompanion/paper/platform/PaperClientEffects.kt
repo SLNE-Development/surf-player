@@ -1,11 +1,12 @@
 package dev.slne.surf.minimapcompanion.paper.platform
 
-import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.protocol.player.ClientVersion
 import com.github.retrooper.packetevents.protocol.potion.PotionType
 import com.github.retrooper.packetevents.resources.ResourceLocation
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityEffect
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerRemoveEntityEffect
+import dev.slne.surf.api.core.extensions.packetEvents
+import dev.slne.surf.api.core.extensions.sendPacket
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
 import org.bukkit.NamespacedKey
@@ -29,22 +30,18 @@ object PaperClientEffects {
      * not see the client on the server's version, as with a client joined through ViaVersion.
      */
     fun vanillaEffectCount(player: Player): Int? {
-        val api = PacketEvents.getAPI()
-        if (api.playerManager.getClientVersion(player) != api.serverManager.version.toClientVersion()) return null
+        if (packetEvents.playerManager.getClientVersion(player) != packetEvents.serverManager.version.toClientVersion()) return null
         return vanillaEffectCount
     }
 
     fun add(player: Player, networkId: Int) {
         val effect = ClientOnlyEffect(networkId)
-        PacketEvents.getAPI().playerManager.sendPacket(
-            player,
-            WrapperPlayServerEntityEffect(player.entityId, effect, 0, INFINITE_DURATION, AMBIENT),
-        )
+        WrapperPlayServerEntityEffect(player.entityId, effect, 0, INFINITE_DURATION, AMBIENT).sendPacket(player)
     }
 
     fun remove(player: Player, networkId: Int) {
         val effect = ClientOnlyEffect(networkId)
-        PacketEvents.getAPI().playerManager.sendPacket(player, WrapperPlayServerRemoveEntityEffect(player.entityId, effect))
+        WrapperPlayServerRemoveEntityEffect(player.entityId, effect).sendPacket(player)
     }
 
     /**

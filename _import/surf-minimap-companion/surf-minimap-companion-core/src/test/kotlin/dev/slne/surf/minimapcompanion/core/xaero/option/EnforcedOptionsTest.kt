@@ -1,6 +1,5 @@
 package dev.slne.surf.minimapcompanion.core.xaero.option
 
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.*
 import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.bool
 import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.dimensions
 import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.double
@@ -8,6 +7,10 @@ import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.in
 import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.int
 import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.positiveDouble
 import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.string
+import net.kyori.adventure.nbt.BinaryTagTypes
+import net.kyori.adventure.nbt.CompoundBinaryTag
+import net.kyori.adventure.nbt.ListBinaryTag
+import net.kyori.adventure.nbt.StringBinaryTag
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -131,13 +134,16 @@ class EnforcedOptionsTest {
             "dims" to listOf("minecraft:overworld"),
         )
         assertEquals(
-            nbtCompound(
-                "flag" to NbtByte.of(true),
-                "level" to NbtInt(1),
-                "scale" to NbtDouble(0.5),
-                "command" to NbtString("/tp"),
-                "dims" to NbtList(listOf(NbtString("minecraft:overworld"))),
-            ),
+            CompoundBinaryTag.builder()
+                .putBoolean("flag", true)
+                .putInt("level", 1)
+                .putDouble("scale", 0.5)
+                .putString("command", "/tp")
+                .put(
+                    "dims",
+                    ListBinaryTag.listBinaryTag(BinaryTagTypes.STRING, listOf(StringBinaryTag.stringBinaryTag("minecraft:overworld"))),
+                )
+                .build(),
             options.toNbt(),
         )
     }

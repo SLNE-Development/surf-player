@@ -1,6 +1,8 @@
 package dev.slne.surf.minimapcompanion.core.xaero
 
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.*
+import dev.slne.surf.minimapcompanion.core.xaero.nbt.toNetworkBytes
+import net.kyori.adventure.nbt.CompoundBinaryTag
+import net.kyori.adventure.nbt.ListBinaryTag
 
 /**
  * Builds the payloads Xaero's Lib reads on [XaeroChannels.LIB]. Xaero's Lib carries the config
@@ -27,27 +29,27 @@ object XaeroLibPackets {
     /**
      * Selects the config channel, such as `xaerominimap:main`, the following config packets apply to.
      */
-    fun configChannel(channelId: String) = packet(CONFIG_CHANNEL, nbtCompound("c" to NbtString(channelId)))
+    fun configChannel(channelId: String) = packet(CONFIG_CHANNEL, CompoundBinaryTag.builder().putString("c", channelId).build())
 
     /**
      * Enforces [options], keyed by Xaero's option IDs. With [reset] the client first drops what was enforced before.
      */
-    fun enforcedConfig(options: NbtCompound, reset: Boolean) = packet(
-        ENFORCED_CONFIG, nbtCompound(
-            "o" to options,
-            "r" to NbtByte.of(reset),
-        )
+    fun enforcedConfig(options: CompoundBinaryTag, reset: Boolean) = packet(
+        ENFORCED_CONFIG, CompoundBinaryTag.builder()
+            .put("o", options)
+            .putBoolean("r", reset)
+            .build()
     )
 
     /**
      * Tells the client there are no server config profiles it may edit.
      */
     fun profileInfoReset() = packet(
-        PROFILE_INFO, nbtCompound(
-            "e" to NbtList(emptyList()),
-            "r" to NbtByte.of(true),
-        )
+        PROFILE_INFO, CompoundBinaryTag.builder()
+            .put("e", ListBinaryTag.empty())
+            .putBoolean("r", true)
+            .build()
     )
 
-    private fun packet(index: Int, tag: NbtTag) = byteArrayOf(index.toByte()) + tag.toNetworkBytes()
+    private fun packet(index: Int, tag: CompoundBinaryTag) = byteArrayOf(index.toByte()) + tag.toNetworkBytes()
 }

@@ -1,6 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.xaero.option
 
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.*
+import net.kyori.adventure.nbt.*
 
 /**
  * The option values a server enforces on one of Xaero's mods, keyed by Xaero's option IDs.
@@ -16,14 +16,14 @@ class EnforcedOptions(val values: Map<String, Any>) {
     /**
      * Encodes the values the way Xaero's Lib syncs them.
      */
-    fun toNbt() = NbtCompound(values.mapValues { (_, value) -> tagOf(value) })
+    fun toNbt(): CompoundBinaryTag = CompoundBinaryTag.from(values.mapValues { (_, value) -> tagOf(value) })
 
-    private fun tagOf(value: Any): NbtTag = when (value) {
-        is Boolean -> NbtByte.of(value)
-        is Int -> NbtInt(value)
-        is Double -> NbtDouble(value)
-        is String -> NbtString(value)
-        is Set<*> -> NbtList(value.map { NbtString(it as String) })
+    private fun tagOf(value: Any): BinaryTag = when (value) {
+        is Boolean -> ByteBinaryTag.byteBinaryTag(if (value) 1 else 0)
+        is Int -> IntBinaryTag.intBinaryTag(value)
+        is Double -> DoubleBinaryTag.doubleBinaryTag(value)
+        is String -> StringBinaryTag.stringBinaryTag(value)
+        is Set<*> -> ListBinaryTag.listBinaryTag(BinaryTagTypes.STRING, value.map { StringBinaryTag.stringBinaryTag(it as String) })
         else -> error("Unsupported option value $value")
     }
 

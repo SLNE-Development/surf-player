@@ -1,12 +1,15 @@
 package dev.slne.surf.minimapcompanion.core.xaero
 
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.*
+import dev.slne.surf.minimapcompanion.core.xaero.nbt.decodedPacket
+import net.kyori.adventure.nbt.CompoundBinaryTag
+import net.kyori.adventure.nbt.ListBinaryTag
 import org.junit.jupiter.api.Test
 import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 class XaeroLibPacketsTest {
 
-    private fun packet(index: Int, tag: NbtTag) = byteArrayOf(index.toByte()) + tag.toNetworkBytes()
+    private fun packet(index: Int, tag: CompoundBinaryTag) = index.toByte() to tag
 
     @Test
     fun `server and dimension handshake are index and the byte one`() {
@@ -16,26 +19,26 @@ class XaeroLibPacketsTest {
 
     @Test
     fun `config channel names the channel`() {
-        assertContentEquals(
-            packet(2, nbtCompound("c" to NbtString("xaerominimap:main"))),
-            XaeroLibPackets.configChannel("xaerominimap:main"),
+        assertEquals(
+            packet(2, CompoundBinaryTag.builder().putString("c", "xaerominimap:main").build()),
+            decodedPacket(XaeroLibPackets.configChannel("xaerominimap:main")),
         )
     }
 
     @Test
     fun `enforced config wraps the options and reset flag`() {
-        val options = nbtCompound("display_radar" to NbtByte.of(false))
-        assertContentEquals(
-            packet(3, nbtCompound("o" to options, "r" to NbtByte.of(true))),
-            XaeroLibPackets.enforcedConfig(options, reset = true),
+        val options = CompoundBinaryTag.builder().putBoolean("display_radar", false).build()
+        assertEquals(
+            packet(3, CompoundBinaryTag.builder().put("o", options).putBoolean("r", true).build()),
+            decodedPacket(XaeroLibPackets.enforcedConfig(options, reset = true)),
         )
     }
 
     @Test
     fun `profile info reset lists no profiles`() {
-        assertContentEquals(
-            packet(5, nbtCompound("e" to NbtList(emptyList()), "r" to NbtByte.of(true))),
-            XaeroLibPackets.profileInfoReset(),
+        assertEquals(
+            packet(5, CompoundBinaryTag.builder().put("e", ListBinaryTag.empty()).putBoolean("r", true).build()),
+            decodedPacket(XaeroLibPackets.profileInfoReset()),
         )
     }
 }

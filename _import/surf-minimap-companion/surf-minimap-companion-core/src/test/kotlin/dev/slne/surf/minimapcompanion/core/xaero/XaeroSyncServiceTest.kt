@@ -4,9 +4,7 @@ import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
 import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.service.FakePlayer
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.NbtByte
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.NbtCompound
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.nbtCompound
+import net.kyori.adventure.nbt.CompoundBinaryTag
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test
 import org.spongepowered.configurate.BasicConfigurationNode
@@ -32,7 +30,7 @@ class XaeroSyncServiceTest {
 
     private fun lib(payload: ByteArray) = XaeroChannels.LIB to payload.toList()
 
-    private fun configChannel(channel: String, options: NbtCompound = nbtCompound()) = listOf(
+    private fun configChannel(channel: String, options: CompoundBinaryTag = CompoundBinaryTag.empty()) = listOf(
         lib(XaeroLibPackets.configChannel(channel)),
         lib(XaeroLibPackets.profileInfoReset()),
         lib(XaeroLibPackets.enforcedConfig(options, reset = true)),
@@ -102,7 +100,7 @@ class XaeroSyncServiceTest {
 
         val sent = player.sentContent
         assertTrue(XaeroChannels.MINIMAP to XaeroPackets.minimapRules(caveMode = true, netherCaveMode = true, radar = false).toList() in sent)
-        assertTrue(lib(XaeroLibPackets.enforcedConfig(nbtCompound("display_radar" to NbtByte.of(false)), reset = true)) in sent)
+        assertTrue(lib(XaeroLibPackets.enforcedConfig(CompoundBinaryTag.builder().putBoolean("display_radar", false).build(), reset = true)) in sent)
     }
 
     @Test
@@ -112,7 +110,7 @@ class XaeroSyncServiceTest {
 
         val sent = player.sentContent
         assertTrue(XaeroChannels.MINIMAP to XaeroPackets.minimapRules(caveMode = true, netherCaveMode = true, radar = false).toList() in sent)
-        assertTrue(lib(XaeroLibPackets.enforcedConfig(nbtCompound("display_radar" to NbtByte.of(false)), reset = true)) in sent)
+        assertTrue(lib(XaeroLibPackets.enforcedConfig(CompoundBinaryTag.builder().putBoolean("display_radar", false).build(), reset = true)) in sent)
     }
 
     @Test

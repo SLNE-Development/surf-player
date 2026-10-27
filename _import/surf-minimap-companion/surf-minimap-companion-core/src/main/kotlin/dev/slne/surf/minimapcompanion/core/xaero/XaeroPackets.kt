@@ -1,6 +1,8 @@
 package dev.slne.surf.minimapcompanion.core.xaero
 
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.*
+import dev.slne.surf.minimapcompanion.core.xaero.nbt.toNetworkBytes
+import dev.slne.surf.minimapcompanion.core.xaero.nbt.uuidTag
+import net.kyori.adventure.nbt.CompoundBinaryTag
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -37,39 +39,39 @@ object XaeroPackets {
         .array()
 
     fun minimapRules(caveMode: Boolean, netherCaveMode: Boolean, radar: Boolean) = packet(
-        RULES, nbtCompound(
-            "cm" to NbtByte.of(caveMode),
-            "ncm" to NbtByte.of(netherCaveMode),
-            "r" to NbtByte.of(radar),
-        )
+        RULES, CompoundBinaryTag.builder()
+            .putBoolean("cm", caveMode)
+            .putBoolean("ncm", netherCaveMode)
+            .putBoolean("r", radar)
+            .build()
     )
 
     fun worldMapRules(caveMode: Boolean, netherCaveMode: Boolean) = packet(
-        RULES, nbtCompound(
-            "cm" to NbtByte.of(caveMode),
-            "ncm" to NbtByte.of(netherCaveMode),
-        )
+        RULES, CompoundBinaryTag.builder()
+            .putBoolean("cm", caveMode)
+            .putBoolean("ncm", netherCaveMode)
+            .build()
     )
 
     /**
      * Shows the player with [uuid] at the given position in [dimension], a world key such as `minecraft:overworld`.
      */
     fun trackedPlayer(uuid: UUID, x: Double, y: Double, z: Double, dimension: String) = packet(
-        TRACKED_PLAYER, nbtCompound(
-            "r" to NbtByte.of(false),
-            "i" to uuidTag(uuid),
-            "x" to NbtDouble(x),
-            "y" to NbtDouble(y),
-            "z" to NbtDouble(z),
-            "d" to NbtString(dimension),
-        )
+        TRACKED_PLAYER, CompoundBinaryTag.builder()
+            .putBoolean("r", false)
+            .put("i", uuidTag(uuid))
+            .putDouble("x", x)
+            .putDouble("y", y)
+            .putDouble("z", z)
+            .putString("d", dimension)
+            .build()
     )
 
     fun trackedPlayerRemoved(uuid: UUID) = packet(
-        TRACKED_PLAYER, nbtCompound(
-            "r" to NbtByte.of(true),
-            "i" to uuidTag(uuid),
-        )
+        TRACKED_PLAYER, CompoundBinaryTag.builder()
+            .putBoolean("r", true)
+            .put("i", uuidTag(uuid))
+            .build()
     )
 
     /**
@@ -77,15 +79,5 @@ object XaeroPackets {
      */
     fun trackerReset() = byteArrayOf(TRACKER_RESET)
 
-    // The layout of Minecraft's UUIDUtil.uuidToIntArray.
-    private fun uuidTag(uuid: UUID) = NbtIntArray(
-        intArrayOf(
-            (uuid.mostSignificantBits ushr 32).toInt(),
-            uuid.mostSignificantBits.toInt(),
-            (uuid.leastSignificantBits ushr 32).toInt(),
-            uuid.leastSignificantBits.toInt(),
-        )
-    )
-
-    private fun packet(index: Int, tag: NbtTag) = byteArrayOf(index.toByte()) + tag.toNetworkBytes()
+    private fun packet(index: Int, tag: CompoundBinaryTag) = byteArrayOf(index.toByte()) + tag.toNetworkBytes()
 }
