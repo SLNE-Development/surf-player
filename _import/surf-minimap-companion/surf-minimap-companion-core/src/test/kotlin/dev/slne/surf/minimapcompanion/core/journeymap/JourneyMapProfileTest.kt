@@ -1,7 +1,12 @@
 package dev.slne.surf.minimapcompanion.core.journeymap
 
+import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import org.junit.jupiter.api.Test
+import org.spongepowered.configurate.BasicConfigurationNode
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class JourneyMapProfileTest {
@@ -69,5 +74,19 @@ class JourneyMapProfileTest {
     fun `null enforces nothing`() {
         assertEquals(emptyMap(), parse("minimapEnabled" to null).values)
         assertEquals(emptyList(), warnings)
+    }
+
+    @Test
+    fun `global settings override the options before they are checked`() {
+        val config = JourneyMapConfig(options = mapOf("teleport" to BasicConfigurationNode.root().raw("WAYPOINT_ONLY")))
+        val profile = JourneyMapProfile.of(config, GlobalSettings(mapOf(GlobalFeature.TELEPORT to true)))
+        assertEquals(mapOf("teleport" to "ALL"), profile.values)
+    }
+
+    @Test
+    fun `each config and global settings pair is parsed once`() {
+        val config = JourneyMapConfig()
+        val global = GlobalSettings(mapOf(GlobalFeature.RADAR to false))
+        assertSame(JourneyMapProfile.of(config, global), JourneyMapProfile.of(config, global))
     }
 }

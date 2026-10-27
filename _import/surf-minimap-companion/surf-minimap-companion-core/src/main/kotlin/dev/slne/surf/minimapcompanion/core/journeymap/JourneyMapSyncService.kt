@@ -2,6 +2,7 @@ package dev.slne.surf.minimapcompanion.core.journeymap
 
 import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
 import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
 
@@ -18,7 +19,8 @@ object JourneyMapSyncService {
         if (!JourneyMapChannels.hasJourneyMap(player)) return
 
         WorldInfo.send(player, config)
-        val permissions = JourneyMapPermissions.json(JourneyMapProfile.of(journeyMap), config.disableMaps, playerRadar)
+        val profile = JourneyMapProfile.of(journeyMap, GlobalSettings.of(config.globalSettings))
+        val permissions = JourneyMapPermissions.json(profile, config.disableMaps, playerRadar)
         player.sendPluginMessage(JourneyMapChannels.PERMISSIONS, JourneyMapPackets.permissions(permissions))
     }
 

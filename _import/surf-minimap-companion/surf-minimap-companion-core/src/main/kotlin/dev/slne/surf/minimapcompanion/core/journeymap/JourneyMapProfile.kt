@@ -2,6 +2,7 @@ package dev.slne.surf.minimapcompanion.core.journeymap
 
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
+import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
 
 /**
  * What this server enforces on JourneyMap, as the strings JourneyMap's permissions JSON carries:
@@ -19,20 +20,27 @@ data class JourneyMapProfile(
         private val TELEPORT_OPTIONS = setOf("NONE", "ALL", "OPS", "WAYPOINT_ONLY", "GLOBAL_ONLY")
 
         @Volatile
-        private var cached: Pair<JourneyMapConfig, JourneyMapProfile>? = null
+        private var cached: Triple<JourneyMapConfig, GlobalSettings, JourneyMapProfile>? = null
 
         /**
-         * Returns the profile [config] describes. Each config instance is parsed once, so its warnings are logged once.
+         * Returns the profile [config] describes, with the entries [global] sets applied. Each pair of instances is
+         * parsed once, so its warnings and the options the global settings override are logged once.
          */
-        fun of(config: JourneyMapConfig): JourneyMapProfile {
-            cached?.let { (cachedConfig, profile) -> if (cachedConfig === config) return profile }
+        fun of(config: JourneyMapConfig, global: GlobalSettings = GlobalSettings.NONE): JourneyMapProfile {
+            cached?.let { (cachedConfig, cachedGlobal, profile) ->
+                if (cachedConfig === config && cachedGlobal === global) return profile
+            }
+
+            val options = JourneyMapGlobalSettings.apply(config.options.mapValues { it.value.raw() }, global) { hint ->
+                log.atInfo().log("%s", hint)
+            }
 
             val warnings = mutableListOf<String>()
-            val profile = parse(config.options.mapValues { it.value.raw() }) { warning ->
+            val profile = parse(options) { warning ->
                 warnings += warning
                 log.atWarning().log("%s", warning)
             }.copy(warnings = warnings)
-            cached = config to profile
+            cached = Triple(config, global, profile)
             return profile
         }
 

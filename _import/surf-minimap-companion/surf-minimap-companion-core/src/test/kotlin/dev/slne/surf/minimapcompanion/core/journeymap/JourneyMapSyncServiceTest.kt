@@ -1,5 +1,6 @@
 package dev.slne.surf.minimapcompanion.core.journeymap
 
+import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
 import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
 import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
 import dev.slne.surf.minimapcompanion.core.service.FakePlayer
@@ -7,6 +8,7 @@ import dev.slne.surf.minimapcompanion.core.worldinfo.WorldInfo
 import kotlinx.serialization.json.JsonPrimitive
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test
+import org.spongepowered.configurate.BasicConfigurationNode
 import kotlin.test.assertEquals
 
 class JourneyMapSyncServiceTest {
@@ -28,6 +30,16 @@ class JourneyMapSyncServiceTest {
         val player = lobbyPlayer()
         JourneyMapSyncService.sync(player, config, journeyMap, playerRadar = false)
         assertEquals(listOf(lobbyWorldId, defaultPermissions), player.sentContent)
+    }
+
+    @Test
+    fun `sync applies the global settings of config yml`() {
+        val player = lobbyPlayer()
+        val config = MinimapCompanionConfig(globalSettings = GlobalSettingsConfig(caveMode = BasicConfigurationNode.root().raw(false)))
+        JourneyMapSyncService.sync(player, config, journeyMap, playerRadar = false)
+
+        val permissions = permissionsJson(player.sent.single { it.first == JourneyMapChannels.PERMISSIONS }.second)
+        assertEquals(JsonPrimitive("NONE"), permissions["caveMapping"])
     }
 
     @Test
