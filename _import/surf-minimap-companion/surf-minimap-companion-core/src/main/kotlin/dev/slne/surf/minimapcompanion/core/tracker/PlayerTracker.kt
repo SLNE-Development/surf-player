@@ -78,6 +78,11 @@ class PlayerTracker(
     fun hasSent(viewer: UUID) = sentPositions[viewer]?.isNotEmpty() == true
 
     /**
+     * How many players [viewer]'s client shows through this tracker.
+     */
+    fun sentCount(viewer: UUID) = sentPositions[viewer]?.size ?: 0
+
+    /**
      * Clears the tracked players [viewer]'s client knows, including ones another server sent.
      */
     fun reset(viewer: CompanionPlayer) {

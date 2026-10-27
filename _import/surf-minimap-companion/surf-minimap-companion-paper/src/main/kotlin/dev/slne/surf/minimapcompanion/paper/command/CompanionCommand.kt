@@ -4,7 +4,10 @@ import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
+import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.literalArgument
+import dev.slne.surf.minimapcompanion.core.command.MapInfo
+import dev.slne.surf.minimapcompanion.core.command.sendMapInfo
 import dev.slne.surf.minimapcompanion.core.command.sendReloadResult
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.permission.CompanionPermissions
@@ -13,6 +16,7 @@ import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
 import dev.slne.surf.minimapcompanion.paper.plugin
 import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 
 fun companionCommand() = commandTree("minimapcompanion") {
     withPermission(CompanionPermissions.COMMAND)
@@ -34,6 +38,25 @@ fun companionCommand() = commandTree("minimapcompanion") {
                 }
 
                 sender.sendReloadResult(result)
+            }
+        }
+    }
+
+    literalArgument("info") {
+        withPermission(CompanionPermissions.COMMAND_INFO)
+        entitySelectorArgumentOnePlayer("player") {
+            anyExecutor { sender, args ->
+                val target = args["player"] as Player
+                // The player's channels, world and tracker state are read on their own thread.
+                target.scheduler.run(plugin, {
+                    val info = MapInfo.of(
+                        PaperCompanionPlayer(target),
+                        target.name,
+                        CompanionConfigs.current,
+                        PaperTracker.info(target),
+                    )
+                    sender.sendMapInfo(info)
+                }, null)
             }
         }
     }

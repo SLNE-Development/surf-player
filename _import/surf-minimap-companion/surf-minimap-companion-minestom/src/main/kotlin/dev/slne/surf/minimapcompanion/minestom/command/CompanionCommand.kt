@@ -3,7 +3,10 @@ package dev.slne.surf.minimapcompanion.minestom.command
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
 import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.literalArgument
+import dev.slne.surf.api.minestom.command.dsl.playerArgument
 import dev.slne.surf.api.minestom.coroutine.minestomBlockingScope
+import dev.slne.surf.minimapcompanion.core.command.MapInfo
+import dev.slne.surf.minimapcompanion.core.command.sendMapInfo
 import dev.slne.surf.minimapcompanion.core.command.sendReloadResult
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.permission.CompanionPermissions
@@ -11,6 +14,7 @@ import dev.slne.surf.minimapcompanion.core.service.MapSyncService
 import dev.slne.surf.minimapcompanion.minestom.platform.MinestomCompanionPlayer
 import kotlinx.coroutines.launch
 import net.minestom.server.MinecraftServer
+import net.minestom.server.entity.Player
 
 fun companionCommand() = commandTree("minimapcompanion") {
     withPermission(CompanionPermissions.COMMAND)
@@ -34,6 +38,20 @@ fun companionCommand() = commandTree("minimapcompanion") {
                 }
 
                 sender.sendReloadResult(result)
+            }
+        }
+    }
+
+    literalArgument("info") {
+        withPermission(CompanionPermissions.COMMAND_INFO)
+        playerArgument("player") {
+            anyExecutor { sender, args ->
+                val target: Player = args.get("player")
+                // The player's instance is only safe to read in their own tick. Minestom runs no player tracker.
+                target.scheduler().scheduleNextTick {
+                    val instance = target.instance ?: return@scheduleNextTick
+                    sender.sendMapInfo(MapInfo.of(MinestomCompanionPlayer(target, instance), target.username, CompanionConfigs.current))
+                }
             }
         }
     }

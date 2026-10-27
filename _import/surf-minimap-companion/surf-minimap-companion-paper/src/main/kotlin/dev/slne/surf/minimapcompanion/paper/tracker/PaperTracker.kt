@@ -3,6 +3,7 @@ package dev.slne.surf.minimapcompanion.paper.tracker
 import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.util.logger
+import dev.slne.surf.minimapcompanion.core.command.MapInfo
 import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapPlayer
 import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapTracker
@@ -172,6 +173,18 @@ object PaperTracker {
         val onlineFor = joinedAt[target]?.elapsedNow() ?: Duration.ZERO
         return MapVisibility.isShown(player.canSee(targetPlayer), onlineFor) { isVanished?.invoke(targetPlayer) == true }
     }
+
+    /**
+     * The tracker as it is for [player], for `/minimapcompanion info`. Read it on the player's own thread.
+     */
+    fun info(player: Player) = MapInfo.Tracker(
+        mode = when {
+            everyoneTracksEveryone -> MapInfo.TrackerMode.EVERYONE
+            relations != null -> MapInfo.TrackerMode.RELATIONS
+            else -> MapInfo.TrackerMode.OFF
+        },
+        xaeroPlayers = tracker.sentCount(player.uniqueId),
+    )
 
     /**
      * Clears the tracked players [player]'s client knows, including ones another server sent.

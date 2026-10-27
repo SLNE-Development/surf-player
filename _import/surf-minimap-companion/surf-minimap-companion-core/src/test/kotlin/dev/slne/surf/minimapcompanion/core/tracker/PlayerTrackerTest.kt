@@ -145,6 +145,15 @@ class PlayerTrackerTest {
     }
 
     @Test
+    fun `sent count is the number of players the viewer's map shows`() {
+        assertEquals(0, tracker.sentCount(viewer.uuid))
+        tracker.update(friend, position)
+        tracker.update(UUID.randomUUID(), position)
+        tick(candidates = null)
+        assertEquals(2, tracker.sentCount(viewer.uuid))
+    }
+
+    @Test
     fun `player no longer tracked is removed`() {
         tracker.update(friend, position)
         tick()
