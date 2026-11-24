@@ -3,6 +3,7 @@
 package dev.slne.surf.player.core.client.chat.message.format
 
 import dev.slne.surf.api.core.messages.Colors
+import dev.slne.surf.player.core.client.command.runServiceAction
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
@@ -31,15 +32,17 @@ fun SurfComponentBuilder.appendDelete(messageData: MessageData) = append(buildTe
     darkSpacer(" ")
     clickEvent(ClickEvent.callback { clicked ->
         ChatPlatform.launchAsync {
-            val deleted = DeletionService.deleteMessage(
-                messageData,
-                deleter = clicked,
-            )
+            runServiceAction(clicked) {
+                val deleted = DeletionService.deleteMessage(
+                    messageData,
+                    deleter = clicked,
+                )
 
-            if (!deleted) {
-                clicked.sendText {
-                    appendErrorPrefix()
-                    error("Die Nachricht besitzt eine ungültige Signatur und konnte nicht gelöscht werden.")
+                if (!deleted) {
+                    clicked.sendText {
+                        appendErrorPrefix()
+                        error("Die Nachricht besitzt eine ungültige Signatur und konnte nicht gelöscht werden.")
+                    }
                 }
             }
         }

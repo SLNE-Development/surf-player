@@ -14,6 +14,7 @@ import dev.slne.surf.player.velocity.plugin
 import dev.slne.surf.player.velocity.queue.config.VelocityQueueConfig
 import dev.slne.surf.player.velocity.queue.queue.VelocityQueueImpl
 import dev.slne.surf.player.velocity.queue.reconnect.QueueReconnectStore
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.jvm.optionals.getOrNull
@@ -31,6 +32,7 @@ object QueuePlayerListener {
                     try {
                         queue.markPlayerReconnected(uuid)
                     } catch (e: Exception) {
+                        if (e is CancellationException) throw e
                         log.atWarning()
                             .withCause(e)
                             .log("Failed to clear grace period for %s in queue %s", uuid, queue.serverName)
@@ -51,6 +53,7 @@ object QueuePlayerListener {
         val targetServer = try {
             QueueReconnectStore.peek(uuid)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             log.atWarning()
                 .withCause(e)
                 .log("Failed to read reconnect entry for %s", uuid)
@@ -85,6 +88,7 @@ object QueuePlayerListener {
         val autoQueueEnabled = try {
             SurfSettingsApi.getCachedValueOrLoad(uuid, SettingKeys.AUTO_QUEUE_AFTER_RECONNECT)
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             QueueReconnectStore.remove(uuid)
 
             log.atWarning()
@@ -125,6 +129,7 @@ object QueuePlayerListener {
                     )
             }
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             log.atWarning()
                 .withCause(e)
                 .log(
@@ -148,6 +153,7 @@ object QueuePlayerListener {
                     try {
                         queue.markPlayerDisconnected(uuid)
                     } catch (e: Exception) {
+                        if (e is CancellationException) throw e
                         log.atWarning()
                             .withCause(e)
                             .log("Failed to mark disconnect for %s in queue %s", uuid, queue.serverName)
@@ -195,6 +201,7 @@ object QueuePlayerListener {
                     timeoutSeconds,
                 )
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             log.atWarning()
                 .withCause(e)
                 .log(

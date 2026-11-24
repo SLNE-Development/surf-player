@@ -1,6 +1,7 @@
 package dev.slne.surf.player.core.client.chat.processor.post
 
 import dev.slne.surf.api.core.messages.Colors
+import dev.slne.surf.player.core.client.command.runServiceAction
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.logger
@@ -160,17 +161,19 @@ object AiModerationPostChatProcessor : PostChatProcessor {
                     )
                     clickEvent(ClickEvent.callback { clicked ->
                         ChatPlatform.launchAsync {
-                            val deleted = DeletionService.deleteMessage(
-                                messageData,
-                                deleter = clicked,
-                                deletionReason = "AI classification: ${action.name}",
-                                notifyTeam = false
-                            )
+                            runServiceAction(clicked) {
+                                val deleted = DeletionService.deleteMessage(
+                                    messageData,
+                                    deleter = clicked,
+                                    deletionReason = "AI classification: ${action.name}",
+                                    notifyTeam = false
+                                )
 
-                            if (!deleted) {
-                                clicked.sendText {
-                                    appendErrorPrefix()
-                                    error("Die Nachricht konnte nicht gelöscht werden!")
+                                if (!deleted) {
+                                    clicked.sendText {
+                                        appendErrorPrefix()
+                                        error("Die Nachricht konnte nicht gelöscht werden!")
+                                    }
                                 }
                             }
                         }

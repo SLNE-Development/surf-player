@@ -44,8 +44,8 @@ fun settingsCommand() = commandAPICommand("settings") {
                 return@playerExecutor
             }
 
-            val value = state?.let { SettingsCommandActions.set(player.uuid, setting, it) }
-                ?: SettingsCommandActions.toggle(player.uuid, setting)
+            val value = state?.let { SettingsCommandActions.set(player.uuid, player, setting, it) }
+                ?: SettingsCommandActions.toggle(player.uuid, player, setting)
             player.sendMessage(SettingsCommandMessages.changed(setting.name, value))
         }
     })

@@ -165,7 +165,7 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
     }
 
     onClose {
-        SettingsMenuDrafts.save(player.uniqueId)
+        SettingsMenuDrafts.save(player.uniqueId, player)
     }
 }
 

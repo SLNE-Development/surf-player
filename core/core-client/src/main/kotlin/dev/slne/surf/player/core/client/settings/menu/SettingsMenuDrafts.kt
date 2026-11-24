@@ -1,6 +1,8 @@
 package dev.slne.surf.player.core.client.settings.menu
 
 import dev.slne.surf.player.api.settings.setting.PlayerSetting
+import dev.slne.surf.player.core.client.command.runServiceAction
+import net.kyori.adventure.audience.Audience
 import dev.slne.surf.player.core.client.settings.platform.SettingsPlatform
 import dev.slne.surf.player.core.client.settings.service.SettingsService
 import java.util.*
@@ -34,13 +36,18 @@ object SettingsMenuDrafts {
             PlayerSetting(playerSetting.setting, newValue.toString())
     }
 
-    /** Saves and forgets the changes of [playerUuid]; called when they close the menu. */
-    fun save(playerUuid: UUID) {
+    /**
+     * Saves and forgets the changes of [playerUuid]; called when they close the menu. [audience]
+     * hears about it if the microservice cannot be reached.
+     */
+    fun save(playerUuid: UUID, audience: Audience) {
         val changedSettings = drafts.remove(playerUuid) ?: return
 
         SettingsPlatform.launchAsync {
-            for (setting in changedSettings.values) {
-                SettingsService.cacheAndSavePlayerSetting(playerUuid, setting)
+            runServiceAction(audience) {
+                for (setting in changedSettings.values) {
+                    SettingsService.cacheAndSavePlayerSetting(playerUuid, setting)
+                }
             }
         }
     }

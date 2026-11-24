@@ -62,6 +62,7 @@ class QueueTransferProcessor(
             }
 
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             log.atWarning()
                 .withCause(e)
                 .log("Failed to process transfers for queue %s", serverName)

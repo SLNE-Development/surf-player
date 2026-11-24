@@ -47,6 +47,7 @@ object QueueMetricsLogger {
                         )
                     }
                 } catch (e: Exception) {
+                    if (e is kotlin.coroutines.cancellation.CancellationException) throw e
                     log.atWarning()
                         .withCause(e)
                         .log("Failed to log metrics snapshot")

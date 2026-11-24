@@ -29,6 +29,7 @@ object ClanTagColorEnforcer {
             val clan = SurfClanApi.findClanByPlayer(playerUuid) ?: return
             enforce(clan)
         } catch (e: Throwable) {
+            if (e is kotlin.coroutines.cancellation.CancellationException) throw e
             log.atWarning()
                 .withCause(e)
                 .log("Failed to check the clan tag color for player %s", playerUuid)

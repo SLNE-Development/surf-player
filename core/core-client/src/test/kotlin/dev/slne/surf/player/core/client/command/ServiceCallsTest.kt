@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.command
 
+import dev.slne.surf.api.core.messages.adventure.plain
 import dev.slne.surf.rabbitmq.api.exception.SurfRabbitConnectionException
 import dev.slne.surf.rabbitmq.api.exception.SurfRabbitRequestTimeoutException
 import kotlinx.coroutines.awaitCancellation
@@ -59,6 +60,47 @@ class ServiceCallsTest {
     fun `only connection problems count as unavailable`() {
         assertTrue(SurfRabbitConnectionException("down").isServiceUnavailable())
         assertFalse(IllegalStateException("bug").isServiceUnavailable())
+    }
+
+    private class RecordingAudience : net.kyori.adventure.audience.Audience {
+        val messages = mutableListOf<net.kyori.adventure.text.Component>()
+        override fun sendMessage(message: net.kyori.adventure.text.Component) {
+            messages += message
+        }
+    }
+
+    @Test
+    fun `a callback action that cannot reach the microservice tells the player`() {
+        val audience = RecordingAudience()
+
+        val ran = runBlocking {
+            runServiceAction(audience) { throw SurfRabbitConnectionException("down") }
+        }
+
+        assertFalse(ran)
+        assertEquals(1, audience.messages.size)
+        assertTrue(audience.messages.single().plain().endsWith(CommandMessages.SERVICE_UNAVAILABLE))
+    }
+
+    @Test
+    fun `a callback action that waits too long tells the player`() {
+        val audience = RecordingAudience()
+
+        val ran = runBlocking { runServiceAction(audience, 50.milliseconds) { awaitCancellation() } }
+
+        assertFalse(ran)
+        assertEquals(1, audience.messages.size)
+    }
+
+    @Test
+    fun `a callback action that succeeds sends nothing extra and other failures pass through`() {
+        val audience = RecordingAudience()
+
+        assertTrue(runBlocking { runServiceAction(audience) { } })
+        assertThrows<IllegalStateException> {
+            runBlocking { runServiceAction(audience) { throw IllegalStateException("bug") } }
+        }
+        assertTrue(audience.messages.isEmpty())
     }
 
     @Test

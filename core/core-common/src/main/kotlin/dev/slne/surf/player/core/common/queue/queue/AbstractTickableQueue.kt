@@ -4,6 +4,7 @@ import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.runAtFixedRate
 import dev.slne.surf.player.core.common.queue.queue.tick.QueueScheduler
 import dev.slne.surf.player.core.common.queue.queue.tick.SafeQueueTick
+import dev.slne.surf.player.core.common.queue.queue.tick.TickJobEnd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -44,11 +45,14 @@ abstract class AbstractTickableQueue(
         }
 
         tickJob?.invokeOnCompletion { cause ->
-            if (cause == null) {
-                log.atInfo()
+            when (SafeQueueTick.tickJobEnd(cause)) {
+                TickJobEnd.COMPLETED -> log.atInfo()
                     .log("Tick job completed normally for queue $serverName")
-            } else {
-                log.atWarning()
+
+                TickJobEnd.STOPPED -> log.atInfo()
+                    .log("Tick job stopped for queue $serverName")
+
+                TickJobEnd.FAILED -> log.atWarning()
                     .withCause(cause)
                     .log("Tick job failed for queue $serverName")
             }

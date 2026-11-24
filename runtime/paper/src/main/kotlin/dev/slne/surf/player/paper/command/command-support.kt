@@ -19,6 +19,7 @@ import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.command.INTERACTIVE_RPC_TIMEOUT
 import dev.slne.surf.player.core.client.command.Toggle
+import dev.slne.surf.player.core.client.command.runServiceAction
 import dev.slne.surf.player.core.client.command.runServiceCall
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
@@ -96,7 +97,7 @@ fun playerClickEvent(
     onClick: suspend CoroutineScope.(Player) -> Unit
 ): ClickEvent<*> = ClickEvent.callback(
     ClickCallback.widen({ clicked ->
-        plugin.launch { onClick(clicked) }
+        plugin.launch { runServiceAction(clicked) { onClick(clicked) } }
     }, Player::class.java)
 ) { it.lifetime(lifetime) }
 

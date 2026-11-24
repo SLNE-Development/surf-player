@@ -9,8 +9,21 @@ import kotlinx.coroutines.withTimeout
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration
 
+/** How a queue's tick job ended, see [SafeQueueTick.tickJobEnd]. */
+enum class TickJobEnd { COMPLETED, STOPPED, FAILED }
+
 object SafeQueueTick {
     val log = logger()
+
+    /**
+     * How a tick job that completed with [cause] ended: a [CancellationException] is the normal
+     * stop on shutdown (or when the queue is disabled), not a failure.
+     */
+    fun tickJobEnd(cause: Throwable?): TickJobEnd = when (cause) {
+        null -> TickJobEnd.COMPLETED
+        is CancellationException -> TickJobEnd.STOPPED
+        else -> TickJobEnd.FAILED
+    }
 
     inline fun tickSafe(queue: AbstractQueue, component: String, block: () -> Unit) {
         try {

@@ -16,6 +16,7 @@ object PlayerConnectionListener {
         try {
             SettingsService.cacheJoinedPlayerSettings(player.uniqueId) { player.isActive }
         } catch (e: Exception) {
+            if (e is kotlin.coroutines.cancellation.CancellationException) throw e
             log.atWarning()
                 .withCause(e)
                 .log("Failed to cache settings for %s", player.uniqueId)

@@ -1,6 +1,9 @@
 package dev.slne.surf.player.core.client.command
 
+import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.util.logger
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.Component
 import dev.slne.surf.rabbitmq.api.exception.SurfRabbitConnectionException
 import dev.slne.surf.rabbitmq.api.exception.SurfRabbitRequestTimeoutException
 import kotlinx.coroutines.CancellationException
@@ -62,4 +65,31 @@ suspend fun <T> runServiceCall(
 
     log.atWarning().log("surf-player microservice not reachable: %s", failure.toString())
     onUnavailable(failure)
+}
+
+/** The error a player gets when an action failed because the microservice is not reachable. */
+fun serviceUnavailableMessage(): Component = buildText {
+    appendErrorPrefix()
+    error(CommandMessages.SERVICE_UNAVAILABLE)
+}
+
+private class ActionUnavailable : RuntimeException(null, null, false, false)
+
+/**
+ * Runs a player-triggered action outside a command executor that calls the microservice: a click
+ * callback (confirmation buttons, accept/deny buttons, delete buttons), a menu that saves on close
+ * or a save a command started in the background. Like [runServiceCall] it waits at most [timeout];
+ * if the microservice cannot be reached, [audience] gets [serviceUnavailableMessage] instead of the
+ * action failing silently. Returns whether the action ran to its end.
+ */
+suspend fun runServiceAction(
+    audience: Audience,
+    timeout: Duration? = INTERACTIVE_RPC_TIMEOUT,
+    block: suspend CoroutineScope.() -> Unit,
+): Boolean = try {
+    runServiceCall(timeout, { throw ActionUnavailable() }, block)
+    true
+} catch (_: ActionUnavailable) {
+    audience.sendMessage(serviceUnavailableMessage())
+    false
 }

@@ -14,6 +14,7 @@ import dev.slne.surf.player.core.client.settings.command.settingsCommandHelp
 import dev.slne.surf.player.core.client.settings.permission.SettingsPermissions
 import dev.slne.surf.player.core.client.settings.service.SettingsService
 import dev.slne.surf.player.paper.command.PaperAdminAction
+import dev.slne.surf.player.paper.command.anyExecutorSuspend
 import dev.slne.surf.player.paper.command.helpExecutor
 import dev.slne.surf.player.paper.command.toggleArgument
 import dev.slne.surf.player.paper.plugin
@@ -47,8 +48,8 @@ fun settingsCommand() = commandAPICommand("settings") {
                 return@playerExecutor
             }
 
-            val value = zustand?.let { SettingsCommandActions.set(player.uniqueId, einstellung, it) }
-                ?: SettingsCommandActions.toggle(player.uniqueId, einstellung)
+            val value = zustand?.let { SettingsCommandActions.set(player.uniqueId, player, einstellung, it) }
+                ?: SettingsCommandActions.toggle(player.uniqueId, player, einstellung)
             player.sendMessage(SettingsCommandMessages.changed(einstellung.name, value))
         }
     }
@@ -69,11 +70,9 @@ fun settingsCommand() = commandAPICommand("settings") {
  */
 fun settingsAdminActions() = listOf(
     PaperAdminAction("refresh", SettingsPermissions.ADMIN_REFRESH, "Lädt alle Einstellungen neu") {
-        anyExecutor { sender, _ ->
-            plugin.launch {
-                val millis = measureTimeMillis { SettingsService.refreshSettings() }
-                sender.sendMessage(SettingsCommandMessages.refreshed(SettingsService.settings.size, millis))
-            }
+        anyExecutorSuspend { sender, _ ->
+            val millis = measureTimeMillis { SettingsService.refreshSettings() }
+            sender.sendMessage(SettingsCommandMessages.refreshed(SettingsService.settings.size, millis))
         }
     },
     PaperAdminAction("list", SettingsPermissions.ADMIN_LIST, "Zeigt alle verfügbaren Einstellungen") {

@@ -123,6 +123,7 @@ object QueueMetrics {
             RedisQueueService.getAll()
                 .associate { it.serverName to it.size() }
         } catch (e: Exception) {
+            if (e is kotlin.coroutines.cancellation.CancellationException) throw e
             log.atWarning()
                 .withCause(e)
                 .log("Failed to collect queue sizes for metrics")

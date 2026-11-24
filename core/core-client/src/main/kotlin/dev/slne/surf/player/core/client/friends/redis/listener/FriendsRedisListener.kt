@@ -9,6 +9,7 @@ import dev.slne.surf.core.api.common.util.sendText
 import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
 import dev.slne.surf.player.api.friends.utils.toSurfPlayer
+import dev.slne.surf.player.core.client.command.runServiceAction
 import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsAction
@@ -122,9 +123,11 @@ object FriendsRedisListener {
                         append(executorName)
                         spacer(" anzunehmen.")
                     }))
-                    clickCallback {
+                    clickCallback { clicked ->
                         FriendsPlatform.INSTANCE.launch {
-                            SurfFriendsApi.acceptFriendRequest(targetUuid, executorUuid)
+                            runServiceAction(clicked) {
+                                SurfFriendsApi.acceptFriendRequest(targetUuid, executorUuid)
+                            }
                         }
                     }
                 }
@@ -136,9 +139,11 @@ object FriendsRedisListener {
                         append(executorName)
                         spacer(" abzulehnen.")
                     }))
-                    clickCallback {
+                    clickCallback { clicked ->
                         FriendsPlatform.INSTANCE.launch {
-                            SurfFriendsApi.declineFriendRequest(targetUuid, executorUuid)
+                            runServiceAction(clicked) {
+                                SurfFriendsApi.declineFriendRequest(targetUuid, executorUuid)
+                            }
                         }
                     }
                 }

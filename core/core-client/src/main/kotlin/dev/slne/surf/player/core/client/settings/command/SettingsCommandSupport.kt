@@ -5,21 +5,25 @@ import dev.slne.surf.player.api.settings.setting.PlayerSetting
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.core.client.settings.platform.SettingsPlatform
 import dev.slne.surf.player.core.client.settings.service.SettingsService
+import dev.slne.surf.player.core.client.command.runServiceAction
+import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import java.util.*
 
 object SettingsCommandActions {
-    fun toggle(playerUuid: UUID, setting: Setting): String {
+    /** Toggles [setting] of [playerUuid]; [audience] hears about it if the save cannot reach the microservice. */
+    fun toggle(playerUuid: UUID, audience: Audience, setting: Setting): String {
         val playerSetting = getPlayerSetting(playerUuid, setting).copy()
         playerSetting.toggle()
-        cacheAndSave(playerUuid, playerSetting)
+        cacheAndSave(playerUuid, audience, playerSetting)
         return playerSetting.getString()
     }
 
-    fun set(playerUuid: UUID, setting: Setting, state: Boolean): String {
+    /** Sets [setting] of [playerUuid]; [audience] hears about it if the save cannot reach the microservice. */
+    fun set(playerUuid: UUID, audience: Audience, setting: Setting, state: Boolean): String {
         val playerSetting = getPlayerSetting(playerUuid, setting).copy()
         playerSetting.settingValue = state.toString()
-        cacheAndSave(playerUuid, playerSetting)
+        cacheAndSave(playerUuid, audience, playerSetting)
         return playerSetting.getString()
     }
 
@@ -30,10 +34,12 @@ object SettingsCommandActions {
         SettingsService.getSettingForPlayerOrDefault(playerUuid, setting.name)
             ?: error("Setting not found")
 
-    private fun cacheAndSave(playerUuid: UUID, playerSetting: PlayerSetting) {
+    private fun cacheAndSave(playerUuid: UUID, audience: Audience, playerSetting: PlayerSetting) {
         SettingsService.cachePlayerSetting(playerUuid, playerSetting)
         SettingsPlatform.launchAsync {
-            SettingsService.savePlayerSetting(playerUuid, playerSetting)
+            runServiceAction(audience) {
+                SettingsService.savePlayerSetting(playerUuid, playerSetting)
+            }
         }
     }
 }
