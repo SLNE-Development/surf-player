@@ -1,0 +1,9 @@
+[versions]
+mini-placeholders = "3.0.1"
+mini-placeholders-kotlin = "3.0.1"
+luckperms-api = "5.5"
+
+[libraries]
+mini-placeholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version.ref = "mini-placeholders" }
+mini-placeholders-kotlin = { module = "io.github.miniplaceholders:miniplaceholders-kotlin-ext", version.ref = "mini-placeholders-kotlin" }
+luckperms-api = { module = "net.luckperms:api", version.ref = "luckperms-api" }
