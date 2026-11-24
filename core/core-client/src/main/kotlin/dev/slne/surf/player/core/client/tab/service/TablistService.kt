@@ -16,15 +16,20 @@ import dev.slne.surf.player.core.client.tab.util.AdventureTablistRenderer
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
 import net.kyori.adventure.text.Component
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 private val log = logger()
+
+/** How long a join or quit takes until the server's player list counts it. */
+private val PLAYER_LIST_SETTLE = 500.milliseconds
 
 /**
  * Coordinates tab list rendering, placeholder updates, player entries, and lifecycle management.
@@ -132,6 +137,7 @@ object TablistService {
             additions.invalidateAll(TablistUpdateReason.PLAYER_COUNT)
             entries.updateEntry(viewer.uuid)
         }
+        recountWhenSettled()
     }
 
     /**
@@ -146,6 +152,24 @@ object TablistService {
         additions.forget(viewerUuid)
         entries.forget(viewerUuid)
         additions.invalidateAll(TablistUpdateReason.PLAYER_COUNT)
+        recountWhenSettled()
+    }
+
+    /**
+     * Renders the player count once more after [PLAYER_LIST_SETTLE].
+     *
+     * Paper's `PlayerQuitEvent` and Minestom's disconnect event fire while the leaving player is
+     * still in the server's player list, so the render right away still counts them; nothing else
+     * changes the count afterwards, and the header used to keep the old number until the next join.
+     * An unchanged count costs nothing: the shared render is reused and nobody is sent anything.
+     */
+    private fun recountWhenSettled() {
+        if (!started) return
+
+        TabPlatform.launch {
+            delay(PLAYER_LIST_SETTLE)
+            invalidateAll(TablistUpdateReason.PLAYER_COUNT)
+        }
     }
 
     /**

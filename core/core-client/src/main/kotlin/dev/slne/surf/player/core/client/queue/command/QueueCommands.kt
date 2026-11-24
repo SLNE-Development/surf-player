@@ -1,6 +1,5 @@
 package dev.slne.surf.player.core.client.queue.command
 
-import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.command.failure
@@ -9,6 +8,7 @@ import dev.slne.surf.player.core.client.queue.config.SurfQueueConfig
 import dev.slne.surf.player.core.client.queue.metrics.QueueMetrics
 import dev.slne.surf.player.core.client.queue.metrics.QueueMetricsLogger
 import dev.slne.surf.player.core.client.queue.queue.ClientQueue
+import dev.slne.surf.player.core.client.util.usernameOrUuid
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
 import dev.slne.surf.api.core.util.mapAsync
 import net.kyori.adventure.audience.Audience
@@ -32,7 +32,7 @@ object QueueCommands {
         val entries = queue(serverName).getAllUuidsOrderedByPosition()
         if (entries.isEmpty()) return failure(QueueMessages.queueEmpty(serverName))
 
-        val named = entries.mapAsync { it to (PlayerLookupService.getUsername(it) ?: it.toString()) }
+        val named = entries.mapAsync { it to usernameOrUuid(it) }
         return reply(QueueMessages.queueListPagination(serverName).renderComponent(named, page))
     }
 

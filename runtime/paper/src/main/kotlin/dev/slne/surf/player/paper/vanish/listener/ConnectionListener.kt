@@ -95,6 +95,7 @@ object ConnectionListener : Listener {
         val player = event.player
 
         pendingFlyRestore.remove(player.uniqueId)
+        HotkeyListener.forget(player.uniqueId)
         VanishService.hideAndDeleteScoreboard(player)
         VanishService.setFlyState(player.uniqueId, player.isFlying)
 

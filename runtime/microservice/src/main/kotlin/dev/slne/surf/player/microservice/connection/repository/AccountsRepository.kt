@@ -6,6 +6,7 @@ import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Op
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.inList
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.inSubQuery
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteReturning
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
@@ -71,8 +72,7 @@ object AccountsRepository {
     ): UnlinkResult = suspendTransaction {
         val deletedMinecraftAccount = AccountsTable
             .deleteReturning(listOf(AccountsTable.userId)) {
-                (AccountsTable.provider eq PROVIDER_MINECRAFT) and
-                        (AccountsTable.providerAccountId eq minecraftUuid.toString())
+                minecraftAccountCondition(minecraftUuid)
             }
             .firstOrNull()
             ?: return@suspendTransaction UnlinkResult.NotLinked
@@ -100,13 +100,23 @@ object AccountsRepository {
         provider: String,
         minecraftUuid: UUID
     ): Long? = suspendTransaction {
-        AccountsTable
+        val accountId = AccountsTable
             .select(AccountsTable.providerAccountId)
             .where(linkedAccountCondition(provider, minecraftUuid))
             .limit(1)
             .firstOrNull()
             ?.getOrNull(AccountsTable.providerAccountId)
-            ?.toLongOrNull()
+            ?: return@suspendTransaction null
+
+        // A link whose account id is no number is not one the website writes; say so instead of
+        // silently reporting the player as unlinked.
+        accountId.toLongOrNull() ?: run {
+            log.atWarning().log(
+                "Ignoring the %s link of %s: providerAccountId '%s' is no numeric %s account id",
+                provider, minecraftUuid, accountId, provider
+            )
+            null
+        }
     }
 
     private fun linkedAccountCondition(provider: String, minecraftUuid: UUID): Op<Boolean> =
@@ -114,11 +124,12 @@ object AccountsRepository {
                 AccountsTable.userId.inSubQuery(
                     AccountsTable
                         .select(AccountsTable.userId)
-                        .where(
-                            (AccountsTable.provider eq PROVIDER_MINECRAFT) and
-                                    (AccountsTable.providerAccountId eq minecraftUuid.toString())
-                        )
+                        .where(minecraftAccountCondition(minecraftUuid))
                 )
+
+    private fun minecraftAccountCondition(minecraftUuid: UUID): Op<Boolean> =
+        (AccountsTable.provider eq PROVIDER_MINECRAFT) and
+                (AccountsTable.providerAccountId inList minecraftAccountIds(minecraftUuid))
 
     private suspend fun fetchDiscordName(discordId: Long): String =
         fetchDisplayName("Discord", discordId, "https://discord.com/api/users/$discordId", {
@@ -173,4 +184,16 @@ object AccountsRepository {
     }
 
     private fun JsonObject.stringOrNull(key: String): String? = this[key]?.jsonPrimitive?.contentOrNull
+}
+
+/**
+ * The ways a Minecraft link can hold [uuid] as its `providerAccountId`: with or without dashes, in
+ * lower or upper case. Matching all of them keeps a link found whichever way it was written, and the
+ * lookup can still use the primary key index.
+ */
+internal fun minecraftAccountIds(uuid: UUID): List<String> {
+    val dashed = uuid.toString().lowercase()
+    val plain = dashed.replace("-", "")
+
+    return listOf(dashed, plain, dashed.uppercase(), plain.uppercase())
 }

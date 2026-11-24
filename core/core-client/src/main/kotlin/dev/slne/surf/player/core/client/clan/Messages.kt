@@ -8,7 +8,8 @@ import dev.slne.surf.player.core.client.command.CommandMessages
  */
 object Messages {
     const val NOT_IN_CLAN = "Du bist in keinem Clan."
-    const val NO_LONGER_IN_A_CLAN = "Du bist nicht mehr in einem Clan."
+    /** A confirmation button of the clan a player was in, clicked after they left it. */
+    const val NO_LONGER_IN_THAT_CLAN = "Du bist nicht mehr in dem Clan."
     const val ALREADY_IN_CLAN = "Du bist bereits in einem Clan."
 
     /** For [dev.slne.surf.player.api.clan.invite.ClanInviteAcceptResult.InviteNotFound]. */

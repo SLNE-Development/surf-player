@@ -29,8 +29,20 @@ object ClanDataCache : ClanUpdatedListener {
         return clan.toCachedData()
     }
 
+    /**
+     * The cached clan data of [uuid]. Never waits: until the data is loaded (started by the first
+     * call) the player counts as clanless, so a server calls [preload] before the first render.
+     */
     fun getData(uuid: UUID): CachedClanData {
         return cache.underlying().get(uuid).getNow(CachedClanData.Empty)
+    }
+
+    /**
+     * Loads the clan data of [uuid] into the cache, e.g. while the player is connecting, so the first
+     * placeholder rendered for them (a join message) already shows their clan.
+     */
+    suspend fun preload(uuid: UUID) {
+        cache.get(uuid)
     }
 
     override fun onClanUpdated(clan: Clan) {

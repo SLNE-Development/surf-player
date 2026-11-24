@@ -1,7 +1,6 @@
 package dev.slne.surf.player.minestom.command
 
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
-import dev.slne.surf.api.minestom.command.dsl.playerExecutor
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.coroutine.minestomBlockingScope
 import dev.slne.surf.player.api.contentcreator.platform.PlatformState
@@ -58,10 +57,10 @@ fun contentCreatorAdminActions() = listOf(
         "<live|offline>"
     ) {
         withSubcommand(subcommand("live") {
-            playerExecutor { player, _ -> LiveStateDebugCommand.setTwitchState(player, player.uuid, PlatformState.ONLINE) }
+            playerExecutorSuspend { player, _ -> LiveStateDebugCommand.setTwitchState(player, player.uuid, PlatformState.ONLINE) }
         })
         withSubcommand(subcommand("offline") {
-            playerExecutor { player, _ -> LiveStateDebugCommand.setTwitchState(player, player.uuid, PlatformState.OFFLINE) }
+            playerExecutorSuspend { player, _ -> LiveStateDebugCommand.setTwitchState(player, player.uuid, PlatformState.OFFLINE) }
         })
     },
 )

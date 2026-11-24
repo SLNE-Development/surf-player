@@ -130,6 +130,7 @@ fun registerClanCommands() {
             withPermission(ClanPermissions.COMMAND_ACCEPT)
             withArguments(clanInviteArgument(CLAN))
             playerExecutorSuspend { player, args ->
+                if (SurfClanApi.findClanByPlayer(player.uuid) != null) failCommand(Messages.ALREADY_IN_CLAN)
                 player.reply(ClanCommands.accept(player.username, args.clanInvite(CLAN)))
             }
         })

@@ -18,6 +18,7 @@ import dev.slne.surf.player.core.client.util.luckPermsPrefix
 import dev.slne.surf.player.core.client.vanish.VanishedPlayers
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.vanish.config.vanishConfig
+import dev.slne.surf.player.paper.vanish.listener.HotkeyListener
 import dev.slne.surf.player.paper.vanish.util.*
 import dev.slne.surf.redis.sync.map.SyncMap
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask
@@ -311,6 +312,7 @@ object VanishService {
 
     fun stopSpectateMode(player: Player) {
         spectateModePlayers.remove(player.uniqueId)
+        HotkeyListener.forget(player.uniqueId)
 
         hideAndDeleteScoreboard(player)
     }

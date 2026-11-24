@@ -40,6 +40,18 @@ fun failCommand(message: String): Nothing =
     })
 
 /**
+ * The exception a synchronous [CustomArgument] parser throws to reject its input with [message],
+ * shown to the sender as an error. [failCommand] must not be used there: CommandAPI only turns a
+ * [CustomArgument.CustomArgumentException] into a proper message, anything else ends up as the raw
+ * "Error in executing command …".
+ */
+fun argumentError(message: String): CustomArgument.CustomArgumentException =
+    CustomArgument.CustomArgumentException.fromAdventureComponent(buildText {
+        appendErrorPrefix()
+        error(message)
+    })
+
+/**
  * Runs [block], which calls the microservice, waiting at most [timeout] (no limit when `null`); if
  * the microservice cannot be reached the command fails with [CommandMessages.SERVICE_UNAVAILABLE].
  */

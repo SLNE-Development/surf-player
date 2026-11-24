@@ -153,7 +153,9 @@ fun registerVanish() {
             val m = admin.run("vanish spectate")
             val r = admin.expect("Du bist nun im Zuschauermodus", since = m, prefix = Prefix.Success)
             sleep(800)
-            val ctrl = admin.messagesSince(m).firstOrNull { it.plain.contains("Steuerung") }
+            // The box heading "Spectate-Mode Steuerung:" is written in small caps, so the box is found
+            // by its key lines, which are plain text.
+            val ctrl = admin.messagesSince(m).firstOrNull { it.plain.contains("Teleport:") && it.plain.contains("Weiter:") }
             note("„${r.plain.trim()}“; Steuerung: „${ctrl?.plain?.trim()?.replace("\n", " ") ?: "fehlt"}“")
             if (ctrl == null) odd("Kein Steuerungskasten; ${notes.last()}")
         } finally { admin.cmd("vanish spectate"); sleep(800); vanish(admin, false) }

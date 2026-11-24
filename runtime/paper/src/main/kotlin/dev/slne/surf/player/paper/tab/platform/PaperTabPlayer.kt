@@ -2,6 +2,7 @@ package dev.slne.surf.player.paper.tab.platform
 
 import com.github.shynixn.mccoroutine.folia.entityDispatcher
 import dev.slne.surf.player.core.client.tab.platform.TabPlayer
+import dev.slne.surf.player.core.client.util.prefixedName
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.withContext
 import net.kyori.adventure.text.Component
@@ -11,7 +12,12 @@ class PaperTabPlayer(private val player: Player) : TabPlayer {
     override val uuid get() = player.uniqueId
     override val audience get() = player
 
-    override fun baseName(): Component = player.displayName()
+    /**
+     * The name with the player's LuckPerms prefix, as on Minestom. Read on every render, so a prefix
+     * change (LuckPerms `UserDataRecalculateEvent`, see `PaperTabFeature`) shows up at once; the
+     * display name never carried the prefix, so the prefix used to be missing from the Paper tab.
+     */
+    override fun baseName(): Component = prefixedName(player.uniqueId, player.name)
 
     override suspend fun baseNameSnapshot(): Component =
         withContext(plugin.entityDispatcher(player)) { baseName() }

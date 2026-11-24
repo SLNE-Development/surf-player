@@ -59,7 +59,7 @@ suspend fun handleLeaveClick(
 ) {
     val clan = SurfClanApi.findClanByPlayer(clicker) ?: return clicked.sendText {
         appendErrorPrefix()
-        error(Messages.NO_LONGER_IN_A_CLAN)
+        error(Messages.NO_LONGER_IN_THAT_CLAN)
     }
 
     if (clan.uuid != originalClanUuid) return clicked.sendText {
@@ -77,7 +77,7 @@ suspend fun handleLeaveClick(
     if (!removed) {
         return clicked.sendText {
             appendErrorPrefix()
-            error("Du bist nicht mehr in dem Clan.")
+            error(Messages.NO_LONGER_IN_THAT_CLAN)
         }
     } else {
         clicked.sendText {

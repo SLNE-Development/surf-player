@@ -3,6 +3,7 @@ package dev.slne.surf.player.core.client.clan.command
 import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.invite.ClanInvite
 import dev.slne.surf.player.api.clan.member.ClanMember
+import dev.slne.surf.player.core.client.util.resolvePlayerUuid
 import dev.slne.surf.player.core.client.util.usernameOrUuid
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -88,13 +89,19 @@ suspend fun findClanMember(player: UUID, nameOrUuid: String): ClanMember? {
         return clan.getMember(uuid)
     }
 
-    return coroutineScope {
-        clan.members.map { member -> async { member to usernameOrUuid(member.uuid) } }
-            .awaitAll()
-            .firstOrNull { (_, name) -> name.equals(nameOrUuid, ignoreCase = true) }
-            ?.first
+    val members = coroutineScope {
+        clan.members.map { member -> async { member to usernameOrUuid(member.uuid) } }.awaitAll()
     }
+
+    return findByName(members, nameOrUuid)
+        ?: resolvePlayerUuid(nameOrUuid)?.let(clan::getMember)
 }
+
+/**
+ * The value of the first of [named] whose name is [input], ignoring case.
+ */
+internal fun <T> findByName(named: List<Pair<T, String>>, input: String): T? =
+    named.firstOrNull { (_, name) -> name.equals(input, ignoreCase = true) }?.first
 
 /**
  * The names of the players [player]'s clan has invited and who have not answered yet.
@@ -112,11 +119,17 @@ suspend fun pendingInviteeNames(player: UUID): Set<String> {
  */
 suspend fun findPendingInvite(player: UUID, input: String): ClanInvite? {
     val clan = SurfClanApi.findClanByPlayer(player) ?: return null
+    val invites = clan.getPendingInvites()
+    val uuid = runCatching { UUID.fromString(input) }.getOrNull()
 
-    return coroutineScope {
-        clan.getPendingInvites().map { invite -> async { invite to usernameOrUuid(invite.invited) } }
-            .awaitAll()
-            .firstOrNull { (_, name) -> name.equals(input, ignoreCase = true) }
-            ?.first
+    if (uuid != null) {
+        return invites.firstOrNull { it.invited == uuid }
     }
+
+    val named = coroutineScope {
+        invites.map { invite -> async { invite to usernameOrUuid(invite.invited) } }.awaitAll()
+    }
+
+    return findByName(named, input)
+        ?: resolvePlayerUuid(input)?.let { invitee -> invites.firstOrNull { it.invited == invitee } }
 }

@@ -10,6 +10,7 @@ import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
 import dev.slne.surf.player.core.client.contentcreator.CoreContentCreator
 import dev.slne.surf.player.api.connection.SurfConnectionApi
+import dev.slne.surf.player.api.connection.impl.TwitchConnection
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -43,9 +44,24 @@ object ContentCreatorService {
         return coreCreators.remove(playerUuid)
     }
 
-    suspend fun cacheCreator(playerUuid: UUID) = SurfConnectionApi.findTwitchConnection(playerUuid)?.let {
+    /**
+     * Reads the Twitch link of [playerUuid] (`public.account`, through the microservice) and caches
+     * them as a content creator if they have one.
+     *
+     * Links are read when a player joins a server and are then kept for their session: a link made on
+     * the website while the player is online is picked up on their next server join, or at once by
+     * `/surfplayer contentcreator debug`, which reads it again for a player not cached yet.
+     */
+    suspend fun cacheCreator(playerUuid: UUID) {
+        cacheCreator(playerUuid, SurfConnectionApi.findTwitchConnection(playerUuid))
+    }
+
+    /** Caches [playerUuid] as the creator behind [connection], unless their session already ended. */
+    internal fun cacheCreator(playerUuid: UUID, connection: TwitchConnection?) {
+        connection ?: return
+
         val creator = CoreContentCreator(playerUuid).also { c ->
-            c.twitchName = it.twitchName
+            c.twitchName = connection.twitchName
         }
 
         coreCreators[playerUuid] = creator

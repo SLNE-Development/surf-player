@@ -14,15 +14,26 @@ fun Ctx.tabJson(viewer: Bot, of: Bot): String = Text.json(viewer.tab[of.uuid]?.d
 
 private fun onlineCount(header: String): Int? = Regex("""<> (\d+) / (\d+)""").find(header)?.groupValues?.get(1)?.toInt()
 
-/** Links a Twitch account to [bot] in public.account (as the website would). */
-fun Ctx.linkTwitch(bot: Bot, twitch: String) {
+/**
+ * Links a Twitch account to [bot] in public.account as the website does: the Twitch row holds the
+ * numeric Twitch user id ([testTwitchId]), not a login name. The microservice looks the name up by
+ * that id (ivr.fi) and falls back to the id itself for an id unknown to Twitch, so the name shown in
+ * game is the id.
+ */
+fun Ctx.linkTwitch(bot: Bot) {
     unlinkAccounts(bot)
     val user = accountUserId(bot)
     net.sql(
         """INSERT INTO public.account ("userId", provider, "providerAccountId") VALUES
-           ('$user', 'minecraft', '${bot.uuid}'), ('$user', 'twitch', '$twitch')"""
+           ('$user', 'minecraft', '${bot.uuid}'), ('$user', 'twitch', '${testTwitchId(bot)}')"""
     )
 }
+
+/**
+ * A Twitch user id for [bot] above every real one (Twitch ids are far below 10^10), distinct per bot
+ * so parallel groups never share a (provider, providerAccountId) row.
+ */
+fun testTwitchId(bot: Bot): Long = 90_000_000_000L + Math.floorMod(bot.uuid.hashCode(), 1_000_000_000)
 
 fun Ctx.unlinkAccounts(bot: Bot) {
     net.sql("""DELETE FROM public.account WHERE "userId" = '${accountUserId(bot)}'""")
@@ -141,7 +152,7 @@ fun registerTab() {
     }
     scenario("tab-15", "Live-Tag im Tab") {
         on(PAPER, admin, p1)
-        linkTwitch(admin, "devadmintest")
+        linkTwitch(admin)
         try {
             val m = admin.run("surfplayer contentcreator debug live")
             val r = admin.firstMessage(m) ?: bad("Keine Antwort")
@@ -227,7 +238,7 @@ fun registerNametag() {
     }
     scenario("nametag-04", "Live-Tag im Nametag") {
         on(PAPER, admin, p1)
-        linkTwitch(admin, "devadmintest")
+        linkTwitch(admin)
         try {
             admin.cmd("surfplayer contentcreator debug live"); sleep(1500)
             val s = eventually(8000, "● im Suffix") { p1.teamOf("${A}")?.suffix?.let { Text.plain(it) }?.takeIf { it.contains("●") } }

@@ -56,10 +56,17 @@ internal sealed interface ClanTagColorField<out T> {
 
     /** Use [value]. */
     data class Set<T>(val value: T) : ClanTagColorField<T>
+}
 
-    fun resolve(current: @UnsafeVariance T, default: @UnsafeVariance T): T = when (this) {
-        Unset -> current
-        Reset -> default
-        is Set -> value
-    }
+/**
+ * The color this field leaves: [current], [default] or the set value.
+ *
+ * An extension rather than a member on purpose: as a member, the compiler gives [ClanTagColorField.Unset]
+ * and [ClanTagColorField.Reset] (`ClanTagColorField<Nothing>`) bridge methods that cast the arguments
+ * to `Void`, so resolving an unset or reset field threw a `ClassCastException`.
+ */
+internal fun <T> ClanTagColorField<T>.resolve(current: T, default: T): T = when (this) {
+    ClanTagColorField.Unset -> current
+    ClanTagColorField.Reset -> default
+    is ClanTagColorField.Set -> value
 }

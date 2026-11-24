@@ -119,7 +119,12 @@ fun registerPlaytime() {
         if (!tabAfk.contains("AFK")) odd("[AFK] fehlt im eigenen Tab-Eintrag; ${notes.last()}")
     }
     scenario("playtime-13", "AFK beenden") {
+        // Self-contained: the bot must be AFK first. It used to rely on playtime-12 having made the
+        // same bot AFK, which does not hold when the two run in different bot groups.
         on(PAPER, p1)
+        p1.look(20f, 0f)
+        val m0 = p1.mark()
+        p1.expect("Du bist nun AFK", since = m0, timeout = 200_000)
         val m = p1.mark()
         p1.look(90f, 10f)
         val r = p1.expect("nicht mehr AFK", since = m, timeout = 6000)

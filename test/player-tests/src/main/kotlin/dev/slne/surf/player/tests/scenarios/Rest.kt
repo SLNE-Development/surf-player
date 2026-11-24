@@ -248,11 +248,11 @@ fun registerContentCreator() {
     notAutomatable("cc-01", "Echte Twitch-Live-Erkennung braucht Twitch-API-Zugangsdaten und einen laufenden Stream.")
     notAutomatable("cc-02", "Echtes Stream-Ende braucht Twitch-API-Zugangsdaten.")
     scenario("cc-03", "/surfplayer contentcreator debug live") {
-        on(PAPER, admin); linkTwitch(admin, "devadmintest")
+        on(PAPER, admin); linkTwitch(admin)
         try { note(answerContains(admin, "surfplayer contentcreator debug live", "ONLINE")) } finally { admin.cmd("surfplayer contentcreator debug offline"); sleep(800); unlinkAccounts(admin) }
     }
     scenario("cc-04", "/surfplayer contentcreator debug offline") {
-        on(PAPER, admin); linkTwitch(admin, "devadmintest")
+        on(PAPER, admin); linkTwitch(admin)
         try {
             admin.cmd("surfplayer contentcreator debug live"); sleep(1000)
             note(answerContains(admin, "surfplayer contentcreator debug offline", "OFFLINE"))
@@ -261,7 +261,7 @@ fun registerContentCreator() {
     scenario("cc-05", "debug ohne Twitch") { on(PAPER, admin); unlinkAccounts(admin); note(answerContains(admin, "surfplayer contentcreator debug live", "nicht mit Twitch verbunden")) }
     scenario("cc-06", "Ohne Permission") { on(PAPER, p1); p1.expectCommandUnavailable("surfplayer"); note("/surfplayer fehlt bei ${P1}") }
     scenario("cc-07", "liveTag per Config") {
-        on(PAPER, admin, p1); linkTwitch(admin, "devadmintest")
+        on(PAPER, admin, p1); linkTwitch(admin)
         try {
             withConfig(PAPER, "contentcreator/config.yml", { Yaml.set(it, "live-tag", "<green>LIVE</green>") }, { reloadOn(PAPER, "contentcreator") }) {
                 admin.cmd("surfplayer contentcreator debug live"); sleep(2000)
@@ -290,16 +290,13 @@ fun registerContentCreator() {
     }
     scenario("cc-12", "debug nur für Spieler") { note("Paper-Konsole: „${consoleRejects(PAPER, "surfplayer contentcreator debug live")}“") }
     scenario("cc-13", "/surfplayer contentcreator Aktionsliste") { on(PAPER, admin); note(helpContains(admin, "surfplayer contentcreator", "reload", "debug")) }
-    scenario("cc-10", "Ungültiger Twitch-Name") {
-        on(LOBBY, admin); linkTwitch(admin, "ab")
-        try {
-            val since = java.time.Instant.now()
-            on(PAPER, admin); sleep(3000)
-            val log = net.logsSince("paper", since)
-            check(log.contains("Skipping invalid Twitch names")) { "Keine Meldung „Skipping invalid Twitch names“ beim Join" }
-            note(log.lines().first { it.contains("Skipping invalid Twitch names") }.trim())
-        } finally { unlinkAccounts(admin) }
-    }
+    notAutomatable(
+        "cc-10",
+        "Ungültiger Twitch-Name: public.account hält die numerische Twitch-ID, der Name kommt von Twitch (ivr.fi) " +
+            "bzw. ist die ID selbst, also immer gültig; ein ungültiger Name lässt sich über die DB nicht herstellen. " +
+            "Die Namensprüfung deckt der Unit-Test TwitchNamesTest ab; ungültige Namen werden beim Join und beim " +
+            "Abgleich mit „Skipping invalid Twitch names“ geloggt und übersprungen."
+    )
 }
 
 fun registerConnection() {
@@ -313,8 +310,9 @@ fun registerConnection() {
     notAutomatable("conn-02", "Gültiger Code muss auf auth.castcrafter.de erzeugt werden (echtes Konto nötig).")
     scenario("conn-03", "/link <Code> ungültig") { on(LOBBY, p1); note(answerContains(p1, "link falsch", "Es ist ein Fehler aufgetreten")) }
     scenario("conn-04", "/surfplayervelocity connection lookup verbunden") {
-        on(LOBBY, admin); linkTwitch(p1, "devplayer1test")
-        try { note(answerContains(admin, "surfplayervelocity connection lookup ${P1}", "${P1} ist mit dem Twitch-Konto 'devplayer1test'")) } finally { unlinkAccounts(p1) }
+        on(LOBBY, admin); linkTwitch(p1)
+        // The name of a Twitch id unknown to Twitch is the id itself (see linkTwitch).
+        try { note(answerContains(admin, "surfplayervelocity connection lookup ${P1}", "${P1} ist mit dem Twitch-Konto '${testTwitchId(p1)}'")) } finally { unlinkAccounts(p1) }
     }
     scenario("conn-05", "lookup ohne Verbindungen") { on(LOBBY, admin); unlinkAccounts(p2); note(answerContains(admin, "surfplayervelocity connection lookup ${P2}", "${P2} hat keine verknüpften Konten")) }
     scenario("conn-12", "/link lookup entfernt") {

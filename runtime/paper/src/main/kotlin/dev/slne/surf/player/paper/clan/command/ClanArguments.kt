@@ -14,6 +14,7 @@ import dev.slne.surf.player.core.client.clan.Messages
 import dev.slne.surf.player.core.client.clan.command.*
 import dev.slne.surf.player.core.client.clan.services.ClientClanService
 import dev.slne.surf.player.core.client.command.CommandMessages
+import dev.slne.surf.player.paper.command.argumentError
 import dev.slne.surf.player.paper.command.failCommand
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
@@ -50,15 +51,26 @@ class ClanByTagArgument(nodeName: String) : SuspendCustomArgument<Clan, String>(
         SurfClanApi.findClanByTag(info.currentInput) ?: failCommand(Messages.unknownClanWithTag(info.currentInput))
 }
 
-/** The pending invitation of the sender to a clan, given by the clan's tag (or name). */
-class ClanInviteArgument(nodeName: String) : SuspendCustomArgument<ClanInvite, String>(StringArgument(nodeName)) {
+/**
+ * The pending invitation of the sender to a clan, given by the clan's tag (or name). With
+ * [rejectClanMembers] (`/clan accept`) a sender who already is in a clan is told so, whether or
+ * not an invitation exists.
+ */
+class ClanInviteArgument(
+    nodeName: String,
+    private val rejectClanMembers: Boolean = false,
+) : SuspendCustomArgument<ClanInvite, String>(StringArgument(nodeName)) {
     init {
         replaceSuggestions(playerSuggestions(::invitedClanTags))
     }
 
-    override suspend fun CoroutineScope.parse(info: CustomArgumentInfo<String>): ClanInvite =
-        findClanInviteByTagOrName(info.playerUuid(), info.currentInput)
+    override suspend fun CoroutineScope.parse(info: CustomArgumentInfo<String>): ClanInvite {
+        val player = info.playerUuid()
+        if (rejectClanMembers && SurfClanApi.findClanByPlayer(player) != null) failCommand(Messages.ALREADY_IN_CLAN)
+
+        return findClanInviteByTagOrName(player, info.currentInput)
             ?: failCommand(Messages.noPendingInviteForClan(info.currentInput))
+    }
 }
 
 /** A member of the sender's clan, given by name. */
@@ -101,7 +113,7 @@ abstract class HexColorArgument<T>(
     factory: (String) -> T?,
 ) : CustomArgument<T, String>(GreedyStringArgument(nodeName), { info ->
     val input = info.currentInput().trim()
-    normalizeHexColor(input, length)?.let(factory) ?: failCommand(invalidHexColorMessage(input, length))
+    normalizeHexColor(input, length)?.let(factory) ?: throw argumentError(invalidHexColorMessage(input, length))
 }) {
     init {
         replaceSuggestions(ArgumentSuggestions.strings(suggestions))

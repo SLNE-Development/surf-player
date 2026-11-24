@@ -10,34 +10,20 @@ import dev.slne.surf.player.tests.dsl.scenario
 private fun Ctx.reply(bot: Bot, command: String, expected: String, prefix: Prefix = Prefix.Any): String {
     val m = bot.run(command)
     val r = bot.await(7000, m) { (it.kind == dev.slne.surf.player.tests.bot.Received.Kind.SYSTEM) && dev.slne.surf.player.tests.bot.Text.has(it.plain, expected) }
-    if (r == null) {
-        // Clan member arguments resolve names through PlayerLookupService (Mojang), which knows no
-        // offline-mode UUIDs. Retry with the UUID to still check the command's own logic.
-        val unknown = bot.messagesSince(m).firstOrNull { it.plain.contains("ist kein Mitglied deines Clans") }
-        if (unknown != null) {
-            val byUuid = listOf(admin, p1, p2).fold(command) { c, b -> c.replace(" ${b.name}", " ${b.uuid}") }
-            if (byUuid != command) {
-                val m2 = bot.run(byUuid)
-                val r2 = bot.await(7000, m2) { dev.slne.surf.player.tests.bot.Text.has(it.plain, expected) }
-                odd(
-                    "Name nicht als Clanmitglied erkannt („${unknown.plain.trim()}“, Offline-UUID ohne Mojang-Namen); " +
-                        "mit UUID: ${r2?.plain?.trim()?.let { "„$it“ wie erwartet" } ?: "ebenfalls nicht erwartet: ${observed(bot, m2)}"}"
-                )
-            }
-        }
-        bad("${bot.name} /$command: erwartet „$expected“, erhalten: ${observed(bot, m)}")
-    }
+    // Player names resolve through surf-core's player records first, so the offline-mode bots are
+    // found by name (no UUID fallback needed any more).
+    if (r == null) bad("${bot.name} /$command: erwartet „$expected“, erhalten: ${observed(bot, m)}")
     if (prefix != Prefix.Any && !hasPrefix(r, prefix)) odd("${bot.name} /$command: „${r.plain.trim()}“ ohne $prefix-Präfix")
     return r.plain.trim().replace("\n", " ⏎ ")
 }
 
-/** Promotions in the set-up go by UUID: names of offline bots are not resolved (see [reply]). */
+/** ${A}'s clan with ${P1} as member, promoted by name to [role] if given. */
 private fun Ctx.clanWithMember(role: String? = null) {
     createClan(admin)
     joinClan(admin, p1)
     when (role) {
-        "OFFICER" -> { admin.cmd("clan promote ${p1.uuid}"); sleep(1500) }
-        "LEADER" -> { admin.cmd("clan promote ${p1.uuid}"); sleep(1500); admin.cmd("clan promote ${p1.uuid}"); sleep(1500) }
+        "OFFICER" -> { admin.cmd("clan promote ${P1}"); sleep(1500) }
+        "LEADER" -> { admin.cmd("clan promote ${P1}"); sleep(1500); admin.cmd("clan promote ${P1}"); sleep(1500) }
     }
 }
 
@@ -239,14 +225,14 @@ fun registerClan() {
     }
     scenario("clan-59", "/clan promote Mitglied → Offizier") {
         on(PAPER, admin, p1); clanWithMember()
-        val m1 = p1.mark(); admin.cmd("clan promote ${p1.uuid}")
+        val m1 = p1.mark(); admin.cmd("clan promote ${P1}")
         val r = p1.expect("${P1} wurde durch ${A} von Mitglied zu Offizier befördert", since = m1)
         note("„${r.plain.trim()}“"); resetClans()
     }
     scenario("clan-60", "promote Offizier → Anführer") {
         on(PAPER, admin, p1); clanWithMember("OFFICER")
-        val m1 = p1.mark(); admin.cmd("clan promote ${p1.uuid}")
-        val r = p1.expect("von Offizier zu Anführer befördert", since = m1)
+        val m1 = p1.mark(); admin.cmd("clan promote ${P1}")
+        val r = p1.expect("${P1} wurde durch ${A} von Offizier zu Anführer befördert", since = m1)
         note("„${r.plain.trim()}“"); resetClans()
     }
     scenario("clan-61", "promote Anführer: höchste Rolle") { on(PAPER, admin, p1); clanWithMember("LEADER"); note(reply(admin, "clan promote ${P1}", "bereits die höchste Rolle")); resetClans() }
@@ -264,13 +250,13 @@ fun registerClan() {
     }
     scenario("clan-67", "/clan demote Anführer → Offizier") {
         on(PAPER, admin, p1); clanWithMember("LEADER")
-        val m1 = p1.mark(); admin.cmd("clan demote ${p1.uuid}")
-        val r = p1.expect("von Anführer zu Offizier degradiert", since = m1)
+        val m1 = p1.mark(); admin.cmd("clan demote ${P1}")
+        val r = p1.expect("${P1} wurde durch ${A} von Anführer zu Offizier degradiert", since = m1)
         note("„${r.plain.trim()}“"); resetClans()
     }
     scenario("clan-68", "demote Offizier → Mitglied") {
         on(PAPER, admin, p1); clanWithMember("OFFICER")
-        val m1 = p1.mark(); admin.cmd("clan demote ${p1.uuid}")
+        val m1 = p1.mark(); admin.cmd("clan demote ${P1}")
         val r = p1.expect("von Offizier zu Mitglied degradiert", since = m1)
         note("„${r.plain.trim()}“"); resetClans()
     }
@@ -280,7 +266,7 @@ fun registerClan() {
     scenario("clan-72", "demote höhere Rolle") { on(PAPER, admin, p1); clanWithMember("LEADER"); note(reply(p1, "clan demote ${A}", "selben oder einen höheren Rang")); resetClans() }
     scenario("clan-73", "/clan kick") {
         on(PAPER, admin, p1); clanWithMember()
-        val ma = admin.mark(); admin.cmd("clan kick ${p1.uuid}")
+        val ma = admin.mark(); admin.cmd("clan kick ${P1}")
         val r = admin.expect("${P1} wurde von ${A} aus dem Clan entfernt", since = ma)
         sleep(800)
         note("„${r.plain.trim()}“; danach: ${reply(p1, "clan info", "keinem Clan")}"); resetClans()
@@ -463,13 +449,17 @@ fun registerClan() {
         check(r.clicks.any { it.value == "/clan chat " }) { "Klick schlägt nicht „/clan chat “ vor: ${r.clicks.map { it.value }}" }
         note("„${r.plain.trim()}“"); resetClans()
     }
-    scenario("clan-108", "/cc") {
+    scenario("clan-108", "/cc und /clanchat") {
+        // Both are documented shortcuts of /clan chat (docs/command-conventions.md). Running the
+        // bare root without a message answers "unknown or incomplete command", which is no sign of a
+        // missing alias, so the alias is checked by sending a message through it.
         on(PAPER, admin, p1); clanWithMember()
         val t = uniq(); val ma = admin.mark(); p1.cmd("cc $t")
         admin.expect(t, since = ma)
+        val t2 = uniq(); val mb = admin.mark(); p1.cmd("clanchat $t2")
+        admin.expect(t2, since = mb)
         resetClans()
-        p1.expectCommandUnavailable("clanchat")
-        note("/cc funktioniert; /clanchat unbekannt")
+        note("/cc und /clanchat kommen im Clan-Chat an")
     }
     scenario("clan-109", "Clanchat ohne Clan") { on(PAPER, p1); resetClans(); note(reply(p1, "cc Hi", "keinem Clan")) }
     scenario("clan-110", "Clanchat serverübergreifend") {

@@ -135,7 +135,7 @@ fun registerClanCommands() {
 
         subcommand("accept") {
             withPermission(ClanPermissions.COMMAND_ACCEPT)
-            withArguments(ClanInviteArgument(CLAN))
+            withArguments(ClanInviteArgument(CLAN, rejectClanMembers = true))
             playerExecutorSuspend { player, args ->
                 player.reply(ClanCommands.accept(player.name, args.awaiting<ClanInvite>(CLAN)))
             }

@@ -17,8 +17,20 @@ object LiveStateDebugCommand {
     /**
      * Forces the twitch state of the content creator behind [playerUuid] to [newState] and reports
      * the outcome to [audience].
+     *
+     * A player who is no cached creator yet has their Twitch link read again first ([loadCreator]),
+     * since links are otherwise only read when joining: a link made while online works right away.
      */
-    fun setTwitchState(audience: Audience, playerUuid: UUID, newState: PlatformState) {
+    suspend fun setTwitchState(
+        audience: Audience,
+        playerUuid: UUID,
+        newState: PlatformState,
+        loadCreator: suspend (UUID) -> Unit = ContentCreatorService::cacheCreator,
+    ) {
+        if (ContentCreatorService.getContentCreator(playerUuid) == null) {
+            loadCreator(playerUuid)
+        }
+
         val updated = ContentCreatorService.updatePlatformState(
             playerUuid,
             PlatformType.TWITCH,

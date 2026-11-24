@@ -6,7 +6,6 @@ import dev.slne.surf.player.api.clan.permission.ClanPermission
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.player.core.common.clan.clan.ClanImpl
-import dev.slne.surf.player.core.client.clan.Messages
 import dev.slne.surf.player.core.client.clan.components.ClanComponents
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.event.ClickEvent
@@ -14,6 +13,9 @@ import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
 
 const val CLAN_MAX_MEMBERS_DISBAND = 50
+
+/** The disband button was clicked by a player who is no longer in the clan it was offered for. */
+const val NO_LONGER_IN_DISBANDED_CLAN = "Du bist nicht mehr in dem Clan, den du auflösen wolltest."
 
 /**
  * Why a clan may not be disbanded by a specific member.
@@ -71,14 +73,10 @@ private fun disbandHoverText() = buildText {
  * Disbands the clan [clicker] confirmed, provided they are still in it and still allowed to.
  */
 suspend fun handleDisbandClick(clicked: Audience, clicker: UUID, oldClanUuid: UUID) {
-    val currentClan = SurfClanApi.findClanByPlayer(clicker) ?: return clicked.sendText {
+    val currentClan = SurfClanApi.findClanByPlayer(clicker)
+    if (currentClan?.uuid != oldClanUuid) return clicked.sendText {
         appendErrorPrefix()
-        error(Messages.NO_LONGER_IN_A_CLAN)
-    }
-
-    if (currentClan.uuid != oldClanUuid) return clicked.sendText {
-        appendErrorPrefix()
-        error("Du bist nicht mehr in dem Clan, den du auflösen wolltest.")
+        error(NO_LONGER_IN_DISBANDED_CLAN)
     }
 
     currentClan.canBeDisbandedBy(clicker)?.let { error ->

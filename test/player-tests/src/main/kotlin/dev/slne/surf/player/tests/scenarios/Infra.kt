@@ -96,7 +96,11 @@ fun registerInfra() {
         val player = keys.filter { it.contains("surf-player:") }
         note("${keys.size} Schlüssel, surf-player: ${player.map { it.replace(Regex("[0-9a-f-]{36}"), "<uuid>") }.distinct().take(15)}")
         if (keys.any { it.startsWith("surf-vanish:") || it.startsWith("surf-chat:") || it.startsWith("surf-clan:") }) bad("Alte Schlüsselnamen vorhanden; ${notes.last()}")
-        if (player.none { it.contains("vanish") }) odd("Kein surf-player:vanish:*-Schlüssel; ${notes.last()}")
+        // surf-redis keeps sync structures under its own prefix, with ':' of the id replaced by '_'
+        // (docs/protocol.md): the sync map surf-player:vanish:vanished-players is stored here.
+        val vanishKeys = keys.filter { it.startsWith("surf-redis:sync:map:surf-player_vanish_vanished-players:") }
+        if (vanishKeys.isEmpty()) bad("Kein Schlüssel surf-redis:sync:map:surf-player_vanish_vanished-players:*; ${notes.last()}")
+        note("Vanish-Sync-Map: ${vanishKeys.sorted()}")
     }
     scenario("infra-18", "Paper-Datenordner pro Feature") {
         val ls = net.ls("paper", dataDir(PAPER))
@@ -278,7 +282,8 @@ fun registerInfra() {
     }
     scenario("infra-42", "Alte Befehle und Varianten entfernt") {
         on(PAPER, admin)
-        val gone = listOf("nick", "clanchat", "f").filter { it in admin.commandRoots }
+        // /clanchat stays: it is a documented shortcut of /clan chat (docs/command-conventions.md, clan-108).
+        val gone = listOf("nick", "f").filter { it in admin.commandRoots }
         check(gone.isEmpty()) { "Noch vorhanden: $gone" }
         val accepted = mutableListOf<String>()
         for (cmd in listOf("clan admin reload", "clan player settings invite", "clan options tagcolor foreground FF0000", "clan setdiscord NULL", "clan disband", "friend decline ${P1}", "spy #clear", "slowchat #status", "slowchat on", "ignore #list", "settings chat:pings #info", "vanish reload")) {
@@ -287,7 +292,7 @@ fun registerInfra() {
             if (r == null || !(r.plain.contains("command.unknown") || r.plain.contains("Incorrect argument") || r.plain.contains("Unknown"))) accepted += "/$cmd → „${r?.plain?.trim()?.take(80)}“"
         }
         check(accepted.isEmpty()) { "Nicht abgelehnt: $accepted" }
-        note("nick, clanchat, f unbekannt; 12 alte Varianten abgelehnt")
+        note("nick, f unbekannt; 12 alte Varianten abgelehnt")
     }
     scenario("infra-43", "Hilfe-Zeilen klickbar") {
         on(PAPER, p1)

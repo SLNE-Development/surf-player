@@ -46,6 +46,14 @@ A client never calls an RPC method in a loop; batch methods exist instead
 and without version suffixes. Events and requests are `@Serializable` classes in
 `core.client.<feature>.redis`; their names are their channel identity.
 
+surf-redis stores its sync structures (sync list, set, map, value) under keys of its own, which a
+caller cannot change: the id is given as `surf-player:<feature>:<name>` like every other key, and
+surf-redis turns it into `surf-redis:sync:<list|set|map|value>:<id with ':' replaced by '_'>:<part>`
+(parts `stream`, `version` and, for maps, `snapshot`). The sync map
+`surf-player:vanish:vanished-players`, for example, lives in
+`surf-redis:sync:map:surf-player_vanish_vanished-players:stream`/`:version`. The tables below name
+the ids.
+
 ## chat
 
 RPC:
@@ -96,7 +104,8 @@ RPC:
   - `findClansByMemberCount(): List<ClanImpl>` - without members, biggest first
   - `findClanById(clanId)`, `findClanByMember(memberUuid)`, `findClanByTag(tag)`,
     `findClanByUuid(clanUuid)`: `ClanImpl?`
-  - `findClanTagsByPrefix(prefix, limit): List<String>`
+  - `findClanTagsByPrefix(prefix, limit): List<String>` - uppercase, alphabetical; a blank prefix
+    returns the first `limit` tags of all clans (suggestions before anything was typed)
   - `updateClanDescription(clanId, description): Boolean`
   - `updateClanDiscordInvite(clanId, discordInvite): Boolean`
   - `updateClanTagColor(clanId, foreground, background, shadow): Boolean`
@@ -132,6 +141,19 @@ RPC: `ConnectionRpcService` (reads and writes `public.account`)
 - `findDiscordConnection(minecraftUuid): DiscordConnection?`
 - `findTwitchConnection(minecraftUuid): TwitchConnection?`
 - `deleteMinecraftLink(minecraftUuid): UnlinkResult` - `NotLinked` / `Unlinked(discordId)`
+
+`public.account` (Auth.js): every row is `("userId", provider, "providerAccountId")`; the rows of
+one website user share `"userId"` (any text, not necessarily a uuid). The `minecraft` row holds the
+player's uuid (matched with or without dashes, in either case), the `discord` and `twitch` rows hold
+the **numeric** account id of that platform; the display name is fetched from Discord / ivr.fi by
+that id (cached 30 min, the id itself when the lookup fails). A non-numeric id is ignored with a
+warning in the microservice log. Nothing is cached between the database and the clients: every
+lookup reads the table.
+
+The content creator feature reads a player's Twitch link when they join a server and keeps it for
+that session; a link made while the player is online is picked up on their next server join, or at
+once by `/surfplayer contentcreator debug live|offline`, which reads it again for a player that has
+none cached.
 
 Redis:
 

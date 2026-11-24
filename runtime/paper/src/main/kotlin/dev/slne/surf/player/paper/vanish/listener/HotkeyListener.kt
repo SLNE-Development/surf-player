@@ -7,14 +7,17 @@ import com.github.retrooper.packetevents.protocol.player.DiggingAction
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerDigging
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
 import dev.slne.surf.player.paper.vanish.service.VanishService
+import dev.slne.surf.player.paper.vanish.util.SpectateHotkeys
 import dev.slne.surf.player.paper.vanish.util.isVanished
 import org.bukkit.entity.Player
 import java.util.*
 
 object HotkeyListener : PacketListenerAbstract() {
-    private val _lastSneaks = mutableObject2ObjectMapOf<UUID, Long>()
+    private val hotkeys = SpectateHotkeys()
+
+    /** Forgets the sneak state of [player], who stopped spectating or left. */
+    fun forget(player: UUID) = hotkeys.forget(player)
 
     override fun onPacketReceive(event: PacketReceiveEvent) {
         val player = event.getPlayer<Player>() ?: return
@@ -31,38 +34,30 @@ object HotkeyListener : PacketListenerAbstract() {
             PacketType.Play.Client.PLAYER_INPUT -> {
                 val packet = WrapperPlayClientPlayerInput(event)
 
-                if (packet.isShift) {
-                    val lastSneak = _lastSneaks[player.uniqueId]
-                    val now = System.currentTimeMillis()
-
-                    if (lastSneak != null && now - lastSneak < 500) {
-                        val current = VanishService.current(player) ?: run {
-                            player.sendText {
-                                appendErrorPrefix()
-                                error("Du schaust gerade niemandem zu.")
-                            }
-                            return
-                        }
-
-                        val vanishTarget = current.player ?: run {
-                            player.sendText {
-                                appendErrorPrefix()
-                                error("Der Spieler, dem du zuschaust, ist nicht mehr online.")
-                            }
-                            return
-                        }
-
-                        player.teleportAsync(vanishTarget.location)
+                if (hotkeys.onInput(player.uniqueId, packet.isShift, System.currentTimeMillis())) {
+                    val current = VanishService.current(player) ?: run {
                         player.sendText {
-                            appendSuccessPrefix()
-                            success("Du bist nun wieder bei")
-                            appendSpace()
-                            variableValue(vanishTarget.name)
-                            success(".")
-
+                            appendErrorPrefix()
+                            error("Du schaust gerade niemandem zu.")
                         }
-                    } else {
-                        _lastSneaks[player.uniqueId] = now
+                        return
+                    }
+
+                    val vanishTarget = current.player ?: run {
+                        player.sendText {
+                            appendErrorPrefix()
+                            error("Der Spieler, dem du zuschaust, ist nicht mehr online.")
+                        }
+                        return
+                    }
+
+                    player.teleportAsync(vanishTarget.location)
+                    player.sendText {
+                        appendSuccessPrefix()
+                        success("Du bist nun wieder bei")
+                        appendSpace()
+                        variableValue(vanishTarget.name)
+                        success(".")
                     }
                 }
             }
@@ -71,9 +66,7 @@ object HotkeyListener : PacketListenerAbstract() {
                 val packet = WrapperPlayClientPlayerDigging(event)
 
                 if (packet.action == DiggingAction.SWAP_ITEM_WITH_OFFHAND) {
-                    val sneakCacheResult = _lastSneaks[player.uniqueId]
-
-                    if (sneakCacheResult != null && System.currentTimeMillis() - sneakCacheResult < 1000) {
+                    if (hotkeys.isSneaking(player.uniqueId)) {
                         val previous = VanishService.previous(player) ?: run {
                             player.sendText {
                                 appendErrorPrefix()

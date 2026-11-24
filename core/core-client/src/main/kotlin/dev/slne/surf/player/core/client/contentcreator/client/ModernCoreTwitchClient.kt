@@ -84,7 +84,13 @@ object ModernCoreTwitchClient : ContentClient(PlatformType.TWITCH) {
                 return@withContext
             }
 
+            // Logs and skips an invalid name ("Skipping invalid Twitch names").
             updateStreamers(ObjectSet.of(contentCreator))
+
+            // Twitch answers an invalid login with a bad request; it was already reported above.
+            if (!isValidTwitchName(channelName)) {
+                return@withContext
+            }
 
             val user = try {
                 twitchClient.clientHelper.enableStreamEventListener(channelName)
@@ -110,11 +116,12 @@ object ModernCoreTwitchClient : ContentClient(PlatformType.TWITCH) {
     }
 
     override suspend fun enableStreamEventListener(contentCreators: ObjectSet<out ContentCreator>) {
+        // Invalid names are logged and skipped by updateStreamers and left out here as well.
         val channelNames = contentCreators.mapNotNull {
             it.getStreamingPlatform(
                 PlatformType.TWITCH
             )?.name
-        }
+        }.filter(::isValidTwitchName)
 
         withContext(ioDispatcher) {
             updateStreamers(contentCreators)

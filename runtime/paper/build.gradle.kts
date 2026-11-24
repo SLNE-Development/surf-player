@@ -37,6 +37,8 @@ surfPaperPluginApi {
 
 dependencies {
     api(projects.surfPlayerCore.surfPlayerCoreClient)
+    // The MiniPlaceholders clan expansion, registered by the plugin itself (PaperClanPlaceholders).
+    implementation(projects.surfPlayerPlaceholderExpansion)
 
     compileOnly(libs.mini.placeholders)
     compileOnly(libs.luckperms.api)

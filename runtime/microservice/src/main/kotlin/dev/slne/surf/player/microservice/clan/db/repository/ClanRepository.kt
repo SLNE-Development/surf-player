@@ -153,9 +153,11 @@ object ClanRepository {
         ClansTable.deleteWhere { ClansTable.id eq clanID } > 0
     }
 
+    /**
+     * The first [limit] tags starting with [prefix], ignoring case; with a blank prefix the first
+     * [limit] tags of all clans, so `/clan info ` suggests tags before anything was typed.
+     */
     suspend fun suggestTagsByPrefix(prefix: String, limit: Int): List<String> {
-        if (prefix.isBlank()) return emptyList()
-
         val normalizedPrefix = ClanTagRules.normalize(prefix)
 
         // The prefix is raw command input while a tag only ever holds letters and digits, so anything
@@ -169,7 +171,9 @@ object ClanRepository {
         return suspendTransaction {
             ClansTable
                 .select(ClansTable.tag)
-                .where { tagUpperCase like "$normalizedPrefix%" }
+                .let { query ->
+                    if (normalizedPrefix.isEmpty()) query else query.where { tagUpperCase like "$normalizedPrefix%" }
+                }
                 .orderBy(tagUpperCase)
                 .limit(limit)
                 // Callers match suggestions against a normalized input, so a legacy mixed-case tag

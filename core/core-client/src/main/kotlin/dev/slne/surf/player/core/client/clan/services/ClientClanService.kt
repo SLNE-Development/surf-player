@@ -72,6 +72,15 @@ object ClientClanService {
 
     suspend fun invalidateCaches() {
         cache.invalidateAll()
+        invalidateTagSuggestions()
+    }
+
+    /**
+     * Drops the cached tag suggestions after a clan was created or deleted on this server, so its
+     * tag is (no longer) suggested at once here; other servers catch up within a minute.
+     */
+    private fun invalidateTagSuggestions() {
+        tagSuggestionBucketCache.underlying().synchronous().invalidateAll()
     }
 
     suspend fun invalidateCachedClanByMember(member: UUID) {
@@ -158,6 +167,7 @@ object ClientClanService {
         )
 
         if (result is ClanCreationResult.Success) {
+            invalidateTagSuggestions()
             callClanCreatedListeners(result.clan)
         }
 
@@ -267,6 +277,7 @@ object ClientClanService {
 
         if (deleted) {
             invalidateCachedClanByID(clan.clanID)
+            invalidateTagSuggestions()
             callClanDeletedListeners(clan)
         }
 
@@ -278,27 +289,24 @@ object ClientClanService {
         limit: Int = 100
     ): Collection<String> {
         val normalized = normalizeTag(input)
-        if (normalized.isEmpty()) {
-            return tagSuggestionBucketCache.underlying()
-                .asMap()
-                .values
-                .asSequence()
-                .flatMap { it.getNow(emptyList()) }
-                .distinct()
-                .take(limit)
-                .toList()
-        }
+        val bucketTags = tagSuggestionBucketCache.get(tagSuggestionBucketKey(normalized))
 
-        val cappedLimit = limit.coerceIn(1, 100)
-        val bucketKey = normalized.take(minOf(3, normalized.length))
-        val bucketTags = tagSuggestionBucketCache.get(bucketKey)
-
-        return bucketTags
-            .asSequence()
-            .filter { it.startsWith(normalized) }
-            .take(cappedLimit)
-            .toList()
+        return filterTagSuggestions(bucketTags, normalized, limit)
     }
 
     private fun normalizeTag(tag: String) = ClanTagRules.normalize(tag)
 }
+
+/**
+ * The key of the cached tag list a normalized input is answered from: its first three characters.
+ * An empty input has its own bucket (the first tags of all clans), so a tag is suggested before
+ * anything was typed.
+ */
+internal fun tagSuggestionBucketKey(normalizedInput: String): String = normalizedInput.take(3)
+
+/** The tags of [bucketTags] that start with [normalizedInput], at most [limit] (1..100). */
+internal fun filterTagSuggestions(bucketTags: List<String>, normalizedInput: String, limit: Int): List<String> =
+    bucketTags.asSequence()
+        .filter { it.startsWith(normalizedInput) }
+        .take(limit.coerceIn(1, 100))
+        .toList()
