@@ -1,8 +1,8 @@
-package dev.slne.surf.content.creator.core.config
+package dev.slne.surf.social.core.client.contentcreator.config
 
 import dev.slne.surf.api.core.config.createSpongeYmlConfig
 import dev.slne.surf.api.core.config.surfConfigApi
-import dev.slne.surf.content.creator.core.coreApi
+import dev.slne.surf.social.core.client.contentcreator.coreApi
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 
 @ConfigSerializable

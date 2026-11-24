@@ -1,9 +1,9 @@
-package dev.slne.surf.nametag.core.client.api
+package dev.slne.surf.social.core.client.nametag.api
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.nametag.api.SurfNametagApi
-import dev.slne.surf.nametag.api.nametag.NametagVisibility
-import dev.slne.surf.nametag.core.client.service.NametagService
+import dev.slne.surf.social.api.nametag.SurfNametagApi
+import dev.slne.surf.social.api.nametag.nametag.NametagVisibility
+import dev.slne.surf.social.core.client.nametag.service.NametagService
 import net.kyori.adventure.util.Services
 import java.util.*
 

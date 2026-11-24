@@ -1,16 +1,16 @@
-package dev.slne.surf.nametag.core.client.service
+package dev.slne.surf.social.core.client.nametag.service
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.luckperms.prefix
 import dev.slne.surf.api.core.minimessage.miniMessage
-import dev.slne.surf.nametag.api.nametag.Nametag
-import dev.slne.surf.nametag.api.nametag.NametagVisibility
-import dev.slne.surf.nametag.api.nametag.nametag
-import dev.slne.surf.nametag.core.client.config.NametagConfig
-import dev.slne.surf.nametag.core.client.hook.ClanHook
-import dev.slne.surf.nametag.core.client.hook.ContentCreatorHook
-import dev.slne.surf.nametag.core.client.platform.NametagPlatform
-import dev.slne.surf.nametag.core.client.platform.NametagPlayer
+import dev.slne.surf.social.api.nametag.nametag.Nametag
+import dev.slne.surf.social.api.nametag.nametag.NametagVisibility
+import dev.slne.surf.social.api.nametag.nametag.nametag
+import dev.slne.surf.social.core.client.nametag.config.NametagConfig
+import dev.slne.surf.social.core.client.nametag.hook.ClanHook
+import dev.slne.surf.social.core.client.nametag.hook.ContentCreatorHook
+import dev.slne.surf.social.core.client.nametag.platform.NametagPlatform
+import dev.slne.surf.social.core.client.nametag.platform.NametagPlayer
 import net.kyori.adventure.text.Component
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

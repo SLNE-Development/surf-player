@@ -1,4 +1,4 @@
-package dev.slne.surf.nametag.core.client.config
+package dev.slne.surf.social.core.client.nametag.config
 
 /**
  * Which players push each other while a nametag team is active.

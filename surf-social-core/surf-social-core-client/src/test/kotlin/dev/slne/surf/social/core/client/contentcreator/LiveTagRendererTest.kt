@@ -1,4 +1,4 @@
-package dev.slne.surf.content.creator.core
+package dev.slne.surf.social.core.client.contentcreator
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer

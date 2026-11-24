@@ -1,7 +1,7 @@
-package dev.slne.surf.content.creator.api
+package dev.slne.surf.social.api.contentcreator
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.content.creator.api.listener.StateChangeListener
+import dev.slne.surf.social.api.contentcreator.listener.StateChangeListener
 import net.kyori.adventure.text.Component
 import java.util.*
 

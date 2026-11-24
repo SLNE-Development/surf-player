@@ -1,4 +1,4 @@
-package dev.slne.surf.nametag.core.client.platform
+package dev.slne.surf.social.core.client.nametag.platform
 
 import dev.slne.surf.api.core.util.requiredService
 import kotlinx.coroutines.CoroutineScope

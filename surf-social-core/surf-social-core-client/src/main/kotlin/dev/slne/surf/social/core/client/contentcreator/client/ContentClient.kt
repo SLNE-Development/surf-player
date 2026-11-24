@@ -1,15 +1,15 @@
-package dev.slne.surf.content.creator.core.client
+package dev.slne.surf.social.core.client.contentcreator.client
 
 import com.github.twitch4j.helix.domain.Stream
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.runAtFixedRate
-import dev.slne.surf.content.creator.api.ContentCreator
-import dev.slne.surf.content.creator.api.ContentCreatorPlatform
-import dev.slne.surf.content.creator.api.platform.PlatformState
-import dev.slne.surf.content.creator.api.platform.PlatformType
-import dev.slne.surf.content.creator.core.ContentCreatorInstance
-import dev.slne.surf.content.creator.core.config.config
-import dev.slne.surf.content.creator.core.service.ContentCreatorService
+import dev.slne.surf.social.api.contentcreator.ContentCreator
+import dev.slne.surf.social.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.social.api.contentcreator.platform.PlatformState
+import dev.slne.surf.social.api.contentcreator.platform.PlatformType
+import dev.slne.surf.social.core.client.contentcreator.ContentCreatorInstance
+import dev.slne.surf.social.core.client.contentcreator.config.config
+import dev.slne.surf.social.core.client.contentcreator.service.ContentCreatorService
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import kotlinx.coroutines.*
 import java.io.Closeable

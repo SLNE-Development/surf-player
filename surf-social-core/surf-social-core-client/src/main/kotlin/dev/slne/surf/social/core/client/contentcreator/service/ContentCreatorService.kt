@@ -1,15 +1,15 @@
-package dev.slne.surf.content.creator.core.service
+package dev.slne.surf.social.core.client.contentcreator.service
 
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.core.util.toObjectSet
-import dev.slne.surf.content.creator.api.ContentCreator
-import dev.slne.surf.content.creator.api.platform.PlatformState
-import dev.slne.surf.content.creator.api.platform.PlatformType
-import dev.slne.surf.content.creator.core.ContentCreatorInstance
-import dev.slne.surf.content.creator.core.CoreContentCreator
-import dev.slne.surf.social.api.SurfSocialApi
+import dev.slne.surf.social.api.contentcreator.ContentCreator
+import dev.slne.surf.social.api.contentcreator.platform.PlatformState
+import dev.slne.surf.social.api.contentcreator.platform.PlatformType
+import dev.slne.surf.social.core.client.contentcreator.ContentCreatorInstance
+import dev.slne.surf.social.core.client.contentcreator.CoreContentCreator
+import dev.slne.surf.social.api.connection.SurfConnectionApi
 import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.api.findConnection
+import dev.slne.surf.social.api.connection.findConnection
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -38,7 +38,7 @@ object ContentCreatorService {
         return coreCreators.remove(playerUuid)
     }
 
-    suspend fun cacheCreator(playerUuid: UUID) = SurfSocialApi.findConnection<TwitchConnection>(playerUuid)?.let {
+    suspend fun cacheCreator(playerUuid: UUID) = SurfConnectionApi.findConnection<TwitchConnection>(playerUuid)?.let {
         val creator = CoreContentCreator(playerUuid).also { c ->
             c.twitchName = it.twitchName
         }

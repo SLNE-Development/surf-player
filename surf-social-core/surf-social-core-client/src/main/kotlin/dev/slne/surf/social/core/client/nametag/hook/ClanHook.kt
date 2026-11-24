@@ -1,14 +1,14 @@
-package dev.slne.surf.nametag.core.client.hook
+package dev.slne.surf.social.core.client.nametag.hook
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.clan.ClanView
-import dev.slne.clan.api.clan.listener.ClanCreatedListener
-import dev.slne.clan.api.clan.listener.ClanDeletedListener
-import dev.slne.clan.api.clan.listener.ClanUpdateMemberListener
-import dev.slne.clan.api.clan.listener.ClanUpdatedListener
-import dev.slne.surf.nametag.core.client.platform.NametagPlatform
-import dev.slne.surf.nametag.core.client.platform.NametagPlayer
-import dev.slne.surf.nametag.core.client.service.NametagService
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.clan.ClanView
+import dev.slne.surf.social.api.clan.clan.listener.ClanCreatedListener
+import dev.slne.surf.social.api.clan.clan.listener.ClanDeletedListener
+import dev.slne.surf.social.api.clan.clan.listener.ClanUpdateMemberListener
+import dev.slne.surf.social.api.clan.clan.listener.ClanUpdatedListener
+import dev.slne.surf.social.core.client.nametag.platform.NametagPlatform
+import dev.slne.surf.social.core.client.nametag.platform.NametagPlayer
+import dev.slne.surf.social.core.client.nametag.service.NametagService
 import kotlinx.coroutines.launch
 import net.kyori.adventure.text.Component
 import java.util.*

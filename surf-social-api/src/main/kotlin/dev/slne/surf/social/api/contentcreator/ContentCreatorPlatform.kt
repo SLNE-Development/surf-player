@@ -1,7 +1,7 @@
-package dev.slne.surf.content.creator.api
+package dev.slne.surf.social.api.contentcreator
 
-import dev.slne.surf.content.creator.api.platform.PlatformState
-import dev.slne.surf.content.creator.api.platform.PlatformType
+import dev.slne.surf.social.api.contentcreator.platform.PlatformState
+import dev.slne.surf.social.api.contentcreator.platform.PlatformType
 
 /**
  * Represents a content creator plattform

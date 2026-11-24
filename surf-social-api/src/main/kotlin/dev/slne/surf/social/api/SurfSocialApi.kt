@@ -6,6 +6,8 @@ import dev.slne.surf.social.api.clan.invite.ClanInviteService
 import dev.slne.surf.social.api.clan.member.ClanMemberService
 import dev.slne.surf.social.api.clan.player.ClanPlayerService
 import dev.slne.surf.social.api.connection.SurfConnectionApi
+import dev.slne.surf.social.api.contentcreator.ContentCreatorApi
+import dev.slne.surf.social.api.nametag.SurfNametagApi
 import dev.slne.surf.social.api.friends.player.FriendsPlayerManager
 import dev.slne.surf.social.api.tab.SurfTabApi
 
@@ -29,6 +31,12 @@ object SurfSocialApi {
 
     /** Friendships and friend requests, resolved per player. */
     val friends: FriendsPlayerManager get() = FriendsPlayerManager.INSTANCE
+
+    /** Player nametags above the head. */
+    val nametags: SurfNametagApi get() = SurfNametagApi
+
+    /** Content creators and their live state (e.g. Twitch). */
+    val contentCreators: ContentCreatorApi get() = ContentCreatorApi.INSTANCE
 
     /** Linked Discord/Twitch accounts of players. */
     val connections: SurfConnectionApi get() = SurfConnectionApi

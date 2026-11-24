@@ -1,9 +1,9 @@
 package dev.slne.surf.social.core.client.tab.hook
 
-import dev.slne.surf.content.creator.api.ContentCreatorApi
-import dev.slne.surf.content.creator.api.ContentCreatorPlatform
-import dev.slne.surf.content.creator.api.listener.StateChangeListener
-import dev.slne.surf.content.creator.api.platform.PlatformState
+import dev.slne.surf.social.api.contentcreator.ContentCreatorApi
+import dev.slne.surf.social.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.social.api.contentcreator.listener.StateChangeListener
+import dev.slne.surf.social.api.contentcreator.platform.PlatformState
 import dev.slne.surf.social.core.client.tab.service.TablistService
 import net.kyori.adventure.text.Component
 import java.util.*

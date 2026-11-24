@@ -22,8 +22,8 @@ dependencies {
     compileOnlyApi("dev.slne.surf.settings:surf-settings-api:+")
     compileOnly("dev.slne.surf.punish:surf-punish-api-common:+")
     compileOnly("dev.slne.surf.playtime:surf-playtime-api-common:+")
-    compileOnly("dev.slne.surf.content.creator:surf-content-creator-api:+")
 
+    api(libs.twitch4j)
     api(libs.openai) {
         exclude(group = "org.apache.httpcomponents.client5")
         exclude(group = "org.apache.httpcomponents.core5")

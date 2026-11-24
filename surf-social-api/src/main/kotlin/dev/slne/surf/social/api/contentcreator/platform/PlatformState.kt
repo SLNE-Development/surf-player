@@ -1,4 +1,4 @@
-package dev.slne.surf.content.creator.api.platform
+package dev.slne.surf.social.api.contentcreator.platform
 
 enum class PlatformState {
 

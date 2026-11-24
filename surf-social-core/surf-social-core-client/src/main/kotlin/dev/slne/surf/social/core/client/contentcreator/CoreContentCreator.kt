@@ -1,9 +1,9 @@
-package dev.slne.surf.content.creator.core
+package dev.slne.surf.social.core.client.contentcreator
 
-import dev.slne.surf.content.creator.api.ContentCreator
-import dev.slne.surf.content.creator.api.ContentCreatorPlatform
-import dev.slne.surf.content.creator.api.platform.PlatformType
-import dev.slne.surf.content.creator.api.toPlattform
+import dev.slne.surf.social.api.contentcreator.ContentCreator
+import dev.slne.surf.social.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.social.api.contentcreator.platform.PlatformType
+import dev.slne.surf.social.api.contentcreator.toPlattform
 import java.util.*
 
 data class CoreContentCreator(
