@@ -11,6 +11,8 @@ import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket
 import net.minestom.server.potion.Potion
 import net.minestom.server.potion.PotionEffect
 
+private data class ClientEffect(val entityId: Int, val networkId: Int)
+
 /**
  * Sends status effects only the client knows, such as the ones mods add. Minestom's effect packets only take
  * effects Minestom knows, so these write the same layout with a raw effect ID and frame it as Minestom does.
@@ -21,8 +23,6 @@ object MinestomClientEffects {
 
     private val ADD_ID = PacketVanilla.SERVER_PACKET_PARSER.play().packetInfo(EntityEffectPacket::class.java).id()
     private val REMOVE_ID = PacketVanilla.SERVER_PACKET_PARSER.play().packetInfo(RemoveEntityEffectPacket::class.java).id()
-
-    private data class ClientEffect(val entityId: Int, val networkId: Int)
 
     // Like EntityEffectPacket for an endless effect hidden from the HUD: entity, effect, amplifier, duration, flags.
     private val ADD = object : NetworkBuffer.Type<ClientEffect> {

@@ -5,19 +5,19 @@ import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
 import dev.slne.surf.player.core.client.minimap.global.OptionOverlay
 
 /**
+ * An option one entry covers, with the values that allow and forbid the feature, as [JourneyMapProfile.parse]
+ * takes them.
+ */
+private data class JourneyMapGlobalOption(val id: String, val allowed: Any, val forbidden: Any)
+
+/**
  * Applies `global-settings` to the options of `journeymap.yml`. JourneyMap's options are permissions, so each entry
  * sends the value that allows or forbids its feature.
  */
 object JourneyMapGlobalSettings {
 
-    /**
-     * An option one entry covers, with the values that allow and forbid the feature, as [JourneyMapProfile.parse]
-     * takes them.
-     */
-    private data class Option(val id: String, val allowed: Any, val forbidden: Any)
-
-    private fun switch(id: String) = Option(id, allowed = true, forbidden = false)
-    private fun everyone(id: String) = Option(id, allowed = "ALL", forbidden = "NONE")
+    private fun switch(id: String) = JourneyMapGlobalOption(id, allowed = true, forbidden = false)
+    private fun everyone(id: String) = JourneyMapGlobalOption(id, allowed = "ALL", forbidden = "NONE")
 
     private val OPTIONS = mapOf(
         GlobalFeature.MINIMAP to listOf(switch("minimapEnabled")),
@@ -29,7 +29,7 @@ object JourneyMapGlobalSettings {
         GlobalFeature.RADAR_PLAYERS to listOf(switch("playerRadarEnabled")),
         // VoxelMap's switch covers hostile and neutral mobs, so the same entry hides the same creatures here.
         GlobalFeature.RADAR_MOBS to listOf(switch("mobRadarEnabled"), switch("animalRadarEnabled"), switch("villagerRadarEnabled")),
-        GlobalFeature.COORDINATES to listOf(Option("hideCoordinates", allowed = false, forbidden = true)),
+        GlobalFeature.COORDINATES to listOf(JourneyMapGlobalOption("hideCoordinates", allowed = false, forbidden = true)),
     )
 
     /**

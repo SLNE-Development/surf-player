@@ -8,7 +8,8 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
-import dev.slne.surf.player.paper.vanish.core.service.vanishService
+import dev.slne.surf.player.paper.vanish.service.VanishService
+import dev.slne.surf.player.paper.vanish.util.isVanished
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -18,11 +19,11 @@ object HotkeyListener : PacketListenerAbstract() {
     override fun onPacketReceive(event: PacketReceiveEvent) {
         val player = event.getPlayer<Player>() ?: return
 
-        if (!vanishService.isVanished(player)) {
+        if (!player.isVanished) {
             return
         }
 
-        if (!vanishService.isSpectating(player.uniqueId)) {
+        if (!VanishService.isSpectating(player.uniqueId)) {
             return
         }
 
@@ -35,7 +36,7 @@ object HotkeyListener : PacketListenerAbstract() {
                     val now = System.currentTimeMillis()
 
                     if (lastSneak != null && now - lastSneak < 500) {
-                        val current = vanishService.current(player) ?: run {
+                        val current = VanishService.current(player) ?: run {
                             player.sendText {
                                 appendErrorPrefix()
                                 error("Du schaust gerade niemandem zu.")
@@ -73,7 +74,7 @@ object HotkeyListener : PacketListenerAbstract() {
                     val sneakCacheResult = _lastSneaks[player.uniqueId]
 
                     if (sneakCacheResult != null && System.currentTimeMillis() - sneakCacheResult < 1000) {
-                        val previous = vanishService.previous(player) ?: run {
+                        val previous = VanishService.previous(player) ?: run {
                             player.sendText {
                                 appendErrorPrefix()
                                 error("Es wurde kein Spieler gefunden, den du zuvor angeschaut hast.")
@@ -101,7 +102,7 @@ object HotkeyListener : PacketListenerAbstract() {
                         return
                     }
 
-                    val next = vanishService.next(player) ?: run {
+                    val next = VanishService.next(player) ?: run {
                         player.sendText {
                             appendErrorPrefix()
                             error("Es wurde kein weiterer Spieler gefunden, dem du zuschauen könntest.")

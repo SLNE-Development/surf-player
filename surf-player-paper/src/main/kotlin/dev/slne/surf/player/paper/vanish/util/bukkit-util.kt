@@ -1,17 +1,15 @@
 package dev.slne.surf.player.paper.vanish.util
 
-import dev.slne.surf.player.paper.vanish.core.service.vanishService
-import dev.slne.surf.player.paper.vanish.plugin
-import org.bukkit.Bukkit
+import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.paper.vanish.service.VanishService
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.metadata.FixedMetadataValue
-import java.util.*
 
+/** Whether this player is vanished anywhere in the network. */
+val OfflinePlayer.isVanished: Boolean get() = VanishService.isVanished(uniqueId)
 
-val Player.currentTarget get() = vanishService.current(this)
-
-val UUID.onlineName get() = Bukkit.getPlayer(this)?.name
-val UUID.bukkitPlayer get() = Bukkit.getPlayer(this)
+val Player.currentTarget get() = VanishService.current(this)
 
 fun Player.getVanishPriority(): Int {
     return effectivePermissions

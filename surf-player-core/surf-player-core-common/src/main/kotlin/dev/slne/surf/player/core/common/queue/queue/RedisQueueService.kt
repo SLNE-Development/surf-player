@@ -1,7 +1,6 @@
 package dev.slne.surf.player.core.common.queue.queue
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.runAtFixedRate
 import dev.slne.surf.api.core.util.withAutoCloseOnRemoval
@@ -18,12 +17,17 @@ import java.time.Duration
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * Creates, caches and periodically discovers the queues stored in Redis.
+ */
 @OptIn(InternalSurfQueueApi::class)
-@AutoService(SurfQueueService::class)
-class RedisQueueService : SurfQueueService, AutoCloseable {
+object RedisQueueService : SurfQueueService, AutoCloseable {
+    const val QUEUE_REFRESH_INTERVAL_SECONDS = 30
+    private val log = logger()
+
     private val queues = Caffeine.newBuilder()
         .expireAfterAccess(Duration.ofSeconds(QUEUE_REFRESH_INTERVAL_SECONDS * 4L))
-        .withAutoCloseOnRemoval { key, value, cause ->
+        .withAutoCloseOnRemoval { key, _, cause ->
             log.atInfo().log("Queue removed from cache: key=%s, cause=%s", key, cause)
         }
         .build<String, AbstractQueue> { serverName ->
@@ -37,8 +41,8 @@ class RedisQueueService : SurfQueueService, AutoCloseable {
     private val scope = QueueInstance.get().queueScheduler.createServiceScope()
     private var refreshJob: Job? = null
 
-    override fun getQueueByName(serverName: String) = queues.get(serverName)
-    fun getAll() = queues.asMap().values
+    override fun getQueueByName(serverName: String): AbstractQueue = queues.get(serverName)
+    fun getAll(): Collection<AbstractQueue> = queues.asMap().values
 
     fun delete(serverName: String) = queues.invalidate(serverName)
 
@@ -73,11 +77,5 @@ class RedisQueueService : SurfQueueService, AutoCloseable {
     override fun close() {
         scope.cancel("RedisQueueService closed")
         queues.invalidateAll()
-    }
-
-    companion object {
-        const val QUEUE_REFRESH_INTERVAL_SECONDS = 30
-        private val log = logger()
-        fun get() = SurfQueueService.instance as RedisQueueService
     }
 }

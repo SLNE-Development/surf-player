@@ -6,9 +6,15 @@ import dev.slne.surf.player.paper.chat.PaperChatFeature
 import dev.slne.surf.player.paper.clan.PaperClanFeature
 import dev.slne.surf.player.paper.contentcreator.PaperContentCreatorFeature
 import dev.slne.surf.player.paper.friends.PaperFriendsFeature
+import dev.slne.surf.player.paper.minimap.PaperMinimapFeature
 import dev.slne.surf.player.paper.nametag.PaperNametagFeature
+import dev.slne.surf.player.paper.playtime.PaperPlaytimeFeature
+import dev.slne.surf.player.paper.profile.PaperProfileFeature
+import dev.slne.surf.player.paper.queue.PaperQueueFeature
+import dev.slne.surf.player.paper.settings.PaperSettingsFeature
 import dev.slne.surf.player.paper.shrieker.PaperShriekerFeature
 import dev.slne.surf.player.paper.tab.PaperTabFeature
+import dev.slne.surf.player.paper.vanish.PaperVanishFeature
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.logging.Level
 
@@ -21,6 +27,9 @@ class PlayerPaperPlugin : SuspendingJavaPlugin() {
      * content creator, so dependencies come first. Disabling happens in reverse order.
      */
     private val features: List<PaperPlayerFeature> = listOf(
+        PaperSettingsFeature,
+        PaperPlaytimeFeature,
+        PaperVanishFeature,
         PaperChatFeature,
         PaperFriendsFeature,
         PaperClanFeature,
@@ -28,6 +37,9 @@ class PlayerPaperPlugin : SuspendingJavaPlugin() {
         PaperContentCreatorFeature,
         PaperNametagFeature,
         PaperTabFeature,
+        PaperProfileFeature,
+        PaperMinimapFeature,
+        PaperQueueFeature,
     )
 
     override suspend fun onLoadAsync() {

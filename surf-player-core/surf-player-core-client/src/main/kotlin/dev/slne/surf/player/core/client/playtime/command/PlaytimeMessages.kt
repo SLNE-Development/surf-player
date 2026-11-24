@@ -2,7 +2,7 @@ package dev.slne.surf.player.core.client.playtime.command
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.player.api.playtime.session.PlaytimeSession
-import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
+import dev.slne.surf.player.core.client.playtime.streak.LoginStreak
 import net.kyori.adventure.audience.Audience
 
 /**
@@ -13,7 +13,7 @@ import net.kyori.adventure.audience.Audience
  */
 fun Audience.sendPlaytimeOverview(
     sessions: Collection<PlaytimeSession>,
-    streak: PlaytimeStreak.SimpleStreak?,
+    streak: LoginStreak?,
     targetName: String? = null,
 ) {
     val summedPlaytime = sessions.sumPlaytime()

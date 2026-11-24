@@ -6,6 +6,15 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
 
 /**
+ * A player as viewers get them, encoded once for all of them. Viewers compare it by identity.
+ */
+private class RadarEntry(uuid: UUID, val player: JourneyMapPlayer) {
+    val bytes = JourneyMapPackets.playerEntry(uuid, player)
+}
+
+private class RadarListing(val dimension: String, val entries: Map<UUID, RadarEntry>, val runsSinceFullList: Int)
+
+/**
  * Feeds JourneyMap's player radar while the server provides the players, as JourneyMap's server addon does.
  * JourneyMap then shows only the players listed here, so each viewer gets the players the tracker shows and the
  * ones their client sees nearby. Players the viewer may not see are never sent, not even as hidden entries.
@@ -14,19 +23,10 @@ import kotlin.math.abs
  * on the thread that owns the player.
  */
 class JourneyMapTracker {
-    private val players = ConcurrentHashMap<UUID, Entry>()
+    private val players = ConcurrentHashMap<UUID, RadarEntry>()
     private val concealed: MutableSet<UUID> = ConcurrentHashMap.newKeySet()
     private val trackers = ConcurrentHashMap<UUID, Set<UUID>>()
-    private val listed = ConcurrentHashMap<UUID, Listing>()
-
-    /**
-     * A player as viewers get them, encoded once for all of them. Viewers compare it by identity.
-     */
-    private class Entry(uuid: UUID, val player: JourneyMapPlayer) {
-        val bytes = JourneyMapPackets.playerEntry(uuid, player)
-    }
-
-    private class Listing(val dimension: String, val entries: Map<UUID, Entry>, val runsSinceFullList: Int)
+    private val listed = ConcurrentHashMap<UUID, RadarListing>()
 
     /**
      * Records where the player with [uuid] is. A [concealed] player is sneaking, invisible or spectating, whom
@@ -35,7 +35,7 @@ class JourneyMapTracker {
      */
     fun update(uuid: UUID, player: JourneyMapPlayer, concealed: Boolean = false, trackedBy: Set<UUID> = emptySet()) {
         val current = players[uuid]
-        if (current == null || !current.player.looksLike(player)) players[uuid] = Entry(uuid, player)
+        if (current == null || !current.player.looksLike(player)) players[uuid] = RadarEntry(uuid, player)
         if (concealed) this.concealed += uuid else this.concealed -= uuid
         trackers[uuid] = trackedBy
     }
@@ -59,7 +59,7 @@ class JourneyMapTracker {
         // is removed, and new ones are cleared first, before they are listed.
         val last = listed[viewer.uuid]
         val previous = last?.takeIf { it.dimension == dimension }
-        val visible = HashMap<UUID, Entry>()
+        val visible = HashMap<UUID, RadarEntry>()
         val changed = ArrayList<ByteArray>()
 
         for ((target, entry) in players) {
@@ -79,12 +79,12 @@ class JourneyMapTracker {
         // players that changed go out. Now and then the whole list follows, in case the client skipped a player it
         // did not know from the tab list yet.
         val keepAlive = previous != null && previous.runsSinceFullList + 1 >= KEEP_ALIVE_RUNS && visible.isNotEmpty()
-        val entries = if (keepAlive) visible.values.map(Entry::bytes) else changed
+        val entries = if (keepAlive) visible.values.map(RadarEntry::bytes) else changed
         if (entries.isNotEmpty()) {
             viewer.sendPluginMessage(JourneyMapChannels.PLAYER_LOCATIONS, JourneyMapPackets.playerLocations(entries))
         }
         val runsSinceFullList = if (keepAlive || previous == null) 0 else previous.runsSinceFullList + 1
-        listed[viewer.uuid] = Listing(dimension, visible, runsSinceFullList)
+        listed[viewer.uuid] = RadarListing(dimension, visible, runsSinceFullList)
     }
 
     private fun removePlayer(viewer: CompanionPlayer, target: UUID) {

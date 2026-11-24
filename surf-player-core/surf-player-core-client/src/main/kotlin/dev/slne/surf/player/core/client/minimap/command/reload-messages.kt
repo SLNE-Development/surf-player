@@ -1,7 +1,7 @@
 package dev.slne.surf.player.core.client.minimap.command
 
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs.ReloadResult
+import dev.slne.surf.player.core.client.minimap.config.ReloadResult
 import net.kyori.adventure.audience.Audience
 
 /**

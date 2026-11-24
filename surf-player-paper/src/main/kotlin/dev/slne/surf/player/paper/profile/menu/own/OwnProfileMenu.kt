@@ -8,8 +8,8 @@ import dev.slne.surf.api.paper.inventory.framework.view.onFirstRender
 import dev.slne.surf.api.paper.inventory.framework.view.settings
 import dev.slne.surf.api.paper.inventory.framework.view.surfView
 import dev.slne.surf.core.api.paper.util.toSurfPlayer
-import dev.slne.surf.player.core.client.profile.integration.SettingsIntegration
 import dev.slne.surf.player.core.client.profile.menu.own.OwnProfileMenuContent
+import dev.slne.surf.player.paper.settings.menu.openSettingsMenu
 import dev.slne.surf.player.paper.profile.menu.playClickSound
 import io.papermc.paper.datacomponent.DataComponentTypes
 import io.papermc.paper.datacomponent.item.ResolvableProfile
@@ -54,7 +54,7 @@ val ownProfileMenu = surfView(OwnProfileMenuContent.TITLE) {
 
             onClick { click ->
                 click.playClickSound()
-                SettingsIntegration.openMenu(click.player.uniqueId)
+                click.player.openSettingsMenu()
             }
         }
     }

@@ -7,7 +7,7 @@ import java.nio.file.Path
 
 @AutoService(QueueInstance::class)
 class MinestomSurfQueueInstance : ClientQueueInstance() {
-    override val dataPath: Path get() = MinestomQueuePlugin.dataDirectory
+    override val dataPath: Path get() = QueueMinestomFeature.dataDirectory
 
     @Volatile
     override var isLoaded: Boolean = false

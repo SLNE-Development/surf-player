@@ -4,17 +4,13 @@ import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.player.core.client.tab.platform.TabPlatform
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.tab.PaperTabFeature
-import dev.slne.surf.player.paper.tab.hook.VanishHook
-import dev.slne.surf.player.paper.tab.isPlaytimeHook
-import dev.slne.surf.player.paper.tab.isVanishHook
+import dev.slne.surf.player.paper.vanish.service.VanishService
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import java.util.*
 
 class PaperTabPlatform : TabPlatform {
     override val dataPath get() = PaperTabFeature.dataPath
-
-    override val playtimeAvailable get() = isPlaytimeHook
 
     override fun onlinePlayers() = Bukkit.getOnlinePlayers().map { PaperTabPlayer(it) }
 
@@ -24,8 +20,7 @@ class PaperTabPlatform : TabPlatform {
 
     override fun maxPlayerCount() = Bukkit.getMaxPlayers()
 
-    override fun isVanished(playerUuid: UUID) =
-        isVanishHook && VanishHook.isVanished(playerUuid)
+    override fun isVanished(playerUuid: UUID) = VanishService.isVanished(playerUuid)
 
     override fun launch(block: suspend CoroutineScope.() -> Unit) = plugin.launch(block = block)
 }

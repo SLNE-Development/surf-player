@@ -18,7 +18,7 @@ fun CommandAPICommand.queueClear() = subcommand("clear") {
     anyExecutorSuspend { sender, arguments ->
         val server: SurfServer? by arguments
         val serverName = server?.name ?: SurfServer.current().name
-        val queue = RedisQueueService.get().getQueueByName(serverName) as ClientQueue
+        val queue = RedisQueueService.getQueueByName(serverName) as ClientQueue
 
         val size = queue.size()
         queue.delete()

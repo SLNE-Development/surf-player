@@ -4,8 +4,8 @@ import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
 import dev.slne.surf.player.core.client.queue.platform.QueuePlatform
 import dev.slne.surf.player.core.client.queue.platform.TransferKickReason
+import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.queue.listener.PlayerKickedDueToFullServerListener
-import dev.slne.surf.player.paper.queue.plugin
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import java.util.*

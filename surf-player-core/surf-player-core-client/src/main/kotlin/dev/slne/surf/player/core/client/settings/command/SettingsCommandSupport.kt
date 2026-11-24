@@ -4,7 +4,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.player.api.settings.setting.PlayerSetting
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.core.client.settings.platform.SettingsPlatform
-import dev.slne.surf.player.core.common.settings.service.SettingsService
+import dev.slne.surf.player.core.client.settings.service.SettingsService
 import net.kyori.adventure.text.Component
 import java.util.*
 

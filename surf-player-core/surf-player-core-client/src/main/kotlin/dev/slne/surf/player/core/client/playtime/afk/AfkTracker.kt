@@ -2,11 +2,11 @@ package dev.slne.surf.player.core.client.playtime.afk
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.emptyObjectSet
-import dev.slne.surf.core.api.common.SurfCoreApi
+import dev.slne.surf.player.api.playtime.event.AfkStateChangeEvent
 import dev.slne.surf.player.api.playtime.session.PlaytimeSession
 import dev.slne.surf.player.core.client.playtime.platform.PlaytimePlatform
-import dev.slne.surf.player.core.common.playtime.service.AfkService
-import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.client.playtime.session.newPlaytimeSession
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import java.time.LocalDateTime
 import java.util.*
@@ -15,14 +15,17 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration.Companion.minutes
 
 /**
+ * The idle state of one tracked player.
+ */
+private class AfkState(@Volatile var lastActivityNanos: Long) {
+    val afk = AtomicBoolean(false)
+}
+
+/**
  * Tracks how long each player has been idle and turns that into afk state changes.
  */
 object AfkTracker {
     private val afkTimeNanos = 3.minutes.inWholeNanoseconds
-
-    private class AfkState(@Volatile var lastActivityNanos: Long) {
-        val afk = AtomicBoolean(false)
-    }
 
     private val states = ConcurrentHashMap<UUID, AfkState>()
 
@@ -40,6 +43,34 @@ object AfkTracker {
      */
     fun forget(playerUuid: UUID) {
         states.remove(playerUuid)
+    }
+
+    /**
+     * Records activity of [playerUuid], bringing them back out of the afk state if needed.
+     * Called by the platforms whenever a player looks around.
+     */
+    fun recordActivity(playerUuid: UUID) {
+        if (markActive(playerUuid)) {
+            applyState(playerUuid, false)
+        }
+    }
+
+    /**
+     * Moves every player that has been idle for long enough into the afk state.
+     */
+    fun checkIdlePlayers() {
+        val now = System.nanoTime()
+
+        for (uuid in idlePlayers(now)) {
+            if (!markAfkIfStillIdle(uuid, now)) continue
+
+            if (PlaytimePlatform.onlinePlayer(uuid) == null) {
+                forget(uuid)
+                continue
+            }
+
+            applyState(uuid, true)
+        }
     }
 
     /**
@@ -91,19 +122,13 @@ object AfkTracker {
     }
 
     /**
-     * Publishes the tracked afk state of [playerUuid], updating their playtime session and
-     * telling them about the change.
-     *
-     * [onChanged] runs after the session has been updated and before the player is notified.
+     * Publishes the tracked afk state of [playerUuid]: updates their playtime session, fires an
+     * [AfkStateChangeEvent] and tells them about the change.
      *
      * Returns `false` when the tracked state no longer matches [isAfk], which happens when the
      * state changed again since the change was scheduled.
      */
-    fun applyState(
-        playerUuid: UUID,
-        isAfk: Boolean,
-        onChanged: () -> Unit = {},
-    ): Boolean {
+    fun applyState(playerUuid: UUID, isAfk: Boolean): Boolean {
         // Check that the state is still the same, as it may have changed since the task was scheduled
         val state = states[playerUuid] ?: return false
         if (state.afk.get() != isAfk) return false
@@ -111,7 +136,7 @@ object AfkTracker {
         AfkService.changeState(playerUuid, isAfk)
         updatePlaytimeSession(playerUuid, isAfk)
 
-        onChanged()
+        AfkStateChangeEvent(playerUuid, isAfk).call()
 
         PlaytimePlatform.onlinePlayer(playerUuid)?.sendText {
             appendInfoPrefix()
@@ -132,30 +157,12 @@ object AfkTracker {
         val activeSessions = PlaytimeService.activeSessionsOf(playerUuid)
 
         if (isAfk) {
-            activeSessions.forEach { session ->
-                session.endTime = now
-                PlaytimeService.removeCachedSession(session.sessionId)
-
-                PlaytimePlatform.launchAsync {
-                    PlaytimeService.saveSession(session)
-                }
-            }
-
+            activeSessions.forEach { endSession(it, now) }
             return
         }
 
         if (activeSessions.isEmpty()) {
-            PlaytimeService.cacheSession(
-                PlaytimeSession(
-                    playerUuid = playerUuid,
-                    sessionId = UUID.randomUUID(),
-                    server = SurfCoreApi.getCurrentServerDisplayName(),
-                    category = SurfCoreApi.getCurrentServerCategory(),
-                    startTime = now,
-                    endTime = now,
-                )
-            )
-
+            PlaytimeService.cacheSession(newPlaytimeSession(playerUuid, now))
             return
         }
 
@@ -163,13 +170,15 @@ object AfkTracker {
         activeSessions
             .sortedByDescending { it.startTime }
             .drop(1)
-            .forEach { duplicate ->
-                duplicate.endTime = now
-                PlaytimeService.removeCachedSession(duplicate.sessionId)
+            .forEach { endSession(it, now) }
+    }
 
-                PlaytimePlatform.launchAsync {
-                    PlaytimeService.saveSession(duplicate)
-                }
-            }
+    private fun endSession(session: PlaytimeSession, now: LocalDateTime) {
+        session.endTime = now
+        PlaytimeService.removeCachedSession(session.sessionId)
+
+        PlaytimePlatform.launchAsync {
+            PlaytimeService.saveSession(session)
+        }
     }
 }

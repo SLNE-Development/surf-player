@@ -10,7 +10,7 @@ import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroMapEffects
 import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
-import dev.slne.surf.player.paper.minimap.plugin
+import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.minimap.tracker.PaperTracker
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

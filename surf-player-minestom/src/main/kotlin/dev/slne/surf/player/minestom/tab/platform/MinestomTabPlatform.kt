@@ -12,8 +12,6 @@ import java.util.*
 class MinestomTabPlatform : TabPlatform {
     override val dataPath get() = TabMinestomFeature.dataDirectory
 
-    override val playtimeAvailable = true
-
     override fun onlinePlayers() = ConnectionManager.onlinePlayers.map { MinestomTabPlayer(it) }
 
     override fun onlinePlayerCount() = ConnectionManager.onlinePlayers.size

@@ -109,7 +109,7 @@ class QueueTransferProcessor(
             }
 
             when (val preparation = transfer.prepare(uuid)) {
-                is QueueTransfer.Preparation.Ready -> {
+                is TransferPreparation.Ready -> {
                     inFlight.add(uuid)
                     scope.launch {
                         runTransfer(entry, preparation.player, targetServer)
@@ -117,7 +117,7 @@ class QueueTransferProcessor(
                     started++
                 }
 
-                is QueueTransfer.Preparation.Rejected -> handleResult(entry, preparation.action, null)
+                is TransferPreparation.Rejected -> handleResult(entry, preparation.action, null)
             }
         }
 

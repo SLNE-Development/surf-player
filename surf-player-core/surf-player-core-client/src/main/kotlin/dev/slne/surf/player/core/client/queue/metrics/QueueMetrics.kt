@@ -108,7 +108,7 @@ object QueueMetrics {
         totalCleanupRemovals = totalCleanupRemovals.get(),
         totalTicks = totalTicks.get(),
         perQueue = trackedServerNames().associateWith { serverName ->
-            QueueMetricsSnapshot.PerQueueMetrics(
+            PerQueueMetrics(
                 transfers = getTransfersFor(serverName),
                 enqueues = getEnqueuesFor(serverName),
                 dequeues = getDequeuesFor(serverName),
@@ -120,7 +120,7 @@ object QueueMetrics {
 
     suspend fun collectQueueSizes(): Map<String, Int> {
         return try {
-            RedisQueueService.get().getAll()
+            RedisQueueService.getAll()
                 .associate { it.serverName to it.size() }
         } catch (e: Exception) {
             log.atWarning()

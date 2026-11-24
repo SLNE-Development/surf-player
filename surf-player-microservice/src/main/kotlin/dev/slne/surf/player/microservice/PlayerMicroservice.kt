@@ -11,6 +11,8 @@ import dev.slne.surf.player.microservice.chat.ChatMicroserviceModule
 import dev.slne.surf.player.microservice.clan.ClanMicroserviceModule
 import dev.slne.surf.player.microservice.connection.ConnectionMicroserviceModule
 import dev.slne.surf.player.microservice.friends.FriendsMicroserviceModule
+import dev.slne.surf.player.microservice.playtime.PlaytimeMicroserviceModule
+import dev.slne.surf.player.microservice.settings.SettingsMicroserviceModule
 import dev.slne.surf.player.microservice.shrieker.ShriekerMicroserviceModule
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -30,6 +32,8 @@ class PlayerMicroservice : Microservice() {
     )
 
     private val modules: List<PlayerMicroserviceModule> = listOf(
+        SettingsMicroserviceModule,
+        PlaytimeMicroserviceModule,
         ChatMicroserviceModule,
         ClanMicroserviceModule,
         FriendsMicroserviceModule,

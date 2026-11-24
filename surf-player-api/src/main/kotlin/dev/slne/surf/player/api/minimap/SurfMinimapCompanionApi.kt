@@ -4,7 +4,7 @@ import dev.slne.surf.api.core.util.requiredService
 import net.kyori.adventure.key.Key
 import java.util.*
 
-private val api = requiredService<SurfMinimapCompanionApi>()
+private val instance = requiredService<SurfMinimapCompanionApi>()
 
 interface SurfMinimapCompanionApi {
 
@@ -18,5 +18,7 @@ interface SurfMinimapCompanionApi {
      */
     fun levelId(playerUuid: UUID): Int?
 
-    companion object : SurfMinimapCompanionApi by api
+    companion object : SurfMinimapCompanionApi by instance {
+        val INSTANCE get() = instance
+    }
 }

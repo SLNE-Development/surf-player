@@ -4,68 +4,32 @@ import com.google.auto.service.AutoService
 import dev.slne.surf.player.api.playtime.SurfPlaytimeApi
 import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
 import dev.slne.surf.player.api.playtime.session.PlaytimeSession
-import dev.slne.surf.player.core.common.playtime.service.AfkService
-import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.client.playtime.afk.AfkService
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeService
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
-import net.kyori.adventure.util.Services
 import java.util.*
 
 @AutoService(SurfPlaytimeApi::class)
-class SurfPlaytimeApiImpl : SurfPlaytimeApi, Services.Fallback {
+class SurfPlaytimeApiImpl : SurfPlaytimeApi {
     override fun getCurrentPlaytimeSession(playerUuid: UUID): PlaytimeSession? =
-        PlaytimeService.activeSessionsOf(playerUuid).firstOrNull()
+        PlaytimeService.currentSession(playerUuid)
 
     override fun isPlayerAfk(playerUuid: UUID): Boolean = AfkService.isAfk(playerUuid)
 
-    override suspend fun getPlaytimeByServer(
-        playerUuid: UUID,
-        server: String
-    ): Long {
-        val currentSession = getCurrentPlaytimeSession(playerUuid)
-            ?.takeIf { it.server == server }
+    override suspend fun getPlaytimeByServer(playerUuid: UUID, server: String): Long =
+        sumWithCurrentSession(
+            currentSession = getCurrentPlaytimeSession(playerUuid)?.takeIf { it.server == server },
+            stored = PlaytimeService.loadSessionsByServer(playerUuid, server)
+        )
 
-        val stored =
-            PlaytimeService.loadSessionsByServer(playerUuid, server)
-                .let { sessions ->
-                    if (currentSession != null) {
-                        sessions.filterNot { it.sessionId == currentSession.sessionId }
-                    } else {
-                        sessions
-                    }
-                }
-                .sumOf { it.durationSeconds }
+    override suspend fun getPlaytimeByCategory(playerUuid: UUID, category: String): Long =
+        sumWithCurrentSession(
+            currentSession = getCurrentPlaytimeSession(playerUuid)?.takeIf { it.category == category },
+            stored = PlaytimeService.loadSessionsByCategory(playerUuid, category)
+        )
 
-        val current = currentSession?.durationSeconds ?: 0
-
-        return stored + current
-    }
-
-
-    override suspend fun getPlaytimeByCategory(
-        playerUuid: UUID,
-        category: String
-    ): Long {
-        val currentSession = getCurrentPlaytimeSession(playerUuid)
-            ?.takeIf { it.category == category }
-
-        val stored =
-            PlaytimeService.loadSessionsByCategory(playerUuid, category)
-                .let { sessions ->
-                    if (currentSession != null) {
-                        sessions.filterNot { it.sessionId == currentSession.sessionId }
-                    } else {
-                        sessions
-                    }
-                }
-                .sumOf { it.durationSeconds }
-
-        val current = currentSession?.durationSeconds ?: 0
-
-        return stored + current
-    }
-
-    override suspend fun getTotalPlaytime(playerUuid: UUID) =
+    override suspend fun getTotalPlaytime(playerUuid: UUID): Long =
         PlaytimeService.getAndLoadSessions(playerUuid).sumOf { it.durationSeconds }
 
     override suspend fun getAllPlaytimeSessions(playerUuid: UUID): ObjectSet<PlaytimeSession> =
@@ -73,4 +37,18 @@ class SurfPlaytimeApiImpl : SurfPlaytimeApi, Services.Fallback {
 
     override suspend fun getPlaytimePerPlayer(filter: PlaytimeFilter): Object2LongMap<UUID> =
         PlaytimeService.loadPlaytimePerPlayer(filter)
+
+    /**
+     * Sums [stored] and [currentSession], counting a stored save of [currentSession] only once.
+     */
+    private fun sumWithCurrentSession(
+        currentSession: PlaytimeSession?,
+        stored: Collection<PlaytimeSession>
+    ): Long {
+        val storedSeconds = stored
+            .filter { it.sessionId != currentSession?.sessionId }
+            .sumOf { it.durationSeconds }
+
+        return storedSeconds + (currentSession?.durationSeconds ?: 0)
+    }
 }

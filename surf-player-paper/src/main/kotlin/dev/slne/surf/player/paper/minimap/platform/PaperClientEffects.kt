@@ -43,13 +43,13 @@ object PaperClientEffects {
         val effect = ClientOnlyEffect(networkId)
         WrapperPlayServerRemoveEntityEffect(player.entityId, effect).sendPacket(player)
     }
+}
 
-    /**
-     * An effect PacketEvents writes by [networkId] alone, without looking it up in a registry.
-     */
-    private class ClientOnlyEffect(private val networkId: Int) : PotionType {
-        override fun getName() = ResourceLocation("surf-minimap-companion", "client_effect_$networkId")
+/**
+ * An effect PacketEvents writes by [networkId] alone, without looking it up in a registry.
+ */
+private class ClientOnlyEffect(private val networkId: Int) : PotionType {
+    override fun getName() = ResourceLocation("surf-minimap-companion", "client_effect_$networkId")
 
-        override fun getId(version: ClientVersion) = networkId
-    }
+    override fun getId(version: ClientVersion) = networkId
 }

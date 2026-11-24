@@ -10,10 +10,11 @@ import dev.slne.surf.player.core.client.minimap.command.MapInfo
 import dev.slne.surf.player.core.client.minimap.command.sendMapInfo
 import dev.slne.surf.player.core.client.minimap.command.sendReloadResult
 import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.player.core.client.minimap.config.ReloadResult
 import dev.slne.surf.player.core.client.minimap.permission.CompanionPermissions
 import dev.slne.surf.player.core.client.minimap.service.MapSyncService
 import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
-import dev.slne.surf.player.paper.minimap.plugin
+import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.minimap.tracker.PaperTracker
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -28,7 +29,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
             plugin.launch(plugin.asyncDispatcher) {
                 val result = CompanionConfigs.reload()
 
-                if (result is CompanionConfigs.ReloadResult.Reloaded) {
+                if (result is ReloadResult.Reloaded) {
                     PaperTracker.configure()
 
                     for (player in Bukkit.getOnlinePlayers()) {

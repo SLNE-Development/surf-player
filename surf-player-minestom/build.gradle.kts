@@ -14,8 +14,6 @@ minestomPluginFile {
     pluginDependencies {
         register("surf-rabbitmq-minestom")
         register("surf-redis-minestom")
-        register("surf-settings-minestom")
-        register("surf-playtime-minestom")
     }
 }
 
@@ -23,5 +21,10 @@ dependencies {
     api(projects.surfPlayerCore.surfPlayerCoreClient)
 
     compileOnly(libs.luckperms.api)
-    compileOnly("dev.slne.surf.playtime:surf-playtime-api-minestom:+")
+    compileOnly(libs.surf.transaction.api)
+}
+
+// Lets Minestom's test environment connect players outside virtual threads (minimap tests).
+tasks.test {
+    systemProperty("minestom.inside-test", "true")
 }

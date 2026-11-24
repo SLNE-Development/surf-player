@@ -1,32 +1,42 @@
 package dev.slne.surf.player.paper.queue
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.player.core.client.queue.ClientQueueInstance
 import dev.slne.surf.player.core.common.queue.QueueInstance
-import dev.slne.surf.player.paper.queue.commands.queueCommand
-import dev.slne.surf.player.paper.queue.hook.startup.QueueStartHook
-import dev.slne.surf.player.paper.queue.listener.PlayerKickedDueToFullServerListener
+import dev.slne.surf.player.paper.queue.startup.PolarQueueStartHook
+import org.bukkit.Bukkit
 
 @AutoService(QueueInstance::class)
 class PaperSurfQueueInstance : ClientQueueInstance() {
-    override val componentOwner get() = plugin
-    override val dataPath get() = plugin.dataPath
+    override val dataPath get() = PaperQueueFeature.dataPath
 
+    /**
+     * Whether the server accepts players, so queued players may be sent here. With PolarLoader
+     * installed that is once Polar has finished loading, otherwise once the plugin is enabled.
+     */
     @Volatile
     override var isLoaded: Boolean = false
         private set
 
+    private val polarInstalled get() = Bukkit.getPluginManager().getPlugin(POLAR_PLUGIN_NAME) != null
+
     override suspend fun load() {
         super.load()
-        QueueStartHook.get().onServerReady {
-            isLoaded = true
+
+        if (polarInstalled) {
+            PolarQueueStartHook.onPolarEnabled { isLoaded = true }
         }
     }
 
     override suspend fun enable() {
         super.enable()
-        PlayerKickedDueToFullServerListener.register()
-        queueCommand()
+
+        if (!polarInstalled) {
+            isLoaded = true
+        }
+    }
+
+    private companion object {
+        const val POLAR_PLUGIN_NAME = "PolarLoader"
     }
 }

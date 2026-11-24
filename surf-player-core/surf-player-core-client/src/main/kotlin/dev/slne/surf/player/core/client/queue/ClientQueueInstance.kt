@@ -2,6 +2,7 @@ package dev.slne.surf.player.core.client.queue
 
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.player.api.queue.SurfQueueAvailableSlotsProvider
+import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.core.client.queue.config.SurfQueueConfig
 import dev.slne.surf.player.core.client.queue.metrics.QueueMetricsLogger
 import dev.slne.surf.player.core.client.queue.queue.ClientQueueImpl
@@ -19,20 +20,25 @@ import java.nio.file.Path
  * The instance for the server's own queue ticks transfers and cleanup, while queues of other
  * servers are created as plain, non-ticking queues used for administrative access.
  *
- * Platform-specific subclasses provide the [componentOwner] and the [dataPath].
+ * Platform-specific subclasses provide the [dataPath].
  */
 abstract class ClientQueueInstance : QueueInstance() {
 
-    /** Directory the plugin stores its configuration in. */
+    /** Directory the queue feature stores its configuration in. */
     abstract val dataPath: Path
+
+    override val redisApi get() = SurfPlayerClient.redisApi
 
     override val queueScheduler = QueueScheduler(workerCount = 1) // Only one tickable queue max, so 1 worker is enough
 
+    /**
+     * Loads the configuration. Runs before Redis is connected. Subclasses **must** call
+     * `super.load()`.
+     */
     @MustBeInvokedByOverriders
-    override suspend fun load() {
+    open suspend fun load() {
         SurfQueueConfig.init()
         SurfQueueAvailableSlotsProvider.set(DefaultSurfQueueAvailableSlotsProvider)
-        super.load()
     }
 
     @MustBeInvokedByOverriders

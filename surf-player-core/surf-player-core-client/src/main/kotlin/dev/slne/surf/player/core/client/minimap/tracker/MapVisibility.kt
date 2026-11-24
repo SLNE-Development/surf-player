@@ -4,14 +4,14 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Whether a viewer sees another player on the maps: exactly when they see that player in the world. A vanish plugin
- * such as surf-vanish hides vanished players from the viewers whose level may not see them, so vanished players
+ * Whether a viewer sees another player on the maps: exactly when they see that player in the world. The vanish
+ * feature hides vanished players from the viewers whose level may not see them, so vanished players
  * stay visible to the viewers who may.
  */
 object MapVisibility {
 
     /**
-     * How long a vanished player stays off every map after joining. surf-vanish hides a joining vanished player from
+     * How long a vanished player stays off every map after joining. Vanish hides a joining vanished player from
      * the other players only a little after the join, and the maps must not show them in between.
      */
     val VANISH_GRACE = 1.seconds

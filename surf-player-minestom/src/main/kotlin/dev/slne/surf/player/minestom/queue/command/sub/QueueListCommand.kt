@@ -17,7 +17,7 @@ fun CommandAPICommand.queueList(): CommandAPICommand = withSubcommand(
         anyExecutorSuspend { sender, arguments ->
             val server: SurfServer? by arguments
             val serverName = server?.name ?: SurfServer.current().name
-            val queue = RedisQueueService.get().getQueueByName(serverName)
+            val queue = RedisQueueService.getQueueByName(serverName)
             val entries = queue.getAllUuidsOrderedByPosition()
 
             if (entries.isEmpty()) {

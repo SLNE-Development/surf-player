@@ -6,7 +6,7 @@ import dev.slne.surf.player.api.settings.setting.PlayerSetting
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.api.settings.setting.SettingKey
 import dev.slne.surf.player.core.client.settings.platform.SettingsPlatform
-import dev.slne.surf.player.core.common.settings.service.SettingsService
+import dev.slne.surf.player.core.client.settings.service.SettingsService
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import net.kyori.adventure.util.Services
 import java.util.*
@@ -20,25 +20,23 @@ class SurfSettingsApiImpl : SurfSettingsApi, Services.Fallback {
     }
 
     override suspend fun <T : Any> getCachedValueOrLoad(playerUuid: UUID, key: SettingKey<T>): T {
-        val cached = SettingsService.getSettingForPlayer(playerUuid, key.name)
-
-        if (cached == null) {
+        if (SettingsService.getSettingForPlayer(playerUuid, key.name) == null) {
             SettingsService.cachePlayerSettings(playerUuid)
         }
 
-        val value = SettingsService.getSettingValueOrDefault(playerUuid, key.name)
-            ?: return key.defaultValue
-        return key.deserialize(value)
+        return getSettingValue(playerUuid, key)
     }
 
     override suspend fun <T : Any> saveSetting(playerUuid: UUID, key: SettingKey<T>, value: T) {
-        val setting = SettingsService.getSettingByName(key.name) ?: return
-        val playerSetting = PlayerSetting(
-            setting = setting,
-            settingValue = key.serialize(value)
+        save(playerUuid, key.name, key.serialize(value))
+    }
+
+    private suspend fun save(playerUuid: UUID, settingName: String, value: String) {
+        val setting = SettingsService.getSettingByName(settingName) ?: return
+        SettingsService.cacheAndSavePlayerSetting(
+            playerUuid,
+            PlayerSetting(setting = setting, settingValue = value)
         )
-        SettingsService.cachePlayerSetting(playerUuid, playerSetting)
-        SettingsService.savePlayerSetting(playerUuid, playerSetting)
     }
 
     override suspend fun <T : Any> createSetting(key: SettingKey<T>): Setting =
@@ -76,8 +74,7 @@ class SurfSettingsApiImpl : SurfSettingsApi, Services.Fallback {
         ReplaceWith("saveSetting(playerUuid, key, value)")
     )
     override suspend fun saveSetting(playerUuid: UUID, playerSetting: PlayerSetting) {
-        SettingsService.cachePlayerSetting(playerUuid, playerSetting)
-        SettingsService.savePlayerSetting(playerUuid, playerSetting)
+        SettingsService.cacheAndSavePlayerSetting(playerUuid, playerSetting)
     }
 
     @Deprecated(
@@ -85,10 +82,7 @@ class SurfSettingsApiImpl : SurfSettingsApi, Services.Fallback {
         ReplaceWith("saveSetting(playerUuid, key, value)")
     )
     override suspend fun saveSetting(playerUuid: UUID, settingName: String, settingValue: String) {
-        val setting = SettingsService.getSettingByName(settingName) ?: return
-        val playerSetting = PlayerSetting(setting = setting, settingValue = settingValue)
-        SettingsService.cachePlayerSetting(playerUuid, playerSetting)
-        SettingsService.savePlayerSetting(playerUuid, playerSetting)
+        save(playerUuid, settingName, settingValue)
     }
 
     @Deprecated("Use getSetting(key) instead.", ReplaceWith("getSetting(key)"))

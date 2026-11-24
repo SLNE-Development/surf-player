@@ -8,7 +8,8 @@ import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.api.chat.message.MessageContext
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
-import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.formatIncomingPm
 import dev.slne.surf.player.core.client.chat.message.format.formatOutgoingPm
 import dev.slne.surf.player.core.client.chat.processor.runPostProcessors
@@ -129,10 +130,10 @@ object DirectMessageSender {
     }
 
     private fun acceptsDirectMessages(target: Player) =
-        SettingsHook.hasDirectMessagesEnabled(target.uniqueId)
+        SurfSettingsApi.getSettingValue(target.uniqueId, SettingKeys.DIRECT_MESSAGES)
 
     private fun pingIfEnabled(target: Player) {
-        if (SettingsHook.hasChatPingsEnabled(target.uniqueId)) {
+        if (SurfSettingsApi.getSettingValue(target.uniqueId, SettingKeys.CHAT_PINGS)) {
             target.schedulePingSound()
         }
     }

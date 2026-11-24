@@ -10,6 +10,11 @@ import java.util.*
 
 @AutoService(PlaytimePlatform::class)
 class MinestomPlaytimePlatform : PlaytimePlatform {
+    /** Whether the surf-transaction API is on the classpath of this server. */
+    override val transactionAvailable by lazy {
+        runCatching { Class.forName("dev.slne.surf.transaction.api.user.TransactionUser") }.isSuccess
+    }
+
     override fun onlinePlayer(playerUuid: UUID) = ConnectionManager.getOnlinePlayerByUuid(playerUuid)
 
     override fun launchAsync(block: suspend CoroutineScope.() -> Unit) =

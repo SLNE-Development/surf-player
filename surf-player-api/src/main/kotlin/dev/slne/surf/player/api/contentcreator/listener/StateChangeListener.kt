@@ -4,7 +4,7 @@ import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
 import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import java.util.UUID
 
-interface StateChangeListener {
+fun interface StateChangeListener {
 
     /**
      * Called when the state of a [ContentCreatorPlatform] has changed.

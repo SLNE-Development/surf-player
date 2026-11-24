@@ -6,23 +6,24 @@ import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.player.paper.vanish.core.service.vanishService
-import dev.slne.surf.player.paper.vanish.plugin
+import dev.slne.surf.player.paper.vanish.config.reloadVanishConfig
+import dev.slne.surf.player.paper.vanish.service.VanishService
 import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
+import dev.slne.surf.player.paper.vanish.util.isVanished
 import kotlin.system.measureTimeMillis
 
 fun vanishCommand() = commandTree("vanish") {
     withPermission(VanishPermissionRegistry.VANISH_COMMAND)
 
     playerExecutor { player, _ ->
-        if (vanishService.isVanished(player)) {
-            vanishService.reappear(player)
+        if (player.isVanished) {
+            VanishService.reappear(player)
             player.sendText {
                 appendSuccessPrefix()
                 success("Du bist nun sichtbar.")
             }
         } else {
-            vanishService.vanish(player)
+            VanishService.vanish(player)
             player.sendText {
                 appendNewInfoPrefixedLine()
                 darkSpacer("-".repeat(25))
@@ -47,14 +48,14 @@ fun vanishCommand() = commandTree("vanish") {
 
     literalArgument("spectate") {
         playerExecutor { player, _ ->
-            if (vanishService.isSpectating(player.uniqueId)) {
-                vanishService.stopSpectateMode(player)
+            if (VanishService.isSpectating(player.uniqueId)) {
+                VanishService.stopSpectateMode(player)
                 player.sendText {
                     appendSuccessPrefix()
                     success("Du bist nun nicht mehr im SpectateMode.")
                 }
             } else {
-                vanishService.startSpectateMode(player)
+                VanishService.startSpectateMode(player)
                 player.sendText {
                     appendSuccessPrefix()
                     success("Du bist nun im SpectateMode.")
@@ -67,7 +68,7 @@ fun vanishCommand() = commandTree("vanish") {
         withPermission(VanishPermissionRegistry.VANISH_COMMAND_RELOAD)
         anyExecutor { executor, _ ->
             val ms = measureTimeMillis {
-                plugin.vanishConfig.reload()
+                reloadVanishConfig()
             }
 
             executor.sendText {

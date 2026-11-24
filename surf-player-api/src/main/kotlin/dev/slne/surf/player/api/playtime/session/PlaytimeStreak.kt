@@ -10,9 +10,4 @@ data class PlaytimeStreak(
     val currentLoginStreak: Int,
     val longestLoginStreak: Int,
     val lastLoginDate: SerializableLocalDate?
-) {
-    data class SimpleStreak(
-        val currentLoginStreak: Int,
-        val longestLoginStreak: Int
-    )
-}
+)

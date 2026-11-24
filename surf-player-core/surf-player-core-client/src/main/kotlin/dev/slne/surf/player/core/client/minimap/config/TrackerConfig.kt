@@ -8,10 +8,10 @@ data class TrackerConfig(
     @param:Comment("Shows every player on this server on everyone's map, like Xaero's everyone_tracks_everyone.")
     val everyoneTracksEveryone: Boolean = false,
 
-    @param:Comment("Shows players their friends from surf-friends. Needs surf-friends-paper on this server.")
+    @param:Comment("Shows players their friends. Paper only.")
     val friends: Boolean = false,
 
-    @param:Comment("Shows players the members of their clan from surf-clan. Needs surf-clan-paper on this server.")
+    @param:Comment("Shows players the members of their clan. Paper only.")
     val clanMembers: Boolean = false,
 ) {
     /**

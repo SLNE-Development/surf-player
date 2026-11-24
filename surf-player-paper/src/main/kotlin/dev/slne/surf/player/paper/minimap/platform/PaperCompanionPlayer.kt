@@ -1,7 +1,7 @@
 package dev.slne.surf.player.paper.minimap.platform
 
 import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
-import dev.slne.surf.player.paper.minimap.plugin
+import dev.slne.surf.player.paper.plugin
 import org.bukkit.World
 import org.bukkit.entity.Player
 

@@ -9,7 +9,8 @@ import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
-import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.appendDelete
 import dev.slne.surf.player.core.client.chat.message.format.appendName
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
@@ -159,7 +160,7 @@ object MinestomMessageFormatter {
                 .build()
         )
 
-        if (viewerMentioned && SettingsHook.hasChatPingsEnabled(viewerUuid)) {
+        if (viewerMentioned && SurfSettingsApi.getSettingValue(viewerUuid, SettingKeys.CHAT_PINGS)) {
             ChatPlatform.playPingSound(viewerUuid)
         }
 

@@ -54,7 +54,7 @@ class CompanionConfigsTest {
             FakeFile("voxelmap.yml", VoxelMapConfig()) { voxelMap }.reloadable(),
         )
 
-        assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
+        assertIs<ReloadResult.Reloaded>(result)
         assertSame(main, result.config)
         assertSame(xaero, result.xaero)
         assertSame(XaeroServerProfile.of(xaero, result.globalSettings), result.profile)
@@ -77,7 +77,7 @@ class CompanionConfigsTest {
             voxelMapFile().reloadable(),
         )
 
-        assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
+        assertIs<ReloadResult.Reloaded>(result)
         assertEquals(mapOf<String, Any>("minimap_cave_mode_allowed" to false), result.profile.minimap.values)
         assertEquals(mapOf<String, Any>("cave_mode_allowed" to false), result.profile.worldMap.values)
         assertEquals(mapOf("caveMapping" to "NONE"), result.journeyMapProfile.values)
@@ -95,7 +95,7 @@ class CompanionConfigsTest {
             voxelMapFile().reloadable(),
         )
 
-        assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
+        assertIs<ReloadResult.Reloaded>(result)
         assertEquals(listOf("Unknown value \"flase\" for global-settings.radar, using per-mod"), result.globalSettings.warnings)
     }
 
@@ -108,7 +108,7 @@ class CompanionConfigsTest {
             voxelMapFile().reloadable(),
         )
 
-        assertIs<CompanionConfigs.ReloadResult.Reloaded>(result)
+        assertIs<ReloadResult.Reloaded>(result)
         assertSame(result.settings, CompanionConfigs.current)
     }
 
@@ -120,7 +120,7 @@ class CompanionConfigsTest {
             journeyMapFile().reloadable(),
             voxelMapFile().reloadable(),
         )
-        assertIs<CompanionConfigs.ReloadResult.Reloaded>(first)
+        assertIs<ReloadResult.Reloaded>(first)
 
         val failed = CompanionConfigs.reload(
             FakeFile("config.yml", MinimapCompanionConfig()) { MinimapCompanionConfig(disableMaps = true) }.reloadable(),
@@ -129,7 +129,7 @@ class CompanionConfigsTest {
             voxelMapFile().reloadable(),
         )
 
-        assertIs<CompanionConfigs.ReloadResult.Failed>(failed)
+        assertIs<ReloadResult.Failed>(failed)
         assertSame(first.settings, CompanionConfigs.current)
     }
 
@@ -141,7 +141,7 @@ class CompanionConfigsTest {
 
         val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable(), journeyMapFile().reloadable(), voxelMapFile().reloadable())
 
-        assertIs<CompanionConfigs.ReloadResult.Failed>(result)
+        assertIs<ReloadResult.Failed>(result)
         assertEquals("xaero.yml", result.fileName)
         assertTrue("mapping values are not allowed here" in result.reason, result.reason)
         assertSame(previous, main.current)
@@ -154,7 +154,7 @@ class CompanionConfigsTest {
 
         val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable(), journeyMapFile().reloadable(), voxelMapFile().reloadable())
 
-        assertIs<CompanionConfigs.ReloadResult.Failed>(result)
+        assertIs<ReloadResult.Failed>(result)
         assertEquals("config.yml", result.fileName)
         assertEquals(0, xaero.loads)
     }
@@ -169,7 +169,7 @@ class CompanionConfigsTest {
 
         val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable(), journeyMap.reloadable(), voxelMapFile().reloadable())
 
-        assertIs<CompanionConfigs.ReloadResult.Failed>(result)
+        assertIs<ReloadResult.Failed>(result)
         assertEquals("journeymap.yml", result.fileName)
         assertSame(previousMain, main.current)
         assertSame(previousXaero, xaero.current)
@@ -187,7 +187,7 @@ class CompanionConfigsTest {
 
         val result = CompanionConfigs.reload(main.reloadable(), xaero.reloadable(), journeyMap.reloadable(), voxelMap.reloadable())
 
-        assertIs<CompanionConfigs.ReloadResult.Failed>(result)
+        assertIs<ReloadResult.Failed>(result)
         assertEquals("voxelmap.yml", result.fileName)
         assertSame(previousMain, main.current)
         assertSame(previousXaero, xaero.current)

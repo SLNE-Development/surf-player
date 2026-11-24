@@ -9,6 +9,7 @@ import dev.slne.surf.api.minestom.inventory.framework.dsl.onItemRender
 import dev.slne.surf.api.minestom.inventory.framework.dsl.openForPlayer
 import dev.slne.surf.api.minestom.inventory.framework.dsl.slot
 import dev.slne.surf.api.minestom.inventory.framework.modifyConfig
+import dev.slne.surf.api.minestom.inventory.framework.open
 import dev.slne.surf.api.minestom.inventory.framework.view.AbstractSurfView
 import dev.slne.surf.api.minestom.inventory.framework.view.container.dsl.blockRow
 import dev.slne.surf.api.minestom.inventory.framework.view.containerDefaults
@@ -27,18 +28,17 @@ import dev.slne.surf.api.minestom.inventory.framework.view.settings.PaginationVi
 import dev.slne.surf.api.minestom.inventory.framework.view.state.get
 import dev.slne.surf.api.minestom.inventory.framework.view.state.initialState
 import dev.slne.surf.api.minestom.inventory.framework.view.surfView
-import dev.slne.surf.player.api.settings.setting.PlayerSetting
-import dev.slne.surf.player.core.client.settings.platform.SettingsPlatform
-import dev.slne.surf.player.core.common.settings.service.SettingsService
+import dev.slne.surf.player.core.client.settings.menu.SettingCategory
+import dev.slne.surf.player.core.client.settings.menu.SettingsMenuDrafts
+import dev.slne.surf.player.core.client.settings.menu.settingKeyMappings
+import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
+import net.minestom.server.entity.Player
+import net.minestom.server.item.Material
 import net.minestom.server.sound.SoundEventKeys
-import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 private const val CATEGORY_STATE = "category"
-
-private val draftSettings = ConcurrentHashMap<UUID, ConcurrentHashMap<String, PlayerSetting>>()
 
 val settingsView: AbstractSurfView = surfView("Einstellungen") {
     settings {
@@ -102,12 +102,7 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
 
     pagination {
         computedSource { context ->
-            val category = categoryState[context]
-
-            SettingsService.getLoadedSettingsWithDefaults(context.player.uuid)
-                .filter { it.setting.defaultValue.toBooleanStrictOrNull() != null }
-                .filter { settingKeyMappings[it.setting.name]?.category == category }
-                .sortedBy { settingKeyMappings.keys.indexOf(it.setting.name) }
+            SettingsMenuDrafts.categorySettings(context.player.uuid, categoryState[context])
         }
 
         itemFactory { playerSetting ->
@@ -127,11 +122,9 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
             }
 
             onItemRender {
-                val currentValue =
-                    draftSettings[player.uuid]?.get(playerSetting.setting.name)?.getBoolean()
-                        ?: playerSetting.getBoolean()
+                val currentValue = SettingsMenuDrafts.currentValue(player.uuid, playerSetting)
 
-                item = buildItem(display.material) {
+                item = buildItem(display.icon.toMaterial()) {
                     displayName {
                         white(display.displayName.toSmallCaps())
                     }
@@ -160,20 +153,7 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
                 }
             }
             onClick { click ->
-                val currentValue =
-                    draftSettings[click.player.uuid]?.get(playerSetting.setting.name)?.getBoolean()
-                        ?: playerSetting.getBoolean()
-
-                val newValue = !currentValue
-
-                draftSettings.compute(click.player.uuid) { _, settings ->
-                    val updatedSettings = settings ?: ConcurrentHashMap()
-                    updatedSettings[playerSetting.setting.name] = PlayerSetting(
-                        playerSetting.setting,
-                        newValue.toString()
-                    )
-                    updatedSettings
-                }
+                SettingsMenuDrafts.toggle(click.player.uuid, playerSetting)
 
                 click.player.playSound(true) {
                     type(SoundEventKeys.UI_BUTTON_CLICK.key())
@@ -185,21 +165,21 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
     }
 
     onClose {
-        val playerUuid = this.player.uuid
-        val changedSettings = draftSettings.remove(playerUuid) ?: return@onClose
-
-        SettingsPlatform.launchAsync {
-            changedSettings.forEach { (_, setting) ->
-                SettingsService.cachePlayerSetting(playerUuid, setting)
-                SettingsService.savePlayerSetting(
-                    playerUuid, setting
-                )
-            }
-        }
+        SettingsMenuDrafts.save(player.uuid)
     }
 }
 
-private fun buildCategoryItem(category: SettingCategory) = buildItem(category.material) {
+/**
+ * Closes the open inventory of this player and opens the settings menu instead.
+ */
+fun Player.openSettingsMenu() {
+    closeInventory()
+    settingsView.open(this)
+}
+
+private fun Key.toMaterial(): Material = Material.fromKey(this) ?: error("Unknown item type $this")
+
+private fun buildCategoryItem(category: SettingCategory) = buildItem(category.icon.toMaterial()) {
     displayName {
         white(category.displayName.toSmallCaps())
     }

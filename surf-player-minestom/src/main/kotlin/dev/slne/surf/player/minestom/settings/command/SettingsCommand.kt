@@ -3,19 +3,19 @@ package dev.slne.surf.player.minestom.settings.command
 import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.literalArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
-import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.core.client.settings.command.SettingsCommandActions
 import dev.slne.surf.player.core.client.settings.command.SettingsCommandMessages
 import dev.slne.surf.player.core.client.settings.permission.SettingsPermissions
 import dev.slne.surf.player.minestom.settings.command.argument.niceToggleArgument
 import dev.slne.surf.player.minestom.settings.command.argument.settingArgument
+import dev.slne.surf.player.minestom.settings.menu.openSettingsMenu
 
 fun settingsCommand() = commandTree("settings") {
     withPermission(SettingsPermissions.COMMAND_SETTINGS)
 
     playerExecutor { player, _ ->
-        SurfSettingsApi.openSettingsGui(player.uuid)
+        player.openSettingsMenu()
     }
 
     settingArgument("setting") {

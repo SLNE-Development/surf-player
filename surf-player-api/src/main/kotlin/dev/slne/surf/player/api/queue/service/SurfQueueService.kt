@@ -1,9 +1,8 @@
 package dev.slne.surf.player.api.queue.service
 
+import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.player.api.queue.InternalSurfQueueApi
 import dev.slne.surf.player.api.queue.SurfQueue
-import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.api.core.util.requiredService
 
 /**
  * Internal service interface responsible for creating and caching [SurfQueue] instances.

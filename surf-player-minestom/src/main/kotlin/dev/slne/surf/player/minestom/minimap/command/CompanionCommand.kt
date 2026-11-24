@@ -9,6 +9,7 @@ import dev.slne.surf.player.core.client.minimap.command.MapInfo
 import dev.slne.surf.player.core.client.minimap.command.sendMapInfo
 import dev.slne.surf.player.core.client.minimap.command.sendReloadResult
 import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.player.core.client.minimap.config.ReloadResult
 import dev.slne.surf.player.core.client.minimap.permission.CompanionPermissions
 import dev.slne.surf.player.core.client.minimap.service.MapSyncService
 import dev.slne.surf.player.minestom.minimap.platform.MinestomCompanionPlayer
@@ -26,7 +27,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
             minestomBlockingScope.launch {
                 val result = CompanionConfigs.reload()
 
-                if (result is CompanionConfigs.ReloadResult.Reloaded) {
+                if (result is ReloadResult.Reloaded) {
                     for (player in MinecraftServer.getConnectionManager().onlinePlayers) {
                         // The player's instance is only safe to read in their own tick. The settings are read then
                         // too, so a later reload that overtook this one wins.

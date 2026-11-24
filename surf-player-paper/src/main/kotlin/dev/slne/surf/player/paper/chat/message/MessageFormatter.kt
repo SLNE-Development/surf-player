@@ -9,7 +9,8 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.core.client.chat.config.chatConfig
-import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.appendDelete
 import dev.slne.surf.player.core.client.chat.util.formatTime
 import dev.slne.surf.player.core.client.chat.util.updateLinks
@@ -223,7 +224,7 @@ object MessageFormatter {
                 .build()
         )
 
-        if (viewerMentioned && SettingsHook.hasChatPingsEnabled(viewerUuid)) {
+        if (viewerMentioned && SurfSettingsApi.getSettingValue(viewerUuid, SettingKeys.CHAT_PINGS)) {
             viewer.playPingSound()
         }
 

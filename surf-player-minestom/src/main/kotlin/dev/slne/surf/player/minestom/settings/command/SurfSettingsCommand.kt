@@ -6,7 +6,7 @@ import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.literalArgument
 import dev.slne.surf.player.core.client.settings.command.SettingsCommandMessages
 import dev.slne.surf.player.core.client.settings.permission.SettingsPermissions
-import dev.slne.surf.player.core.common.settings.service.SettingsService
+import dev.slne.surf.player.core.client.settings.service.SettingsService
 import kotlin.system.measureTimeMillis
 
 fun surfSettingsCommand() = commandTree("surfSettings") {

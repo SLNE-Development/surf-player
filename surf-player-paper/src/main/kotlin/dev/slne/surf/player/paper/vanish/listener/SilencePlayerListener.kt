@@ -2,7 +2,7 @@ package dev.slne.surf.player.paper.vanish.listener
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent
 import dev.slne.surf.api.paper.event.cancel
-import dev.slne.surf.player.paper.vanish.core.service.vanishService
+import dev.slne.surf.player.paper.vanish.util.isVanished
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -18,14 +18,14 @@ import org.bukkit.event.raid.RaidTriggerEvent
 object SilencePlayerListener : Listener {
     @EventHandler
     fun onPickup(event: PlayerAttemptPickupItemEvent) {
-        if (vanishService.isVanished(event.player)) {
+        if (event.player.isVanished) {
             event.cancel()
         }
     }
 
     @EventHandler
     fun onPressurePlateActive(event: PlayerInteractEvent) {
-        if (!vanishService.isVanished(event.player)) {
+        if (!event.player.isVanished) {
             return
         }
 
@@ -40,7 +40,7 @@ object SilencePlayerListener : Listener {
     fun onEntityTarget(event: EntityTargetEvent) {
         val target = event.target as? Player ?: return
 
-        if (vanishService.isVanished(target)) {
+        if (target.isVanished) {
             event.cancel()
         }
     }
@@ -48,21 +48,21 @@ object SilencePlayerListener : Listener {
 
     @EventHandler
     fun onDrop(event: PlayerDropItemEvent) {
-        if (vanishService.isVanished(event.player)) {
+        if (event.player.isVanished) {
             event.cancel()
         }
     }
 
     @EventHandler
     fun onPickupArrow(event: PlayerPickupArrowEvent) {
-        if (vanishService.isVanished(event.player)) {
+        if (event.player.isVanished) {
             event.cancel()
         }
     }
 
     @EventHandler
     fun onRaidTrigger(event: RaidTriggerEvent) {
-        if (vanishService.isVanished(event.player)) {
+        if (event.player.isVanished) {
             event.cancel()
         }
     }
@@ -72,7 +72,7 @@ object SilencePlayerListener : Listener {
         val entity = event.entity
 
         if (entity is Player) {
-            if (vanishService.isVanished(entity)) {
+            if (entity.isVanished) {
                 event.cancel()
             }
         }
@@ -83,7 +83,7 @@ object SilencePlayerListener : Listener {
         val entity = event.entity
 
         if (entity is Player) {
-            if (vanishService.isVanished(entity)) {
+            if (entity.isVanished) {
                 event.cancel()
             }
         }
@@ -91,7 +91,7 @@ object SilencePlayerListener : Listener {
 
     @EventHandler
     fun onXpPickup(event: PlayerPickupExperienceEvent) {
-        if (vanishService.isVanished(event.player)) {
+        if (event.player.isVanished) {
             event.cancel()
         }
     }
@@ -101,7 +101,7 @@ object SilencePlayerListener : Listener {
         val entity = event.entity
 
         if (entity is Player) {
-            if (vanishService.isVanished(entity)) {
+            if (entity.isVanished) {
                 event.cancel()
             }
         }
@@ -109,14 +109,14 @@ object SilencePlayerListener : Listener {
 
     @EventHandler
     fun onBucketFill(event: PlayerBucketFillEvent) {
-        if (vanishService.isVanished(event.player)) {
+        if (event.player.isVanished) {
             event.cancel()
         }
     }
 
     @EventHandler
     fun onBucketEmpty(event: PlayerBucketEmptyEvent) {
-        if (vanishService.isVanished(event.player)) {
+        if (event.player.isVanished) {
             event.cancel()
         }
     }
@@ -126,7 +126,7 @@ object SilencePlayerListener : Listener {
         val entity = event.entity
 
         if (entity is Player) {
-            if (vanishService.isVanished(entity)) {
+            if (entity.isVanished) {
                 event.cancel()
             }
         }

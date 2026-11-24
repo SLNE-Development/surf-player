@@ -10,7 +10,8 @@ import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.player.api.chat.message.MessageContext
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
-import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.formatIncomingPm
 import dev.slne.surf.player.core.client.chat.message.format.formatOutgoingPm
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
@@ -95,7 +96,7 @@ object DirectMessageService {
         messageData: MessageData,
         message: SignedMessage,
     ) {
-        if (!SettingsHook.hasDirectMessagesEnabled(target.uuid)) return
+        if (!SurfSettingsApi.getSettingValue(target.uuid, SettingKeys.DIRECT_MESSAGES)) return
 
         target.sendSignedMessage(
             message,
@@ -103,7 +104,7 @@ object DirectMessageService {
             formatIncomingPm(messageData)
         )
 
-        if (SettingsHook.hasChatPingsEnabled(target.uuid)) {
+        if (SurfSettingsApi.getSettingValue(target.uuid, SettingKeys.CHAT_PINGS)) {
             ChatPlatform.playPingSound(target.uuid)
         }
     }
@@ -137,7 +138,7 @@ object DirectMessageService {
         val target = messageData.receiver
             ?.let { ConnectionManager.getOnlinePlayerByUuid(it) } ?: return false
 
-        if (!SettingsHook.hasDirectMessagesEnabled(target.uuid)) return true
+        if (!SurfSettingsApi.getSettingValue(target.uuid, SettingKeys.DIRECT_MESSAGES)) return true
 
         val senderUser = messageData.senderUser()
 
@@ -147,7 +148,7 @@ object DirectMessageService {
             text(senderUser.username)
         )
 
-        if (SettingsHook.hasChatPingsEnabled(target.uuid)) {
+        if (SurfSettingsApi.getSettingValue(target.uuid, SettingKeys.CHAT_PINGS)) {
             ChatPlatform.playPingSound(target.uuid)
         }
 

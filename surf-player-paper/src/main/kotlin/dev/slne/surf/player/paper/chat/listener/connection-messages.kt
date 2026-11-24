@@ -2,7 +2,8 @@ package dev.slne.surf.player.paper.chat.listener
 
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.api.paper.util.forEachPlayer
-import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
@@ -26,7 +27,7 @@ fun broadcastConnectionMessage(player: Player, message: Component) {
     }
 
     forEachPlayer { viewer ->
-        if (SettingsHook.hasConnectionMessagesEnabled(viewer.uniqueId)) {
+        if (SurfSettingsApi.getSettingValue(viewer.uniqueId, SettingKeys.CONNECTION_MESSAGES)) {
             viewer.sendMessage(message)
         }
     }

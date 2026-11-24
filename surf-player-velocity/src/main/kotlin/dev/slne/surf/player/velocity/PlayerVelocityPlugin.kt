@@ -8,9 +8,12 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.annotation.DataDirectory
+import com.velocitypowered.api.proxy.ProxyServer
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.velocity.clan.ClanVelocityFeature
 import dev.slne.surf.player.velocity.connection.ConnectionVelocityFeature
+import dev.slne.surf.player.velocity.queue.QueueVelocityFeature
+import dev.slne.surf.player.velocity.settings.SettingsVelocityFeature
 import kotlinx.coroutines.CancellationException
 import org.slf4j.Logger
 import java.nio.file.Path
@@ -22,6 +25,7 @@ val plugin get() = PlayerVelocityPlugin.instance
  * and forwards the plugin lifecycle to them.
  */
 class PlayerVelocityPlugin @Inject constructor(
+    val proxy: ProxyServer,
     val eventManager: EventManager,
     val container: PluginContainer,
     val logger: Logger,
@@ -29,8 +33,10 @@ class PlayerVelocityPlugin @Inject constructor(
     suspendingPluginContainer: SuspendingPluginContainer
 ) {
     private val features: List<VelocityPlayerFeature> = listOf(
+        SettingsVelocityFeature,
         ClanVelocityFeature,
         ConnectionVelocityFeature,
+        QueueVelocityFeature,
     )
 
     init {

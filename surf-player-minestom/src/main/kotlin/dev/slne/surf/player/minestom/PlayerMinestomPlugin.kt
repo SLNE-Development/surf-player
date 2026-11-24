@@ -7,7 +7,12 @@ import dev.slne.surf.player.minestom.chat.ChatMinestomFeature
 import dev.slne.surf.player.minestom.clan.ClanMinestomFeature
 import dev.slne.surf.player.minestom.contentcreator.ContentCreatorMinestomFeature
 import dev.slne.surf.player.minestom.friends.FriendsMinestomFeature
+import dev.slne.surf.player.minestom.minimap.MinimapMinestomFeature
 import dev.slne.surf.player.minestom.nametag.NametagMinestomFeature
+import dev.slne.surf.player.minestom.playtime.PlaytimeMinestomFeature
+import dev.slne.surf.player.minestom.profile.ProfileMinestomFeature
+import dev.slne.surf.player.minestom.queue.QueueMinestomFeature
+import dev.slne.surf.player.minestom.settings.SettingsMinestomFeature
 import dev.slne.surf.player.minestom.tab.TabMinestomFeature
 import kotlinx.coroutines.CancellationException
 import net.minestom.server.event.player.PlayerDisconnectEvent
@@ -20,12 +25,17 @@ import net.minestom.server.event.player.PlayerSpawnEvent
  */
 object PlayerMinestomPlugin : SurfMinestomPlugin() {
     private val features: List<MinestomPlayerFeature> = listOf(
+        SettingsMinestomFeature,
+        PlaytimeMinestomFeature,
         ChatMinestomFeature,
         FriendsMinestomFeature,
         ClanMinestomFeature,
         ContentCreatorMinestomFeature,
         NametagMinestomFeature,
         TabMinestomFeature,
+        ProfileMinestomFeature,
+        MinimapMinestomFeature,
+        QueueMinestomFeature,
     )
 
     override suspend fun onLoad() {

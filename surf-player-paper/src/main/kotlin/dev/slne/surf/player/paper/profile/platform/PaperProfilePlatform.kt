@@ -5,8 +5,8 @@ import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.inventory.framework.open
 import dev.slne.surf.player.core.client.profile.platform.ProfilePlatform
+import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.profile.menu.own.ownProfileMenu
-import dev.slne.surf.player.paper.profile.plugin
 import net.kyori.adventure.util.Services
 import org.bukkit.Bukkit
 import java.util.*

@@ -7,10 +7,11 @@ import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.player.api.queue.SurfQueue
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.velocity.plugin
 import dev.slne.surf.player.velocity.queue.config.VelocityQueueConfig
-import dev.slne.surf.player.velocity.queue.hook.SettingsHook
-import dev.slne.surf.player.velocity.queue.plugin
 import dev.slne.surf.player.velocity.queue.queue.VelocityQueueImpl
 import dev.slne.surf.player.velocity.queue.reconnect.QueueReconnectStore
 import kotlinx.coroutines.coroutineScope
@@ -24,7 +25,7 @@ object QueuePlayerListener {
     suspend fun onPostLogin(event: PostLoginEvent) {
         val uuid = event.player.uniqueId
         coroutineScope {
-            for (queue in RedisQueueService.get().getAll()) {
+            for (queue in RedisQueueService.getAll()) {
                 require(queue is VelocityQueueImpl) { "Queue must be VelocityQueueImpl" }
                 launch {
                     try {
@@ -82,7 +83,7 @@ object QueuePlayerListener {
         }
 
         val autoQueueEnabled = try {
-            SettingsHook.hasAutoQueueAfterReconnectEnabled(uuid)
+            SurfSettingsApi.getCachedValueOrLoad(uuid, SettingKeys.AUTO_QUEUE_AFTER_RECONNECT)
         } catch (e: Exception) {
             QueueReconnectStore.remove(uuid)
 
@@ -141,7 +142,7 @@ object QueuePlayerListener {
         storeReconnectEntry(event)
 
         coroutineScope {
-            for (queue in RedisQueueService.get().getAll()) {
+            for (queue in RedisQueueService.getAll()) {
                 require(queue is VelocityQueueImpl)
                 launch {
                     try {

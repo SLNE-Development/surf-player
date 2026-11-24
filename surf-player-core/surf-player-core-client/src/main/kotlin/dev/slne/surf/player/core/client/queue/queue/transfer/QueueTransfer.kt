@@ -22,28 +22,23 @@ class QueueTransfer(private val serverName: String) {
         private val CONNECT_TIMEOUT = 30.seconds
     }
 
-    sealed interface Preparation {
-        class Ready(val player: SurfPlayer) : Preparation
-        class Rejected(val action: TransferAction) : Preparation
-    }
-
-    fun prepare(uuid: UUID): Preparation {
+    fun prepare(uuid: UUID): TransferPreparation {
         try {
             val corePlayer = SurfCoreApi.getPlayer(uuid)
-                ?: return Preparation.Rejected(TransferAction.PLAYER_NOT_FOUND)
+                ?: return TransferPreparation.Rejected(TransferAction.PLAYER_NOT_FOUND)
             val currentPlayerServerName = corePlayer.currentServer?.name
-                ?: return Preparation.Rejected(TransferAction.PLAYER_NOT_CONNECTED_TO_A_SERVER) // Probably transferring to another proxy
+                ?: return TransferPreparation.Rejected(TransferAction.PLAYER_NOT_CONNECTED_TO_A_SERVER) // Probably transferring to another proxy
 
             if (currentPlayerServerName == serverName) {
-                return Preparation.Rejected(TransferAction.PLAYER_ALREADY_ON_SERVER)
+                return TransferPreparation.Rejected(TransferAction.PLAYER_ALREADY_ON_SERVER)
             }
 
-            return Preparation.Ready(corePlayer)
+            return TransferPreparation.Ready(corePlayer)
         } catch (e: Exception) {
             log.atWarning()
                 .withCause(e)
                 .log("Error while preparing transfer of %s for queue %s", uuid, serverName)
-            return Preparation.Rejected(TransferAction.ERROR)
+            return TransferPreparation.Rejected(TransferAction.ERROR)
         }
     }
 

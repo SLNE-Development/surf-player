@@ -1,74 +1,212 @@
 # surf-player
 
-All social features of the SLNE network in one repository, one plugin per platform and one
+The player layer of the SLNE network: chat, friends, clans, tab list, nametags, profiles,
+settings, vanish, playtime, queue and more, shipped as one plugin per platform and one
 microservice.
 
-| Feature          | Formerly                | Packages (`dev.slne.surf.player.<layer>.<feature>`) |
-|------------------|-------------------------|-----------------------------------------------------|
-| `chat`           | surf-chat               | api, core.common, core.client, paper, minestom, microservice |
-| `clan`           | surf-clan               | api, core.common, core.client, paper, minestom, velocity, microservice, placeholder.expansion |
-| `friends`        | surf-friends            | api, core.common, core.client, paper, minestom, microservice |
-| `shrieker`       | surf-shrieker           | api, core.common, paper, microservice |
-| `tab`            | surf-tab                | api, core.client, paper, minestom |
-| `nametag`        | surf-nametag            | api, core.client, paper, minestom |
-| `contentcreator` | surf-content-creator    | api, core.client, paper, minestom |
-| `connection`     | surf-player (account linking) | api, core.common, core.client, velocity, microservice |
+Other plugins integrate through a single, platform-independent API: `surf-player-api`.
 
-The full git history of every former repository is preserved; `git log --follow` works across the
-move.
-
-## Modules
-
-| Module | Content |
-|--------|---------|
-| `surf-player-api` | Public API of every feature. Entry point: `dev.slne.surf.player.api.SurfPlayerApi` |
-| `surf-player-core:surf-player-core-common` | Code shared by clients and the microservice (rabbit packets, RPC interfaces, serializers) |
-| `surf-player-core:surf-player-core-client` | Client side logic and the shared `SurfPlayerClient` connection |
-| `surf-player-paper` | The Paper plugin `PlayerPaperPlugin` |
-| `surf-player-minestom` | The Minestom plugin `PlayerMinestomPlugin` |
-| `surf-player-velocity` | The Velocity plugin `PlayerVelocityPlugin` |
-| `surf-player-microservice` | The microservice `PlayerMicroservice` |
-| `surf-player-placeholder-expansion` | MiniPlaceholders expansion for clans |
+## Installation
 
 ```kotlin
-SurfPlayerApi.chat.registerChatProcessor(...)
-SurfPlayerApi.clans.clans.findClanByTag(...)
-SurfPlayerApi.connections.findConnection<TwitchConnection>(uuid)
+repositories {
+    maven("https://reposilite.slne.dev/releases")
+}
+
+dependencies {
+    compileOnly("dev.slne.surf.player:surf-player-api:<version>")
+}
 ```
 
-## Architecture
+Declare a dependency on the plugin of your platform so it is loaded before yours:
 
-- **One plugin per platform.** Every feature is a feature object (`PaperFeature`,
-  `MinestomPlayerFeature`, `VelocityPlayerFeature`) that the platform plugin loads in a fixed
-  order and disables in reverse.
-- **One connection.** All features share a single RabbitMQ client and a single Redis API named
-  `surf-player` (`dev.slne.surf.player.core.client.SurfPlayerClient`). The plugin connects RabbitMQ
-  before features load, Redis after all features registered their Redis listeners, and disconnects
-  once after all features are disabled.
-- **One microservice.** `PlayerMicroservice` owns one database connection and one RabbitMQ server
-  connection (`surf-player`). Each feature contributes its tables and handlers through a
-  `<Feature>MicroserviceModule`.
+```kotlin
+// Paper
+surfPaperPluginApi {
+    serverDependencies {
+        registerRequired("surf-player-paper")
+    }
+}
 
-## Migrating from the separate plugins
+// Minestom
+minestomPluginFile {
+    pluginDependencies {
+        register("surf-player-minestom")
+    }
+}
 
-- Remove `surf-chat-*`, `surf-clan-*`, `surf-friends-*`, `surf-shrieker-*`, `surf-tab-*`,
-  `surf-nametag-*`, `surf-content-creator-*` and the old `surf-player-*` jars; install
-  `surf-player-paper`, `surf-player-minestom` or `surf-player-velocity` instead.
-- Every feature now has its own subfolder in the plugin data folder, e.g.
-  `plugins/surf-chat-paper/config.yml` → `plugins/surf-player-paper/chat/config.yml`.
-  Move existing configs by hand. The shared RabbitMQ client config lives in the plugin root folder.
-- The RabbitMQ queue is `surf-player` for everything. The microservice and all clients must be
-  deployed together; old and new versions cannot talk to each other.
-- Deploy a single `surf-player-microservice` container instead of four. Configure one set of
-  `SURF_DATABASE_*` / `SURF_RABBITMQ_*` variables (same database as before).
-- Every feature keeps its tables in its own Postgres schema, exactly as before. The schema names
-  default to `surf-chat`, `surf-clan`, `surf-friends` and `surf-shrieker` and can be overridden with
-  `SURF_PLAYER_SCHEMA_CHAT`, `SURF_PLAYER_SCHEMA_CLAN`, `SURF_PLAYER_SCHEMA_FRIENDS` and
-  `SURF_PLAYER_SCHEMA_SHRIEKER`. **Set these to the `SURF_DATABASE_SCHEMA` values of the old
-  deployments** if they differ from the defaults. Connection accounts stay in `public.account`.
+// Velocity
+velocityPluginFile {
+    pluginDependencies {
+        register("surf-player-velocity")
+    }
+}
+```
+
+## Getting started
+
+Every feature is reachable through `SurfPlayerApi`:
+
+```kotlin
+import dev.slne.surf.player.api.SurfPlayerApi
+
+val clan = SurfPlayerApi.clans.clans.findClanByPlayer(player.uniqueId)
+val friends = SurfPlayerApi.friends.findPlayer(player.uniqueId).friendships
+val vanished = SurfPlayerApi.vanish.isVanished(player.uniqueId)
+```
+
+Each feature also has its own entry point (for example `SurfChatApi`, `ClanService`), which
+resolves to the same instance.
+
+### Conventions
+
+- **Players are identified by `UUID`.** The API never takes platform types such as Bukkit's
+  `Player`, so the same code runs on Paper, Minestom and Velocity.
+- **`suspend` means network.** Functions that may talk to the microservice or Redis are
+  `suspend`. Call them from a coroutine (e.g. mccoroutine on Paper), never from a blocking
+  context on the main thread.
+- **Results are sealed types.** Operations that can fail for expected reasons return a sealed
+  result instead of throwing, so the compiler makes you handle every case.
+- **Events are surf-api events.** Feature events extend `SurfEvent` and are listened to through
+  the surf-api event bus on every platform.
+
+## Features
+
+### Chat
+
+```kotlin
+SurfPlayerApi.chat.registerChatProcessor(object : PreChatProcessor {
+    override val order = 100
+
+    override fun process(context: MessageContext): MessageContext {
+        // modify or cancel the message before it is sent
+        return context
+    }
+})
+
+val ignored = SurfPlayerApi.chat.getIgnoreList(playerUuid)
+val history = SurfPlayerApi.chat.lookupHistory(filter)
+```
+
+`PreChatProcessor`s run before a message is delivered and may modify or cancel it;
+`PostChatProcessor`s run afterwards. `MessageRedirector`s can take over delivery entirely.
+
+### Friends
+
+```kotlin
+val self = SurfPlayerApi.friends.findPlayer(playerUuid)
+val target = SurfPlayerApi.friends.findPlayer(targetUuid)
+
+when (val result = self.sendFriendRequest(target)) {
+    is FriendRequestCreateResult.Success -> {}
+    is FriendRequestCreateResult.AlreadyFriends -> {}
+    is FriendRequestCreateResult.AlreadySentFriendRequest -> {}
+    is FriendRequestCreateResult.AlreadyReceivedFriendRequest -> {}
+    is FriendRequestCreateResult.OnCooldown -> println("retry in ${result.remaining}")
+    is FriendRequestCreateResult.Blocked -> {}
+}
+```
+
+Declining or withdrawing a request puts the sender on a cooldown for that target, and players
+who ignore each other cannot exchange requests.
+
+### Clans
+
+```kotlin
+val clan = Clan.byTag("SLNE") ?: return
+
+clan.invite(invitee = targetUuid, invitedBy = playerUuid)
+
+Clan.registerListener(ClanCreatedListener { created ->
+    logger.info("Clan ${created.name} was created")
+})
+```
+
+`SurfPlayerApi.clans` exposes the clan, member, invite and player services.
+
+### Tab list
+
+```kotlin
+object OnlineStaffPlaceholder : TabPlaceholder {
+    override val tagName = "online_staff"
+    override val updates = UpdateCondition.Every(10.seconds)
+    override fun value() = Component.text(onlineStaffCount())
+}
+
+SurfPlayerApi.tab.registerPlaceholder(OnlineStaffPlaceholder)
+```
+
+Registered placeholders can be used as `<online_staff>` in tab list templates. Use
+`UpdateCondition.OnDemand` together with `SurfPlayerApi.tab.invalidate(...)` for values that only
+change on known events. `TabEntryRenderEvent` lets you change a player's tab list name and order.
+
+### Nametags
+
+```kotlin
+SurfPlayerApi.nametags.setNametagVisibility(playerUuid, NametagVisibility.NEVER)
+SurfPlayerApi.nametags.resetNametagVisibility(playerUuid)
+```
+
+### Vanish
+
+```kotlin
+if (SurfPlayerApi.vanish.isVanished(playerUuid)) return
+
+val visible = onlinePlayers.filterNot { SurfPlayerApi.vanish.isVanished(it) }
+```
+
+Vanish is provided by the Paper plugin.
+
+### Content creators
+
+```kotlin
+SurfPlayerApi.contentCreators.registerStateChangeListener { playerUuid, platform, state ->
+    // a creator went live or offline
+}
+
+val liveTag = SurfPlayerApi.contentCreators.renderLiveTag(playerUuid)
+```
+
+### Account connections
+
+```kotlin
+val twitch = SurfPlayerApi.connections.findConnection<TwitchConnection>(playerUuid)
+val discord = SurfPlayerApi.connections.findConnection<DiscordConnection>(playerUuid)
+```
+
+## Platform support
+
+| Feature          | Paper | Minestom | Velocity |
+|------------------|:-----:|:--------:|:--------:|
+| Chat             | ✓     | ✓        |          |
+| Friends          | ✓     | ✓        |          |
+| Clans            | ✓     | ✓        | ✓        |
+| Tab list         | ✓     | ✓        |          |
+| Nametags         | ✓     | ✓        |          |
+| Vanish           | ✓     |          |          |
+| Content creators | ✓     | ✓        |          |
+| Connections      |       |          | ✓        |
+
+The API is available on every platform; calling a feature that is not provided by the running
+platform fails when the service is resolved.
+
+## Project layout
+
+| Directory | Artifact | Content |
+|-----------|----------|---------|
+| `api` | `surf-player-api` | Public API |
+| `core/core-common` | `surf-player-core-common` | Code shared by plugins and the microservice |
+| `core/core-client` | `surf-player-core-client` | Platform-independent plugin logic |
+| `runtime/paper` | `surf-player-paper` | Paper plugin |
+| `runtime/minestom` | `surf-player-minestom` | Minestom plugin |
+| `runtime/velocity` | `surf-player-velocity` | Velocity plugin |
+| `runtime/microservice` | `surf-player-microservice` | Microservice |
+| `runtime/placeholder-expansion` | `surf-player-placeholder-expansion` | MiniPlaceholders expansion |
 
 ## Building
 
 ```shell
 ./gradlew build
 ```
+
+Requires Java 25.

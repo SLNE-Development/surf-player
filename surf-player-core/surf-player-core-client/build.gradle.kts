@@ -19,9 +19,8 @@ dependencies {
 
     compileOnly(libs.luckperms.api)
     compileOnly(libs.mini.placeholders)
-    compileOnlyApi("dev.slne.surf.settings:surf-settings-api:+")
     compileOnly("dev.slne.surf.punish:surf-punish-api-common:+")
-    compileOnly("dev.slne.surf.playtime:surf-playtime-api-common:+")
+    compileOnly(libs.surf.transaction.api)
 
     api(libs.twitch4j)
     api(libs.openai) {

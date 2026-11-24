@@ -3,11 +3,12 @@ package dev.slne.surf.player.core.client.profile.menu.own
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
+import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.api.core.util.dateTimeFormatter
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.player.api.playtime.surfPlaytimeApi
-import dev.slne.surf.player.core.client.profile.integration.LuckPermsIntegration
-import dev.slne.surf.player.core.client.profile.util.formatSeconds
+import dev.slne.surf.player.core.client.playtime.command.formatSeconds
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.client.util.luckPermsPrefix
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.empty
 import net.kyori.adventure.text.TextComponent
@@ -48,13 +49,13 @@ object OwnProfileMenuContent {
     fun headLore(surfPlayer: SurfPlayer): Array<TextComponent> = arrayOf(
         empty(),
         rangLabel,
-        buildText { append(LuckPermsIntegration.getRang(surfPlayer.uuid)) },
+        buildText { append(miniMessage.deserialize(luckPermsPrefix(surfPlayer.uuid).ifEmpty { "/" })) },
 
         empty(),
         sessionLabel,
         buildText {
             note(
-                surfPlaytimeApi.getCurrentPlaytimeSession(surfPlayer.uuid)
+                PlaytimeService.currentSession(surfPlayer.uuid)
                     ?.durationSeconds
                     ?.formatSeconds() ?: "0s"
             )

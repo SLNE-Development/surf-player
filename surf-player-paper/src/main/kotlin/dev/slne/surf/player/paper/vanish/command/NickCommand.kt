@@ -3,7 +3,7 @@ package dev.slne.surf.player.paper.vanish.command
 import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.player.paper.vanish.core.service.NickService
+import dev.slne.surf.player.paper.vanish.service.NickService
 import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
 
 

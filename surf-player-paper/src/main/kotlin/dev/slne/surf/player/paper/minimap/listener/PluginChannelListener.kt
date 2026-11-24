@@ -5,7 +5,7 @@ import dev.slne.surf.player.core.client.minimap.service.MapSyncService
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
 import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
-import dev.slne.surf.player.paper.minimap.plugin
+import dev.slne.surf.player.paper.plugin
 
 /**
  * Registers the map mods' plugin channels, as a server with the mods does, and answers the requests clients send
@@ -36,9 +36,15 @@ object PluginChannelListener {
         messenger.registerIncomingPluginChannel(plugin, VoxelMapChannels.SETTINGS) { _, _, _ -> }
     }
 
+    /**
+     * Unregisters only the map mods' channels; other features of the plugin may use channels of their own.
+     */
     fun unregister() {
         val messenger = plugin.server.messenger
-        messenger.unregisterOutgoingPluginChannel(plugin)
-        messenger.unregisterIncomingPluginChannel(plugin)
+
+        for (channel in XaeroChannels.ALL + JourneyMapChannels.ANNOUNCED + VoxelMapChannels.SETTINGS) {
+            messenger.unregisterOutgoingPluginChannel(plugin, channel)
+            messenger.unregisterIncomingPluginChannel(plugin, channel)
+        }
     }
 }

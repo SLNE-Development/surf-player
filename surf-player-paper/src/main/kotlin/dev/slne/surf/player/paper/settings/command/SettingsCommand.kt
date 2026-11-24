@@ -11,10 +11,10 @@ import dev.slne.surf.player.core.client.settings.command.SettingsCommandMessages
 import dev.slne.surf.player.paper.settings.command.argument.niceToggleArgument
 import dev.slne.surf.player.paper.settings.command.argument.settingArgument
 import dev.slne.surf.player.paper.settings.menu.settingsView
-import dev.slne.surf.player.paper.settings.permission.PermissionRegistry
+import dev.slne.surf.player.paper.settings.permission.PaperSettingsPermissions
 
 fun settingsCommand() = commandTree("settings") {
-    withPermission(PermissionRegistry.COMMAND_SETTINGS)
+    withPermission(PaperSettingsPermissions.COMMAND_SETTINGS)
 
     playerExecutor { player, _ ->
         settingsView.open(player)

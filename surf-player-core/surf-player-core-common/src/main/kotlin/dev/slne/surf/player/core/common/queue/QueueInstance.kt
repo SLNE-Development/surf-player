@@ -1,65 +1,40 @@
 package dev.slne.surf.player.core.common.queue
 
-import dev.slne.surf.api.core.component.SurfComponentApi
 import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.player.core.common.queue.queue.AbstractQueue
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
 import dev.slne.surf.player.core.common.queue.queue.tick.QueueScheduler
-import dev.slne.surf.player.core.common.queue.redis.RedisInstance
+import dev.slne.surf.redis.RedisApi
 import org.jetbrains.annotations.MustBeInvokedByOverriders
 
 /**
- * Abstract base class that bootstraps the queue system.
+ * Bootstraps the queue system of one platform.
  *
- * Responsible for connecting to Redis, loading queue state, managing
- * [SurfComponentApi] lifecycle, and tearing down the [QueueTicker].
- * Platform-specific subclasses provide the [componentOwner] and implement
- * [createQueue] to return the appropriate [AbstractQueue] variant.
- *
- * Implementations are responsible for starting the [QueueTicker] at the
- * appropriate time during their platform's lifecycle.
+ * Platform-specific subclasses supply the shared [redisApi] and implement [createQueue] to return
+ * the appropriate [AbstractQueue] variant. The platform's queue feature drives the lifecycle:
+ * [enable] runs once Redis is connected, [disable] before it disconnects.
  */
-abstract class QueueInstance { // Implementations are responsible for starting the queue ticker task
-    /**
-     * The platform-specific owner object used with [SurfComponentApi], or `null` on platforms
-     * without component support, which skips the component lifecycle entirely.
-     */
-    protected open val componentOwner: Any? = null
+abstract class QueueInstance {
+    /** The Redis connection shared by every surf-player feature of the platform. */
+    abstract val redisApi: RedisApi
     abstract val queueScheduler: QueueScheduler
     abstract val isLoaded: Boolean
 
     /**
-     * Connects to Redis, fetches existing queues, and loads all [dev.slne.surf.api.shared.api.component.SurfComponent]s.
-     * Subclasses **must** call `super.load()`.
-     */
-    @MustBeInvokedByOverriders
-    open suspend fun load() {
-        RedisInstance.get().connect()
-        RedisQueueService.get().startRefreshing()
-        componentOwner?.let { SurfComponentApi.load(it) }
-    }
-
-    /**
-     * Enables all [dev.slne.surf.api.shared.api.component.SurfComponent]s. Subclasses **must** call `super.enable()`.
+     * Starts fetching the existing queues from Redis. Subclasses **must** call `super.enable()`.
      */
     @MustBeInvokedByOverriders
     open suspend fun enable() {
-        componentOwner?.let { SurfComponentApi.enable(it) }
+        RedisQueueService.startRefreshing()
     }
 
     /**
-     * Stops the [QueueTicker], disables all [dev.slne.surf.api.shared.api.component.SurfComponent]s, and disconnects
-     * from Redis. Subclasses **must** call `super.disable()`.
+     * Closes all queues and stops their ticking. Subclasses **must** call `super.disable()`.
      */
     @MustBeInvokedByOverriders
     open suspend fun disable() {
-        RedisQueueService.get().close()
-
-        componentOwner?.let { SurfComponentApi.disable(it) }
-
+        RedisQueueService.close()
         queueScheduler.close()
-
-        RedisInstance.get().disconnect()
     }
 
     /**

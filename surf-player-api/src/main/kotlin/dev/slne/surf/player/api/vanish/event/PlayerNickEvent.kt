@@ -1,20 +1,9 @@
 package dev.slne.surf.player.api.vanish.event
 
-import org.bukkit.Bukkit
-import org.bukkit.event.Event
-import org.bukkit.event.HandlerList
+import dev.slne.surf.api.core.event.SurfSyncEvent
 import java.util.*
 
-class PlayerNickEvent(
-    val playerUuid: UUID,
-    val name: String
-) : Event() {
-    val player get() = Bukkit.getPlayer(playerUuid)
-
-    override fun getHandlers() = handlerList
-
-    companion object {
-        @JvmStatic
-        val handlerList = HandlerList()
-    }
-}
+/**
+ * Fired after the player identified by [playerUuid] has been nicked as [name].
+ */
+class PlayerNickEvent(val playerUuid: UUID, val name: String) : SurfSyncEvent()

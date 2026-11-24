@@ -1,7 +1,5 @@
 package dev.slne.surf.player.microservice.settings.repository
 
-import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
-import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
@@ -10,9 +8,7 @@ import dev.slne.surf.player.microservice.settings.table.SettingsTable
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 
-val settingRepository = SettingRepository()
-
-class SettingRepository {
+object SettingRepository {
     suspend fun loadSettings(): List<Setting> = suspendTransaction {
         SettingsTable.select(SettingsTable.name, SettingsTable.defaultValue).map {
             Setting(
@@ -29,9 +25,5 @@ class SettingRepository {
         }
 
         Setting(name, defaultValue)
-    }
-
-    suspend fun deleteSetting(name: String) = suspendTransaction {
-        SettingsTable.deleteWhere { SettingsTable.name eq name }
     }
 }

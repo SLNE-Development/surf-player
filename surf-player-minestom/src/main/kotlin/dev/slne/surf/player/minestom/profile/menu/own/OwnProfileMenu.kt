@@ -7,8 +7,8 @@ import dev.slne.surf.api.minestom.inventory.framework.view.onFirstRender
 import dev.slne.surf.api.minestom.inventory.framework.view.settings
 import dev.slne.surf.api.minestom.inventory.framework.view.surfView
 import dev.slne.surf.core.api.minestom.util.toSurfPlayer
-import dev.slne.surf.player.core.client.profile.integration.SettingsIntegration
 import dev.slne.surf.player.core.client.profile.menu.own.OwnProfileMenuContent
+import dev.slne.surf.player.minestom.settings.menu.openSettingsMenu
 import dev.slne.surf.player.minestom.profile.menu.playClickSound
 import net.minestom.server.component.DataComponents
 import net.minestom.server.entity.Player
@@ -49,7 +49,7 @@ val ownProfileMenu = surfView(OwnProfileMenuContent.TITLE) {
 
             onClick { click ->
                 click.playClickSound()
-                SettingsIntegration.openMenu(click.player.uuid)
+                click.player.openSettingsMenu()
             }
         }
     }

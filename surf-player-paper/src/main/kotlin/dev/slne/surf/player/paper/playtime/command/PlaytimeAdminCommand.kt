@@ -5,20 +5,17 @@ import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.player.core.client.playtime.command.*
-import dev.slne.surf.player.core.client.playtime.config.playtimeConfig
-import dev.slne.surf.player.core.client.playtime.config.playtimeConfigManager
+import dev.slne.surf.player.core.client.playtime.config.PlaytimeConfigManager
 import dev.slne.surf.player.core.client.playtime.permission.PlaytimePermissions
-import dev.slne.surf.player.core.common.playtime.service.PayCheckService
-import dev.slne.surf.player.core.common.playtime.service.PlaytimeStreakService
-import dev.slne.surf.player.paper.playtime.plugin
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeStreakService
+import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.Deferred
 
 fun playtimeAdminCommand() = commandTree("playtimeadmin") {
     withPermission(PlaytimePermissions.COMMAND_ADMIN)
     literalArgument("reload") {
         anyExecutor { sender, _ ->
-            playtimeConfigManager.reload()
-            PayCheckService.create(playtimeConfig)
+            PlaytimeConfigManager.reload()
 
             sender.sendConfigurationReloaded()
         }

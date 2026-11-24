@@ -1,6 +1,6 @@
 package dev.slne.surf.player.paper.vanish.listener
 
-import dev.slne.surf.player.paper.vanish.core.service.vanishService
+import dev.slne.surf.player.paper.vanish.service.VanishService
 import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
@@ -15,7 +15,7 @@ object GameModeChangeListener : Listener {
                 return
             }
 
-            if (vanishService.getFlyState(event.player.uniqueId)) {
+            if (VanishService.getFlyState(event.player.uniqueId)) {
                 event.player.allowFlight = true
                 event.player.isFlying = true
             }
@@ -24,7 +24,7 @@ object GameModeChangeListener : Listener {
                 return
             }
 
-            vanishService.setFlyState(event.player.uniqueId, event.player.isFlying)
+            VanishService.setFlyState(event.player.uniqueId, event.player.isFlying)
         }
     }
 }

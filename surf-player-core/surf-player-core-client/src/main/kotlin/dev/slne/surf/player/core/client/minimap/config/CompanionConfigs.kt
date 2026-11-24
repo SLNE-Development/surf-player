@@ -19,30 +19,33 @@ private fun <C> SpongeConfigClass<C>.reloadable(fileName: String) =
     ReloadableConfig(fileName, ::reloadFromFile, ::getConfig) { manager.config = it }
 
 /**
+ * The outcome of [CompanionConfigs.reload].
+ */
+sealed interface ReloadResult {
+    val duration: Duration
+
+    data class Reloaded(val settings: CompanionSettings, override val duration: Duration) : ReloadResult {
+        val config get() = settings.config
+        val globalSettings get() = settings.global
+        val xaero get() = settings.xaero
+        val profile get() = settings.xaeroProfile
+        val journeyMap get() = settings.journeyMap
+        val journeyMapProfile get() = settings.journeyMapProfile
+        val voxelMap get() = settings.voxelMap
+        val voxelMapProfile get() = settings.voxelMapProfile
+    }
+
+    /**
+     * [fileName] could not be read; every file keeps the config it had before.
+     */
+    data class Failed(val fileName: String, val reason: String, override val duration: Duration) : ReloadResult
+}
+
+/**
  * Loads the companion's config files: `config.yml` for every map mod, `xaero.yml` for Xaero's mods,
  * `journeymap.yml` for JourneyMap and `voxelmap.yml` for VoxelMap.
  */
 object CompanionConfigs {
-
-    sealed interface ReloadResult {
-        val duration: Duration
-
-        data class Reloaded(val settings: CompanionSettings, override val duration: Duration) : ReloadResult {
-            val config get() = settings.config
-            val globalSettings get() = settings.global
-            val xaero get() = settings.xaero
-            val profile get() = settings.xaeroProfile
-            val journeyMap get() = settings.journeyMap
-            val journeyMapProfile get() = settings.journeyMapProfile
-            val voxelMap get() = settings.voxelMap
-            val voxelMapProfile get() = settings.voxelMapProfile
-        }
-
-        /**
-         * [fileName] could not be read; every file keeps the config it had before.
-         */
-        data class Failed(val fileName: String, val reason: String, override val duration: Duration) : ReloadResult
-    }
 
     @Volatile
     private var settings: CompanionSettings? = null
@@ -101,26 +104,26 @@ object CompanionConfigs {
             ReloadResult.Failed(e.file.fileName, reason, start.elapsedNow())
         }
     }
+}
 
-    /**
-     * Loads files one after another and remembers how to put back the ones already loaded.
-     */
-    private class FileReload {
-        private val restores = mutableListOf<() -> Unit>()
+/**
+ * Loads files one after another and remembers how to put back the ones already loaded.
+ */
+private class FileReload {
+    private val restores = mutableListOf<() -> Unit>()
 
-        fun <C> load(file: ReloadableConfig<C>): C {
-            val previous = file.current()
-            val loaded = try {
-                file.load()
-            } catch (e: UncheckedIOException) {
-                throw FileFailed(file, e)
-            }
-            restores += { file.restore(previous) }
-            return loaded
+    fun <C> load(file: ReloadableConfig<C>): C {
+        val previous = file.current()
+        val loaded = try {
+            file.load()
+        } catch (e: UncheckedIOException) {
+            throw FileFailed(file, e)
         }
-
-        fun restore() = restores.forEach { it() }
+        restores += { file.restore(previous) }
+        return loaded
     }
 
-    private class FileFailed(val file: ReloadableConfig<*>, override val cause: UncheckedIOException) : Exception(cause)
+    fun restore() = restores.forEach { it() }
 }
+
+private class FileFailed(val file: ReloadableConfig<*>, override val cause: UncheckedIOException) : Exception(cause)

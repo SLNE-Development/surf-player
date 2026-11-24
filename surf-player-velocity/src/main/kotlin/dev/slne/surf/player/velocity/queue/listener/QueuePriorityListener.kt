@@ -5,7 +5,7 @@ import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.player.core.common.queue.QueueInstance
 import dev.slne.surf.player.core.common.queue.priority.LuckpermsPriorityResolver
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
-import dev.slne.surf.player.velocity.queue.plugin
+import dev.slne.surf.player.velocity.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ object QueuePriorityListener {
         if (priority <= 0) return
 
         scope.launch {
-            for (queue in RedisQueueService.get().getAll()) {
+            for (queue in RedisQueueService.getAll()) {
                 launch {
                     try {
                         queue.raisePriority(uuid, priority)

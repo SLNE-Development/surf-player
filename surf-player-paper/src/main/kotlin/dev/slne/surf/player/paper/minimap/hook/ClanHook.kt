@@ -5,7 +5,7 @@ import dev.slne.surf.player.core.client.minimap.tracker.RelationSource
 import java.util.*
 
 /**
- * Relates players to the members of their clan from surf-clan. Only load it when surf-clan-paper is enabled.
+ * Relates players to the members of their clan.
  */
 object ClanHook : RelationSource {
     override suspend fun related(player: UUID): Set<UUID> =

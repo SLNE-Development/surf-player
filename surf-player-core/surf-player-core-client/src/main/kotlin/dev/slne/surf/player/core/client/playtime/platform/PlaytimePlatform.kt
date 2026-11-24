@@ -13,6 +13,11 @@ private val platform = requiredService<PlaytimePlatform>()
  */
 interface PlaytimePlatform {
     /**
+     * Whether the optional surf-transaction plugin is available to pay out paychecks.
+     */
+    val transactionAvailable: Boolean
+
+    /**
      * Returns the online player with the given [playerUuid] as an [Audience], or `null` if they
      * are not online.
      */

@@ -15,11 +15,6 @@ interface TabPlatform {
      */
     val dataPath: Path
 
-    /**
-     * Whether the external surf-playtime plugin is present to tell which players are AFK.
-     */
-    val playtimeAvailable: Boolean
-
     fun onlinePlayers(): Collection<TabPlayer>
 
     fun onlinePlayerCount(): Int

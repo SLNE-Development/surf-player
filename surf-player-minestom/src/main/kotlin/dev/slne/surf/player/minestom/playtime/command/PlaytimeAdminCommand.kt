@@ -4,19 +4,16 @@ import dev.slne.surf.api.minestom.command.dsl.*
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.player.core.client.playtime.command.*
-import dev.slne.surf.player.core.client.playtime.config.playtimeConfig
-import dev.slne.surf.player.core.client.playtime.config.playtimeConfigManager
+import dev.slne.surf.player.core.client.playtime.config.PlaytimeConfigManager
 import dev.slne.surf.player.core.client.playtime.permission.PlaytimePermissions
-import dev.slne.surf.player.core.common.playtime.service.PayCheckService
-import dev.slne.surf.player.core.common.playtime.service.PlaytimeStreakService
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeStreakService
 import kotlinx.coroutines.Deferred
 
 fun playtimeAdminCommand() = commandTree("playtimeadmin") {
     withPermission(PlaytimePermissions.COMMAND_ADMIN)
     literalArgument("reload") {
         anyExecutorSuspend { sender, _ ->
-            PayCheckService.create(playtimeConfig)
-            playtimeConfigManager.reload()
+            PlaytimeConfigManager.reload()
 
             sender.sendConfigurationReloaded()
         }

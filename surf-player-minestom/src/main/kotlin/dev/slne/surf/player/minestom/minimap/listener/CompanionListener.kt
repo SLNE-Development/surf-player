@@ -15,7 +15,7 @@ import dev.slne.surf.player.minestom.minimap.platform.MinestomCompanionPlayer
 import dev.slne.surf.player.minestom.minimap.platform.RegisteredChannels
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
-import net.minestom.server.event.player.PlayerDisconnectEvent
+import net.minestom.server.entity.Player
 import net.minestom.server.event.player.PlayerPluginMessageEvent
 import net.minestom.server.event.player.PlayerRespawnEvent
 import net.minestom.server.event.player.PlayerSpawnEvent
@@ -55,22 +55,9 @@ object CompanionListener : EventRegistrar {
             }
         }
 
-        // Fires on the first spawn and on every instance change.
+        // Fires on the first spawn and on every instance change; the first spawn continues in onJoin.
         node.addListener<PlayerSpawnEvent> { event ->
-            val player = event.player
-            val companionPlayer = MinestomCompanionPlayer(player, event.instance)
-
-            MapSyncService.sync(companionPlayer)
-            if (!event.isFirstSpawn) return@addListener
-
-            tracker.reset(companionPlayer)
-
-            for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
-                player.scheduler().buildTask {
-                    val instance = player.instance ?: return@buildTask
-                    MapSyncService.sync(MinestomCompanionPlayer(player, instance))
-                }.delay(TaskSchedule.millis(delay.inWholeMilliseconds)).schedule()
-            }
+            MapSyncService.sync(MinestomCompanionPlayer(event.player, event.instance))
         }
 
         // The client drops every effect on respawn, and a respawn in the same instance fires no spawn event.
@@ -79,12 +66,27 @@ object CompanionListener : EventRegistrar {
             val instance = player.instance ?: return@addListener
             XaeroMapEffects.sync(MinestomCompanionPlayer(player, instance), CompanionConfigs.current.config.disableMaps)
         }
+    }
 
-        node.addListener<PlayerDisconnectEvent> { event ->
-            val uuid = event.player.uuid
-            RegisteredChannels.forget(uuid)
-            MapSyncService.forget(uuid)
-            tracker.forget(uuid)
+    /**
+     * Called on [player]'s first spawn, after the spawn listener synced them.
+     */
+    fun onJoin(player: Player) {
+        val instance = player.instance ?: return
+        tracker.reset(MinestomCompanionPlayer(player, instance))
+
+        for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
+            player.scheduler().buildTask {
+                val currentInstance = player.instance ?: return@buildTask
+                MapSyncService.sync(MinestomCompanionPlayer(player, currentInstance))
+            }.delay(TaskSchedule.millis(delay.inWholeMilliseconds)).schedule()
         }
+    }
+
+    fun onQuit(player: Player) {
+        val uuid = player.uuid
+        RegisteredChannels.forget(uuid)
+        MapSyncService.forget(uuid)
+        tracker.forget(uuid)
     }
 }

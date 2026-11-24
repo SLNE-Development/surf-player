@@ -25,6 +25,11 @@ class PlaytimeFormatTest {
     }
 
     @Test
+    fun `keeps hours unpadded beyond a day`() {
+        assertEquals("25h 00m 00s", (25 * 3600).toLong().formatSeconds())
+    }
+
+    @Test
     fun `parses iso dates`() {
         assertEquals(LocalDate.of(2026, 12, 31), parseDate("2026-12-31"))
     }

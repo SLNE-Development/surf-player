@@ -24,6 +24,8 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
  * | clan     | `surf-clan`     | `SURF_PLAYER_SCHEMA_CLAN`     |
  * | friends  | `surf-friends`  | `SURF_PLAYER_SCHEMA_FRIENDS`  |
  * | shrieker | `surf-shrieker` | `SURF_PLAYER_SCHEMA_SHRIEKER` |
+ * | settings | `surf-settings` | `SURF_PLAYER_SCHEMA_SETTINGS` |
+ * | playtime | `surf-playtime` | `SURF_PLAYER_SCHEMA_PLAYTIME` |
  *
  * The variables are read once, when this object initializes, which happens before any table
  * object initializes because the table names reference it. Changing them requires a restart.
@@ -37,6 +39,8 @@ object PlayerSchemas {
     val clan: String = schema("SURF_PLAYER_SCHEMA_CLAN", "surf-clan")
     val friends: String = schema("SURF_PLAYER_SCHEMA_FRIENDS", "surf-friends")
     val shrieker: String = schema("SURF_PLAYER_SCHEMA_SHRIEKER", "surf-shrieker")
+    val settings: String = schema("SURF_PLAYER_SCHEMA_SETTINGS", "surf-settings")
+    val playtime: String = schema("SURF_PLAYER_SCHEMA_PLAYTIME", "surf-playtime")
 
     private fun schema(envVar: String, default: String): String {
         val name = System.getenv(envVar)?.trim()?.takeIf { it.isNotEmpty() } ?: default

@@ -30,11 +30,11 @@ class MapInfoTest {
 
         assertEquals(
             listOf(
-                MapInfo.Mod.XAERO_MINIMAP to true,
-                MapInfo.Mod.XAERO_WORLD_MAP to false,
-                MapInfo.Mod.XAERO_LIB to true,
-                MapInfo.Mod.JOURNEYMAP to true,
-                MapInfo.Mod.VOXELMAP to false,
+                MapMod.XAERO_MINIMAP to true,
+                MapMod.XAERO_WORLD_MAP to false,
+                MapMod.XAERO_LIB to true,
+                MapMod.JOURNEYMAP to true,
+                MapMod.VOXELMAP to false,
             ),
             info.mods,
         )
@@ -87,7 +87,7 @@ class MapInfoTest {
             }
         }
         val player = FakePlayer(channels = setOf(XaeroChannels.MINIMAP))
-        val info = MapInfo.of(player, "Keviro", settings, MapInfo.Tracker(MapInfo.TrackerMode.RELATIONS, xaeroPlayers = 2))
+        val info = MapInfo.of(player, "Keviro", settings, MapTrackerInfo(MapTrackerMode.RELATIONS, xaeroPlayers = 2))
 
         audience.sendMapInfo(info)
         val text = messages.joinToString("\n") { PlainTextComponentSerializer.plainText().serialize(it) }

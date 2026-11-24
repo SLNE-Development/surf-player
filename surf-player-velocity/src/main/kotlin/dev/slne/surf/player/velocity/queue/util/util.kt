@@ -1,6 +1,6 @@
 package dev.slne.surf.player.velocity.queue.util
 
-import dev.slne.surf.player.velocity.queue.plugin
+import dev.slne.surf.player.velocity.plugin
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 

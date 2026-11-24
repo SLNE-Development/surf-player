@@ -4,9 +4,9 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.player.api.tab.event.TabEntryRenderEvent
 import dev.slne.surf.player.core.client.contentcreator.LiveTagRenderer
+import dev.slne.surf.player.core.client.playtime.afk.AfkService
 import dev.slne.surf.player.core.client.tab.hook.ClanHook
 import dev.slne.surf.player.core.client.tab.hook.LuckPermsHook
-import dev.slne.surf.player.core.client.tab.hook.SurfPlaytimeHook
 import dev.slne.surf.player.core.client.tab.platform.TabPlayer
 import dev.slne.surf.player.core.client.tab.platform.tabPlatform
 import dev.slne.surf.player.core.client.tab.service.UpdateCoalescer
@@ -205,7 +205,7 @@ class TabEntries {
     private fun liveTag(uuid: UUID): Component = LiveTagRenderer.render(uuid, space = true)
 
     private fun afkTag(uuid: UUID): TextComponent {
-        return if (tabPlatform.playtimeAvailable && SurfPlaytimeHook.isAfk(uuid)) afkTag else Component.empty()
+        return if (AfkService.isAfk(uuid)) afkTag else Component.empty()
     }
 
     /**

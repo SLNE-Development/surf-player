@@ -4,11 +4,12 @@ import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.glow.SurfGlowingApi
 import dev.slne.surf.api.paper.util.forEachPlayerInRegion
-import dev.slne.surf.player.paper.vanish.core.service.vanishService
-import dev.slne.surf.player.paper.vanish.config.VanishConfiguration
-import dev.slne.surf.player.paper.vanish.plugin
+import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.paper.vanish.service.VANISH_GLOW_COLOR
+import dev.slne.surf.player.paper.vanish.service.VanishService
 import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
 import dev.slne.surf.player.paper.vanish.util.canVanishSee
+import dev.slne.surf.player.paper.vanish.util.isVanished
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -27,27 +28,23 @@ object ConnectionListener : Listener {
 
         pendingFlyRestore.add(player.uniqueId)
 
-        if (vanishService.isVanished(player)) {
+        if (player.isVanished) {
             event.joinMessage(null)
         }
 
-        vanishService.allOnline().forEach { vanishedPlayer ->
+        VanishService.allOnline().forEach { vanishedPlayer ->
             if (!player.canVanishSee(vanishedPlayer)) {
                 player.hidePlayer(plugin, vanishedPlayer)
             }
         }
 
-        if (vanishService.isVanished(player)) {
-            if (vanishService.isSpectating(player.uniqueId)) {
-                vanishService.createAndShowScoreboard(player)
+        if (player.isVanished) {
+            if (VanishService.isSpectating(player.uniqueId)) {
+                VanishService.createAndShowScoreboard(player)
             }
 
-            vanishService.current(player)?.player?.let { currentPlayer ->
-                SurfGlowingApi.makeGlowing(
-                    currentPlayer,
-                    player,
-                    VanishConfiguration.GLOW_COLOR
-                )
+            VanishService.current(player)?.player?.let { currentPlayer ->
+                SurfGlowingApi.makeGlowing(currentPlayer, player, VANISH_GLOW_COLOR)
             }
 
             plugin.launch {
@@ -80,7 +77,7 @@ object ConnectionListener : Listener {
         }
 
         if (player.hasPermission(VanishPermissionRegistry.VANISH_SAVE_FLY_STATE)) {
-            if (vanishService.getFlyState(player.uniqueId)) {
+            if (VanishService.getFlyState(player.uniqueId)) {
                 player.allowFlight = true
                 player.isFlying = true
             }
@@ -92,10 +89,10 @@ object ConnectionListener : Listener {
         val player = event.player
 
         pendingFlyRestore.remove(player.uniqueId)
-        vanishService.hideAndDeleteScoreboard(player)
-        vanishService.setFlyState(player.uniqueId, player.isFlying)
+        VanishService.hideAndDeleteScoreboard(player)
+        VanishService.setFlyState(player.uniqueId, player.isFlying)
 
-        if (vanishService.isVanished(player)) {
+        if (player.isVanished) {
             event.quitMessage(null)
 
             Bukkit.getOnlinePlayers()

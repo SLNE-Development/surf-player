@@ -3,7 +3,8 @@ package dev.slne.surf.player.paper.minimap.tracker
 import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.player.core.client.minimap.command.MapInfo
+import dev.slne.surf.player.core.client.minimap.command.MapTrackerInfo
+import dev.slne.surf.player.core.client.minimap.command.MapTrackerMode
 import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
 import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapPlayer
 import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapTracker
@@ -14,12 +15,9 @@ import dev.slne.surf.player.core.client.minimap.tracker.TrackedPosition
 import dev.slne.surf.player.core.client.minimap.tracker.TrackerRelations
 import dev.slne.surf.player.paper.minimap.hook.ClanHook
 import dev.slne.surf.player.paper.minimap.hook.FriendsHook
-import dev.slne.surf.player.paper.minimap.hook.VanishHook
-import dev.slne.surf.player.paper.minimap.isClanHook
-import dev.slne.surf.player.paper.minimap.isFriendsHook
-import dev.slne.surf.player.paper.minimap.isVanishHook
 import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
-import dev.slne.surf.player.paper.minimap.plugin
+import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.paper.vanish.util.isVanished
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -57,9 +55,6 @@ object PaperTracker {
     @Volatile
     private var relationRefresh: Job? = null
 
-    @Volatile
-    private var isVanished: ((Player) -> Boolean)? = null
-
     private val joinedAt = ConcurrentHashMap<UUID, TimeSource.Monotonic.ValueTimeMark>()
 
     /**
@@ -73,13 +68,9 @@ object PaperTracker {
         everyoneTracksEveryone = config.everyoneTracksEveryone
         journeyMapRadar = config.isEnabled
 
-        if (isVanishHook) {
-            isVanished = VanishHook::isVanished
-        }
-
-        val sources = buildList {
-            if (config.friends) source("friends", "surf-friends-paper", isFriendsHook) { FriendsHook }?.let(::add)
-            if (config.clanMembers) source("clan-members", "surf-clan-paper", isClanHook) { ClanHook }?.let(::add)
+        val sources = buildList<RelationSource> {
+            if (config.friends) add(FriendsHook)
+            if (config.clanMembers) add(ClanHook)
         }
 
         // Built in full before it replaces the old relations, so a tick on another thread sees either, never none.
@@ -105,14 +96,6 @@ object PaperTracker {
         } else if (sources.isNotEmpty()) {
             log.atInfo().log("Xaero player tracker: %d relation source(s) active", sources.size)
         }
-    }
-
-    // The supplier keeps the hook's class, which needs the other plugin, from loading without it.
-    private fun source(option: String, pluginName: String, enabled: Boolean, source: () -> RelationSource): RelationSource? {
-        if (enabled) return source()
-
-        log.atWarning().log("tracker.%s is on, but %s is not enabled on this server", option, pluginName)
-        return null
     }
 
     /**
@@ -166,22 +149,22 @@ object PaperTracker {
     private fun isShownByTracker(viewer: UUID, target: UUID) =
         everyoneTracksEveryone || relations?.isRelated(viewer, target) == true
 
-    // The maps show whom the viewer sees in the world. surf-vanish hides vanished players only from the viewers whose
+    // The maps show whom the viewer sees in the world. Vanish hides vanished players only from the viewers whose
     // level may not see them, a little after they join, so vanished players stay off every map until then.
     private fun isVisibleOnMap(player: Player, target: UUID): Boolean {
         val targetPlayer = Bukkit.getPlayer(target) ?: return false
         val onlineFor = joinedAt[target]?.elapsedNow() ?: Duration.ZERO
-        return MapVisibility.isShown(player.canSee(targetPlayer), onlineFor) { isVanished?.invoke(targetPlayer) == true }
+        return MapVisibility.isShown(player.canSee(targetPlayer), onlineFor) { targetPlayer.isVanished }
     }
 
     /**
      * The tracker as it is for [player], for `/minimapcompanion info`. Read it on the player's own thread.
      */
-    fun info(player: Player) = MapInfo.Tracker(
+    fun info(player: Player) = MapTrackerInfo(
         mode = when {
-            everyoneTracksEveryone -> MapInfo.TrackerMode.EVERYONE
-            relations != null -> MapInfo.TrackerMode.RELATIONS
-            else -> MapInfo.TrackerMode.OFF
+            everyoneTracksEveryone -> MapTrackerMode.EVERYONE
+            relations != null -> MapTrackerMode.RELATIONS
+            else -> MapTrackerMode.OFF
         },
         xaeroPlayers = tracker.sentCount(player.uniqueId),
     )

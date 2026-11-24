@@ -2,8 +2,15 @@ package dev.slne.surf.player.core.client.settings
 
 import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
+import dev.slne.surf.player.core.client.settings.service.SettingsService
 
-suspend fun createDefaultSettings() {
+/**
+ * Loads the registered settings and registers the built-in ones that are still missing.
+ * Every platform runs this once on startup, before players can join.
+ */
+suspend fun loadSettings() {
+    SettingsService.refreshSettings()
+
     SurfSettingsApi.createSetting(SettingKeys.CHAT_PINGS)
     SurfSettingsApi.createSetting(SettingKeys.CHAT_DEATH_MESSAGES)
     SurfSettingsApi.createSetting(SettingKeys.DIRECT_MESSAGES)

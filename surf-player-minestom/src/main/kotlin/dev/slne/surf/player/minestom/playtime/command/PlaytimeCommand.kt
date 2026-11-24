@@ -7,8 +7,8 @@ import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgumen
 import dev.slne.surf.player.core.client.playtime.command.sendPlayerNotFound
 import dev.slne.surf.player.core.client.playtime.command.sendPlaytimeOverview
 import dev.slne.surf.player.core.client.playtime.permission.PlaytimePermissions
-import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
-import dev.slne.surf.player.core.common.playtime.service.PlaytimeStreakService
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeStreakService
 import kotlinx.coroutines.Deferred
 
 fun playtimeCommand() = commandTree("playtime") {

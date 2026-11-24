@@ -5,7 +5,8 @@ import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.player.core.client.chat.config.chatConfig
-import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
@@ -62,7 +63,7 @@ object ChatConnectionHandler {
         }
 
         ConnectionManager.onlinePlayers
-            .filter { viewer -> SettingsHook.hasConnectionMessagesEnabled(viewer.uuid) }
+            .filter { viewer -> SurfSettingsApi.getSettingValue(viewer.uuid, SettingKeys.CONNECTION_MESSAGES) }
             .forEach { viewer -> viewer.sendMessage(message) }
     }
 }

@@ -2,37 +2,24 @@ package dev.slne.surf.player.paper.vanish.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
 import dev.slne.surf.api.core.config.surfConfigApi
-import dev.slne.surf.player.paper.vanish.plugin
-import net.kyori.adventure.text.format.NamedTextColor
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
+import java.nio.file.Path
 
 @ConfigSerializable
 data class VanishConfig(
     val spoofConnectionMessages: Boolean = true
 )
 
-class VanishConfiguration {
-    private val configManager: SpongeConfigManager<VanishConfig>
+private lateinit var configManager: SpongeConfigManager<VanishConfig>
 
-    init {
-        surfConfigApi.createSpongeYmlConfig(
-            VanishConfig::class.java,
-            plugin.dataPath,
-            "config.yml"
-        )
-        configManager = surfConfigApi.getSpongeConfigManagerForConfig(
-            VanishConfig::class.java
-        )
-        reload()
-    }
+val vanishConfig: VanishConfig get() = configManager.config
 
-    fun reload() {
-        configManager.reloadFromFile()
-    }
+fun initVanishConfig(dataPath: Path) {
+    surfConfigApi.createSpongeYmlConfig(VanishConfig::class.java, dataPath, "config.yml")
+    configManager = surfConfigApi.getSpongeConfigManagerForConfig(VanishConfig::class.java)
+    reloadVanishConfig()
+}
 
-    val config get() = configManager.config
-
-    companion object {
-        val GLOW_COLOR: NamedTextColor = NamedTextColor.GREEN
-    }
+fun reloadVanishConfig() {
+    configManager.reloadFromFile()
 }

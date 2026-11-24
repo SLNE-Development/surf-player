@@ -1,8 +1,8 @@
 package dev.slne.surf.player.paper.settings.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.player.core.common.settings.service.SettingsService
-import dev.slne.surf.player.paper.settings.plugin
+import dev.slne.surf.player.core.client.settings.service.SettingsService
+import dev.slne.surf.player.paper.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -13,11 +13,7 @@ object PlayerConnectionListener : Listener {
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
         plugin.launch {
-            SettingsService.cachePlayerSettings(player.uniqueId)
-
-            if (!player.isOnline) {
-                SettingsService.invalidatePlayerSettingsCache(player.uniqueId)
-            }
+            SettingsService.cacheJoinedPlayerSettings(player.uniqueId) { player.isOnline }
         }
     }
 

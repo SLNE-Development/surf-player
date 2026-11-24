@@ -18,7 +18,7 @@ fun CommandAPICommand.queuePause(): CommandAPICommand = withSubcommand(
             anyExecutorSuspend { sender, arguments ->
                 val server: SurfServer? by arguments
                 val serverName = server?.name ?: SurfServer.current().name
-                val queue = RedisQueueService.get().getQueueByName(serverName)
+                val queue = RedisQueueService.getQueueByName(serverName)
                 queue.pause()
 
                 sender.sendMessage(QueueMessages.queuePaused())
@@ -30,7 +30,7 @@ fun CommandAPICommand.queuePause(): CommandAPICommand = withSubcommand(
             anyExecutorSuspend { sender, arguments ->
                 val server: SurfServer? by arguments
                 val serverName = server?.name ?: SurfServer.current().name
-                val queue = RedisQueueService.get().getQueueByName(serverName)
+                val queue = RedisQueueService.getQueueByName(serverName)
                 queue.resume()
 
                 sender.sendMessage(QueueMessages.queueResumed())
@@ -42,7 +42,7 @@ fun CommandAPICommand.queuePause(): CommandAPICommand = withSubcommand(
             anyExecutorSuspend { sender, arguments ->
                 val server: SurfServer? by arguments
                 val serverName = server?.name ?: SurfServer.current().name
-                val queue = RedisQueueService.get().getQueueByName(serverName)
+                val queue = RedisQueueService.getQueueByName(serverName)
 
                 sender.sendMessage(QueueMessages.queuePauseStatus(queue.isPaused()))
             }

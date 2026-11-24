@@ -8,7 +8,7 @@ import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.StringArgument
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.core.client.settings.command.SettingsCommandMessages
-import dev.slne.surf.player.core.common.settings.service.SettingsService
+import dev.slne.surf.player.core.client.settings.service.SettingsService
 
 class SettingArgument(nodeName: String) :
     CustomArgument<Setting, String>(StringArgument(nodeName), { info ->

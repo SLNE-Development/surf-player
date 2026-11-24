@@ -14,14 +14,6 @@ data class QueueMetricsSnapshot(
     val totalTicks: Long,
     val perQueue: Map<String, PerQueueMetrics>
 ) {
-    data class PerQueueMetrics(
-        val transfers: Long,
-        val enqueues: Long,
-        val dequeues: Long,
-        val failedTransfers: Long,
-        val skips: Long
-    )
-
     val lockAcquisitionRate: Double
         get() = if (totalLockAttempts > 0) totalLockAcquired.toDouble() / totalLockAttempts else 0.0
 

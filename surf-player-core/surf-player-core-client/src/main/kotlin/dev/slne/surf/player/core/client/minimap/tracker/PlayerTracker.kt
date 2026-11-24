@@ -7,6 +7,19 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
+ * A target's position as viewers get it. It is encoded when the first viewer gets it, and only once for all of
+ * them, since positions are published even while nobody tracks the player. Viewers compare it by identity.
+ */
+private class PublishedPosition(
+    uuid: UUID,
+    val position: TrackedPosition,
+    encode: (uuid: UUID, position: TrackedPosition) -> ByteArray,
+) {
+    val payload by lazy { encode(uuid, position) }
+    val removal by lazy { XaeroPackets.trackedPlayerRemoved(uuid) }
+}
+
+/**
  * Shows players other players on Xaero's maps beyond their view distance, as the mods' player tracker does.
  *
  * Positions come in through [update]; each viewer is synced by its own [tick], so a platform can run both
@@ -17,17 +30,8 @@ class PlayerTracker(
         XaeroPackets.trackedPlayer(uuid, position.x, position.y, position.z, position.dimension)
     },
 ) {
-    private val positions = ConcurrentHashMap<UUID, Published>()
-    private val sentPositions = ConcurrentHashMap<UUID, MutableMap<UUID, Published>>()
-
-    /**
-     * A target's position as viewers get it. It is encoded when the first viewer gets it, and only once for all of
-     * them, since positions are published even while nobody tracks the player. Viewers compare it by identity.
-     */
-    private inner class Published(uuid: UUID, val position: TrackedPosition) {
-        val payload by lazy { encode(uuid, position) }
-        val removal by lazy { XaeroPackets.trackedPlayerRemoved(uuid) }
-    }
+    private val positions = ConcurrentHashMap<UUID, PublishedPosition>()
+    private val sentPositions = ConcurrentHashMap<UUID, MutableMap<UUID, PublishedPosition>>()
 
     /**
      * Records where the player with [uuid] is. Moves under [MIN_MOVE] blocks within a dimension keep the position
@@ -36,7 +40,7 @@ class PlayerTracker(
     fun update(uuid: UUID, position: TrackedPosition) {
         val current = positions[uuid]
         if (current != null && current.position.isNear(position)) return
-        positions[uuid] = Published(uuid, position)
+        positions[uuid] = PublishedPosition(uuid, position, encode)
     }
 
     /**

@@ -3,11 +3,11 @@ package dev.slne.surf.player.velocity.queue.command.pause
 import dev.jorel.commandapi.CommandTree
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.literalArgument
-import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.velocity.command.executors.anyExecutorSuspend
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.velocity.command.argument.surfBackendServerArgument
 import dev.slne.surf.player.api.queue.queue
+import dev.slne.surf.player.core.client.queue.command.QueueMessages
 import dev.slne.surf.player.velocity.queue.permission.SurfQueuePermissions
 
 fun CommandTree.queuePauseCommand() = literalArgument("pause") {
@@ -19,10 +19,7 @@ fun CommandTree.queuePauseCommand() = literalArgument("pause") {
                 val server: SurfServer by arguments
                 server.queue().pause()
 
-                source.sendText {
-                    appendSuccessPrefix()
-                    success("Paused queue")
-                }
+                source.sendMessage(QueueMessages.queuePaused())
             }
         }
 
@@ -31,26 +28,15 @@ fun CommandTree.queuePauseCommand() = literalArgument("pause") {
                 val server: SurfServer by arguments
                 server.queue().resume()
 
-                source.sendText {
-                    appendSuccessPrefix()
-                    success("Resumed queue")
-                }
+                source.sendMessage(QueueMessages.queueResumed())
             }
         }
 
         literalArgument("status") {
             anyExecutorSuspend { source, arguments ->
                 val server: SurfServer by arguments
-                val isPaused = server.queue().isPaused()
 
-                source.sendText {
-                    appendInfoPrefix()
-                    if (isPaused) {
-                        info("The queue is currently paused")
-                    } else {
-                        info("The queue is currently running")
-                    }
-                }
+                source.sendMessage(QueueMessages.queuePauseStatus(server.queue().isPaused()))
             }
         }
     }

@@ -25,7 +25,7 @@ fun CommandAPICommand.queueInfo() = subcommand("info") {
         val uuid = profile.idOrThrow()
         val server: SurfServer? by arguments
         val serverName = server?.name ?: SurfServer.current().name
-        val queue = RedisQueueService.get().getQueueByName(serverName)
+        val queue = RedisQueueService.getQueueByName(serverName)
         val playerName = profile.name ?: uuid.toString()
 
         val isQueued = queue.isQueued(uuid)
