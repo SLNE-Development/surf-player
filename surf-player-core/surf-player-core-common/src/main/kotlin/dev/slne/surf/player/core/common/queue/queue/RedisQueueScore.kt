@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.queue.queue
+package dev.slne.surf.player.core.common.queue.queue
 
 /**
  * Packs queue metadata into a single 53-bit value stored as a Redis ZSET score (Double).

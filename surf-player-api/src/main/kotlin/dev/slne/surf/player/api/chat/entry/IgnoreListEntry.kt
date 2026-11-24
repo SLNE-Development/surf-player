@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.chat.entry
+package dev.slne.surf.player.api.chat.entry
 
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import kotlinx.serialization.Contextual

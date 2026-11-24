@@ -1,13 +1,13 @@
-package dev.slne.surf.social.microservice.clan.db.migration
+package dev.slne.surf.player.microservice.clan.db.migration
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Table
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.vendors.currentDialect
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.TransactionManager
-import dev.slne.surf.social.microservice.clan.db.table.ClanInvitesTable
-import dev.slne.surf.social.microservice.clan.db.table.ClanMembersTable
-import dev.slne.surf.social.microservice.clan.db.table.ClanPlayerTable
-import dev.slne.surf.social.microservice.clan.db.table.ClansTable
+import dev.slne.surf.player.microservice.clan.db.table.ClanInvitesTable
+import dev.slne.surf.player.microservice.clan.db.table.ClanMembersTable
+import dev.slne.surf.player.microservice.clan.db.table.ClanPlayerTable
+import dev.slne.surf.player.microservice.clan.db.table.ClansTable
 
 private data class UuidColumn(
     val table: Table,
@@ -32,7 +32,7 @@ private fun sqlLiteral(value: String) = "'" + value.replace("'", "''") + "'"
  * columns. Exposed's SchemaUtils creates missing tables and columns, but it does not change the type
  * of an existing column.
  *
- * The clan tables are schema-qualified (see [dev.slne.surf.social.microservice.SocialSchemas]), so
+ * The clan tables are schema-qualified (see [dev.slne.surf.player.microservice.PlayerSchemas]), so
  * the lookup and the `ALTER TABLE` use each table's own schema instead of `current_schema()`, which
  * is the connection's `SURF_DATABASE_SCHEMA` and no longer the clan schema.
  *

@@ -15,5 +15,5 @@ surfMicroservice {
 }
 
 dependencies {
-    api(projects.surfSocialApi)
+    api(projects.surfPlayerApi)
 }

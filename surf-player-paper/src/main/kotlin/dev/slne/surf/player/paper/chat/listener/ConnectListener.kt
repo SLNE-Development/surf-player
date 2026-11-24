@@ -1,11 +1,11 @@
-package dev.slne.surf.social.paper.chat.listener
+package dev.slne.surf.player.paper.chat.listener
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.event.common.connection.PlayerJoinMessageEvent
-import dev.slne.surf.social.core.client.chat.config.chatConfig
-import dev.slne.surf.social.core.common.chat.service.IgnoreService
-import dev.slne.surf.social.paper.chat.hook.MiniPlaceholdersHook
-import dev.slne.surf.social.paper.chat.message.MessageFormatter
+import dev.slne.surf.player.core.client.chat.config.chatConfig
+import dev.slne.surf.player.core.common.chat.service.IgnoreService
+import dev.slne.surf.player.paper.chat.hook.MiniPlaceholdersHook
+import dev.slne.surf.player.paper.chat.message.MessageFormatter
 import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent
 import kotlinx.coroutines.runBlocking
 import org.bukkit.entity.Player

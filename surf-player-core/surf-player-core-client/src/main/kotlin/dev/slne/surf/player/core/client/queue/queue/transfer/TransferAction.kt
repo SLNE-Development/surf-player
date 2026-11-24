@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.queue.queue.transfer
+package dev.slne.surf.player.core.client.queue.queue.transfer
 
 enum class TransferAction {
     DONE,

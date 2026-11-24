@@ -1,11 +1,11 @@
-package dev.slne.surf.social.minestom.friends.command.subcommand.request
+package dev.slne.surf.player.minestom.friends.command.subcommand.request
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument
-import dev.slne.surf.social.core.client.friends.command.sendFriendRequest
-import dev.slne.surf.social.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.player.core.client.friends.command.sendFriendRequest
+import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 import kotlinx.coroutines.Deferred
 
 fun friendRequestSendCommand(commandName: String) = CommandAPICommand(commandName).apply {

@@ -1,7 +1,7 @@
-package dev.slne.surf.social.placeholder.expansion.clan
+package dev.slne.surf.player.placeholder.expansion.clan
 
 import dev.slne.surf.api.core.messages.adventure.uuid
-import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.clan.Clan
 import io.github.miniplaceholders.api.Expansion
 import io.github.miniplaceholders.api.utils.Tags
 import net.kyori.adventure.audience.Audience

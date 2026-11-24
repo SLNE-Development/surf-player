@@ -8,10 +8,10 @@ surfVelocityApi {
 }
 
 velocityPluginFile {
-    main = "dev.slne.surf.social.velocity.SocialVelocityPlugin"
+    main = "dev.slne.surf.player.velocity.PlayerVelocityPlugin"
     authors = listOf("Ammo", "red", "twisti")
 }
 
 dependencies {
-    api(projects.surfSocialCore.surfSocialCoreClient)
+    api(projects.surfPlayerCore.surfPlayerCoreClient)
 }

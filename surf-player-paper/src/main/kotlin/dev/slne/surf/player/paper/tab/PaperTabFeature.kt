@@ -1,21 +1,21 @@
-package dev.slne.surf.social.paper.tab
+package dev.slne.surf.player.paper.tab
 
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.api.paper.extensions.pluginManager
-import dev.slne.surf.social.core.client.tab.hook.ClanHook
-import dev.slne.surf.social.core.client.tab.hook.ContentCreatorHook
-import dev.slne.surf.social.core.client.tab.hook.LuckPermsHook
-import dev.slne.surf.social.core.client.tab.redis.redisLoader
-import dev.slne.surf.social.core.client.tab.service.TablistService
-import dev.slne.surf.social.paper.PaperSocialFeature
-import dev.slne.surf.social.paper.hook.subscribeToLuckPermsUserChanges
-import dev.slne.surf.social.paper.tab.command.surfTabCommand
-import dev.slne.surf.social.paper.tab.listener.PlayerListener
-import dev.slne.surf.social.paper.tab.listener.PlaytimeListener
-import dev.slne.surf.social.paper.tab.listener.VanishListener
-import dev.slne.surf.social.paper.tab.platform.PaperTabPlatform
+import dev.slne.surf.player.core.client.tab.hook.ClanHook
+import dev.slne.surf.player.core.client.tab.hook.ContentCreatorHook
+import dev.slne.surf.player.core.client.tab.hook.LuckPermsHook
+import dev.slne.surf.player.core.client.tab.redis.redisLoader
+import dev.slne.surf.player.core.client.tab.service.TablistService
+import dev.slne.surf.player.paper.PaperPlayerFeature
+import dev.slne.surf.player.paper.hook.subscribeToLuckPermsUserChanges
+import dev.slne.surf.player.paper.tab.command.surfTabCommand
+import dev.slne.surf.player.paper.tab.listener.PlayerListener
+import dev.slne.surf.player.paper.tab.listener.PlaytimeListener
+import dev.slne.surf.player.paper.tab.listener.VanishListener
+import dev.slne.surf.player.paper.tab.platform.PaperTabPlatform
 
-object PaperTabFeature : PaperSocialFeature {
+object PaperTabFeature : PaperPlayerFeature {
     override val name = "tab"
 
     override suspend fun onLoad() {

@@ -1,16 +1,16 @@
-package dev.slne.surf.social.minestom.friends
+package dev.slne.surf.player.minestom.friends
 
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
-import dev.slne.surf.social.core.client.friends.FriendsClientInstance
-import dev.slne.surf.social.core.client.friends.connection.FriendConnectionNotifier
-import dev.slne.surf.social.minestom.MinestomSocialFeature
-import dev.slne.surf.social.minestom.friends.command.friendCommand
-import dev.slne.surf.social.minestom.friends.command.subcommand.friend.friendListCommand
-import dev.slne.surf.social.minestom.friends.command.subcommand.request.friendRequestSendCommand
+import dev.slne.surf.player.core.client.friends.FriendsClientInstance
+import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
+import dev.slne.surf.player.minestom.MinestomPlayerFeature
+import dev.slne.surf.player.minestom.friends.command.friendCommand
+import dev.slne.surf.player.minestom.friends.command.subcommand.friend.friendListCommand
+import dev.slne.surf.player.minestom.friends.command.subcommand.request.friendRequestSendCommand
 import kotlinx.coroutines.launch
 import net.minestom.server.entity.Player
 
-object FriendsMinestomFeature : MinestomSocialFeature {
+object FriendsMinestomFeature : MinestomPlayerFeature {
     override val id = "friends"
 
     override suspend fun onLoad() {

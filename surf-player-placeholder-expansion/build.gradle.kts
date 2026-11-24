@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(projects.surfSocialApi)
+    compileOnly(projects.surfPlayerApi)
     compileOnly(libs.mini.placeholders)
 }

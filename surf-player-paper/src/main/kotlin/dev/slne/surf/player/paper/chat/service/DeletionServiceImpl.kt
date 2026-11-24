@@ -1,13 +1,13 @@
-package dev.slne.surf.social.paper.chat.service
+package dev.slne.surf.player.paper.chat.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.api.paper.extensions.server
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.message.format.createMessageDeletedTeamNotification
-import dev.slne.surf.social.core.common.chat.service.DeletionService
-import dev.slne.surf.social.core.common.chat.service.HistoryService
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.core.client.chat.message.format.createMessageDeletedTeamNotification
+import dev.slne.surf.player.core.common.chat.service.DeletionService
+import dev.slne.surf.player.core.common.chat.service.HistoryService
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import net.kyori.adventure.audience.Audience

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.minimap.world
+package dev.slne.surf.player.core.client.minimap.world
 
-import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
+import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

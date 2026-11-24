@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.minimap.config
+package dev.slne.surf.player.core.client.minimap.config
 
-import dev.slne.surf.social.core.client.minimap.xaero.XaeroServerProfile
+import dev.slne.surf.player.core.client.minimap.xaero.XaeroServerProfile
 import org.junit.jupiter.api.Test
 import org.spongepowered.configurate.BasicConfigurationNode
 import java.io.IOException

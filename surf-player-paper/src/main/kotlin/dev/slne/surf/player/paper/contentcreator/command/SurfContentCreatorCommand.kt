@@ -1,11 +1,11 @@
-package dev.slne.surf.social.paper.contentcreator.command
+package dev.slne.surf.player.paper.contentcreator.command
 
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.jorel.commandapi.kotlindsl.playerExecutor
-import dev.slne.surf.social.api.contentcreator.platform.PlatformState
-import dev.slne.surf.social.core.client.contentcreator.ContentCreatorPermissions
-import dev.slne.surf.social.core.client.contentcreator.command.LiveStateDebugCommand
+import dev.slne.surf.player.api.contentcreator.platform.PlatformState
+import dev.slne.surf.player.core.client.contentcreator.ContentCreatorPermissions
+import dev.slne.surf.player.core.client.contentcreator.command.LiveStateDebugCommand
 
 fun surfContentCreatorCommand() = commandTree("surfcontentcreator") {
     withPermission(ContentCreatorPermissions.COMMAND)

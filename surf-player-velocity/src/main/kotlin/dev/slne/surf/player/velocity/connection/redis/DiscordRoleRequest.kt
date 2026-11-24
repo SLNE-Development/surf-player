@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.connection.redis
+package dev.slne.surf.player.velocity.connection.redis
 
 import kotlinx.serialization.Serializable
 

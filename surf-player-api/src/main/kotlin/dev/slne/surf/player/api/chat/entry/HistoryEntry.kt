@@ -1,8 +1,8 @@
-package dev.slne.surf.social.api.chat.entry
+package dev.slne.surf.player.api.chat.entry
 
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
-import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.player.api.chat.message.MessageType
 import dev.slne.surf.core.api.common.SurfCoreApi
 import kotlinx.serialization.Serializable
 

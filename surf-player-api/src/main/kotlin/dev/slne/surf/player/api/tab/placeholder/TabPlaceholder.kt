@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.tab.placeholder
+package dev.slne.surf.player.api.tab.placeholder
 
 import net.kyori.adventure.text.Component
 

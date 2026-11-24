@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.common.clan.rpc
+package dev.slne.surf.player.core.common.clan.rpc
 
-import dev.slne.surf.social.api.clan.clan.ClanCreationResult
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.api.clan.clan.ClanCreationResult
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor

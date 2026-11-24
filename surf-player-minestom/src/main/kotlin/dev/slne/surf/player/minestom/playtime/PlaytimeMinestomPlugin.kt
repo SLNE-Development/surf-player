@@ -1,15 +1,15 @@
-package dev.slne.surf.social.minestom.playtime
+package dev.slne.surf.player.minestom.playtime
 
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
-import dev.slne.surf.social.core.client.playtime.ClientPlaytimeInstance
-import dev.slne.surf.social.core.client.playtime.config.playtimeConfig
-import dev.slne.surf.social.core.common.playtime.service.PayCheckService
-import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
-import dev.slne.surf.social.minestom.playtime.command.playtimeAdminCommand
-import dev.slne.surf.social.minestom.playtime.command.playtimeCommand
-import dev.slne.surf.social.minestom.playtime.listener.PlayerAfkListener
-import dev.slne.surf.social.minestom.playtime.listener.PlayerConnectionListener
-import dev.slne.surf.social.minestom.playtime.playtime.playtimeTasks
+import dev.slne.surf.player.core.client.playtime.ClientPlaytimeInstance
+import dev.slne.surf.player.core.client.playtime.config.playtimeConfig
+import dev.slne.surf.player.core.common.playtime.service.PayCheckService
+import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.player.minestom.playtime.command.playtimeAdminCommand
+import dev.slne.surf.player.minestom.playtime.command.playtimeCommand
+import dev.slne.surf.player.minestom.playtime.listener.PlayerAfkListener
+import dev.slne.surf.player.minestom.playtime.listener.PlayerConnectionListener
+import dev.slne.surf.player.minestom.playtime.playtime.playtimeTasks
 
 object PlaytimeMinestomPlugin : SurfMinestomPlugin() {
     override suspend fun onLoad() {

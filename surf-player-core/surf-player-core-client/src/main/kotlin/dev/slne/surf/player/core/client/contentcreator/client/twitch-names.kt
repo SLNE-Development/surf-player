@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.contentcreator.client
+package dev.slne.surf.player.core.client.contentcreator.client
 
 private val VALID_TWITCH_NAME_REGEX = "^[a-zA-Z0-9_]{4,25}$".toRegex()
 

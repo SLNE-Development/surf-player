@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.chat.repository.ignore
+package dev.slne.surf.player.microservice.chat.repository.ignore
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Op
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
@@ -9,8 +9,8 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insertIgnore
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
-import dev.slne.surf.social.microservice.chat.table.IgnoreListTable
+import dev.slne.surf.player.api.chat.entry.IgnoreListEntry
+import dev.slne.surf.player.microservice.chat.table.IgnoreListTable
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList

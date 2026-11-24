@@ -1,10 +1,10 @@
-package dev.slne.surf.social.paper.friends.command.subcommand.request
+package dev.slne.surf.player.paper.friends.command.subcommand.request
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.core.client.friends.command.friendRequestListComponent
-import dev.slne.surf.social.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.player.core.client.friends.command.friendRequestListComponent
+import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 
 fun CommandAPICommand.friendRequestListCommand() = subcommand("requests") {
     withPermission(FriendPermissions.COMMAND_FRIEND_REQUEST_LIST)

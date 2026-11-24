@@ -1,8 +1,8 @@
-package dev.slne.surf.social.minestom.minimap.listener
+package dev.slne.surf.player.minestom.minimap.listener
 
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.social.minestom.minimap.platform.RegisteredChannels
+import dev.slne.surf.player.minestom.minimap.platform.RegisteredChannels
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
 import net.minestom.server.event.player.PlayerSkinInitEvent

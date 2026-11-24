@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.tab.entry
+package dev.slne.surf.player.core.client.tab.entry
 
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component

@@ -1,17 +1,17 @@
-package dev.slne.surf.social.minestom.minimap.command
+package dev.slne.surf.player.minestom.minimap.command
 
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
 import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.literalArgument
 import dev.slne.surf.api.minestom.command.dsl.playerArgument
 import dev.slne.surf.api.minestom.coroutine.minestomBlockingScope
-import dev.slne.surf.social.core.client.minimap.command.MapInfo
-import dev.slne.surf.social.core.client.minimap.command.sendMapInfo
-import dev.slne.surf.social.core.client.minimap.command.sendReloadResult
-import dev.slne.surf.social.core.client.minimap.config.CompanionConfigs
-import dev.slne.surf.social.core.client.minimap.permission.CompanionPermissions
-import dev.slne.surf.social.core.client.minimap.service.MapSyncService
-import dev.slne.surf.social.minestom.minimap.platform.MinestomCompanionPlayer
+import dev.slne.surf.player.core.client.minimap.command.MapInfo
+import dev.slne.surf.player.core.client.minimap.command.sendMapInfo
+import dev.slne.surf.player.core.client.minimap.command.sendReloadResult
+import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.player.core.client.minimap.permission.CompanionPermissions
+import dev.slne.surf.player.core.client.minimap.service.MapSyncService
+import dev.slne.surf.player.minestom.minimap.platform.MinestomCompanionPlayer
 import kotlinx.coroutines.launch
 import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Player

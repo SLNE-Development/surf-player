@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.minimap.api
+package dev.slne.surf.player.core.client.minimap.api
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.api.minimap.SurfMinimapCompanionApi
-import dev.slne.surf.social.core.client.minimap.config.CompanionConfigs
-import dev.slne.surf.social.core.client.minimap.world.LevelIds
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlatform
-import dev.slne.surf.social.core.client.minimap.xaero.XaeroSyncService
+import dev.slne.surf.player.api.minimap.SurfMinimapCompanionApi
+import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.player.core.client.minimap.world.LevelIds
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlatform
+import dev.slne.surf.player.core.client.minimap.xaero.XaeroSyncService
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.util.Services
 import java.util.*

@@ -1,15 +1,15 @@
-package dev.slne.surf.social.core.client.tab.entry
+package dev.slne.surf.player.core.client.tab.entry
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.api.tab.event.TabEntryRenderEvent
-import dev.slne.surf.social.core.client.contentcreator.LiveTagRenderer
-import dev.slne.surf.social.core.client.tab.hook.ClanHook
-import dev.slne.surf.social.core.client.tab.hook.LuckPermsHook
-import dev.slne.surf.social.core.client.tab.hook.SurfPlaytimeHook
-import dev.slne.surf.social.core.client.tab.platform.TabPlayer
-import dev.slne.surf.social.core.client.tab.platform.tabPlatform
-import dev.slne.surf.social.core.client.tab.service.UpdateCoalescer
+import dev.slne.surf.player.api.tab.event.TabEntryRenderEvent
+import dev.slne.surf.player.core.client.contentcreator.LiveTagRenderer
+import dev.slne.surf.player.core.client.tab.hook.ClanHook
+import dev.slne.surf.player.core.client.tab.hook.LuckPermsHook
+import dev.slne.surf.player.core.client.tab.hook.SurfPlaytimeHook
+import dev.slne.surf.player.core.client.tab.platform.TabPlayer
+import dev.slne.surf.player.core.client.tab.platform.tabPlatform
+import dev.slne.surf.player.core.client.tab.service.UpdateCoalescer
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withTimeout

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.clan.util
+package dev.slne.surf.player.api.clan.util
 
 /**
  * Marks declarations that are internal to the Surf Clan API implementation.

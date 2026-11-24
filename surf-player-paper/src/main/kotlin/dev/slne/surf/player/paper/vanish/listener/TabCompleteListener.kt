@@ -1,7 +1,7 @@
-package dev.slne.surf.social.paper.vanish.listener
+package dev.slne.surf.player.paper.vanish.listener
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent
-import dev.slne.surf.social.paper.vanish.util.canVanishSee
+import dev.slne.surf.player.paper.vanish.util.canVanishSee
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

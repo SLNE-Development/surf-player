@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.clan.invite
+package dev.slne.surf.player.api.clan.invite
 
 import kotlinx.serialization.Serializable
 

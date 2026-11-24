@@ -1,13 +1,13 @@
-package dev.slne.surf.social.core.client.chat.service
+package dev.slne.surf.player.core.client.chat.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.plain
 import dev.slne.surf.api.core.util.toObjectList
-import dev.slne.surf.social.api.chat.entry.HistoryEntry
-import dev.slne.surf.social.api.chat.entry.HistoryFilter
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.rpc.chatHistoryRpcService
-import dev.slne.surf.social.core.common.chat.service.HistoryService
+import dev.slne.surf.player.api.chat.entry.HistoryEntry
+import dev.slne.surf.player.api.chat.entry.HistoryFilter
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.core.client.chat.rpc.chatHistoryRpcService
+import dev.slne.surf.player.core.common.chat.service.HistoryService
 import it.unimi.dsi.fastutil.objects.ObjectList
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit

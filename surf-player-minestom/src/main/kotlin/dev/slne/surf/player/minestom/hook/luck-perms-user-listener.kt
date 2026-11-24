@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.hook
+package dev.slne.surf.player.minestom.hook
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import net.luckperms.api.event.node.NodeAddEvent

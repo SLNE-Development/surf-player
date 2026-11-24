@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.vanish.util
+package dev.slne.surf.player.paper.vanish.util
 
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder

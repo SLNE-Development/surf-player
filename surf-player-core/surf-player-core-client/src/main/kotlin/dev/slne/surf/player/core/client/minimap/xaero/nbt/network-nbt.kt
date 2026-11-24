@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.xaero.nbt
+package dev.slne.surf.player.core.client.minimap.xaero.nbt
 
 import net.kyori.adventure.nbt.BinaryTagIO
 import net.kyori.adventure.nbt.CompoundBinaryTag

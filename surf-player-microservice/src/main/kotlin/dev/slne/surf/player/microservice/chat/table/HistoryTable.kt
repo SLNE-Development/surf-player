@@ -1,12 +1,12 @@
-package dev.slne.surf.social.microservice.chat.table
+package dev.slne.surf.player.microservice.chat.table
 
-import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.player.api.chat.message.MessageType
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
-import dev.slne.surf.social.microservice.SocialSchemas
+import dev.slne.surf.player.microservice.PlayerSchemas
 
-object HistoryTable : ULongIdTable("${SocialSchemas.chat}.chat_histories") {
+object HistoryTable : ULongIdTable("${PlayerSchemas.chat}.chat_histories") {
     val messageUuid = nativeUuid("message_uuid").uniqueIndex()
     val senderUuid = nativeUuid("sender_uuid")
     val receiverUuid = nativeUuid("receiver_uuid").nullable()

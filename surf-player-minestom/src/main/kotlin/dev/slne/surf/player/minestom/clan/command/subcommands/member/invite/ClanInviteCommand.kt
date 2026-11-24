@@ -1,16 +1,16 @@
-package dev.slne.surf.social.minestom.clan.command.subcommands.member.invite
+package dev.slne.surf.player.minestom.clan.command.subcommands.member.invite
 
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.invite.ClanInviteResult
-import dev.slne.surf.social.api.clan.permission.ClanPermission
-import dev.slne.surf.social.minestom.command.failCommand
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.invite.ClanInviteResult
+import dev.slne.surf.player.api.clan.permission.ClanPermission
+import dev.slne.surf.player.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.command.*
-import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.client.clan.Messages
+import dev.slne.surf.player.core.client.clan.command.*
+import dev.slne.surf.player.core.client.clan.permission.ClanPermissions
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument

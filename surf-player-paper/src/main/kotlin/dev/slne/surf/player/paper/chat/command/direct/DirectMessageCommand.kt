@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.chat.command.direct
+package dev.slne.surf.player.paper.chat.command.direct
 
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import dev.jorel.commandapi.kotlindsl.getValue
@@ -8,8 +8,8 @@ import dev.slne.surf.api.paper.command.args.asyncSignedMessageArgument
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.paper.command.argument.surfPlayerArgument
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.service.DirectMessageSender
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.paper.chat.service.DirectMessageSender
 import net.kyori.adventure.chat.SignedMessage
 
 fun directMessageCommand() = commandAPICommand("msg") {

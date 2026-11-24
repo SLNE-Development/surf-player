@@ -1,21 +1,21 @@
 @file:Suppress("RETURN_IN_FUNCTION_WITH_EXPRESSION_BODY_WARNING")
 
-package dev.slne.surf.social.minestom.chat.message
+package dev.slne.surf.player.minestom.chat.message
 
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.plain
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.permission.hasPermission
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.util.luckPermsPrefix
-import dev.slne.surf.social.core.client.chat.hook.SettingsHook
-import dev.slne.surf.social.core.client.chat.message.format.appendDelete
-import dev.slne.surf.social.core.client.chat.message.format.appendName
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
-import dev.slne.surf.social.core.client.chat.util.formatTime
-import dev.slne.surf.social.core.client.chat.util.updateLinks
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.core.client.util.luckPermsPrefix
+import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.core.client.chat.message.format.appendDelete
+import dev.slne.surf.player.core.client.chat.message.format.appendName
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.player.core.client.chat.util.formatTime
+import dev.slne.surf.player.core.client.chat.util.updateLinks
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig

@@ -1,12 +1,12 @@
-package dev.slne.surf.social.paper.chat.command.slowchat
+package dev.slne.surf.player.paper.chat.command.slowchat
 
 import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.paper.chat.command.argument.NiceToggleArgument
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.core.client.chat.service.SlowChatService
-import dev.slne.surf.social.paper.chat.util.realName
+import dev.slne.surf.player.paper.chat.command.argument.NiceToggleArgument
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.core.client.chat.service.SlowChatService
+import dev.slne.surf.player.paper.chat.util.realName
 import org.bukkit.Bukkit
 
 fun slowChatCommand() = commandTree("slowchat") {

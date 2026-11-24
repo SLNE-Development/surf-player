@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.playtime.service
+package dev.slne.surf.player.core.common.playtime.service
 
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

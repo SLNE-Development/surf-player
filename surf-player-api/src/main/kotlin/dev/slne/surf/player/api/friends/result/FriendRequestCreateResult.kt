@@ -1,7 +1,7 @@
-package dev.slne.surf.social.api.friends.result
+package dev.slne.surf.player.api.friends.result
 
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
-import dev.slne.surf.social.api.friends.model.FriendRequest
+import dev.slne.surf.player.api.friends.model.FriendRequest
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 

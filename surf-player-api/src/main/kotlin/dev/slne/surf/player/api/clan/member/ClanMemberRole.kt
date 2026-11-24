@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.clan.member
+package dev.slne.surf.player.api.clan.member
 
-import dev.slne.surf.social.api.clan.permission.ClanPermission
+import dev.slne.surf.player.api.clan.permission.ClanPermission
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.text
 import net.kyori.adventure.text.Component

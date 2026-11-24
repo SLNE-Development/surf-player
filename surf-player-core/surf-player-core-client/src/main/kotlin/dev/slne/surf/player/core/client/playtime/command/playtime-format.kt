@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.playtime.command
+package dev.slne.surf.player.core.client.playtime.command
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.playtime.command
+package dev.slne.surf.player.core.client.playtime.command
 
-import dev.slne.surf.social.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.api.playtime.session.PlaytimeSession
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime

@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.clan.commands
+package dev.slne.surf.player.paper.clan.commands
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.CommandAPIPaper
 import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent

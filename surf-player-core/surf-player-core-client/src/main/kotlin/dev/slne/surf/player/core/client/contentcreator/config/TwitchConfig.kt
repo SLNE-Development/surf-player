@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.contentcreator.config
+package dev.slne.surf.player.core.client.contentcreator.config
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 

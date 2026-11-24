@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.journeymap
+package dev.slne.surf.player.core.client.minimap.journeymap
 
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test

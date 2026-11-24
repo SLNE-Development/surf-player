@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.clan.db.table
+package dev.slne.surf.player.microservice.clan.db.table
 
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime

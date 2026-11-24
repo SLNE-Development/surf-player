@@ -1,6 +1,6 @@
-package dev.slne.surf.social.paper.chat.permission
+package dev.slne.surf.player.paper.chat.permission
 
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 
 object PermissionRegistry : dev.slne.surf.api.paper.permission.PermissionRegistry() {
     val PREFIX_TEAM = create(ChatPermissions.PREFIX_TEAM)

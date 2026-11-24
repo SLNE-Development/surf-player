@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.chat.command.spy
+package dev.slne.surf.player.paper.chat.command.spy
 
 import dev.jorel.commandapi.CommandAPI
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
@@ -6,8 +6,8 @@ import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.core.common.chat.service.SpyService
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.core.common.chat.service.SpyService
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import org.bukkit.entity.Player
 
 fun directMessageSpyCommand() = commandAPICommand("spy") {

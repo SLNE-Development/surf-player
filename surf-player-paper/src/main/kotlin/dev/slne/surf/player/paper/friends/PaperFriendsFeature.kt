@@ -1,14 +1,14 @@
-package dev.slne.surf.social.paper.friends
+package dev.slne.surf.player.paper.friends
 
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.social.core.client.friends.FriendsClientInstance
-import dev.slne.surf.social.paper.PaperSocialFeature
-import dev.slne.surf.social.paper.friends.command.friendCommand
-import dev.slne.surf.social.paper.friends.command.subcommand.friend.FriendListCommand
-import dev.slne.surf.social.paper.friends.command.subcommand.request.FriendRequestSendCommand
-import dev.slne.surf.social.paper.friends.listener.FriendConnectionListener
+import dev.slne.surf.player.core.client.friends.FriendsClientInstance
+import dev.slne.surf.player.paper.PaperPlayerFeature
+import dev.slne.surf.player.paper.friends.command.friendCommand
+import dev.slne.surf.player.paper.friends.command.subcommand.friend.FriendListCommand
+import dev.slne.surf.player.paper.friends.command.subcommand.request.FriendRequestSendCommand
+import dev.slne.surf.player.paper.friends.listener.FriendConnectionListener
 
-object PaperFriendsFeature : PaperSocialFeature {
+object PaperFriendsFeature : PaperPlayerFeature {
     override val name = "friends"
 
     override suspend fun onLoad() {

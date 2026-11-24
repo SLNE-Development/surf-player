@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.queue.commands.sub
+package dev.slne.surf.player.paper.queue.commands.sub
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.arguments.AsyncPlayerProfileArgument
@@ -11,10 +11,10 @@ import dev.slne.surf.api.paper.command.util.awaitAsyncPlayerProfile
 import dev.slne.surf.api.paper.command.util.idOrThrow
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.paper.command.argument.surfBackendServerArgument
-import dev.slne.surf.social.core.client.queue.command.QueueMessages
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueScore
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueService
-import dev.slne.surf.social.paper.queue.permission.PaperQueuePermissions
+import dev.slne.surf.player.core.client.queue.command.QueueMessages
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueScore
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.paper.queue.permission.PaperQueuePermissions
 
 fun CommandAPICommand.queueEnqueue() = subcommand("enqueue") {
     withPermission(PaperQueuePermissions.COMMAND_ENQUEUE)

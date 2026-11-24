@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.clan.db.repository
+package dev.slne.surf.player.microservice.clan.db.repository
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
@@ -6,12 +6,12 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.inSubQuery
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.*
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import dev.slne.surf.social.api.clan.invite.ClanInviteResult
-import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
-import dev.slne.surf.social.microservice.clan.db.table.ClanInvitesTable
-import dev.slne.surf.social.microservice.clan.db.table.ClanMembersTable
-import dev.slne.surf.social.microservice.clan.db.table.ClanPlayerTable
-import dev.slne.surf.social.microservice.clan.db.table.ClansTable
+import dev.slne.surf.player.api.clan.invite.ClanInviteResult
+import dev.slne.surf.player.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.player.microservice.clan.db.table.ClanInvitesTable
+import dev.slne.surf.player.microservice.clan.db.table.ClanMembersTable
+import dev.slne.surf.player.microservice.clan.db.table.ClanPlayerTable
+import dev.slne.surf.player.microservice.clan.db.table.ClansTable
 import kotlinx.coroutines.flow.*
 import java.util.*
 

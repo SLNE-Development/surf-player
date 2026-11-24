@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.profile.menu
+package dev.slne.surf.player.paper.profile.menu
 
 import dev.slne.surf.api.core.messages.adventure.playSound
 import dev.slne.surf.api.paper.util.BukkitSound

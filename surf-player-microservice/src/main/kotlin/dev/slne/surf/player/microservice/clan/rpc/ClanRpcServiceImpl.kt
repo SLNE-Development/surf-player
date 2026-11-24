@@ -1,9 +1,9 @@
-package dev.slne.surf.social.microservice.clan.rpc
+package dev.slne.surf.player.microservice.clan.rpc
 
-import dev.slne.surf.social.api.clan.clan.ClanCreationResult
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.common.clan.rpc.ClanRpcService
-import dev.slne.surf.social.microservice.clan.db.repository.ClanRepository
+import dev.slne.surf.player.api.clan.clan.ClanCreationResult
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.common.clan.rpc.ClanRpcService
+import dev.slne.surf.player.microservice.clan.db.repository.ClanRepository
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 import java.util.*

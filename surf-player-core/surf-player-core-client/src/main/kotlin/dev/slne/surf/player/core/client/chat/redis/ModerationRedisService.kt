@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.client.chat.redis
+package dev.slne.surf.player.core.client.chat.redis
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationResult
-import dev.slne.surf.social.core.client.SocialClient.redisApi
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.core.common.chat.aimoderation.ModerationClassificationResult
+import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
 import dev.slne.surf.redis.codec.JsonKotlinCodec
 import java.util.concurrent.TimeUnit
 

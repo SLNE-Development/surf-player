@@ -6,12 +6,12 @@
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /workspace
 COPY . .
-RUN chmod +x gradlew && ./gradlew :surf-social-microservice:prepareMicroserviceDockerArtifact --no-daemon
+RUN chmod +x gradlew && ./gradlew :surf-player-microservice:prepareMicroserviceDockerArtifact --no-daemon
 
 # Stage 2: compile the native microservicectl command client.
 FROM golang:1.26-alpine AS command-client-build
 WORKDIR /src
-COPY --from=build /workspace/surf-social-microservice/build/generated/microservicectl/main.go /src/main.go
+COPY --from=build /workspace/surf-player-microservice/build/generated/microservicectl/main.go /src/main.go
 RUN mkdir -p /out \
     && CGO_ENABLED=0 go build \
         -buildvcs=false \
@@ -34,7 +34,7 @@ RUN groupadd --system --gid 10001 app \
 
 # Install the application JAR and the command client.
 WORKDIR /app
-COPY --from=build --chown=app:app /workspace/surf-social-microservice/build/docker/app.jar /app/app.jar
+COPY --from=build --chown=app:app /workspace/surf-player-microservice/build/docker/app.jar /app/app.jar
 COPY --from=command-client-build /out/microservicectl /usr/local/bin/microservicectl
 
 # Additional JVM flags. The entrypoint always applies:

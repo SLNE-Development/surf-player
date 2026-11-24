@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.playtime.bridge
+package dev.slne.surf.player.core.common.playtime.bridge
 
 import dev.slne.surf.api.core.util.requiredService
 import java.util.*

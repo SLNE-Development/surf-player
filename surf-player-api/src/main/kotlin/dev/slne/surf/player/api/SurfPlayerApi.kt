@@ -1,14 +1,14 @@
-package dev.slne.surf.social.api
+package dev.slne.surf.player.api
 
-import dev.slne.surf.social.api.chat.SurfChatApi
-import dev.slne.surf.social.api.connection.SurfConnectionApi
-import dev.slne.surf.social.api.contentcreator.ContentCreatorApi
-import dev.slne.surf.social.api.friends.player.FriendsPlayerManager
-import dev.slne.surf.social.api.nametag.SurfNametagApi
-import dev.slne.surf.social.api.tab.SurfTabApi
+import dev.slne.surf.player.api.chat.SurfChatApi
+import dev.slne.surf.player.api.connection.SurfConnectionApi
+import dev.slne.surf.player.api.contentcreator.ContentCreatorApi
+import dev.slne.surf.player.api.friends.player.FriendsPlayerManager
+import dev.slne.surf.player.api.nametag.SurfNametagApi
+import dev.slne.surf.player.api.tab.SurfTabApi
 
 /**
- * Single entry point to every feature of surf-social.
+ * Single entry point to every feature of surf-player.
  *
  * Each accessor resolves its service lazily, so a platform only needs to provide the services of
  * the features it actually uses (for example, the tab list is not available inside the
@@ -17,7 +17,7 @@ import dev.slne.surf.social.api.tab.SurfTabApi
  * The feature specific entry points (e.g. [SurfChatApi.Companion]) remain available and resolve to
  * the same instances.
  */
-object SurfSocialApi {
+object SurfPlayerApi {
 
     /** Chat processing, message history and ignore lists. */
     val chat: SurfChatApi get() = SurfChatApi.INSTANCE
@@ -38,5 +38,5 @@ object SurfSocialApi {
     val connections: SurfConnectionApi get() = SurfConnectionApi.INSTANCE
 
     /** Access to clans and their members, invites and players. */
-    val clans: SurfSocialClans get() = SurfSocialClans
+    val clans: SurfPlayerClans get() = SurfPlayerClans
 }

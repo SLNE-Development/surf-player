@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.queue.listener
+package dev.slne.surf.player.velocity.queue.listener
 
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.DisconnectEvent
@@ -6,13 +6,13 @@ import com.velocitypowered.api.event.connection.PostLoginEvent
 import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.api.queue.SurfQueue
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueService
-import dev.slne.surf.social.velocity.queue.config.VelocityQueueConfig
-import dev.slne.surf.social.velocity.queue.hook.SettingsHook
-import dev.slne.surf.social.velocity.queue.plugin
-import dev.slne.surf.social.velocity.queue.queue.VelocityQueueImpl
-import dev.slne.surf.social.velocity.queue.reconnect.QueueReconnectStore
+import dev.slne.surf.player.api.queue.SurfQueue
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.velocity.queue.config.VelocityQueueConfig
+import dev.slne.surf.player.velocity.queue.hook.SettingsHook
+import dev.slne.surf.player.velocity.queue.plugin
+import dev.slne.surf.player.velocity.queue.queue.VelocityQueueImpl
+import dev.slne.surf.player.velocity.queue.reconnect.QueueReconnectStore
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.jvm.optionals.getOrNull

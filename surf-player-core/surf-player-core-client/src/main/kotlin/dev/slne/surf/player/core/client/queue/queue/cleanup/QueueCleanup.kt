@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.queue.queue.cleanup
+package dev.slne.surf.player.core.client.queue.queue.cleanup
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.core.common.queue.queue.AbstractQueue
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueLockManager
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueStore
-import dev.slne.surf.social.core.client.queue.metrics.QueueMetrics
-import dev.slne.surf.social.core.client.queue.queue.OwnedClientQueueImpl
+import dev.slne.surf.player.core.common.queue.queue.AbstractQueue
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueLockManager
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueStore
+import dev.slne.surf.player.core.client.queue.metrics.QueueMetrics
+import dev.slne.surf.player.core.client.queue.queue.OwnedClientQueueImpl
 import java.util.*
 import kotlin.coroutines.cancellation.CancellationException
 

@@ -1,8 +1,8 @@
-package dev.slne.surf.social.minestom.tab.platform
+package dev.slne.surf.player.minestom.tab.platform
 
 import dev.slne.surf.api.minestom.coroutine.withEntity
-import dev.slne.surf.social.core.client.tab.platform.TabPlayer
-import dev.slne.surf.social.core.client.util.prefixedName
+import dev.slne.surf.player.core.client.tab.platform.TabPlayer
+import dev.slne.surf.player.core.client.util.prefixedName
 import net.kyori.adventure.text.Component
 import net.minestom.server.entity.Player
 import java.util.*

@@ -1,12 +1,12 @@
-package dev.slne.surf.social.paper.queue
+package dev.slne.surf.player.paper.queue
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.social.core.client.queue.ClientQueueInstance
-import dev.slne.surf.social.core.common.queue.QueueInstance
-import dev.slne.surf.social.paper.queue.commands.queueCommand
-import dev.slne.surf.social.paper.queue.hook.startup.QueueStartHook
-import dev.slne.surf.social.paper.queue.listener.PlayerKickedDueToFullServerListener
+import dev.slne.surf.player.core.client.queue.ClientQueueInstance
+import dev.slne.surf.player.core.common.queue.QueueInstance
+import dev.slne.surf.player.paper.queue.commands.queueCommand
+import dev.slne.surf.player.paper.queue.hook.startup.QueueStartHook
+import dev.slne.surf.player.paper.queue.listener.PlayerKickedDueToFullServerListener
 
 @AutoService(QueueInstance::class)
 class PaperSurfQueueInstance : ClientQueueInstance() {

@@ -1,15 +1,15 @@
-package dev.slne.surf.social.paper.minimap
+package dev.slne.surf.player.paper.minimap
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.api.paper.extensions.pluginManager
-import dev.slne.surf.social.core.client.minimap.config.CompanionConfigs
-import dev.slne.surf.social.core.client.minimap.service.MapSyncService
-import dev.slne.surf.social.paper.minimap.command.companionCommand
-import dev.slne.surf.social.paper.minimap.listener.CompanionListener
-import dev.slne.surf.social.paper.minimap.listener.PluginChannelListener
-import dev.slne.surf.social.paper.minimap.platform.PaperCompanionPlayer
-import dev.slne.surf.social.paper.minimap.tracker.PaperTracker
+import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.player.core.client.minimap.service.MapSyncService
+import dev.slne.surf.player.paper.minimap.command.companionCommand
+import dev.slne.surf.player.paper.minimap.listener.CompanionListener
+import dev.slne.surf.player.paper.minimap.listener.PluginChannelListener
+import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.player.paper.minimap.tracker.PaperTracker
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)

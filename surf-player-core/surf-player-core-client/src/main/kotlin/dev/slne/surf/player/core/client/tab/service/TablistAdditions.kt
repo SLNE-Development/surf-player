@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.tab.service
+package dev.slne.surf.player.core.client.tab.service
 
-import dev.slne.surf.social.core.client.tab.platform.TabViewer
+import dev.slne.surf.player.core.client.tab.platform.TabViewer
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver

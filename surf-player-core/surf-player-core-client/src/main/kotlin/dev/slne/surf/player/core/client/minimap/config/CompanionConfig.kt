@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.minimap.config
+package dev.slne.surf.player.core.client.minimap.config
 
 import dev.slne.surf.api.core.config.SpongeYmlConfigClass
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlatform
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlatform
 
 /**
  * Loads [MinimapCompanionConfig] from `config.yml` in the plugin's data directory.

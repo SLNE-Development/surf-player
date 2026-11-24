@@ -1,11 +1,11 @@
-package dev.slne.surf.social.microservice.playtime.handler
+package dev.slne.surf.player.microservice.playtime.handler
 
-import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.CreatePlaytimeStreakPauseRequestPacket
-import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.DeletePlaytimeStreakPauseRequestPacket
-import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.LoadPlaytimeStreakPausesRequestPacket
-import dev.slne.surf.social.core.common.playtime.rabbit.packet.response.PlaytimeStreakPauseResponsePacket
-import dev.slne.surf.social.core.common.playtime.rabbit.packet.response.PlaytimeStreakPausesResponsePacket
-import dev.slne.surf.social.microservice.playtime.database.repository.PlaytimeStreakPauseRepository
+import dev.slne.surf.player.core.common.playtime.rabbit.packet.request.CreatePlaytimeStreakPauseRequestPacket
+import dev.slne.surf.player.core.common.playtime.rabbit.packet.request.DeletePlaytimeStreakPauseRequestPacket
+import dev.slne.surf.player.core.common.playtime.rabbit.packet.request.LoadPlaytimeStreakPausesRequestPacket
+import dev.slne.surf.player.core.common.playtime.rabbit.packet.response.PlaytimeStreakPauseResponsePacket
+import dev.slne.surf.player.core.common.playtime.rabbit.packet.response.PlaytimeStreakPausesResponsePacket
+import dev.slne.surf.player.microservice.playtime.database.repository.PlaytimeStreakPauseRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.queue.queue.tick
+package dev.slne.surf.player.core.common.queue.queue.tick
 
 import kotlinx.coroutines.*
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.clan.listener
+package dev.slne.surf.player.velocity.clan.listener
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import net.kyori.adventure.text.Component

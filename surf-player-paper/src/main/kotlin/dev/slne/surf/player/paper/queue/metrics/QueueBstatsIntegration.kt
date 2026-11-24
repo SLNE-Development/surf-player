@@ -1,10 +1,10 @@
-package dev.slne.surf.social.paper.queue.metrics
+package dev.slne.surf.player.paper.queue.metrics
 
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.paper.api.metrics.Metrics
-import dev.slne.surf.social.core.client.queue.metrics.QueueMetrics
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueService
-import dev.slne.surf.social.paper.queue.plugin
+import dev.slne.surf.player.core.client.queue.metrics.QueueMetrics
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.paper.queue.plugin
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicLong
 

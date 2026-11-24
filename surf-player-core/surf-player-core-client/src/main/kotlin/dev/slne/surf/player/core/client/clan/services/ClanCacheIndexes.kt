@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.clan.services
+package dev.slne.surf.player.core.client.clan.services
 
 import dev.slne.surf.redis.cache.RedisSetIndexes
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.common.clan.clan.ClanTagRules
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.common.clan.clan.ClanTagRules
 
 /**
  * The indexes clans can be looked up by in the clan cache.

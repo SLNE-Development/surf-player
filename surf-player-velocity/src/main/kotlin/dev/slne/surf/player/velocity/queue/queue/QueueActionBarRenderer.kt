@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.queue.queue
+package dev.slne.surf.player.velocity.queue.queue
 
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.text

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.connection.impl
+package dev.slne.surf.player.api.connection.impl
 
-import dev.slne.surf.social.api.connection.SocialConnection
+import dev.slne.surf.player.api.connection.SocialConnection
 import kotlinx.serialization.Serializable
 
 @Serializable

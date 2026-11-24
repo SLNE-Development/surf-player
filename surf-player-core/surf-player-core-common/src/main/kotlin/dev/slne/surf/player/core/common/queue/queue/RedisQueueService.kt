@@ -1,14 +1,14 @@
-package dev.slne.surf.social.core.common.queue.queue
+package dev.slne.surf.player.core.common.queue.queue
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.runAtFixedRate
 import dev.slne.surf.api.core.util.withAutoCloseOnRemoval
-import dev.slne.surf.social.api.queue.InternalSurfQueueApi
-import dev.slne.surf.social.api.queue.service.SurfQueueService
-import dev.slne.surf.social.core.common.queue.QueueInstance
-import dev.slne.surf.social.core.common.queue.redis.redisApi
+import dev.slne.surf.player.api.queue.InternalSurfQueueApi
+import dev.slne.surf.player.api.queue.service.SurfQueueService
+import dev.slne.surf.player.core.common.queue.QueueInstance
+import dev.slne.surf.player.core.common.queue.redis.redisApi
 import dev.slne.surf.redis.libs.redisson.api.options.KeysScanOptions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel

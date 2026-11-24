@@ -1,10 +1,10 @@
-package dev.slne.surf.social.minestom.tab.platform
+package dev.slne.surf.player.minestom.tab.platform
 
 import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.social.core.client.tab.platform.TabPlatform
-import dev.slne.surf.social.minestom.tab.TabMinestomFeature
+import dev.slne.surf.player.core.client.tab.platform.TabPlatform
+import dev.slne.surf.player.minestom.tab.TabMinestomFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*

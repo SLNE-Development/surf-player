@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.minimap.global
+package dev.slne.surf.player.core.client.minimap.global
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.core.client.minimap.config.GlobalSettingsConfig
+import dev.slne.surf.player.core.client.minimap.config.GlobalSettingsConfig
 
 /**
  * The features `global-settings` switches for every mod: `true` allows a feature and `false` forbids it, whatever

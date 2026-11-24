@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.profile
+package dev.slne.surf.player.paper.profile
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.inventory.framework.register
-import dev.slne.surf.social.paper.profile.command.profileCommand
-import dev.slne.surf.social.paper.profile.menu.own.ownProfileMenu
+import dev.slne.surf.player.paper.profile.command.profileCommand
+import dev.slne.surf.player.paper.profile.menu.own.ownProfileMenu
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)

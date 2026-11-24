@@ -1,12 +1,12 @@
-package dev.slne.surf.social.api.clan.permission
+package dev.slne.surf.player.api.clan.permission
 
 /**
  * Represents permissions that can be granted to clan members based on their role.
  *
  * Each permission controls access to specific clan management actions. Permissions are
- * typically associated with [dev.slne.surf.social.api.clan.member.ClanMemberRole] instances.
+ * typically associated with [dev.slne.surf.player.api.clan.member.ClanMemberRole] instances.
  *
- * @see dev.slne.surf.social.api.clan.member.ClanMemberRole
+ * @see dev.slne.surf.player.api.clan.member.ClanMemberRole
  */
 enum class ClanPermission {
     /**

@@ -1,11 +1,11 @@
-package dev.slne.surf.social.minestom.nametag.platform
+package dev.slne.surf.player.minestom.nametag.platform
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.inventory.framework.view.util.shift as glyphShift
-import dev.slne.surf.social.core.client.nametag.platform.NametagPlatform
-import dev.slne.surf.social.minestom.nametag.NametagMinestomFeature
+import dev.slne.surf.player.core.client.nametag.platform.NametagPlatform
+import dev.slne.surf.player.minestom.nametag.NametagMinestomFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.minimap.platform
+package dev.slne.surf.player.minestom.minimap.platform
 
 import org.junit.jupiter.api.Test
 import java.util.*

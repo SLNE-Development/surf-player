@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.client.tab
+package dev.slne.surf.player.core.client.tab
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.api.tab.SurfTabApi
-import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
-import dev.slne.surf.social.core.client.tab.service.TablistService
+import dev.slne.surf.player.api.tab.SurfTabApi
+import dev.slne.surf.player.api.tab.placeholder.TabPlaceholder
+import dev.slne.surf.player.core.client.tab.service.TablistService
 import java.util.*
 
 @AutoService(SurfTabApi::class)

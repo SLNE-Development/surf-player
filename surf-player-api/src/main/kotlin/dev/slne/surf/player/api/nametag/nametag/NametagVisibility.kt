@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.nametag.nametag
+package dev.slne.surf.player.api.nametag.nametag
 
 /**
  * When the name above a player's head is shown to a viewer.

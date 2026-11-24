@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.minimap.platform
+package dev.slne.surf.player.minestom.minimap.platform
 
 import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Player

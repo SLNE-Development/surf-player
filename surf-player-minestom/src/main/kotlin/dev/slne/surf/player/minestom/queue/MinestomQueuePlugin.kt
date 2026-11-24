@@ -1,8 +1,8 @@
-package dev.slne.surf.social.minestom.queue
+package dev.slne.surf.player.minestom.queue
 
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
-import dev.slne.surf.social.core.common.queue.QueueInstance
-import dev.slne.surf.social.minestom.queue.command.queueCommand
+import dev.slne.surf.player.core.common.queue.QueueInstance
+import dev.slne.surf.player.minestom.queue.command.queueCommand
 
 object MinestomQueuePlugin : SurfMinestomPlugin() {
     override suspend fun onLoad() {

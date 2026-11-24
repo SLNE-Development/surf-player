@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.vanish.service
+package dev.slne.surf.player.paper.vanish.service
 
 import com.destroystokyo.paper.profile.ProfileProperty
 import com.google.auto.service.AutoService
@@ -6,10 +6,10 @@ import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.api.paper.util.getPrefixedName
-import dev.slne.surf.social.api.vanish.event.PlayerNickEvent
-import dev.slne.surf.social.api.vanish.event.PlayerUnNickEvent
-import dev.slne.surf.social.paper.vanish.core.service.NickService
-import dev.slne.surf.social.paper.vanish.util.retrieveSkin
+import dev.slne.surf.player.api.vanish.event.PlayerNickEvent
+import dev.slne.surf.player.api.vanish.event.PlayerUnNickEvent
+import dev.slne.surf.player.paper.vanish.core.service.NickService
+import dev.slne.surf.player.paper.vanish.util.retrieveSkin
 import net.kyori.adventure.util.Services
 import org.bukkit.entity.Player
 import java.util.*

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.chat.message
+package dev.slne.surf.player.api.chat.message
 
 /**
  * Whether a message passed validation, see [MessageValidationError] for the reasons it can fail.

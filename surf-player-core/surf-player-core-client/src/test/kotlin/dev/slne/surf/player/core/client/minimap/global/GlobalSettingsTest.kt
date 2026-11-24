@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.minimap.global
+package dev.slne.surf.player.core.client.minimap.global
 
-import dev.slne.surf.social.core.client.minimap.config.GlobalSettingsConfig
+import dev.slne.surf.player.core.client.minimap.config.GlobalSettingsConfig
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame

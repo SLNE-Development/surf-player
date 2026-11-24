@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.common.chat.rabbit.rpc
+package dev.slne.surf.player.core.common.chat.rabbit.rpc
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
-import dev.slne.surf.social.api.chat.functionality.Functionalities
+import dev.slne.surf.player.api.chat.functionality.Functionalities
 
 /** The chat functionalities of each server, stored by the microservice. */
 @RpcService

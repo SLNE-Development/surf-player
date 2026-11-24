@@ -1,8 +1,8 @@
-package dev.slne.surf.social.microservice.friends.cooldown
+package dev.slne.surf.player.microservice.friends.cooldown
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import dev.slne.surf.social.microservice.friends.config.FriendsConfig
-import dev.slne.surf.social.microservice.friends.db.repository.FriendRequestCooldownRepository
+import dev.slne.surf.player.microservice.friends.config.FriendsConfig
+import dev.slne.surf.player.microservice.friends.db.repository.FriendRequestCooldownRepository
 import java.time.OffsetDateTime
 import java.util.*
 import kotlin.time.Duration

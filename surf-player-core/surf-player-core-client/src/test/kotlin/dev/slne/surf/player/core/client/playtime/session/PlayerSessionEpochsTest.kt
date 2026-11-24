@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.playtime.session
+package dev.slne.surf.player.core.client.playtime.session
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

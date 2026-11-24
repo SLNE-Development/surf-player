@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.minimap.service
+package dev.slne.surf.player.core.client.minimap.service
 
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
-import dev.slne.surf.social.core.client.minimap.xaero.XaeroChannels
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
 import net.kyori.adventure.key.Key
 import java.util.*
 

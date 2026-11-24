@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.chat.message.redirector
+package dev.slne.surf.player.api.chat.message.redirector
 
 import java.util.concurrent.CopyOnWriteArrayList
 

@@ -1,8 +1,8 @@
-package dev.slne.surf.social.api.playtime
+package dev.slne.surf.player.api.playtime
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
-import dev.slne.surf.social.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.player.api.playtime.session.PlaytimeSession
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*

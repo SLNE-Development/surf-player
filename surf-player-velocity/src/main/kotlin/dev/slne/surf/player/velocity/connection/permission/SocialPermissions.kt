@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.connection.permission
+package dev.slne.surf.player.velocity.connection.permission
 
 object SocialPermissions {
     const val BASE = "surf.social"

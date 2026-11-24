@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.settings
+package dev.slne.surf.player.microservice.settings
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.database.DatabaseApi
@@ -6,10 +6,10 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.microservice.api.microservice.Microservice
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
-import dev.slne.surf.social.microservice.settings.rabbit.handler.PlayerSettingsHandler
-import dev.slne.surf.social.microservice.settings.rabbit.handler.SettingsHandler
-import dev.slne.surf.social.microservice.settings.table.SettingEntriesTable
-import dev.slne.surf.social.microservice.settings.table.SettingsTable
+import dev.slne.surf.player.microservice.settings.rabbit.handler.PlayerSettingsHandler
+import dev.slne.surf.player.microservice.settings.rabbit.handler.SettingsHandler
+import dev.slne.surf.player.microservice.settings.table.SettingEntriesTable
+import dev.slne.surf.player.microservice.settings.table.SettingsTable
 import kotlin.io.path.Path
 
 @AutoService(Microservice::class)

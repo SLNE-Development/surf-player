@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.tracker
+package dev.slne.surf.player.core.client.minimap.tracker
 
 import dev.slne.surf.api.core.util.logger
 import kotlinx.coroutines.currentCoroutineContext

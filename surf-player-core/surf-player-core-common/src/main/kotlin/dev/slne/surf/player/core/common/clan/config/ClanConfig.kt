@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.common.clan.config
+package dev.slne.surf.player.core.common.clan.config
 
 import dev.slne.surf.api.core.config.SpongeYmlConfigClass
-import dev.slne.surf.social.core.common.clan.ClanInstance
+import dev.slne.surf.player.core.common.clan.ClanInstance
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 
 @ConfigSerializable

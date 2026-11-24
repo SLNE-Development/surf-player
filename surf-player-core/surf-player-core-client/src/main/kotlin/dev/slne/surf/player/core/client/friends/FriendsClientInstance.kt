@@ -1,12 +1,12 @@
-package dev.slne.surf.social.core.client.friends
+package dev.slne.surf.player.core.client.friends
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.api.friends.model.FriendRequest
-import dev.slne.surf.social.api.friends.model.Friendship
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.core.client.friends.redis.listener.FriendRequestRedisListener
-import dev.slne.surf.social.core.client.friends.redis.listener.FriendshipRedisListener
-import dev.slne.surf.social.core.client.friends.rpc.friendsRpcService
+import dev.slne.surf.player.api.friends.model.FriendRequest
+import dev.slne.surf.player.api.friends.model.Friendship
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.friends.redis.listener.FriendRequestRedisListener
+import dev.slne.surf.player.core.client.friends.redis.listener.FriendshipRedisListener
+import dev.slne.surf.player.core.client.friends.rpc.friendsRpcService
 import dev.slne.surf.redis.sync.list.SyncList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -16,8 +16,8 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 /**
- * The friends state shared by every client platform. It uses the shared surf-social connections
- * owned by [SocialClient].
+ * The friends state shared by every client platform. It uses the shared surf-player connections
+ * owned by [SurfPlayerClient].
  */
 abstract class FriendsClientInstance {
     abstract val dataPath: Path
@@ -31,10 +31,10 @@ abstract class FriendsClientInstance {
     private var subscribeToEvents: Boolean = false
 
     /**
-     * Registers the friends Redis components. Must run before [SocialClient.connectRedis].
+     * Registers the friends Redis components. Must run before [SurfPlayerClient.connectRedis].
      */
     suspend fun onLoad() {
-        val redisApi = SocialClient.redisApi
+        val redisApi = SurfPlayerClient.redisApi
 
         if (subscribeToEvents) {
             redisApi.subscribeToEvents(FriendshipRedisListener)
@@ -52,7 +52,7 @@ abstract class FriendsClientInstance {
         fetch()
     }
 
-    /** The shared connections are closed by [SocialClient.disable]. */
+    /** The shared connections are closed by [SurfPlayerClient.disable]. */
     suspend fun onDisable() {
     }
 

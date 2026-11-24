@@ -1,12 +1,12 @@
-package dev.slne.surf.social.minestom.clan.command.arguments.color
+package dev.slne.surf.player.minestom.clan.command.arguments.color
 
-import dev.slne.surf.social.minestom.command.failCommand
+import dev.slne.surf.player.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.argument.Argument
 import dev.slne.surf.api.minestom.command.argument.CustomArgument
 import dev.slne.surf.api.minestom.command.argument.TextArgument
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
-import dev.slne.surf.social.core.client.clan.command.*
+import dev.slne.surf.player.core.client.clan.command.*
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 

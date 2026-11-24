@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.command
+package dev.slne.surf.player.core.client.minimap.command
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import net.kyori.adventure.audience.Audience

@@ -1,9 +1,9 @@
-package dev.slne.surf.social.minestom.playtime.platform
+package dev.slne.surf.player.minestom.playtime.platform
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
-import dev.slne.surf.social.core.client.playtime.platform.PlaytimePlatform
+import dev.slne.surf.player.core.client.playtime.platform.PlaytimePlatform
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*

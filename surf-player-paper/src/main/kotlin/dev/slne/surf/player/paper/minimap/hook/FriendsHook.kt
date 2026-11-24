@@ -1,7 +1,7 @@
-package dev.slne.surf.social.paper.minimap.hook
+package dev.slne.surf.player.paper.minimap.hook
 
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
-import dev.slne.surf.social.core.client.minimap.tracker.RelationSource
+import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.core.client.minimap.tracker.RelationSource
 import java.util.*
 
 /**

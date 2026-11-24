@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.playtime
+package dev.slne.surf.player.core.client.playtime
 
-import dev.slne.surf.social.core.common.playtime.PlaytimeInstance
+import dev.slne.surf.player.core.common.playtime.PlaytimeInstance
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 import java.nio.file.Path
 

@@ -1,7 +1,7 @@
-package dev.slne.surf.social.api.clan.member
+package dev.slne.surf.player.api.clan.member
 
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.permission.ClanPermission
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.permission.ClanPermission
 import org.jetbrains.annotations.ApiStatus
 import java.time.OffsetDateTime
 import java.util.*

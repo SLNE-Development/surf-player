@@ -1,15 +1,15 @@
-package dev.slne.surf.social.minestom.clan.command.subcommands
+package dev.slne.surf.player.minestom.clan.command.subcommands
 
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.clan.ClanCreationResult
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.clan.ClanCreationResult
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.stringArgument
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.command.clanCreatedMessage
-import dev.slne.surf.social.core.client.clan.command.clanCreationFailedMessage
-import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.client.clan.command.clanCreatedMessage
+import dev.slne.surf.player.core.client.clan.command.clanCreationFailedMessage
+import dev.slne.surf.player.core.client.clan.permission.ClanPermissions
 
 fun CommandAPICommand.clanCreateCommand(): CommandAPICommand = withSubcommand(
     subcommand("create") {

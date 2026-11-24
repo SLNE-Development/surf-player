@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.playtime.command
+package dev.slne.surf.player.paper.playtime.command
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.commandTree
@@ -6,12 +6,12 @@ import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
-import dev.slne.surf.social.core.client.playtime.command.sendPlayerNotFound
-import dev.slne.surf.social.core.client.playtime.command.sendPlaytimeOverview
-import dev.slne.surf.social.core.client.playtime.permission.PlaytimePermissions
-import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
-import dev.slne.surf.social.core.common.playtime.service.PlaytimeStreakService
-import dev.slne.surf.social.paper.playtime.plugin
+import dev.slne.surf.player.core.client.playtime.command.sendPlayerNotFound
+import dev.slne.surf.player.core.client.playtime.command.sendPlaytimeOverview
+import dev.slne.surf.player.core.client.playtime.permission.PlaytimePermissions
+import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.common.playtime.service.PlaytimeStreakService
+import dev.slne.surf.player.paper.playtime.plugin
 import kotlinx.coroutines.Deferred
 
 fun playtimeCommand() = commandTree("playtime") {

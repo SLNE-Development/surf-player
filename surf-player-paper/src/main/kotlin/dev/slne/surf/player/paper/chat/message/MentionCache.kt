@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.chat.message
+package dev.slne.surf.player.paper.chat.message
 
 import org.bukkit.entity.Player
 import java.util.regex.Pattern

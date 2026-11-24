@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.client.contentcreator.command
+package dev.slne.surf.player.core.client.contentcreator.command
 
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.api.contentcreator.platform.PlatformState
-import dev.slne.surf.social.api.contentcreator.platform.PlatformType
-import dev.slne.surf.social.core.client.contentcreator.service.ContentCreatorService
+import dev.slne.surf.player.api.contentcreator.platform.PlatformState
+import dev.slne.surf.player.api.contentcreator.platform.PlatformType
+import dev.slne.surf.player.core.client.contentcreator.service.ContentCreatorService
 import net.kyori.adventure.audience.Audience
 import java.util.*
 

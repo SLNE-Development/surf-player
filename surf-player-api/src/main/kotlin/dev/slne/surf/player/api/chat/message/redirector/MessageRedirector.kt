@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.chat.message.redirector
+package dev.slne.surf.player.api.chat.message.redirector
 
-import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.player.api.chat.message.MessageData
 import net.kyori.adventure.chat.SignedMessage
 
 interface MessageRedirector {

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.connection.config
+package dev.slne.surf.player.microservice.connection.config
 
 import dev.slne.surf.api.core.util.logger
 import java.nio.file.Path

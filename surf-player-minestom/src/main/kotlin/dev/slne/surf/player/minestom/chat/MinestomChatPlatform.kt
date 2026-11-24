@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.chat
+package dev.slne.surf.player.minestom.chat
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.sound
@@ -6,7 +6,7 @@ import dev.slne.surf.api.minestom.chat.deleteSignedMessage
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.permission.hasPermission
-import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.kyori.adventure.chat.SignedMessage

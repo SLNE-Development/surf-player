@@ -1,8 +1,8 @@
-package dev.slne.surf.social.microservice.clan.rpc
+package dev.slne.surf.player.microservice.clan.rpc
 
-import dev.slne.surf.social.core.common.clan.player.ClanPlayerImpl
-import dev.slne.surf.social.core.common.clan.rpc.ClanPlayerRpcService
-import dev.slne.surf.social.microservice.clan.db.repository.ClanPlayerRepository
+import dev.slne.surf.player.core.common.clan.player.ClanPlayerImpl
+import dev.slne.surf.player.core.common.clan.rpc.ClanPlayerRpcService
+import dev.slne.surf.player.microservice.clan.db.repository.ClanPlayerRepository
 import java.util.*
 
 object ClanPlayerRpcServiceImpl : ClanPlayerRpcService {

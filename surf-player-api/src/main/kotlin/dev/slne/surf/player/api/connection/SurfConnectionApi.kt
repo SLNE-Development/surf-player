@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.connection
+package dev.slne.surf.player.api.connection
 
 import dev.slne.surf.api.core.util.requiredService
 import java.util.*

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.contentcreator
+package dev.slne.surf.player.api.contentcreator
 
-import dev.slne.surf.social.api.contentcreator.platform.PlatformType
+import dev.slne.surf.player.api.contentcreator.platform.PlatformType
 import java.util.*
 
 interface ContentCreator {

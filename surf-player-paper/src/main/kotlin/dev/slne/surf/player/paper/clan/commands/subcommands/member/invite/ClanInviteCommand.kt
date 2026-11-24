@@ -1,18 +1,18 @@
-package dev.slne.surf.social.paper.clan.commands.subcommands.member.invite
+package dev.slne.surf.player.paper.clan.commands.subcommands.member.invite
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.invite.ClanInviteResult
-import dev.slne.surf.social.api.clan.permission.ClanPermission
-import dev.slne.surf.social.paper.clan.commands.failCommand
-import dev.slne.surf.social.paper.clan.permission.ClanPermissions
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.invite.ClanInviteResult
+import dev.slne.surf.player.api.clan.permission.ClanPermission
+import dev.slne.surf.player.paper.clan.commands.failCommand
+import dev.slne.surf.player.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.command.*
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.client.clan.Messages
+import dev.slne.surf.player.core.client.clan.command.*
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
 

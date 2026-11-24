@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.nametag.hook
+package dev.slne.surf.player.core.client.nametag.hook
 
-import dev.slne.surf.social.api.contentcreator.ContentCreatorPlatform
-import dev.slne.surf.social.api.contentcreator.listener.StateChangeListener
-import dev.slne.surf.social.api.contentcreator.platform.PlatformState
-import dev.slne.surf.social.core.client.contentcreator.ContentCreatorInstance
-import dev.slne.surf.social.core.client.nametag.platform.NametagPlatform
-import dev.slne.surf.social.core.client.nametag.service.NametagService
+import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.player.api.contentcreator.listener.StateChangeListener
+import dev.slne.surf.player.api.contentcreator.platform.PlatformState
+import dev.slne.surf.player.core.client.contentcreator.ContentCreatorInstance
+import dev.slne.surf.player.core.client.nametag.platform.NametagPlatform
+import dev.slne.surf.player.core.client.nametag.service.NametagService
 import java.util.*
 
 object ContentCreatorHook {

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.queue
+package dev.slne.surf.player.api.queue
 
 import dev.slne.surf.core.api.common.server.SurfServer
 

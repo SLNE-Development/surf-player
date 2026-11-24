@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.chat.permission
+package dev.slne.surf.player.core.client.chat.permission
 
 /**
  * Platform-neutral registry of all permission node strings used by surf-chat.

@@ -1,26 +1,26 @@
-package dev.slne.surf.social.microservice.chat
+package dev.slne.surf.player.microservice.chat
 
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
-import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatFunctionalityRpcService
-import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatHistoryRpcService
-import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatIgnoreRpcService
-import dev.slne.surf.social.core.common.chat.rabbit.rpc.ModerationService
-import dev.slne.surf.social.microservice.SocialMicroserviceModule
-import dev.slne.surf.social.microservice.SocialSchemas
-import dev.slne.surf.social.microservice.chat.rpc.ChatFunctionalityRpcServiceImpl
-import dev.slne.surf.social.microservice.chat.rpc.ChatHistoryRpcServiceImpl
-import dev.slne.surf.social.microservice.chat.rpc.ChatIgnoreRpcServiceImpl
-import dev.slne.surf.social.microservice.chat.rpc.ModerationServiceImpl
-import dev.slne.surf.social.microservice.chat.table.FunctionalityTable
-import dev.slne.surf.social.microservice.chat.table.HistoryTable
-import dev.slne.surf.social.microservice.chat.table.IgnoreListTable
-import dev.slne.surf.social.microservice.chat.table.ModerationsTable
-import dev.slne.surf.social.microservice.createSchemaWithTables
+import dev.slne.surf.player.core.common.chat.rabbit.rpc.ChatFunctionalityRpcService
+import dev.slne.surf.player.core.common.chat.rabbit.rpc.ChatHistoryRpcService
+import dev.slne.surf.player.core.common.chat.rabbit.rpc.ChatIgnoreRpcService
+import dev.slne.surf.player.core.common.chat.rabbit.rpc.ModerationService
+import dev.slne.surf.player.microservice.PlayerMicroserviceModule
+import dev.slne.surf.player.microservice.PlayerSchemas
+import dev.slne.surf.player.microservice.chat.rpc.ChatFunctionalityRpcServiceImpl
+import dev.slne.surf.player.microservice.chat.rpc.ChatHistoryRpcServiceImpl
+import dev.slne.surf.player.microservice.chat.rpc.ChatIgnoreRpcServiceImpl
+import dev.slne.surf.player.microservice.chat.rpc.ModerationServiceImpl
+import dev.slne.surf.player.microservice.chat.table.FunctionalityTable
+import dev.slne.surf.player.microservice.chat.table.HistoryTable
+import dev.slne.surf.player.microservice.chat.table.IgnoreListTable
+import dev.slne.surf.player.microservice.chat.table.ModerationsTable
+import dev.slne.surf.player.microservice.createSchemaWithTables
 
-object ChatMicroserviceModule : SocialMicroserviceModule {
+object ChatMicroserviceModule : PlayerMicroserviceModule {
     override suspend fun createTables() {
         createSchemaWithTables(
-            SocialSchemas.chat,
+            PlayerSchemas.chat,
             FunctionalityTable,
             HistoryTable,
             IgnoreListTable,

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.placeholder.expansion.clan
+package dev.slne.surf.player.placeholder.expansion.clan
 
 import net.kyori.adventure.text.Component
 

@@ -1,17 +1,17 @@
-package dev.slne.surf.social.paper.settings.command
+package dev.slne.surf.player.paper.settings.command
 
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.surf.api.paper.inventory.framework.open
-import dev.slne.surf.social.api.settings.setting.Setting
-import dev.slne.surf.social.core.client.settings.command.SettingsCommandActions
-import dev.slne.surf.social.core.client.settings.command.SettingsCommandMessages
-import dev.slne.surf.social.paper.settings.command.argument.niceToggleArgument
-import dev.slne.surf.social.paper.settings.command.argument.settingArgument
-import dev.slne.surf.social.paper.settings.menu.settingsView
-import dev.slne.surf.social.paper.settings.permission.PermissionRegistry
+import dev.slne.surf.player.api.settings.setting.Setting
+import dev.slne.surf.player.core.client.settings.command.SettingsCommandActions
+import dev.slne.surf.player.core.client.settings.command.SettingsCommandMessages
+import dev.slne.surf.player.paper.settings.command.argument.niceToggleArgument
+import dev.slne.surf.player.paper.settings.command.argument.settingArgument
+import dev.slne.surf.player.paper.settings.menu.settingsView
+import dev.slne.surf.player.paper.settings.permission.PermissionRegistry
 
 fun settingsCommand() = commandTree("settings") {
     withPermission(PermissionRegistry.COMMAND_SETTINGS)

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.chat.service
+package dev.slne.surf.player.core.client.chat.service
 
-import dev.slne.surf.social.core.client.SocialClient.redisApi
+import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
 import dev.slne.surf.redis.codec.UUIDCodec
 import dev.slne.surf.redis.libs.redisson.api.RMapCacheReactive
 import kotlinx.coroutines.reactor.awaitSingleOrNull

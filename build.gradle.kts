@@ -13,7 +13,7 @@ buildscript {
 }
 
 allprojects {
-    group = "dev.slne.surf.social"
+    group = "dev.slne.surf.player"
     version = findProperty("version") as String
 }
 
@@ -21,7 +21,7 @@ subprojects {
     afterEvaluate {
         extensions.findByType<KotlinJvmExtension>()?.apply {
             compilerOptions {
-                optIn.add("dev.slne.surf.social.api.clan.util.InternalClanApi")
+                optIn.add("dev.slne.surf.player.api.clan.util.InternalClanApi")
             }
         }
 

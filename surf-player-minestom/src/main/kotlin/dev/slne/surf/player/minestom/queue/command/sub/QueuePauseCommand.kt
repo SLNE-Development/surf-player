@@ -1,13 +1,13 @@
-package dev.slne.surf.social.minestom.queue.command.sub
+package dev.slne.surf.player.minestom.queue.command.sub
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.minestom.command.argument.surfBackendServerArgument
-import dev.slne.surf.social.core.client.queue.command.QueueMessages
-import dev.slne.surf.social.core.client.queue.permission.QueuePermissions
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.core.client.queue.command.QueueMessages
+import dev.slne.surf.player.core.client.queue.permission.QueuePermissions
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
 
 fun CommandAPICommand.queuePause(): CommandAPICommand = withSubcommand(
     subcommand("pause") {

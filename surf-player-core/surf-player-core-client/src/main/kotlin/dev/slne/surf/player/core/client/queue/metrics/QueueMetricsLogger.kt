@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.queue.metrics
+package dev.slne.surf.player.core.client.queue.metrics
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.core.client.queue.platform.QueuePlatform
+import dev.slne.surf.player.core.client.queue.platform.QueuePlatform
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive

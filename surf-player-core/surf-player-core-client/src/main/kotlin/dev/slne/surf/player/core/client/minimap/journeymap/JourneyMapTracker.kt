@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.minimap.journeymap
+package dev.slne.surf.player.core.client.minimap.journeymap
 
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs

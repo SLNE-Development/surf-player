@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.vanish.listener
+package dev.slne.surf.player.paper.vanish.listener
 
 import com.github.retrooper.packetevents.event.PacketListenerAbstract
 import com.github.retrooper.packetevents.event.PacketReceiveEvent
@@ -8,7 +8,7 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerInput
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
-import dev.slne.surf.social.paper.vanish.core.service.vanishService
+import dev.slne.surf.player.paper.vanish.core.service.vanishService
 import org.bukkit.entity.Player
 import java.util.*
 

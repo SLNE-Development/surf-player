@@ -1,12 +1,12 @@
-package dev.slne.surf.social.core.client.friends.command
+package dev.slne.surf.player.core.client.friends.command
 
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.CommonComponents
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.service.PlayerLookupService
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
-import dev.slne.surf.social.core.client.friends.util.format
+import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.core.client.friends.util.format
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import java.time.OffsetDateTime

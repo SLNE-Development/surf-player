@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.client.chat.redis.rpc
+package dev.slne.surf.player.core.client.chat.redis.rpc
 
 import dev.slne.surf.api.core.serializer.SurfSerializerModule
 import dev.slne.surf.api.core.serializer.java.uuid.JavaUUIDStringSerializer
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.api.chat.message.MessageType
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy

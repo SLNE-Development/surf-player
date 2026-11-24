@@ -1,7 +1,7 @@
-package dev.slne.surf.social.paper.queue.permission
+package dev.slne.surf.player.paper.queue.permission
 
 import dev.slne.surf.api.paper.permission.PermissionRegistry
-import dev.slne.surf.social.core.client.queue.permission.QueuePermissions
+import dev.slne.surf.player.core.client.queue.permission.QueuePermissions
 
 object PaperQueuePermissions : PermissionRegistry() {
     val COMMAND_QUEUE = create(QueuePermissions.COMMAND_QUEUE)

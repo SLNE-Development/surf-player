@@ -1,11 +1,11 @@
-package dev.slne.surf.social.paper.chat.listener
+package dev.slne.surf.player.paper.chat.listener
 
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.api.paper.util.forEachPlayer
-import dev.slne.surf.social.core.client.chat.hook.SettingsHook
-import dev.slne.surf.social.core.client.chat.message.format.buildConnectionMessage
-import dev.slne.surf.social.core.client.util.luckPermsPrefix
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
+import dev.slne.surf.player.core.client.util.luckPermsPrefix
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 

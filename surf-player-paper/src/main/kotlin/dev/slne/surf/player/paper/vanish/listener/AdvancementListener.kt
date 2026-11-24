@@ -1,6 +1,6 @@
-package dev.slne.surf.social.paper.vanish.listener
+package dev.slne.surf.player.paper.vanish.listener
 
-import dev.slne.surf.social.paper.vanish.core.service.vanishService
+import dev.slne.surf.player.paper.vanish.core.service.vanishService
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener

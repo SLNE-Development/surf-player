@@ -1,8 +1,8 @@
-package dev.slne.surf.social.microservice.chat.rpc
+package dev.slne.surf.player.microservice.chat.rpc
 
-import dev.slne.surf.social.api.chat.functionality.Functionalities
-import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatFunctionalityRpcService
-import dev.slne.surf.social.microservice.chat.repository.functionality.FunctionalityRepository
+import dev.slne.surf.player.api.chat.functionality.Functionalities
+import dev.slne.surf.player.core.common.chat.rabbit.rpc.ChatFunctionalityRpcService
+import dev.slne.surf.player.microservice.chat.repository.functionality.FunctionalityRepository
 
 object ChatFunctionalityRpcServiceImpl : ChatFunctionalityRpcService {
     override suspend fun findFunctionalities(serverName: String): Functionalities =

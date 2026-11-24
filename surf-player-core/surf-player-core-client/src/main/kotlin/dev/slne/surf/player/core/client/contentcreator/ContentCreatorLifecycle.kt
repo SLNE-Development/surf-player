@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.contentcreator
+package dev.slne.surf.player.core.client.contentcreator
 
-import dev.slne.surf.social.core.client.contentcreator.client.ContentClientManager
-import dev.slne.surf.social.core.client.contentcreator.platform.platformBridge
-import dev.slne.surf.social.core.client.contentcreator.service.ContentCreatorService
+import dev.slne.surf.player.core.client.contentcreator.client.ContentClientManager
+import dev.slne.surf.player.core.client.contentcreator.platform.platformBridge
+import dev.slne.surf.player.core.client.contentcreator.service.ContentCreatorService
 
 /**
  * Starts and stops the platform-neutral part of the content creator plugin.

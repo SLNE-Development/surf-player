@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.chat.processor
+package dev.slne.surf.player.core.client.chat.processor
 
-import dev.slne.surf.social.api.chat.message.MessageContext
-import dev.slne.surf.social.api.chat.processor.chatProcessorRegistry
+import dev.slne.surf.player.api.chat.message.MessageContext
+import dev.slne.surf.player.api.chat.processor.chatProcessorRegistry
 
 suspend fun runPreProcessors(context: MessageContext): MessageContext {
     var current = context

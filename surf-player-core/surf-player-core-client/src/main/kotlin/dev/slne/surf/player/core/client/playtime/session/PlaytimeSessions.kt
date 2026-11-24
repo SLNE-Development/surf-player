@@ -1,14 +1,14 @@
-package dev.slne.surf.social.core.client.playtime.session
+package dev.slne.surf.player.core.client.playtime.session
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.core.api.common.SurfCoreApi
-import dev.slne.surf.social.api.playtime.session.PlaytimeSession
-import dev.slne.surf.social.api.playtime.session.PlaytimeStreak
-import dev.slne.surf.social.core.client.playtime.streak.isGapBridgedByPauses
-import dev.slne.surf.social.core.common.playtime.service.AfkService
-import dev.slne.surf.social.core.common.playtime.service.PayCheckService
-import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
-import dev.slne.surf.social.core.common.playtime.service.PlaytimeStreakService
+import dev.slne.surf.player.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
+import dev.slne.surf.player.core.client.playtime.streak.isGapBridgedByPauses
+import dev.slne.surf.player.core.common.playtime.service.AfkService
+import dev.slne.surf.player.core.common.playtime.service.PayCheckService
+import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.common.playtime.service.PlaytimeStreakService
 import net.kyori.adventure.audience.Audience
 import java.time.LocalDate
 import java.time.LocalDateTime

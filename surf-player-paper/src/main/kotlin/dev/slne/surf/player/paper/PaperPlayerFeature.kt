@@ -1,15 +1,15 @@
-package dev.slne.surf.social.paper
+package dev.slne.surf.player.paper
 
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 
 /**
- * A feature (former standalone plugin) bundled into [SocialPaperPlugin].
+ * A feature (former standalone plugin) bundled into [PlayerPaperPlugin].
  *
- * Lifecycle methods are called by [SocialPaperPlugin] in feature order on load/enable
+ * Lifecycle methods are called by [PlayerPaperPlugin] in feature order on load/enable
  * and in reverse order on disable.
  */
-interface PaperSocialFeature {
+interface PaperPlayerFeature {
     /** Human-readable feature name, also used as the feature's data subfolder. */
     val name: String
 

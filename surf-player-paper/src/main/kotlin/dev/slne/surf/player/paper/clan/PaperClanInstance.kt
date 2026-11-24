@@ -1,12 +1,12 @@
-package dev.slne.surf.social.paper.clan
+package dev.slne.surf.player.paper.clan
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.social.core.common.clan.ClanInstance
-import dev.slne.surf.social.paper.clan.commands.clanCommand
-import dev.slne.surf.social.paper.clan.commands.subcommands.ClanChatCommand
-import dev.slne.surf.social.paper.clan.listener.ClanTagColorJoinListener
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.core.common.clan.ClanInstance
+import dev.slne.surf.player.paper.clan.commands.clanCommand
+import dev.slne.surf.player.paper.clan.commands.subcommands.ClanChatCommand
+import dev.slne.surf.player.paper.clan.listener.ClanTagColorJoinListener
+import dev.slne.surf.player.paper.plugin
 
 @AutoService(ClanInstance::class)
 class PaperClanInstance : ClanInstance {

@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.common.queue.queue
+package dev.slne.surf.player.core.common.queue.queue
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.api.queue.SurfQueue
-import dev.slne.surf.social.core.common.queue.priority.LuckpermsPriorityResolver
-import dev.slne.surf.social.core.common.queue.queue.entry.QueueEntry
+import dev.slne.surf.player.api.queue.SurfQueue
+import dev.slne.surf.player.core.common.queue.priority.LuckpermsPriorityResolver
+import dev.slne.surf.player.core.common.queue.queue.entry.QueueEntry
 import it.unimi.dsi.fastutil.objects.Object2IntMap
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectList

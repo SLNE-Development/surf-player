@@ -1,10 +1,10 @@
-package dev.slne.surf.social.paper.playtime.hook
+package dev.slne.surf.player.paper.playtime.hook
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.client.playtime.paycheck.PayCheckPayout
-import dev.slne.surf.social.core.common.playtime.bridge.TransactionBridge
-import dev.slne.surf.social.paper.playtime.hasTransactionHook
-import dev.slne.surf.social.paper.playtime.plugin
+import dev.slne.surf.player.core.client.playtime.paycheck.PayCheckPayout
+import dev.slne.surf.player.core.common.playtime.bridge.TransactionBridge
+import dev.slne.surf.player.paper.playtime.hasTransactionHook
+import dev.slne.surf.player.paper.playtime.plugin
 import net.kyori.adventure.util.Services
 import org.bukkit.Bukkit
 import java.util.*

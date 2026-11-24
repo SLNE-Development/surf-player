@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.nametag.nametag
+package dev.slne.surf.player.api.nametag.nametag
 
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
 import net.kyori.adventure.text.Component

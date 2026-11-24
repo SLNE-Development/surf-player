@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.minimap.world
+package dev.slne.surf.player.core.client.minimap.world
 
-import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
 import net.kyori.adventure.key.Key
 
 /**

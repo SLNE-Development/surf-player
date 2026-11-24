@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.playtime.api.event
+package dev.slne.surf.player.minestom.playtime.api.event
 
 import net.minestom.server.entity.Player
 import net.minestom.server.event.trait.PlayerEvent

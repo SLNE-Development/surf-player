@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.tab.hook
+package dev.slne.surf.player.core.client.tab.hook
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
-import dev.slne.surf.social.core.client.tab.service.TablistService
+import dev.slne.surf.player.core.client.tab.service.TablistService
 import net.luckperms.api.model.user.User
 import java.util.*
 

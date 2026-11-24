@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.clan.db.repository
+package dev.slne.surf.player.microservice.clan.db.repository
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
@@ -6,8 +6,8 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insertReturnin
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.update
-import dev.slne.surf.social.core.common.clan.player.ClanPlayerImpl
-import dev.slne.surf.social.microservice.clan.db.table.ClanPlayerTable
+import dev.slne.surf.player.core.common.clan.player.ClanPlayerImpl
+import dev.slne.surf.player.microservice.clan.db.table.ClanPlayerTable
 import kotlinx.coroutines.flow.singleOrNull
 import java.util.*
 

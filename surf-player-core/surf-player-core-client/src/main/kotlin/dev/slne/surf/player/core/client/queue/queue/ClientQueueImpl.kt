@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.queue.queue
+package dev.slne.surf.player.core.client.queue.queue
 
-import dev.slne.surf.social.core.client.queue.metrics.QueueMetrics
-import dev.slne.surf.social.core.client.queue.queue.cleanup.QueueCleanup
-import dev.slne.surf.social.core.common.queue.queue.AbstractQueue
+import dev.slne.surf.player.core.client.queue.metrics.QueueMetrics
+import dev.slne.surf.player.core.client.queue.queue.cleanup.QueueCleanup
+import dev.slne.surf.player.core.common.queue.queue.AbstractQueue
 
 class ClientQueueImpl(serverName: String) : AbstractQueue(serverName), ClientQueue {
     private val cleanup = QueueCleanup(this, store, lockManager)

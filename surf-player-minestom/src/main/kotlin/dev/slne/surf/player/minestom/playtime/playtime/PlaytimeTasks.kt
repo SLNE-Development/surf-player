@@ -1,9 +1,9 @@
-package dev.slne.surf.social.minestom.playtime.playtime
+package dev.slne.surf.player.minestom.playtime.playtime
 
 import dev.slne.surf.api.core.util.runAtFixedRate
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
-import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
-import dev.slne.surf.social.minestom.playtime.listener.checkAfkStates
+import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.player.minestom.playtime.listener.checkAfkStates
 import kotlinx.coroutines.Job
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds

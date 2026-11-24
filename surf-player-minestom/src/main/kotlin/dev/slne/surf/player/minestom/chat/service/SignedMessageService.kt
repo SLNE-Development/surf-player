@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.chat.service
+package dev.slne.surf.player.minestom.chat.service
 
 import dev.slne.surf.api.core.messages.adventure.text
 import dev.slne.surf.api.core.util.logger
@@ -8,13 +8,13 @@ import dev.slne.surf.api.minestom.chat.sendRemoteSignedMessage
 import dev.slne.surf.api.minestom.chat.signedChatSession
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.redis.request.RequestTimeoutException
-import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageHandledRedisResponse
-import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
-import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
-import dev.slne.surf.social.core.client.SocialClient.redisApi
-import dev.slne.surf.social.minestom.chat.redis.rpc.chatSession
-import dev.slne.surf.social.minestom.chat.redis.rpc.toRemote
-import dev.slne.surf.social.minestom.chat.redis.rpc.toWire
+import dev.slne.surf.player.core.client.chat.redis.rpc.SendSignedMessageHandledRedisResponse
+import dev.slne.surf.player.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
+import dev.slne.surf.player.core.client.chat.redis.rpc.SignedChatMessage
+import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
+import dev.slne.surf.player.minestom.chat.redis.rpc.chatSession
+import dev.slne.surf.player.minestom.chat.redis.rpc.toRemote
+import dev.slne.surf.player.minestom.chat.redis.rpc.toWire
 import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component
 import net.minestom.server.entity.Player

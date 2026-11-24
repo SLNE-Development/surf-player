@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.playtime
+package dev.slne.surf.player.core.common.playtime
 
 import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.rabbitmq.api.RabbitMQApi

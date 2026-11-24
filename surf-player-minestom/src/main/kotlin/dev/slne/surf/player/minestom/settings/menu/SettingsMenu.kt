@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.settings.menu
+package dev.slne.surf.player.minestom.settings.menu
 
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
@@ -27,9 +27,9 @@ import dev.slne.surf.api.minestom.inventory.framework.view.settings.PaginationVi
 import dev.slne.surf.api.minestom.inventory.framework.view.state.get
 import dev.slne.surf.api.minestom.inventory.framework.view.state.initialState
 import dev.slne.surf.api.minestom.inventory.framework.view.surfView
-import dev.slne.surf.social.api.settings.setting.PlayerSetting
-import dev.slne.surf.social.core.client.settings.platform.SettingsPlatform
-import dev.slne.surf.social.core.common.settings.service.SettingsService
+import dev.slne.surf.player.api.settings.setting.PlayerSetting
+import dev.slne.surf.player.core.client.settings.platform.SettingsPlatform
+import dev.slne.surf.player.core.common.settings.service.SettingsService
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.minestom.server.sound.SoundEventKeys

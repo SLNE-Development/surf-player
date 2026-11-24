@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.clan.clan
+package dev.slne.surf.player.api.clan.clan
 
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor

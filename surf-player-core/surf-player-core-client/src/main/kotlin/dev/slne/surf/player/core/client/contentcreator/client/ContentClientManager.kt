@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.contentcreator.client
+package dev.slne.surf.player.core.client.contentcreator.client
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.api.contentcreator.ContentCreator
-import dev.slne.surf.social.core.client.contentcreator.service.ContentCreatorService
+import dev.slne.surf.player.api.contentcreator.ContentCreator
+import dev.slne.surf.player.core.client.contentcreator.service.ContentCreatorService
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope

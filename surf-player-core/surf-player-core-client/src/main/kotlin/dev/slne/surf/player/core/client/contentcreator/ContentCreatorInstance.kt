@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.client.contentcreator
+package dev.slne.surf.player.core.client.contentcreator
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.api.contentcreator.ContentCreatorPlatform
-import dev.slne.surf.social.api.contentcreator.listener.StateChangeListener
-import dev.slne.surf.social.api.contentcreator.platform.PlatformState
+import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.player.api.contentcreator.listener.StateChangeListener
+import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import java.util.*
 import java.util.concurrent.CopyOnWriteArraySet
 

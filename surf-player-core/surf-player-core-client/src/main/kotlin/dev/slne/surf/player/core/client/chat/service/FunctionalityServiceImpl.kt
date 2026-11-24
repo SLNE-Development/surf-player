@@ -1,10 +1,10 @@
-package dev.slne.surf.social.core.client.chat.service
+package dev.slne.surf.player.core.client.chat.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.core.api.common.SurfCoreApi
-import dev.slne.surf.social.api.chat.functionality.Functionalities
-import dev.slne.surf.social.core.client.chat.rpc.chatFunctionalityRpcService
-import dev.slne.surf.social.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.api.chat.functionality.Functionalities
+import dev.slne.surf.player.core.client.chat.rpc.chatFunctionalityRpcService
+import dev.slne.surf.player.core.common.chat.service.FunctionalityService
 import net.kyori.adventure.util.Services
 
 @AutoService(FunctionalityService::class)

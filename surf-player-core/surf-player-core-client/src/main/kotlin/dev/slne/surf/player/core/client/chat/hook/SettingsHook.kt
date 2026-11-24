@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.chat.hook
+package dev.slne.surf.player.core.client.chat.hook
 
-import dev.slne.surf.social.api.settings.SurfSettingsApi
-import dev.slne.surf.social.api.settings.setting.SettingKeys
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 import java.util.*
 
 object SettingsHook {

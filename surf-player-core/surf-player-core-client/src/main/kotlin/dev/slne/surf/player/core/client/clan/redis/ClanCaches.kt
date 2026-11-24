@@ -1,12 +1,12 @@
-package dev.slne.surf.social.core.client.clan.redis
+package dev.slne.surf.player.core.client.clan.redis
 
-import dev.slne.surf.social.core.common.clan.clan.CoreClanService
-import dev.slne.surf.social.core.common.clan.player.CoreClanPlayerService
+import dev.slne.surf.player.core.common.clan.clan.CoreClanService
+import dev.slne.surf.player.core.common.clan.player.CoreClanPlayerService
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
 /**
- * The clan caches kept on the shared surf-social Redis connection.
+ * The clan caches kept on the shared surf-player Redis connection.
  */
 object ClanCaches {
     private const val NAMESPACE = "surf-clan"

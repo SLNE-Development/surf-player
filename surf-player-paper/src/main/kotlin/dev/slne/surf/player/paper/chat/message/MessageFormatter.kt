@@ -1,21 +1,21 @@
 @file:Suppress("RETURN_IN_FUNCTION_WITH_EXPRESSION_BODY_WARNING")
 
-package dev.slne.surf.social.paper.chat.message
+package dev.slne.surf.player.paper.chat.message
 
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.plain
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.extensions.server
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.config.chatConfig
-import dev.slne.surf.social.core.client.chat.hook.SettingsHook
-import dev.slne.surf.social.core.client.chat.message.format.appendDelete
-import dev.slne.surf.social.core.client.chat.util.formatTime
-import dev.slne.surf.social.core.client.chat.util.updateLinks
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.util.appendName
-import dev.slne.surf.social.paper.chat.util.playPingSound
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.core.client.chat.config.chatConfig
+import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.core.client.chat.message.format.appendDelete
+import dev.slne.surf.player.core.client.chat.util.formatTime
+import dev.slne.surf.player.core.client.chat.util.updateLinks
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.paper.chat.util.appendName
+import dev.slne.surf.player.paper.chat.util.playPingSound
 import dev.slne.surf.core.api.paper.CorePlayerStatusAccess
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import net.kyori.adventure.text.Component

@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.common.queue.queue
+package dev.slne.surf.player.core.common.queue.queue
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.core.common.queue.redis.redisApi
+import dev.slne.surf.player.core.common.queue.redis.redisApi
 import dev.slne.surf.redis.libs.redisson.api.RPermitExpirableSemaphoreAsync
 import kotlinx.coroutines.*
 import kotlinx.coroutines.future.await

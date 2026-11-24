@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.chat.ai
+package dev.slne.surf.player.core.client.chat.ai
 
 /**
  * What a moderation score is looked up for; equal inputs share a cached score.

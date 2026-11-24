@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.chat.util
+package dev.slne.surf.player.paper.chat.util
 
 import com.github.shynixn.mccoroutine.folia.entityDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.messages.adventure.playSound
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.paper.plugin
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 

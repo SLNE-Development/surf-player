@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.vanish.event
+package dev.slne.surf.player.api.vanish.event
 
 import org.bukkit.Bukkit
 import org.bukkit.event.Event

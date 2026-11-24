@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.friends.db.repository
+package dev.slne.surf.player.microservice.friends.db.repository
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
@@ -8,9 +8,9 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
-import dev.slne.surf.social.microservice.friends.cooldown.CooldownCounter
-import dev.slne.surf.social.microservice.friends.cooldown.FriendRequestCooldown
-import dev.slne.surf.social.microservice.friends.db.table.FriendRequestCooldownsTable
+import dev.slne.surf.player.microservice.friends.cooldown.CooldownCounter
+import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldown
+import dev.slne.surf.player.microservice.friends.db.table.FriendRequestCooldownsTable
 import kotlinx.coroutines.flow.firstOrNull
 import java.time.OffsetDateTime
 import java.util.*

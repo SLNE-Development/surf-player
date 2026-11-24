@@ -1,9 +1,9 @@
-package dev.slne.surf.social.api.settings
+package dev.slne.surf.player.api.settings
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.api.settings.setting.PlayerSetting
-import dev.slne.surf.social.api.settings.setting.Setting
-import dev.slne.surf.social.api.settings.setting.SettingKey
+import dev.slne.surf.player.api.settings.setting.PlayerSetting
+import dev.slne.surf.player.api.settings.setting.Setting
+import dev.slne.surf.player.api.settings.setting.SettingKey
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
 

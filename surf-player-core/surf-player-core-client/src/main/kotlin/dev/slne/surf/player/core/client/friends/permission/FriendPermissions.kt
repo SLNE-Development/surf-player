@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.friends.permission
+package dev.slne.surf.player.core.client.friends.permission
 
 /**
  * Platform-neutral registry of all permission node strings used by surf-friends.

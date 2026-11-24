@@ -1,18 +1,18 @@
-package dev.slne.surf.social.microservice.friends.rpc
+package dev.slne.surf.player.microservice.friends.rpc
 
-import dev.slne.surf.social.api.friends.model.FriendRequest
-import dev.slne.surf.social.api.friends.model.Friendship
-import dev.slne.surf.social.api.friends.result.FriendRequestCreateResult
-import dev.slne.surf.social.api.friends.result.FriendRequestRemoveResult
-import dev.slne.surf.social.api.friends.result.FriendRequestStateResult
-import dev.slne.surf.social.api.friends.result.FriendshipRemoveResult
-import dev.slne.surf.social.core.common.friends.rpc.FriendRequestState
-import dev.slne.surf.social.core.common.friends.rpc.FriendsRpcService
-import dev.slne.surf.social.microservice.chat.repository.ignore.IgnoreRepository
-import dev.slne.surf.social.microservice.friends.cooldown.FriendRequestCooldownKind
-import dev.slne.surf.social.microservice.friends.cooldown.FriendRequestCooldowns
-import dev.slne.surf.social.microservice.friends.db.repository.FriendRequestRepository
-import dev.slne.surf.social.microservice.friends.db.repository.FriendshipsRepository
+import dev.slne.surf.player.api.friends.model.FriendRequest
+import dev.slne.surf.player.api.friends.model.Friendship
+import dev.slne.surf.player.api.friends.result.FriendRequestCreateResult
+import dev.slne.surf.player.api.friends.result.FriendRequestRemoveResult
+import dev.slne.surf.player.api.friends.result.FriendRequestStateResult
+import dev.slne.surf.player.api.friends.result.FriendshipRemoveResult
+import dev.slne.surf.player.core.common.friends.rpc.FriendRequestState
+import dev.slne.surf.player.core.common.friends.rpc.FriendsRpcService
+import dev.slne.surf.player.microservice.chat.repository.ignore.IgnoreRepository
+import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldownKind
+import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldowns
+import dev.slne.surf.player.microservice.friends.db.repository.FriendRequestRepository
+import dev.slne.surf.player.microservice.friends.db.repository.FriendshipsRepository
 import java.time.OffsetDateTime
 import java.util.*
 

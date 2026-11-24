@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.util
+package dev.slne.surf.player.core.client.util
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import net.kyori.adventure.text.Component

@@ -1,11 +1,11 @@
-package dev.slne.surf.social.velocity.queue.listener
+package dev.slne.surf.player.velocity.queue.listener
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.core.common.queue.QueueInstance
-import dev.slne.surf.social.core.common.queue.priority.LuckpermsPriorityResolver
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueService
-import dev.slne.surf.social.velocity.queue.plugin
+import dev.slne.surf.player.core.common.queue.QueueInstance
+import dev.slne.surf.player.core.common.queue.priority.LuckpermsPriorityResolver
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.velocity.queue.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch

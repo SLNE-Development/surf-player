@@ -1,31 +1,31 @@
-package dev.slne.surf.social.core.client.clan.services
+package dev.slne.surf.player.core.client.clan.services
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
 import com.sksamuel.aedile.core.asLoadingCache
 import com.sksamuel.aedile.core.expireAfterWrite
-import dev.slne.surf.social.api.clan.clan.*
-import dev.slne.surf.social.api.clan.clan.listener.*
-import dev.slne.surf.social.api.clan.invite.ClanInviteResult
-import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
-import dev.slne.surf.social.api.clan.member.ClanMemberRole
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.core.client.clan.redis.ClanCaches
-import dev.slne.surf.social.core.client.clan.rpc.clanRpcService
-import dev.slne.surf.social.core.client.util.ListenerRegistry
-import dev.slne.surf.social.core.common.clan.clan.AbstractClanView
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.common.clan.clan.ClanTagRules
-import dev.slne.surf.social.core.common.clan.clan.CoreClanService
-import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
-import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
+import dev.slne.surf.player.api.clan.clan.*
+import dev.slne.surf.player.api.clan.clan.listener.*
+import dev.slne.surf.player.api.clan.invite.ClanInviteResult
+import dev.slne.surf.player.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.player.api.clan.member.ClanMemberRole
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.clan.redis.ClanCaches
+import dev.slne.surf.player.core.client.clan.rpc.clanRpcService
+import dev.slne.surf.player.core.client.util.ListenerRegistry
+import dev.slne.surf.player.core.common.clan.clan.AbstractClanView
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.common.clan.clan.ClanTagRules
+import dev.slne.surf.player.core.common.clan.clan.CoreClanService
+import dev.slne.surf.player.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.player.core.common.clan.member.ClanMemberImpl
 import it.unimi.dsi.fastutil.chars.Char2BooleanOpenHashMap
 import java.util.*
 import kotlin.time.Duration.Companion.minutes
 
 @AutoService(ClanService::class)
 class ClientClanServiceImpl : CoreClanService {
-    private val cache = SocialClient.redisApi.createSimpleSetRedisCache(
+    private val cache = SurfPlayerClient.redisApi.createSimpleSetRedisCache(
         ClanCaches.key("clan_cache"),
         ClanImpl.serializer(),
         15.minutes,

@@ -1,14 +1,14 @@
-package dev.slne.surf.social.minestom.chat.command
+package dev.slne.surf.player.minestom.chat.command
 
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
 import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.literalArgument
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
-import dev.slne.surf.social.core.client.chat.service.SlowChatService
-import dev.slne.surf.social.minestom.chat.command.argument.niceToggleArgument
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.player.core.client.chat.service.SlowChatService
+import dev.slne.surf.player.minestom.chat.command.argument.niceToggleArgument
 import net.minestom.server.entity.Player
 
 fun slowChatCommand() = commandTree("slowchat") {

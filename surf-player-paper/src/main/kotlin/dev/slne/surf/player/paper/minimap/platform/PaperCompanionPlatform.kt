@@ -1,8 +1,8 @@
-package dev.slne.surf.social.paper.minimap.platform
+package dev.slne.surf.player.paper.minimap.platform
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlatform
-import dev.slne.surf.social.paper.minimap.plugin
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlatform
+import dev.slne.surf.player.paper.minimap.plugin
 import net.kyori.adventure.key.Key
 import org.bukkit.Bukkit
 

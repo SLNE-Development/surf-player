@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.clan.listener
+package dev.slne.surf.player.paper.clan.listener
 
 import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.social.paper.plugin
-import dev.slne.surf.social.core.client.clan.tagcolor.ClanTagColorEnforcer
+import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.core.client.clan.tagcolor.ClanTagColorEnforcer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent

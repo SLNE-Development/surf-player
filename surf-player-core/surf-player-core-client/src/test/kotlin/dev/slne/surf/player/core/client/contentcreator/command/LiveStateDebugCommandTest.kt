@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.contentcreator.command
+package dev.slne.surf.player.core.client.contentcreator.command
 
-import dev.slne.surf.social.api.contentcreator.platform.PlatformState
+import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

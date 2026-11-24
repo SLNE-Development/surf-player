@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.minimap.journeymap
+package dev.slne.surf.player.core.client.minimap.journeymap
 
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
-import dev.slne.surf.social.core.client.minimap.world.WorldInfo
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.world.WorldInfo
 
 /**
  * The plugin channels JourneyMap's server side uses; every packet has its own.

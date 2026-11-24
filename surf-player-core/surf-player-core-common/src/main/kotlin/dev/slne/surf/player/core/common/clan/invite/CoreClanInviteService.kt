@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.common.clan.invite
+package dev.slne.surf.player.core.common.clan.invite
 
-import dev.slne.surf.social.api.clan.invite.ClanInviteAcceptResult
-import dev.slne.surf.social.api.clan.invite.ClanInviteResult
-import dev.slne.surf.social.api.clan.invite.ClanInviteService
+import dev.slne.surf.player.api.clan.invite.ClanInviteAcceptResult
+import dev.slne.surf.player.api.clan.invite.ClanInviteResult
+import dev.slne.surf.player.api.clan.invite.ClanInviteService
 import java.util.*
 
 interface CoreClanInviteService : ClanInviteService {

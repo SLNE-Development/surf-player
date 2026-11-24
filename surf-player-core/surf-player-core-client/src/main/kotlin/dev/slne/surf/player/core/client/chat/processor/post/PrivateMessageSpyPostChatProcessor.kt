@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.chat.processor.post
+package dev.slne.surf.player.core.client.chat.processor.post
 
-import dev.slne.surf.social.api.chat.message.MessageContext
-import dev.slne.surf.social.api.chat.message.MessageType
-import dev.slne.surf.social.api.chat.processor.PostChatProcessor
-import dev.slne.surf.social.core.client.chat.message.format.formatPmSpy
-import dev.slne.surf.social.core.client.chat.util.sendText
-import dev.slne.surf.social.core.common.chat.service.SpyService
+import dev.slne.surf.player.api.chat.message.MessageContext
+import dev.slne.surf.player.api.chat.message.MessageType
+import dev.slne.surf.player.api.chat.processor.PostChatProcessor
+import dev.slne.surf.player.core.client.chat.message.format.formatPmSpy
+import dev.slne.surf.player.core.client.chat.util.sendText
+import dev.slne.surf.player.core.common.chat.service.SpyService
 
 object PrivateMessageSpyPostChatProcessor : PostChatProcessor {
     override suspend fun process(messageContext: MessageContext) {

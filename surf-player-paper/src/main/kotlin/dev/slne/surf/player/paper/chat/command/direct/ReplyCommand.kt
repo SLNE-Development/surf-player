@@ -1,13 +1,13 @@
-package dev.slne.surf.social.paper.chat.command.direct
+package dev.slne.surf.player.paper.chat.command.direct
 
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import dev.slne.surf.api.core.command.args.awaiting
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.args.asyncSignedMessageArgument
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.core.client.chat.service.ReplyCache
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.service.DirectMessageSender
+import dev.slne.surf.player.core.client.chat.service.ReplyCache
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.paper.chat.service.DirectMessageSender
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.chat.SignedMessage
 

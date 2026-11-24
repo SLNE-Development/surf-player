@@ -1,17 +1,17 @@
-package dev.slne.surf.social.paper.clan.commands.subcommands.member.invite
+package dev.slne.surf.player.paper.clan.commands.subcommands.member.invite
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.arguments
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.social.api.clan.invite.ClanInvite
-import dev.slne.surf.social.paper.clan.commands.arguments.ClanInviteArgument
-import dev.slne.surf.social.paper.clan.commands.failCommand
-import dev.slne.surf.social.paper.clan.permission.ClanPermissions
+import dev.slne.surf.player.api.clan.invite.ClanInvite
+import dev.slne.surf.player.paper.clan.commands.arguments.ClanInviteArgument
+import dev.slne.surf.player.paper.clan.commands.failCommand
+import dev.slne.surf.player.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaiting
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.core.client.clan.command.INVITE_ALREADY_DENIED
-import dev.slne.surf.social.core.client.clan.command.inviteDeniedMessage
-import dev.slne.surf.social.core.client.clan.command.inviteDeniedNotification
+import dev.slne.surf.player.core.client.clan.command.INVITE_ALREADY_DENIED
+import dev.slne.surf.player.core.client.clan.command.inviteDeniedMessage
+import dev.slne.surf.player.core.client.clan.command.inviteDeniedNotification
 import dev.slne.surf.core.api.common.SurfCoreApi
 
 fun CommandAPICommand.clanDenyCommand() = subcommand("deny") {

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.common.queue.queue
+package dev.slne.surf.player.core.common.queue.queue
 
-import dev.slne.surf.social.core.common.queue.redis.RedisInstance
+import dev.slne.surf.player.core.common.queue.redis.RedisInstance
 
 data class RedisQueueKeys(
     val serverName: String,

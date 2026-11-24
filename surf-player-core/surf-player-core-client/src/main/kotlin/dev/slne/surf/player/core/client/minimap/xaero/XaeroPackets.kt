@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.minimap.xaero
+package dev.slne.surf.player.core.client.minimap.xaero
 
-import dev.slne.surf.social.core.client.minimap.xaero.nbt.toNetworkBytes
-import dev.slne.surf.social.core.client.minimap.xaero.nbt.uuidTag
+import dev.slne.surf.player.core.client.minimap.xaero.nbt.toNetworkBytes
+import dev.slne.surf.player.core.client.minimap.xaero.nbt.uuidTag
 import net.kyori.adventure.nbt.CompoundBinaryTag
 import java.nio.ByteBuffer
 import java.util.*

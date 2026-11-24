@@ -1,8 +1,8 @@
-package dev.slne.surf.social.paper.chat.command.surfchat.functionality
+package dev.slne.surf.player.paper.chat.command.surfchat.functionality
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 
 fun CommandAPICommand.functionalityCommand() = subcommand("functionality") {
     withPermission(PermissionRegistry.COMMAND_SURFCHAT_FUNCTIONALITY)

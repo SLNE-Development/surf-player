@@ -6,7 +6,7 @@ plugins {
 }
 
 surfStandaloneApi {
-    withSurfDatabaseR2dbc("2.3.5", "dev.slne.surf.social.libs.database")
+    withSurfDatabaseR2dbc("2.3.5", "dev.slne.surf.player.libs.database")
     withCoreCommon()
     withSurfRedis()
 }
@@ -17,7 +17,7 @@ surfMicroservice {
 }
 
 dependencies {
-    api(projects.surfSocialCore.surfSocialCoreCommon)
+    api(projects.surfPlayerCore.surfPlayerCoreCommon)
 }
 
 sourceSets.test {

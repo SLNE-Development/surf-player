@@ -1,12 +1,12 @@
-package dev.slne.surf.social.paper.tab.platform
+package dev.slne.surf.player.paper.tab.platform
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.social.core.client.tab.platform.TabPlatform
-import dev.slne.surf.social.paper.plugin
-import dev.slne.surf.social.paper.tab.PaperTabFeature
-import dev.slne.surf.social.paper.tab.hook.VanishHook
-import dev.slne.surf.social.paper.tab.isPlaytimeHook
-import dev.slne.surf.social.paper.tab.isVanishHook
+import dev.slne.surf.player.core.client.tab.platform.TabPlatform
+import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.paper.tab.PaperTabFeature
+import dev.slne.surf.player.paper.tab.hook.VanishHook
+import dev.slne.surf.player.paper.tab.isPlaytimeHook
+import dev.slne.surf.player.paper.tab.isVanishHook
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import java.util.*

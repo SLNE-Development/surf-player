@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.friends.cooldown
+package dev.slne.surf.player.microservice.friends.cooldown
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull

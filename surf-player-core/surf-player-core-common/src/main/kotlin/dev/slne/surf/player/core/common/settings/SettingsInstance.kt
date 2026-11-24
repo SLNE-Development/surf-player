@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.settings
+package dev.slne.surf.player.core.common.settings
 
 import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.rabbitmq.api.RabbitMQApi

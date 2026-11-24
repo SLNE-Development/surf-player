@@ -1,11 +1,11 @@
-package dev.slne.surf.social.paper.nametag.platform
+package dev.slne.surf.player.paper.nametag.platform
 
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams
-import dev.slne.surf.social.api.nametag.nametag.Nametag
-import dev.slne.surf.social.core.client.nametag.config.NametagConfig
-import dev.slne.surf.social.core.client.nametag.platform.NametagPlayer
-import dev.slne.surf.social.core.client.nametag.service.teamDisplayName
-import dev.slne.surf.social.paper.nametag.util.sendPacket
+import dev.slne.surf.player.api.nametag.nametag.Nametag
+import dev.slne.surf.player.core.client.nametag.config.NametagConfig
+import dev.slne.surf.player.core.client.nametag.platform.NametagPlayer
+import dev.slne.surf.player.core.client.nametag.service.teamDisplayName
+import dev.slne.surf.player.paper.nametag.util.sendPacket
 import org.bukkit.entity.Player
 import java.util.*
 

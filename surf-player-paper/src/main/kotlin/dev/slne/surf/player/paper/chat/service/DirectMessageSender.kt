@@ -1,25 +1,25 @@
-package dev.slne.surf.social.paper.chat.service
+package dev.slne.surf.player.paper.chat.service
 
 import dev.slne.surf.api.core.messages.adventure.text
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.paper.nms.NmsUseWithCaution
 import dev.slne.surf.api.paper.nms.bridges.SurfPaperNmsPlayerBridge
 import dev.slne.surf.core.api.common.SurfCoreApi
-import dev.slne.surf.social.api.chat.message.MessageContext
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.api.chat.message.MessageType
-import dev.slne.surf.social.core.client.chat.hook.SettingsHook
-import dev.slne.surf.social.core.client.chat.message.format.formatIncomingPm
-import dev.slne.surf.social.core.client.chat.message.format.formatOutgoingPm
-import dev.slne.surf.social.core.client.chat.processor.runPostProcessors
-import dev.slne.surf.social.core.client.chat.processor.runPreProcessors
-import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageHandledRedisResponse
-import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageRedisRequest
-import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.core.client.chat.service.ReplyCache
-import dev.slne.surf.social.core.client.util.undeliverableMessage
-import dev.slne.surf.social.paper.chat.util.schedulePingSound
+import dev.slne.surf.player.api.chat.message.MessageContext
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.api.chat.message.MessageType
+import dev.slne.surf.player.core.client.chat.hook.SettingsHook
+import dev.slne.surf.player.core.client.chat.message.format.formatIncomingPm
+import dev.slne.surf.player.core.client.chat.message.format.formatOutgoingPm
+import dev.slne.surf.player.core.client.chat.processor.runPostProcessors
+import dev.slne.surf.player.core.client.chat.processor.runPreProcessors
+import dev.slne.surf.player.core.client.chat.redis.rpc.SendDirectMessageHandledRedisResponse
+import dev.slne.surf.player.core.client.chat.redis.rpc.SendDirectMessageRedisRequest
+import dev.slne.surf.player.core.client.chat.redis.rpc.SignedChatMessage
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.chat.service.ReplyCache
+import dev.slne.surf.player.core.client.util.undeliverableMessage
+import dev.slne.surf.player.paper.chat.util.schedulePingSound
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import net.kyori.adventure.chat.SignedMessage
@@ -122,7 +122,7 @@ object DirectMessageSender {
         signedMessage: SignedMessage,
     ) {
         SignedMessageSender.forwardToRemoteServer(sender, signedMessage, formatIncomingPm(messageData)) { wireMessage ->
-            SocialClient.redisApi.sendRequest<SendDirectMessageHandledRedisResponse>(
+            SurfPlayerClient.redisApi.sendRequest<SendDirectMessageHandledRedisResponse>(
                 SendDirectMessageRedisRequest(messageData, wireMessage),
             )
         }

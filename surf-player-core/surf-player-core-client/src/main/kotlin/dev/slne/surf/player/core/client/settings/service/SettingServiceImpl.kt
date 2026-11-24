@@ -1,15 +1,15 @@
-package dev.slne.surf.social.core.client.settings.service
+package dev.slne.surf.player.core.client.settings.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.util.emptyObjectSet
 import dev.slne.surf.api.core.util.freeze
 import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
 import dev.slne.surf.api.core.util.mutableObjectSetOf
-import dev.slne.surf.social.api.settings.setting.PlayerSetting
-import dev.slne.surf.social.api.settings.setting.Setting
-import dev.slne.surf.social.core.client.settings.ClientSettingsInstance
-import dev.slne.surf.social.core.common.settings.rabbit.packet.request.*
-import dev.slne.surf.social.core.common.settings.service.SettingsService
+import dev.slne.surf.player.api.settings.setting.PlayerSetting
+import dev.slne.surf.player.api.settings.setting.Setting
+import dev.slne.surf.player.core.client.settings.ClientSettingsInstance
+import dev.slne.surf.player.core.common.settings.rabbit.packet.request.*
+import dev.slne.surf.player.core.common.settings.service.SettingsService
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import net.kyori.adventure.util.Services

@@ -1,7 +1,7 @@
-package dev.slne.surf.social.api.nametag
+package dev.slne.surf.player.api.nametag
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.api.nametag.nametag.NametagVisibility
+import dev.slne.surf.player.api.nametag.nametag.NametagVisibility
 import java.util.*
 
 private val instance = requiredService<SurfNametagApi>()

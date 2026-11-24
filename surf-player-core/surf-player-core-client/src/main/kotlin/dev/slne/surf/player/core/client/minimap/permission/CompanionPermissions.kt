@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.permission
+package dev.slne.surf.player.core.client.minimap.permission
 
 /**
  * The permission nodes of the companion's commands, the same on every platform.

@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.nametag.listener
+package dev.slne.surf.player.paper.nametag.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.social.core.client.nametag.service.NametagService
-import dev.slne.surf.social.paper.nametag.platform.PaperNametagPlayer
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.core.client.nametag.service.NametagService
+import dev.slne.surf.player.paper.nametag.platform.PaperNametagPlayer
+import dev.slne.surf.player.paper.plugin
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

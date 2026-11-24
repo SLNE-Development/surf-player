@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.clan
+package dev.slne.surf.player.paper.clan
 
-import dev.slne.surf.social.core.common.clan.ClanInstance
-import dev.slne.surf.social.paper.PaperSocialFeature
+import dev.slne.surf.player.core.common.clan.ClanInstance
+import dev.slne.surf.player.paper.PaperPlayerFeature
 
-object PaperClanFeature : PaperSocialFeature {
+object PaperClanFeature : PaperPlayerFeature {
     override val name = "clan"
 
     override suspend fun onLoad() {

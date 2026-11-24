@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.common.playtime.service
+package dev.slne.surf.player.core.common.playtime.service
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.api.playtime.session.PlaytimeStreak
-import dev.slne.surf.social.api.playtime.session.PlaytimeStreakPause
+import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
+import dev.slne.surf.player.api.playtime.session.PlaytimeStreakPause
 import java.time.LocalDate
 import java.util.*
 

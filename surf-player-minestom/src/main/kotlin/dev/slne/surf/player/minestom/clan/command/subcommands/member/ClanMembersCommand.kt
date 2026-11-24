@@ -1,15 +1,15 @@
-package dev.slne.surf.social.minestom.clan.command.subcommands.member
+package dev.slne.surf.player.minestom.clan.command.subcommands.member
 
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.minestom.clan.command.arguments.clanByClanTagArgument
-import dev.slne.surf.social.minestom.clan.command.resolveClanArgumentOrOwn
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.minestom.clan.command.arguments.clanByClanTagArgument
+import dev.slne.surf.player.minestom.clan.command.resolveClanArgumentOrOwn
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.command.clanMembersPagination
-import dev.slne.surf.social.core.client.clan.command.collectClanMemberData
-import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.client.clan.command.clanMembersPagination
+import dev.slne.surf.player.core.client.clan.command.collectClanMemberData
+import dev.slne.surf.player.core.client.clan.permission.ClanPermissions
 
 private const val CLAN_NODE = "clan"
 

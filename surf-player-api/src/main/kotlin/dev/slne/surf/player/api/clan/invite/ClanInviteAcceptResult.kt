@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.clan.invite
+package dev.slne.surf.player.api.clan.invite
 
-import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.clan.Clan
 
 /**
  * Represents the result of attempting to accept a clan invitation.

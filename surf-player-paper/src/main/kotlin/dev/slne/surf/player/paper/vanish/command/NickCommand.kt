@@ -1,10 +1,10 @@
-package dev.slne.surf.social.paper.vanish.command
+package dev.slne.surf.player.paper.vanish.command
 
 import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.paper.vanish.core.service.NickService
-import dev.slne.surf.social.paper.vanish.util.VanishPermissionRegistry
+import dev.slne.surf.player.paper.vanish.core.service.NickService
+import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
 
 
 private val validNameRegex = Regex("^[a-zA-Z0-9_]{3,16}$")

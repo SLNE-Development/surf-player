@@ -1,7 +1,7 @@
-package dev.slne.surf.social.paper.friends.platform
+package dev.slne.surf.player.paper.friends.platform
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.client.friends.platform.FriendsPlatform
+import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import java.util.*

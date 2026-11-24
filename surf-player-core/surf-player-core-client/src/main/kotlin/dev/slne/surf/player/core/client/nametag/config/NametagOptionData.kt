@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.nametag.config
+package dev.slne.surf.player.core.client.nametag.config
 
 /**
  * The friendly flags a nametag team is created with.

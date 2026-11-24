@@ -1,8 +1,8 @@
-package dev.slne.surf.social.paper.settings.listener
+package dev.slne.surf.player.paper.settings.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.social.core.common.settings.service.SettingsService
-import dev.slne.surf.social.paper.settings.plugin
+import dev.slne.surf.player.core.common.settings.service.SettingsService
+import dev.slne.surf.player.paper.settings.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent

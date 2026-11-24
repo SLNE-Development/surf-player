@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.friends.util
+package dev.slne.surf.player.core.client.friends.util
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.queue.queue.entry
+package dev.slne.surf.player.core.common.queue.queue.entry
 
 import dev.slne.surf.redis.libs.redisson.client.codec.BaseCodec
 import dev.slne.surf.redis.libs.redisson.client.protocol.Decoder

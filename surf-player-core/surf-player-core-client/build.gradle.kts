@@ -15,7 +15,7 @@ surfMicroservice {
 }
 
 dependencies {
-    api(projects.surfSocialCore.surfSocialCoreCommon)
+    api(projects.surfPlayerCore.surfPlayerCoreCommon)
 
     compileOnly(libs.luckperms.api)
     compileOnly(libs.mini.placeholders)

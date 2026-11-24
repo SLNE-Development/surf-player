@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.clan.command
+package dev.slne.surf.player.core.client.clan.command
 
-import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.api.core.messages.adventure.buildText
 
 private val DISCORD_LINK_REGEX =

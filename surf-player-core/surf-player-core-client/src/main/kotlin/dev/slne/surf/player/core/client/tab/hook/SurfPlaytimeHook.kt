@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.tab.hook
+package dev.slne.surf.player.core.client.tab.hook
 
-import dev.slne.surf.social.api.playtime.surfPlaytimeApi
+import dev.slne.surf.player.api.playtime.surfPlaytimeApi
 import java.util.*
 
 object SurfPlaytimeHook {

@@ -1,7 +1,7 @@
-package dev.slne.surf.social.minestom.clan
+package dev.slne.surf.player.minestom.clan
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.common.clan.ClanInstance
+import dev.slne.surf.player.core.common.clan.ClanInstance
 import java.nio.file.Path
 
 @AutoService(ClanInstance::class)

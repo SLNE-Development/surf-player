@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.settings.command.argument
+package dev.slne.surf.player.minestom.settings.command.argument
 
 import dev.slne.surf.api.minestom.command.CommandAPI
 import dev.slne.surf.api.minestom.command.CommandTree
@@ -6,8 +6,8 @@ import dev.slne.surf.api.minestom.command.argument.Argument
 import dev.slne.surf.api.minestom.command.argument.CustomArgument
 import dev.slne.surf.api.minestom.command.argument.StringArgument
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
-import dev.slne.surf.social.core.client.settings.command.NiceToggle
-import dev.slne.surf.social.core.client.settings.command.SettingsCommandMessages
+import dev.slne.surf.player.core.client.settings.command.NiceToggle
+import dev.slne.surf.player.core.client.settings.command.SettingsCommandMessages
 
 class NiceToggleArgument(nodeName: String) :
     CustomArgument<Boolean, String>(StringArgument(nodeName), { info ->

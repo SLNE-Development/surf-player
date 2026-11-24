@@ -1,12 +1,12 @@
-package dev.slne.surf.social.paper.clan.commands.subcommands.member.role
+package dev.slne.surf.player.paper.clan.commands.subcommands.member.role
 
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.member.ClanMember
-import dev.slne.surf.social.api.clan.permission.ClanPermission
-import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.command.*
-import dev.slne.surf.social.core.client.util.usernameOrUuid
-import dev.slne.surf.social.paper.clan.commands.failCommand
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.member.ClanMember
+import dev.slne.surf.player.api.clan.permission.ClanPermission
+import dev.slne.surf.player.core.client.clan.Messages
+import dev.slne.surf.player.core.client.clan.command.*
+import dev.slne.surf.player.core.client.util.usernameOrUuid
+import dev.slne.surf.player.paper.clan.commands.failCommand
 import org.bukkit.entity.Player
 
 /**

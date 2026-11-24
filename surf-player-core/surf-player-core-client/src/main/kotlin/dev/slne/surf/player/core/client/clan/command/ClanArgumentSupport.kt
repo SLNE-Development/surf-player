@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.client.clan.command
+package dev.slne.surf.player.core.client.clan.command
 
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.invite.ClanInvite
-import dev.slne.surf.social.api.clan.member.ClanMember
-import dev.slne.surf.social.core.client.util.usernameOrUuid
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.invite.ClanInvite
+import dev.slne.surf.player.api.clan.member.ClanMember
+import dev.slne.surf.player.core.client.util.usernameOrUuid
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore

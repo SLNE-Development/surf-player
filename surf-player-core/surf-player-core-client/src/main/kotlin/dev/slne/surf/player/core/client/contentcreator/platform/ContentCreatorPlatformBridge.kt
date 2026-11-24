@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.contentcreator.platform
+package dev.slne.surf.player.core.client.contentcreator.platform
 
 import dev.slne.surf.api.core.util.requiredService
 import it.unimi.dsi.fastutil.objects.ObjectSet

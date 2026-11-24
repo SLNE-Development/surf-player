@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.nametag.hook
+package dev.slne.surf.player.core.client.nametag.hook
 
-import dev.slne.surf.social.core.client.nametag.platform.NametagPlatform
-import dev.slne.surf.social.core.client.nametag.service.NametagService
+import dev.slne.surf.player.core.client.nametag.platform.NametagPlatform
+import dev.slne.surf.player.core.client.nametag.service.NametagService
 import net.luckperms.api.model.user.User
 
 object LuckPermsHook {

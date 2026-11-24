@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.chat.player
+package dev.slne.surf.player.minestom.chat.player
 
 import net.kyori.adventure.text.Component
 import net.minestom.server.entity.Player

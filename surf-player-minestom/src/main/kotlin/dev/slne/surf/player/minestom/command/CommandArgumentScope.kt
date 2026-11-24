@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.command
+package dev.slne.surf.player.minestom.command
 
 import dev.slne.surf.api.core.util.logger
 import kotlinx.coroutines.CoroutineExceptionHandler

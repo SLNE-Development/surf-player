@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.tab.service
+package dev.slne.surf.player.core.client.tab.service
 
-import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
-import dev.slne.surf.social.core.client.tab.config.TablistConfig
-import dev.slne.surf.social.core.client.tab.service.TablistUpdateReason
+import dev.slne.surf.player.api.tab.placeholder.TabPlaceholder
+import dev.slne.surf.player.core.client.tab.config.TablistConfig
+import dev.slne.surf.player.core.client.tab.service.TablistUpdateReason
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.junit.jupiter.api.Assertions.assertEquals

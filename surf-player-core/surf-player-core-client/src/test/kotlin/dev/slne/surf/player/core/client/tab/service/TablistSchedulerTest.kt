@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.tab.service
+package dev.slne.surf.player.core.client.tab.service
 
-import dev.slne.surf.social.core.client.tab.service.TablistUpdateReason
+import dev.slne.surf.player.core.client.tab.service.TablistUpdateReason
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull

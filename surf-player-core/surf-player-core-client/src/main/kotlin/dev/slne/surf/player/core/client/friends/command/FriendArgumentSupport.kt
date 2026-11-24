@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.friends.command
+package dev.slne.surf.player.core.client.friends.command
 
 import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
-import dev.slne.surf.social.core.client.friends.util.resolveUsername
+import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.core.client.friends.util.resolveUsername
 import java.util.*
 
 /**

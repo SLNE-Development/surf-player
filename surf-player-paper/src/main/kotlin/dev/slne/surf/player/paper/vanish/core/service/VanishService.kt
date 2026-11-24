@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.vanish.core.service
+package dev.slne.surf.player.paper.vanish.core.service
 
 import dev.slne.surf.api.core.util.requiredService
 import it.unimi.dsi.fastutil.objects.ObjectSet

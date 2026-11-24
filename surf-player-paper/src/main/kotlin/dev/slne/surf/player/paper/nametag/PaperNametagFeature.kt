@@ -1,13 +1,13 @@
-package dev.slne.surf.social.paper.nametag
+package dev.slne.surf.player.paper.nametag
 
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.social.core.client.nametag.config.NametagConfig
-import dev.slne.surf.social.core.client.nametag.hook.ClanHook
-import dev.slne.surf.social.core.client.nametag.hook.ContentCreatorHook
-import dev.slne.surf.social.core.client.nametag.hook.LuckPermsHook
-import dev.slne.surf.social.paper.PaperSocialFeature
-import dev.slne.surf.social.paper.hook.subscribeToLuckPermsUserChanges
-import dev.slne.surf.social.paper.nametag.listener.NametagListener
+import dev.slne.surf.player.core.client.nametag.config.NametagConfig
+import dev.slne.surf.player.core.client.nametag.hook.ClanHook
+import dev.slne.surf.player.core.client.nametag.hook.ContentCreatorHook
+import dev.slne.surf.player.core.client.nametag.hook.LuckPermsHook
+import dev.slne.surf.player.paper.PaperPlayerFeature
+import dev.slne.surf.player.paper.hook.subscribeToLuckPermsUserChanges
+import dev.slne.surf.player.paper.nametag.listener.NametagListener
 
 /**
  * The former surf-nametag Paper plugin.
@@ -15,7 +15,7 @@ import dev.slne.surf.social.paper.nametag.listener.NametagListener
  * Clans and content creators are bundled in the same plugin and enabled before this feature,
  * so their hooks are always registered.
  */
-object PaperNametagFeature : PaperSocialFeature {
+object PaperNametagFeature : PaperPlayerFeature {
     override val name = "nametag"
 
     override suspend fun onEnable() {

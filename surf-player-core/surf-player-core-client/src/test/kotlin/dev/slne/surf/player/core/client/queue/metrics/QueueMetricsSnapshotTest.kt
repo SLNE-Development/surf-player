@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.queue.metrics
+package dev.slne.surf.player.core.client.queue.metrics
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

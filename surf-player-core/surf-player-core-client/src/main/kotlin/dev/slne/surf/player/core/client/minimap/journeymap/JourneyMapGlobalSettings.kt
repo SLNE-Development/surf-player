@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.minimap.journeymap
+package dev.slne.surf.player.core.client.minimap.journeymap
 
-import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
-import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
-import dev.slne.surf.social.core.client.minimap.global.OptionOverlay
+import dev.slne.surf.player.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.player.core.client.minimap.global.OptionOverlay
 
 /**
  * Applies `global-settings` to the options of `journeymap.yml`. JourneyMap's options are permissions, so each entry

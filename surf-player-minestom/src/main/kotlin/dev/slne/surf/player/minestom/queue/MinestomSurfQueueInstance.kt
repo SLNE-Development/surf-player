@@ -1,8 +1,8 @@
-package dev.slne.surf.social.minestom.queue
+package dev.slne.surf.player.minestom.queue
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.client.queue.ClientQueueInstance
-import dev.slne.surf.social.core.common.queue.QueueInstance
+import dev.slne.surf.player.core.client.queue.ClientQueueInstance
+import dev.slne.surf.player.core.common.queue.QueueInstance
 import java.nio.file.Path
 
 @AutoService(QueueInstance::class)

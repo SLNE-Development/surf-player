@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.queue.metrics
+package dev.slne.surf.player.core.client.queue.metrics
 
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
 import dev.slne.surf.api.core.util.logger
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong

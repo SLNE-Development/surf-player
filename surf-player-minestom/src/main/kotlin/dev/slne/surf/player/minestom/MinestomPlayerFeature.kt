@@ -1,17 +1,17 @@
-package dev.slne.surf.social.minestom
+package dev.slne.surf.player.minestom
 
 import net.minestom.server.entity.Player
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 
 /**
- * One feature (chat, friends, clan, tab, ...) bundled into [SocialMinestomPlugin].
+ * One feature (chat, friends, clan, tab, ...) bundled into [PlayerMinestomPlugin].
  *
  * The plugin forwards its own lifecycle and the players joining and leaving to every feature:
  * [onLoad], [onEnable], [onPlayerJoin] and [onPlayerQuit] in the order the features are
  * registered, [onDisable] in reverse order.
  */
-interface MinestomSocialFeature {
+interface MinestomPlayerFeature {
     /**
      * Short identifier of the feature; also the name of its subfolder in the plugin's data
      * directory.
@@ -23,7 +23,7 @@ interface MinestomSocialFeature {
      * own subfolder since several of them use the same file names (e.g. `config.yml`).
      */
     val dataDirectory: Path
-        get() = SocialMinestomPlugin.dataDirectory.resolve(id).createDirectories()
+        get() = PlayerMinestomPlugin.dataDirectory.resolve(id).createDirectories()
 
     suspend fun onLoad() = Unit
 

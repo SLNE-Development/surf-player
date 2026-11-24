@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.nametag.platform
+package dev.slne.surf.player.core.client.nametag.platform
 
-import dev.slne.surf.social.api.nametag.nametag.Nametag
-import dev.slne.surf.social.core.client.nametag.config.NametagConfig
+import dev.slne.surf.player.api.nametag.nametag.Nametag
+import dev.slne.surf.player.core.client.nametag.config.NametagConfig
 import java.util.*
 
 /**

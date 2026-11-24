@@ -1,10 +1,10 @@
-package dev.slne.surf.social.velocity.settings.listener
+package dev.slne.surf.player.velocity.settings.listener
 
 import com.google.common.eventbus.Subscribe
 import com.velocitypowered.api.event.connection.DisconnectEvent
 import com.velocitypowered.api.event.connection.PostLoginEvent
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.social.core.common.settings.service.SettingsService
+import dev.slne.surf.player.core.common.settings.service.SettingsService
 
 object PlayerConnectionListener {
     private val log = logger()

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.contentcreator
+package dev.slne.surf.player.core.client.contentcreator
 
 /**
  * Permission nodes used by the content creator plugin.

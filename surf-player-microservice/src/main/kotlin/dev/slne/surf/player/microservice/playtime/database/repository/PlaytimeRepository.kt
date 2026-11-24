@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.playtime.database.repository
+package dev.slne.surf.player.microservice.playtime.database.repository
 
 import dev.slne.surf.api.core.util.freeze
 import dev.slne.surf.api.core.util.mutableObjectSetOf
@@ -16,10 +16,10 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
-import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
-import dev.slne.surf.social.api.playtime.session.PlaytimeSession
-import dev.slne.surf.social.microservice.playtime.database.table.PlaytimeSessionsTable
-import dev.slne.surf.social.microservice.playtime.database.table.exp.DurationSecondsExpression
+import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.player.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.microservice.playtime.database.table.PlaytimeSessionsTable
+import dev.slne.surf.player.microservice.playtime.database.table.exp.DurationSecondsExpression
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.Object2LongMaps
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap

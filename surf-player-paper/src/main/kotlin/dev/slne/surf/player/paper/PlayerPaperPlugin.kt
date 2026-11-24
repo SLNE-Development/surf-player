@@ -1,26 +1,26 @@
-package dev.slne.surf.social.paper
+package dev.slne.surf.player.paper
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.paper.chat.PaperChatFeature
-import dev.slne.surf.social.paper.clan.PaperClanFeature
-import dev.slne.surf.social.paper.contentcreator.PaperContentCreatorFeature
-import dev.slne.surf.social.paper.friends.PaperFriendsFeature
-import dev.slne.surf.social.paper.nametag.PaperNametagFeature
-import dev.slne.surf.social.paper.shrieker.PaperShriekerFeature
-import dev.slne.surf.social.paper.tab.PaperTabFeature
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.paper.chat.PaperChatFeature
+import dev.slne.surf.player.paper.clan.PaperClanFeature
+import dev.slne.surf.player.paper.contentcreator.PaperContentCreatorFeature
+import dev.slne.surf.player.paper.friends.PaperFriendsFeature
+import dev.slne.surf.player.paper.nametag.PaperNametagFeature
+import dev.slne.surf.player.paper.shrieker.PaperShriekerFeature
+import dev.slne.surf.player.paper.tab.PaperTabFeature
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.logging.Level
 
-val plugin get() = JavaPlugin.getPlugin(SocialPaperPlugin::class.java)
+val plugin get() = JavaPlugin.getPlugin(PlayerPaperPlugin::class.java)
 
-class SocialPaperPlugin : SuspendingJavaPlugin() {
+class PlayerPaperPlugin : SuspendingJavaPlugin() {
 
     /**
      * Load/enable order. Clan hooks into chat; nametag and tab hook into clan and
      * content creator, so dependencies come first. Disabling happens in reverse order.
      */
-    private val features: List<PaperSocialFeature> = listOf(
+    private val features: List<PaperPlayerFeature> = listOf(
         PaperChatFeature,
         PaperFriendsFeature,
         PaperClanFeature,
@@ -31,9 +31,9 @@ class SocialPaperPlugin : SuspendingJavaPlugin() {
     )
 
     override suspend fun onLoadAsync() {
-        // One shared RabbitMQ/Redis connection for every feature, see SocialClient.
-        SocialClient.load(dataPath)
-        SocialClient.connectRabbit()
+        // One shared RabbitMQ/Redis connection for every feature, see SurfPlayerClient.
+        SurfPlayerClient.load(dataPath)
+        SurfPlayerClient.connectRabbit()
 
         // Features register everything Redis needs here, before Redis is frozen.
         for (feature in features) {
@@ -42,7 +42,7 @@ class SocialPaperPlugin : SuspendingJavaPlugin() {
     }
 
     override suspend fun onEnableAsync() {
-        SocialClient.connectRedis()
+        SurfPlayerClient.connectRedis()
 
         for (feature in features) {
             feature.onEnable()
@@ -58,6 +58,6 @@ class SocialPaperPlugin : SuspendingJavaPlugin() {
             }
         }
 
-        SocialClient.disable()
+        SurfPlayerClient.disable()
     }
 }

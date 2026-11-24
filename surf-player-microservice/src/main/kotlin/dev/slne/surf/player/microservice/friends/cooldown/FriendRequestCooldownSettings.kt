@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.friends.cooldown
+package dev.slne.surf.player.microservice.friends.cooldown
 
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days

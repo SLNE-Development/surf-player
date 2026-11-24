@@ -1,19 +1,19 @@
-package dev.slne.surf.social.velocity.connection
+package dev.slne.surf.player.velocity.connection
 
-import dev.slne.surf.social.velocity.VelocitySocialFeature
-import dev.slne.surf.social.velocity.connection.command.linkCommand
-import dev.slne.surf.social.velocity.connection.command.surfSocialCommand
-import dev.slne.surf.social.velocity.connection.command.unlinkCommand
-import dev.slne.surf.social.velocity.connection.config.SocialConfigManager
+import dev.slne.surf.player.velocity.VelocityPlayerFeature
+import dev.slne.surf.player.velocity.connection.command.linkCommand
+import dev.slne.surf.player.velocity.connection.command.surfSocialCommand
+import dev.slne.surf.player.velocity.connection.command.unlinkCommand
+import dev.slne.surf.player.velocity.connection.config.SocialConfigManager
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 
 /**
- * Social connections (Discord/Twitch account linking), formerly the standalone surf-social
+ * Social connections (Discord/Twitch account linking), formerly the standalone surf-player
  * Velocity plugin.
  */
-object ConnectionVelocityFeature : VelocitySocialFeature {
+object ConnectionVelocityFeature : VelocityPlayerFeature {
     override val id = "connection"
 
     lateinit var socialConfigManager: SocialConfigManager

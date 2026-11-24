@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.chat.redis
+package dev.slne.surf.player.core.client.chat.redis
 
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationResult
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.core.common.chat.aimoderation.ModerationClassificationResult
 import kotlinx.serialization.Serializable
 
 /**

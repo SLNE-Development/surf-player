@@ -1,22 +1,22 @@
-package dev.slne.surf.social.paper.chat
+package dev.slne.surf.player.paper.chat
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.api.chat.SurfChatApi
-import dev.slne.surf.social.api.chat.entry.HistoryEntry
-import dev.slne.surf.social.api.chat.entry.HistoryFilter
-import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.api.chat.processor.PostChatProcessor
-import dev.slne.surf.social.api.chat.processor.PreChatProcessor
-import dev.slne.surf.social.api.chat.processor.chatProcessorRegistry
-import dev.slne.surf.social.core.common.chat.service.HistoryService
-import dev.slne.surf.social.core.common.chat.service.IgnoreService
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.core.client.chat.processor.post.AiModerationPostChatProcessor
-import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
-import dev.slne.surf.social.core.client.chat.redis.event.DeleteRemoteMessageRedisEvent
-import dev.slne.surf.social.paper.chat.service.SignedMessageSender
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.api.chat.SurfChatApi
+import dev.slne.surf.player.api.chat.entry.HistoryEntry
+import dev.slne.surf.player.api.chat.entry.HistoryFilter
+import dev.slne.surf.player.api.chat.entry.IgnoreListEntry
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.api.chat.processor.PostChatProcessor
+import dev.slne.surf.player.api.chat.processor.PreChatProcessor
+import dev.slne.surf.player.api.chat.processor.chatProcessorRegistry
+import dev.slne.surf.player.core.common.chat.service.HistoryService
+import dev.slne.surf.player.core.common.chat.service.IgnoreService
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.chat.processor.post.AiModerationPostChatProcessor
+import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService
+import dev.slne.surf.player.core.client.chat.redis.event.DeleteRemoteMessageRedisEvent
+import dev.slne.surf.player.paper.chat.service.SignedMessageSender
+import dev.slne.surf.player.paper.plugin
 import it.unimi.dsi.fastutil.objects.ObjectList
 import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component
@@ -35,7 +35,7 @@ class PaperSurfChatApiImpl : SurfChatApi, Services.Fallback {
 
     override suspend fun deleteRemoteMessage(deleter: UUID?, messageData: MessageData) {
         messageData.signature?.let {
-            SocialClient.redisApi.publishEvent(DeleteRemoteMessageRedisEvent(it))
+            SurfPlayerClient.redisApi.publishEvent(DeleteRemoteMessageRedisEvent(it))
         }
 
         HistoryService.markDeleted(messageData.messageUuid, deleter, null)

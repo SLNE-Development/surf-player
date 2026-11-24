@@ -1,15 +1,15 @@
-package dev.slne.surf.social.core.client
+package dev.slne.surf.player.core.client
 
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 import dev.slne.surf.redis.RedisApi
-import dev.slne.surf.social.core.common.SOCIAL_CONNECTION_NAME
-import dev.slne.surf.social.core.common.SocialSerializerModule
+import dev.slne.surf.player.core.common.PLAYER_CONNECTION_NAME
+import dev.slne.surf.player.core.common.PlayerSerializerModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.nio.file.Path
 
 /**
- * Owns the single RabbitMQ and Redis connection that every surf-social feature on a client
+ * Owns the single RabbitMQ and Redis connection that every surf-player feature on a client
  * platform (Paper, Minestom, Velocity) shares.
  *
  * Lifecycle, driven by the platform plugin:
@@ -23,7 +23,7 @@ import java.nio.file.Path
  *
  * [connectRabbit], [connectRedis] and [disable] are idempotent.
  */
-object SocialClient {
+object SurfPlayerClient {
     @Volatile
     private var rabbit: ClientRabbitMQApi? = null
 
@@ -35,21 +35,21 @@ object SocialClient {
     private var disabled = false
 
     val rabbitApi: ClientRabbitMQApi
-        get() = rabbit ?: error("SocialClient.load(dataPath) has not been called yet")
+        get() = rabbit ?: error("SurfPlayerClient.load(dataPath) has not been called yet")
 
     val redisApi: RedisApi
-        get() = redis ?: error("SocialClient.load(dataPath) has not been called yet")
+        get() = redis ?: error("SurfPlayerClient.load(dataPath) has not been called yet")
 
     @Synchronized
     fun load(dataPath: Path) {
         if (rabbit != null) return
 
         rabbit = ClientRabbitMQApi.create(
-            SOCIAL_CONNECTION_NAME,
+            PLAYER_CONNECTION_NAME,
             dataPath,
-            SocialSerializerModule.module
+            PlayerSerializerModule.module
         )
-        redis = RedisApi.create(SOCIAL_CONNECTION_NAME)
+        redis = RedisApi.create(PLAYER_CONNECTION_NAME)
     }
 
     suspend fun connectRabbit() {

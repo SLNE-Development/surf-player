@@ -10,13 +10,13 @@ plugins {
     id("dev.slne.surf.api.gradle.settings") version "+"
 }
 
-rootProject.name = "surf-social"
+rootProject.name = "surf-player"
 
-include("surf-social-api")
-include("surf-social-core:surf-social-core-common")
-include("surf-social-core:surf-social-core-client")
-include("surf-social-paper")
-include("surf-social-minestom")
-include("surf-social-velocity")
-include("surf-social-microservice")
-include("surf-social-placeholder-expansion")
+include("surf-player-api")
+include("surf-player-core:surf-player-core-common")
+include("surf-player-core:surf-player-core-client")
+include("surf-player-paper")
+include("surf-player-minestom")
+include("surf-player-velocity")
+include("surf-player-microservice")
+include("surf-player-placeholder-expansion")

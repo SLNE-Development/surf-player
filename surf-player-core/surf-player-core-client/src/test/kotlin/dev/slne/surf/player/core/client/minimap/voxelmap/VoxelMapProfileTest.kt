@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.minimap.voxelmap
+package dev.slne.surf.player.core.client.minimap.voxelmap
 
-import dev.slne.surf.social.core.client.minimap.config.VoxelMapConfig
-import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
-import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.player.core.client.minimap.config.VoxelMapConfig
+import dev.slne.surf.player.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
 import org.junit.jupiter.api.Test
 import org.spongepowered.configurate.BasicConfigurationNode
 import kotlin.test.assertEquals

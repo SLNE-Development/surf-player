@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.chat.service
+package dev.slne.surf.player.core.client.chat.service
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.expireAfterWrite
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean

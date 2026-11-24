@@ -1,15 +1,15 @@
-package dev.slne.surf.social.minestom.clan
+package dev.slne.surf.player.minestom.clan
 
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
-import dev.slne.surf.social.core.client.clan.tagcolor.ClanTagColorEnforcer
-import dev.slne.surf.social.core.common.clan.ClanInstance
-import dev.slne.surf.social.minestom.MinestomSocialFeature
-import dev.slne.surf.social.minestom.clan.command.clanChatCommand
-import dev.slne.surf.social.minestom.clan.command.clanCommand
+import dev.slne.surf.player.core.client.clan.tagcolor.ClanTagColorEnforcer
+import dev.slne.surf.player.core.common.clan.ClanInstance
+import dev.slne.surf.player.minestom.MinestomPlayerFeature
+import dev.slne.surf.player.minestom.clan.command.clanChatCommand
+import dev.slne.surf.player.minestom.clan.command.clanCommand
 import kotlinx.coroutines.launch
 import net.minestom.server.entity.Player
 
-object ClanMinestomFeature : MinestomSocialFeature {
+object ClanMinestomFeature : MinestomPlayerFeature {
     override val id = "clan"
 
     override suspend fun onLoad() {

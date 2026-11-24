@@ -1,12 +1,12 @@
-package dev.slne.surf.social.core.client.chat.processor.pre.validate
+package dev.slne.surf.player.core.client.chat.processor.pre.validate
 
-import dev.slne.surf.social.api.chat.message.MessageContext
-import dev.slne.surf.social.api.chat.processor.PreChatProcessor
-import dev.slne.surf.social.core.client.chat.config.chatConfig
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.client.chat.processor.ProcessorOrder
-import dev.slne.surf.social.core.client.chat.util.hasPermission
-import dev.slne.surf.social.core.client.chat.util.sendText
+import dev.slne.surf.player.api.chat.message.MessageContext
+import dev.slne.surf.player.api.chat.processor.PreChatProcessor
+import dev.slne.surf.player.core.client.chat.config.chatConfig
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.processor.ProcessorOrder
+import dev.slne.surf.player.core.client.chat.util.hasPermission
+import dev.slne.surf.player.core.client.chat.util.sendText
 import java.net.URI
 
 private val urlRegex = Regex(

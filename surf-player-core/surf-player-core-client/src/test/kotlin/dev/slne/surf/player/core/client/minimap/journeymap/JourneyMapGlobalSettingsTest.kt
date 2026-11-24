@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.minimap.journeymap
+package dev.slne.surf.player.core.client.minimap.journeymap
 
-import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
-import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.player.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

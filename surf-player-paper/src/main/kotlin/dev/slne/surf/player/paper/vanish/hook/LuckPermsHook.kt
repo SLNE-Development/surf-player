@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.vanish.hook
+package dev.slne.surf.player.paper.vanish.hook
 
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.entity.Player

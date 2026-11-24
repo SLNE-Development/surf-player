@@ -1,11 +1,11 @@
-package dev.slne.surf.social.paper.clan.commands.arguments.color
+package dev.slne.surf.player.paper.clan.commands.arguments.color
 
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.TextArgument
-import dev.slne.surf.social.core.client.clan.command.INVALID_HEX_COLOR
-import dev.slne.surf.social.core.client.clan.command.isHexColor
-import dev.slne.surf.social.paper.clan.commands.failCommand
+import dev.slne.surf.player.core.client.clan.command.INVALID_HEX_COLOR
+import dev.slne.surf.player.core.client.clan.command.isHexColor
+import dev.slne.surf.player.paper.clan.commands.failCommand
 
 /**
  * Parses a hex color of [requiredLength] digits (without `#`) via [factory].

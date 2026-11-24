@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.common.clan.member
+package dev.slne.surf.player.core.common.clan.member
 
-import dev.slne.surf.social.api.clan.member.ClanMember
-import dev.slne.surf.social.api.clan.member.ClanMemberRole
+import dev.slne.surf.player.api.clan.member.ClanMember
+import dev.slne.surf.player.api.clan.member.ClanMemberRole
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableStringUUID
 import kotlinx.serialization.Serializable

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.queue.hook.startup
+package dev.slne.surf.player.paper.queue.hook.startup
 
 import dev.slne.surf.api.core.component.AbstractComponent
 import dev.slne.surf.api.core.component.surfComponentApi

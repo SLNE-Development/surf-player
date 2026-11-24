@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.queue.redis
+package dev.slne.surf.player.core.common.queue.redis
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.redis.RedisApi

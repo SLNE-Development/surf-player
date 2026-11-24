@@ -1,7 +1,7 @@
-package dev.slne.surf.social.microservice.friends.config
+package dev.slne.surf.player.microservice.friends.config
 
 import dev.slne.surf.api.core.environment.EnvironmentVariables
-import dev.slne.surf.social.microservice.friends.cooldown.FriendRequestCooldownSettings
+import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldownSettings
 import kotlin.time.Duration
 
 /**
@@ -10,10 +10,10 @@ import kotlin.time.Duration
  *
  * | Setting                       | Environment variable                                  | Default |
  * |-------------------------------|-------------------------------------------------------|---------|
- * | cooldown after a decline      | `SURF_SOCIAL_FRIEND_REQUEST_DECLINE_COOLDOWN`         | `24h`   |
- * | cooldown after a withdrawal   | `SURF_SOCIAL_FRIEND_REQUEST_WITHDRAW_COOLDOWN`        | `30m`   |
- * | escalation window             | `SURF_SOCIAL_FRIEND_REQUEST_COOLDOWN_ESCALATION_WINDOW` | `30d` |
- * | maximum cooldown              | `SURF_SOCIAL_FRIEND_REQUEST_MAX_COOLDOWN`             | `7d`    |
+ * | cooldown after a decline      | `SURF_PLAYER_FRIEND_REQUEST_DECLINE_COOLDOWN`         | `24h`   |
+ * | cooldown after a withdrawal   | `SURF_PLAYER_FRIEND_REQUEST_WITHDRAW_COOLDOWN`        | `30m`   |
+ * | escalation window             | `SURF_PLAYER_FRIEND_REQUEST_COOLDOWN_ESCALATION_WINDOW` | `30d` |
+ * | maximum cooldown              | `SURF_PLAYER_FRIEND_REQUEST_MAX_COOLDOWN`             | `7d`    |
  */
 object FriendsConfig {
     @Volatile
@@ -25,19 +25,19 @@ object FriendsConfig {
 
         cooldownSettings = FriendRequestCooldownSettings(
             declineCooldown = positiveDuration(
-                "SURF_SOCIAL_FRIEND_REQUEST_DECLINE_COOLDOWN",
+                "SURF_PLAYER_FRIEND_REQUEST_DECLINE_COOLDOWN",
                 defaults.declineCooldown
             ),
             withdrawCooldown = positiveDuration(
-                "SURF_SOCIAL_FRIEND_REQUEST_WITHDRAW_COOLDOWN",
+                "SURF_PLAYER_FRIEND_REQUEST_WITHDRAW_COOLDOWN",
                 defaults.withdrawCooldown
             ),
             escalationWindow = positiveDuration(
-                "SURF_SOCIAL_FRIEND_REQUEST_COOLDOWN_ESCALATION_WINDOW",
+                "SURF_PLAYER_FRIEND_REQUEST_COOLDOWN_ESCALATION_WINDOW",
                 defaults.escalationWindow
             ),
             maxCooldown = positiveDuration(
-                "SURF_SOCIAL_FRIEND_REQUEST_MAX_COOLDOWN",
+                "SURF_PLAYER_FRIEND_REQUEST_MAX_COOLDOWN",
                 defaults.maxCooldown
             )
         )

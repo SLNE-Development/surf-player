@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.chat.message
+package dev.slne.surf.player.minestom.chat.message
 
 import net.minestom.server.entity.Player
 import java.util.regex.Pattern

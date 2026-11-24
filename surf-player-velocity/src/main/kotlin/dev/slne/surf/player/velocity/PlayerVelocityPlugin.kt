@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity
+package dev.slne.surf.player.velocity
 
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.google.inject.Inject
@@ -8,27 +8,27 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.annotation.DataDirectory
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.velocity.clan.ClanVelocityFeature
-import dev.slne.surf.social.velocity.connection.ConnectionVelocityFeature
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.velocity.clan.ClanVelocityFeature
+import dev.slne.surf.player.velocity.connection.ConnectionVelocityFeature
 import kotlinx.coroutines.CancellationException
 import org.slf4j.Logger
 import java.nio.file.Path
 
-val plugin get() = SocialVelocityPlugin.instance
+val plugin get() = PlayerVelocityPlugin.instance
 
 /**
- * The single Velocity plugin of surf-social. It hosts every social feature that has a proxy side
+ * The single Velocity plugin of surf-player. It hosts every social feature that has a proxy side
  * and forwards the plugin lifecycle to them.
  */
-class SocialVelocityPlugin @Inject constructor(
+class PlayerVelocityPlugin @Inject constructor(
     val eventManager: EventManager,
     val container: PluginContainer,
     val logger: Logger,
     @param:DataDirectory val dataPath: Path,
     suspendingPluginContainer: SuspendingPluginContainer
 ) {
-    private val features: List<VelocitySocialFeature> = listOf(
+    private val features: List<VelocityPlayerFeature> = listOf(
         ClanVelocityFeature,
         ConnectionVelocityFeature,
     )
@@ -40,16 +40,16 @@ class SocialVelocityPlugin @Inject constructor(
 
     @Subscribe
     suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
-        // One shared RabbitMQ/Redis connection for every feature, see SocialClient.
-        SocialClient.load(dataPath)
-        SocialClient.connectRabbit()
+        // One shared RabbitMQ/Redis connection for every feature, see SurfPlayerClient.
+        SurfPlayerClient.load(dataPath)
+        SurfPlayerClient.connectRabbit()
 
         // Features register everything Redis needs here, before Redis is frozen.
         for (feature in features) {
             feature.onLoad()
         }
 
-        SocialClient.connectRedis()
+        SurfPlayerClient.connectRedis()
 
         for (feature in features) {
             feature.onEnable()
@@ -68,11 +68,11 @@ class SocialVelocityPlugin @Inject constructor(
             }
         }
 
-        SocialClient.disable()
+        SurfPlayerClient.disable()
     }
 
     companion object {
-        lateinit var instance: SocialVelocityPlugin
+        lateinit var instance: PlayerVelocityPlugin
             private set
     }
 }

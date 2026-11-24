@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.nametag.service
+package dev.slne.surf.player.core.client.nametag.service
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

@@ -1,7 +1,7 @@
-package dev.slne.surf.social.api.clan.clan
+package dev.slne.surf.player.api.clan.clan
 
-import dev.slne.surf.social.api.clan.clan.listener.ClanListener
-import dev.slne.surf.social.api.clan.util.InternalClanApi
+import dev.slne.surf.player.api.clan.clan.listener.ClanListener
+import dev.slne.surf.player.api.clan.util.InternalClanApi
 import dev.slne.surf.api.core.util.requiredService
 import java.util.*
 

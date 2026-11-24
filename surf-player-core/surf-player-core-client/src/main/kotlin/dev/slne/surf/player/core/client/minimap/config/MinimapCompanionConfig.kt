@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.config
+package dev.slne.surf.player.core.client.minimap.config
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import org.spongepowered.configurate.objectmapping.meta.Comment

@@ -1,7 +1,7 @@
-package dev.slne.surf.social.paper.clan.commands.arguments.color
+package dev.slne.surf.player.paper.clan.commands.arguments.color
 
-import dev.slne.surf.social.core.client.clan.command.CLAN_TAG_COLOR_LENGTH
-import dev.slne.surf.social.core.client.clan.command.CLAN_TAG_COLOR_SUGGESTIONS
+import dev.slne.surf.player.core.client.clan.command.CLAN_TAG_COLOR_LENGTH
+import dev.slne.surf.player.core.client.clan.command.CLAN_TAG_COLOR_SUGGESTIONS
 import net.kyori.adventure.text.format.TextColor
 
 class ClanTagHexColorArgument(nodeName: String) :

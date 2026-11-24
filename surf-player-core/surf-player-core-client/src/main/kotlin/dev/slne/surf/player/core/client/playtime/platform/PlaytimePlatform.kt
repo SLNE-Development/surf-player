@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.playtime.platform
+package dev.slne.surf.player.core.client.playtime.platform
 
 import dev.slne.surf.api.core.util.requiredService
 import kotlinx.coroutines.CoroutineScope

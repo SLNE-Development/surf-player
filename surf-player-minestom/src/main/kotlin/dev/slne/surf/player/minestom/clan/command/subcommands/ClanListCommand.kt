@@ -1,14 +1,14 @@
-package dev.slne.surf.social.minestom.clan.command.subcommands
+package dev.slne.surf.player.minestom.clan.command.subcommands
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.core.common.clan.clan.CoreClanService
-import dev.slne.surf.social.core.client.clan.command.clanListPagination
-import dev.slne.surf.social.core.client.clan.command.handleClanListClick
-import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
+import dev.slne.surf.player.core.common.clan.clan.CoreClanService
+import dev.slne.surf.player.core.client.clan.command.clanListPagination
+import dev.slne.surf.player.core.client.clan.command.handleClanListClick
+import dev.slne.surf.player.core.client.clan.permission.ClanPermissions
 import kotlinx.coroutines.launch
 import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent

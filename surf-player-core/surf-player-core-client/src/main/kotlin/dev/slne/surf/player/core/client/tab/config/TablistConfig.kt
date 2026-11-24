@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.tab.config
+package dev.slne.surf.player.core.client.tab.config
 
 import dev.slne.surf.api.core.config.constraints.PositiveNumber
 import org.spongepowered.configurate.objectmapping.ConfigSerializable

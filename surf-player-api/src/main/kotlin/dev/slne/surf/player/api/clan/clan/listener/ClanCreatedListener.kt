@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.clan.clan.listener
+package dev.slne.surf.player.api.clan.clan.listener
 
-import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.clan.Clan
 
 /**
  * Listener for clan creation events.

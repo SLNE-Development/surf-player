@@ -1,8 +1,8 @@
-package dev.slne.surf.social.paper.vanish.config
+package dev.slne.surf.player.paper.vanish.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
 import dev.slne.surf.api.core.config.surfConfigApi
-import dev.slne.surf.social.paper.vanish.plugin
+import dev.slne.surf.player.paper.vanish.plugin
 import net.kyori.adventure.text.format.NamedTextColor
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 

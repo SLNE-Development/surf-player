@@ -1,20 +1,20 @@
-package dev.slne.surf.social.minestom.tab
+package dev.slne.surf.player.minestom.tab
 
-import dev.slne.surf.social.core.client.tab.hook.ClanHook
-import dev.slne.surf.social.core.client.tab.hook.ContentCreatorHook
-import dev.slne.surf.social.core.client.tab.hook.LuckPermsHook
-import dev.slne.surf.social.core.client.tab.redis.redisLoader
-import dev.slne.surf.social.core.client.tab.service.TablistService
-import dev.slne.surf.social.minestom.MinestomSocialFeature
-import dev.slne.surf.social.minestom.SocialMinestomPlugin
-import dev.slne.surf.social.minestom.hook.subscribeToLuckPermsUserChanges
-import dev.slne.surf.social.minestom.tab.command.surfTabCommand
-import dev.slne.surf.social.minestom.tab.listener.PlaytimeListener
-import dev.slne.surf.social.minestom.tab.platform.MinestomTabPlatform
-import dev.slne.surf.social.minestom.tab.platform.MinestomTabPlayer
+import dev.slne.surf.player.core.client.tab.hook.ClanHook
+import dev.slne.surf.player.core.client.tab.hook.ContentCreatorHook
+import dev.slne.surf.player.core.client.tab.hook.LuckPermsHook
+import dev.slne.surf.player.core.client.tab.redis.redisLoader
+import dev.slne.surf.player.core.client.tab.service.TablistService
+import dev.slne.surf.player.minestom.MinestomPlayerFeature
+import dev.slne.surf.player.minestom.PlayerMinestomPlugin
+import dev.slne.surf.player.minestom.hook.subscribeToLuckPermsUserChanges
+import dev.slne.surf.player.minestom.tab.command.surfTabCommand
+import dev.slne.surf.player.minestom.tab.listener.PlaytimeListener
+import dev.slne.surf.player.minestom.tab.platform.MinestomTabPlatform
+import dev.slne.surf.player.minestom.tab.platform.MinestomTabPlayer
 import net.minestom.server.entity.Player
 
-object TabMinestomFeature : MinestomSocialFeature {
+object TabMinestomFeature : MinestomPlayerFeature {
     override val id = "tab"
 
     override suspend fun onLoad() {
@@ -30,7 +30,7 @@ object TabMinestomFeature : MinestomSocialFeature {
     override suspend fun onEnable() {
         surfTabCommand()
 
-        PlaytimeListener.register(SocialMinestomPlugin.eventNode)
+        PlaytimeListener.register(PlayerMinestomPlugin.eventNode)
     }
 
     override suspend fun onDisable() {

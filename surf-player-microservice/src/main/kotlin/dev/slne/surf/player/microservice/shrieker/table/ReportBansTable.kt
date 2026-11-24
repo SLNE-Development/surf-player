@@ -1,11 +1,11 @@
-package dev.slne.surf.social.microservice.shrieker.table
+package dev.slne.surf.player.microservice.shrieker.table
 
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
-import dev.slne.surf.social.microservice.SocialSchemas
+import dev.slne.surf.player.microservice.PlayerSchemas
 
-object ReportBansTable : ULongIdTable("${SocialSchemas.shrieker}.shrieker_bans") {
+object ReportBansTable : ULongIdTable("${PlayerSchemas.shrieker}.shrieker_bans") {
     val bannedBy = nativeUuid("banned_by")
     val bannedAt = offsetDateTime("banned_at")
 

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.queue.platform
+package dev.slne.surf.player.core.client.queue.platform
 
 import dev.slne.surf.api.core.util.requiredService
 import kotlinx.coroutines.CoroutineScope

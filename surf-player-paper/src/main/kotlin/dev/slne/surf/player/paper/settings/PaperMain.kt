@@ -1,16 +1,16 @@
-package dev.slne.surf.social.paper.settings
+package dev.slne.surf.player.paper.settings
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.api.paper.inventory.framework.register
-import dev.slne.surf.social.core.client.settings.ClientSettingsInstance
-import dev.slne.surf.social.core.client.settings.createDefaultSettings
-import dev.slne.surf.social.core.common.settings.service.SettingsService
-import dev.slne.surf.social.paper.settings.command.settingsCommand
-import dev.slne.surf.social.paper.settings.command.surfSettingsCommand
-import dev.slne.surf.social.paper.settings.listener.PlayerConnectionListener
-import dev.slne.surf.social.paper.settings.menu.settingsCategoryView
-import dev.slne.surf.social.paper.settings.menu.settingsView
+import dev.slne.surf.player.core.client.settings.ClientSettingsInstance
+import dev.slne.surf.player.core.client.settings.createDefaultSettings
+import dev.slne.surf.player.core.common.settings.service.SettingsService
+import dev.slne.surf.player.paper.settings.command.settingsCommand
+import dev.slne.surf.player.paper.settings.command.surfSettingsCommand
+import dev.slne.surf.player.paper.settings.listener.PlayerConnectionListener
+import dev.slne.surf.player.paper.settings.menu.settingsCategoryView
+import dev.slne.surf.player.paper.settings.menu.settingsView
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)

@@ -1,10 +1,10 @@
-package dev.slne.surf.social.microservice.chat.table
+package dev.slne.surf.player.microservice.chat.table
 
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.table.AuditableLongIdTable
-import dev.slne.surf.social.microservice.SocialSchemas
+import dev.slne.surf.player.microservice.PlayerSchemas
 
-object IgnoreListTable : AuditableLongIdTable("${SocialSchemas.chat}.chat_ignorelist_entries") {
+object IgnoreListTable : AuditableLongIdTable("${PlayerSchemas.chat}.chat_ignorelist_entries") {
     val userUuid = nativeUuid("user_id").index()
     val ignoredUuid = nativeUuid("target_uuid")
 

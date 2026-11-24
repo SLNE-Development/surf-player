@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.minimap.config
+package dev.slne.surf.player.core.client.minimap.config
 
-import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.player.core.client.minimap.global.GlobalFeature
 import org.spongepowered.configurate.BasicConfigurationNode
 import org.spongepowered.configurate.ConfigurationNode
 import org.spongepowered.configurate.objectmapping.ConfigSerializable

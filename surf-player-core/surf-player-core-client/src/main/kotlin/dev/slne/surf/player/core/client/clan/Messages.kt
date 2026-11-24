@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.clan
+package dev.slne.surf.player.core.client.clan
 
 /**
  * The plain player facing texts a clan command reports through its platform's own failure

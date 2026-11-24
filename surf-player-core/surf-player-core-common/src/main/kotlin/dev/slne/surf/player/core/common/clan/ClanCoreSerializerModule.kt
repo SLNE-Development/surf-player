@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.common.clan
+package dev.slne.surf.player.core.common.clan
 
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.invite.ClanInvite
-import dev.slne.surf.social.api.clan.member.ClanMember
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
-import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
+import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.invite.ClanInvite
+import dev.slne.surf.player.api.clan.member.ClanMember
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.player.core.common.clan.member.ClanMemberImpl
 import kotlinx.serialization.modules.SerializersModule
 
 object ClanCoreSerializerModule {

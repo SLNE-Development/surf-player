@@ -1,14 +1,14 @@
-package dev.slne.surf.social.velocity.clan.listener
+package dev.slne.surf.player.velocity.clan.listener
 
 import com.github.shynixn.mccoroutine.velocity.launch
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.player.ServerConnectedEvent
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.api.clan.invite.ClanInvite
-import dev.slne.surf.social.core.client.clan.components.ClanComponents
-import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.velocity.plugin
+import dev.slne.surf.player.api.clan.invite.ClanInvite
+import dev.slne.surf.player.core.client.clan.components.ClanComponents
+import dev.slne.surf.player.core.common.clan.clan.ClanImpl
+import dev.slne.surf.player.velocity.plugin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope

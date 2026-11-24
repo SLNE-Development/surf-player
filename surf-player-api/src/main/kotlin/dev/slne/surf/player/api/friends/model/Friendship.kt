@@ -1,8 +1,8 @@
-package dev.slne.surf.social.api.friends.model
+package dev.slne.surf.player.api.friends.model
 
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.friends.player.FriendsPlayer
 import kotlinx.serialization.Serializable
 
 @Serializable

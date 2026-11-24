@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.tab.platform
+package dev.slne.surf.player.core.client.tab.platform
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

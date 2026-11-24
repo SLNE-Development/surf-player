@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.playtime.platform
+package dev.slne.surf.player.paper.playtime.platform
 
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.client.playtime.platform.PlaytimePlatform
-import dev.slne.surf.social.paper.playtime.plugin
+import dev.slne.surf.player.core.client.playtime.platform.PlaytimePlatform
+import dev.slne.surf.player.paper.playtime.plugin
 import kotlinx.coroutines.CoroutineScope
 import net.kyori.adventure.util.Services
 import org.bukkit.Bukkit

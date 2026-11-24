@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.vanish.util
+package dev.slne.surf.player.paper.vanish.util
 
 import it.unimi.dsi.fastutil.objects.ObjectList
 import java.util.*

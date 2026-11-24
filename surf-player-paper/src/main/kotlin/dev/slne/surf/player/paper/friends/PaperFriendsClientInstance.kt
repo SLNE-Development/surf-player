@@ -1,10 +1,10 @@
-package dev.slne.surf.social.paper.friends
+package dev.slne.surf.player.paper.friends
 
 import com.github.shynixn.mccoroutine.folia.globalRegionDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.client.friends.FriendsClientInstance
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.core.client.friends.FriendsClientInstance
+import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import java.nio.file.Path

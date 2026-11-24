@@ -1,9 +1,9 @@
-package dev.slne.surf.social.velocity.settings
+package dev.slne.surf.player.velocity.settings
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.core.client.settings.ClientLoader
-import dev.slne.surf.social.core.client.settings.ClientSettingsInstance
-import dev.slne.surf.social.core.common.settings.SettingsInstance
+import dev.slne.surf.player.core.client.settings.ClientLoader
+import dev.slne.surf.player.core.client.settings.ClientSettingsInstance
+import dev.slne.surf.player.core.common.settings.SettingsInstance
 
 @AutoService(SettingsInstance::class)
 class VelocitySettingsInstanceImpl : ClientSettingsInstance {

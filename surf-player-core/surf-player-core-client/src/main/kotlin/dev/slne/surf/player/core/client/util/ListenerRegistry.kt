@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.util
+package dev.slne.surf.player.core.client.util
 
 import dev.slne.surf.api.core.util.logger
 import java.util.concurrent.CopyOnWriteArrayList

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.clan.invite
+package dev.slne.surf.player.api.clan.invite
 
-import dev.slne.surf.social.api.clan.util.InternalClanApi
+import dev.slne.surf.player.api.clan.util.InternalClanApi
 import dev.slne.surf.api.core.util.requiredService
 import java.util.*
 

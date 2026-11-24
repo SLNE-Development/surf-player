@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.friends.command.argument
+package dev.slne.surf.player.paper.friends.command.argument
 
 import com.github.shynixn.mccoroutine.folia.scope
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
@@ -6,8 +6,8 @@ import dev.jorel.commandapi.arguments.StringArgument
 import dev.slne.surf.api.core.messages.adventure.uuid
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.api.paper.command.args.SuspendCustomArgument
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 import net.kyori.adventure.text.Component

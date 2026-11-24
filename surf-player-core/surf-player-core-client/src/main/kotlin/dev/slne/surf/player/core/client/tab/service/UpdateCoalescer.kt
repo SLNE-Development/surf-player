@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.tab.service
+package dev.slne.surf.player.core.client.tab.service
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope

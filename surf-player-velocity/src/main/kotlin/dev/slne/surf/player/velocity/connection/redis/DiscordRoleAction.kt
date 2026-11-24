@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.connection.redis
+package dev.slne.surf.player.velocity.connection.redis
 
 /**
  * What surf-discord does with the Discord roles of a user, see [DiscordRoleRequest].

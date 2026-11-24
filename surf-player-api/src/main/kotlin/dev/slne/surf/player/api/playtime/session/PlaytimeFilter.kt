@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.playtime.session
+package dev.slne.surf.player.api.playtime.session
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.friends.rpc
+package dev.slne.surf.player.core.client.friends.rpc
 
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.core.common.friends.rpc.FriendsRpcService
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.common.friends.rpc.FriendsRpcService
 
-val friendsRpcService by lazy { SocialClient.rabbitApi.createRpcService<FriendsRpcService>() }
+val friendsRpcService by lazy { SurfPlayerClient.rabbitApi.createRpcService<FriendsRpcService>() }

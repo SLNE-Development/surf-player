@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.clan.member
+package dev.slne.surf.player.api.clan.member
 
 import kotlinx.serialization.Serializable
 

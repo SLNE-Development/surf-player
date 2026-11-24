@@ -1,7 +1,7 @@
-package dev.slne.surf.social.velocity.queue.reconnect
+package dev.slne.surf.player.velocity.queue.reconnect
 
-import dev.slne.surf.social.core.common.queue.redis.RedisInstance
-import dev.slne.surf.social.core.common.queue.redis.redisApi
+import dev.slne.surf.player.core.common.queue.redis.RedisInstance
+import dev.slne.surf.player.core.common.queue.redis.redisApi
 import dev.slne.surf.redis.codec.UUIDCodec
 import dev.slne.surf.redis.libs.redisson.client.codec.StringCodec
 import dev.slne.surf.redis.libs.redisson.codec.CompositeCodec

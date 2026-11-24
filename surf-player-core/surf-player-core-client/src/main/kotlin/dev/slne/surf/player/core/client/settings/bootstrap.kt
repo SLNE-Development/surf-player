@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.settings
+package dev.slne.surf.player.core.client.settings
 
-import dev.slne.surf.social.api.settings.SurfSettingsApi
-import dev.slne.surf.social.api.settings.setting.SettingKeys
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
 
 suspend fun createDefaultSettings() {
     SurfSettingsApi.createSetting(SettingKeys.CHAT_PINGS)

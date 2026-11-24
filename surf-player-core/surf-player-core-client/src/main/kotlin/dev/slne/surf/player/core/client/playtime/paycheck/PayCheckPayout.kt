@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.playtime.paycheck
+package dev.slne.surf.player.core.client.playtime.paycheck
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.core.client.playtime.config.playtimeConfig
+import dev.slne.surf.player.core.client.playtime.config.playtimeConfig
 import dev.slne.surf.transaction.api.currency.Currency
 import dev.slne.surf.transaction.api.user.TransactionUser
 import net.kyori.adventure.audience.Audience

@@ -1,10 +1,10 @@
-package dev.slne.surf.social.core.client.friends.player
+package dev.slne.surf.player.core.client.friends.player
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.util.toObjectSet
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
-import dev.slne.surf.social.api.friends.player.FriendsPlayerManager
+import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.friends.player.FriendsPlayerManager
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*

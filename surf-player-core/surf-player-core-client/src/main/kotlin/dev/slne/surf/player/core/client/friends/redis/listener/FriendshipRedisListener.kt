@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.friends.redis.listener
+package dev.slne.surf.player.core.client.friends.redis.listener
 
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.common.util.sendText
-import dev.slne.surf.social.api.friends.utils.displayName
-import dev.slne.surf.social.api.friends.utils.toSurfPlayer
-import dev.slne.surf.social.core.client.friends.FriendsClientInstance
-import dev.slne.surf.social.core.client.friends.redis.event.FriendRemoveRedisEvent
+import dev.slne.surf.player.api.friends.utils.displayName
+import dev.slne.surf.player.api.friends.utils.toSurfPlayer
+import dev.slne.surf.player.core.client.friends.FriendsClientInstance
+import dev.slne.surf.player.core.client.friends.redis.event.FriendRemoveRedisEvent
 import dev.slne.surf.redis.event.OnRedisEvent
 
 object FriendshipRedisListener {

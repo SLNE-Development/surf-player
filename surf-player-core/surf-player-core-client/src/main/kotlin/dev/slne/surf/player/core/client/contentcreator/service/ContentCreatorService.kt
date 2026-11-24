@@ -1,15 +1,15 @@
-package dev.slne.surf.social.core.client.contentcreator.service
+package dev.slne.surf.player.core.client.contentcreator.service
 
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.core.util.toObjectSet
-import dev.slne.surf.social.api.contentcreator.ContentCreator
-import dev.slne.surf.social.api.contentcreator.platform.PlatformState
-import dev.slne.surf.social.api.contentcreator.platform.PlatformType
-import dev.slne.surf.social.core.client.contentcreator.ContentCreatorInstance
-import dev.slne.surf.social.core.client.contentcreator.CoreContentCreator
-import dev.slne.surf.social.api.connection.SurfConnectionApi
-import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.api.connection.findConnection
+import dev.slne.surf.player.api.contentcreator.ContentCreator
+import dev.slne.surf.player.api.contentcreator.platform.PlatformState
+import dev.slne.surf.player.api.contentcreator.platform.PlatformType
+import dev.slne.surf.player.core.client.contentcreator.ContentCreatorInstance
+import dev.slne.surf.player.core.client.contentcreator.CoreContentCreator
+import dev.slne.surf.player.api.connection.SurfConnectionApi
+import dev.slne.surf.player.api.connection.impl.TwitchConnection
+import dev.slne.surf.player.api.connection.findConnection
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.playtime.database.repository
+package dev.slne.surf.player.microservice.playtime.database.repository
 
 import dev.slne.surf.api.core.util.mutableObject2IntMapOf
 import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
@@ -8,10 +8,10 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
-import dev.slne.surf.social.api.playtime.session.PlaytimeStreak
-import dev.slne.surf.social.microservice.playtime.database.table.PlaytimeSessionsTable
-import dev.slne.surf.social.microservice.playtime.database.table.PlaytimeStreakPausesTable
-import dev.slne.surf.social.microservice.playtime.database.table.PlaytimeStreaksTable
+import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
+import dev.slne.surf.player.microservice.playtime.database.table.PlaytimeSessionsTable
+import dev.slne.surf.player.microservice.playtime.database.table.PlaytimeStreakPausesTable
+import dev.slne.surf.player.microservice.playtime.database.table.PlaytimeStreaksTable
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map

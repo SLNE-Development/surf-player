@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.chat.command.ignore
+package dev.slne.surf.player.minestom.chat.command.ignore
 
 import dev.slne.surf.api.minestom.command.CommandAPI
 import dev.slne.surf.api.minestom.command.CommandTree
@@ -10,9 +10,9 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.util.mapAsync
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.client.chat.util.formatTime
-import dev.slne.surf.social.core.common.chat.service.IgnoreService
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.util.formatTime
+import dev.slne.surf.player.core.common.chat.service.IgnoreService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.text.format.TextDecoration
 import java.time.OffsetDateTime

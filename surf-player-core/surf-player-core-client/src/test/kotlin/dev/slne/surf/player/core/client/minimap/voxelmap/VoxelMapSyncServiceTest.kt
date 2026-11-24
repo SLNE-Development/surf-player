@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.client.minimap.voxelmap
+package dev.slne.surf.player.core.client.minimap.voxelmap
 
-import dev.slne.surf.social.core.client.minimap.config.GlobalSettingsConfig
-import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
-import dev.slne.surf.social.core.client.minimap.config.VoxelMapConfig
-import dev.slne.surf.social.core.client.minimap.service.FakePlayer
+import dev.slne.surf.player.core.client.minimap.config.GlobalSettingsConfig
+import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
+import dev.slne.surf.player.core.client.minimap.config.VoxelMapConfig
+import dev.slne.surf.player.core.client.minimap.service.FakePlayer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject

@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.minimap.xaero
+package dev.slne.surf.player.core.client.minimap.xaero
 
-import dev.slne.surf.social.core.client.minimap.config.CompanionConfigs
-import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
-import dev.slne.surf.social.core.client.minimap.config.XaeroConfig
-import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
-import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
-import dev.slne.surf.social.core.client.minimap.world.LevelIds
+import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
+import dev.slne.surf.player.core.client.minimap.config.XaeroConfig
+import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.world.LevelIds
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds

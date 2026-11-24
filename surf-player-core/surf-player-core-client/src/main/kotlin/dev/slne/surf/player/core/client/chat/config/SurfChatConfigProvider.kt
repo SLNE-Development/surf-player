@@ -1,7 +1,7 @@
-package dev.slne.surf.social.core.client.chat.config
+package dev.slne.surf.player.core.client.chat.config
 
 import dev.slne.surf.api.core.config.SpongeYmlConfigClass
-import dev.slne.surf.social.core.client.chat.config.configs.SurfChatConfig
+import dev.slne.surf.player.core.client.chat.config.configs.SurfChatConfig
 import java.nio.file.Path
 
 lateinit var chatConfigProvider: SpongeYmlConfigClass<SurfChatConfig>

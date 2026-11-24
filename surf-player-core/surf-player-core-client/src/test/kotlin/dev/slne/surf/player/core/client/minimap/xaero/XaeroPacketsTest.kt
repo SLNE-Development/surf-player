@@ -1,6 +1,6 @@
-package dev.slne.surf.social.core.client.minimap.xaero
+package dev.slne.surf.player.core.client.minimap.xaero
 
-import dev.slne.surf.social.core.client.minimap.xaero.nbt.decodedPacket
+import dev.slne.surf.player.core.client.minimap.xaero.nbt.decodedPacket
 import net.kyori.adventure.nbt.CompoundBinaryTag
 import net.kyori.adventure.nbt.IntArrayBinaryTag
 import org.junit.jupiter.api.Test

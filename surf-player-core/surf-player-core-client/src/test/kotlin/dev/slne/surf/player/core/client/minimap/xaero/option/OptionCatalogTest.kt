@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.xaero.option
+package dev.slne.surf.player.core.client.minimap.xaero.option
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

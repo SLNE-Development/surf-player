@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.profile
+package dev.slne.surf.player.api.profile
 
 import dev.slne.surf.api.core.util.requiredService
 import java.util.*

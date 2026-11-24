@@ -1,9 +1,9 @@
-package dev.slne.surf.social.core.common.playtime.service
+package dev.slne.surf.player.core.common.playtime.service
 
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
-import dev.slne.surf.social.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.player.api.playtime.session.PlaytimeSession
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import kotlinx.coroutines.coroutineScope

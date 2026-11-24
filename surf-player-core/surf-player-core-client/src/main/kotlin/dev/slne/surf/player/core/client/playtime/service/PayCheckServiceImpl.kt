@@ -1,13 +1,13 @@
-package dev.slne.surf.social.core.client.playtime.service
+package dev.slne.surf.player.core.client.playtime.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.social.core.client.playtime.ClientPlaytimeInstance
-import dev.slne.surf.social.core.client.playtime.session.PlayerSessionEpochs
-import dev.slne.surf.social.core.common.playtime.bridge.transactionBridge
-import dev.slne.surf.social.core.common.playtime.config.PlaytimeConfig
-import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.LoadSecondsByPlayerUuidAndServerNameRequestPacket
-import dev.slne.surf.social.core.common.playtime.service.PayCheckService
+import dev.slne.surf.player.core.client.playtime.ClientPlaytimeInstance
+import dev.slne.surf.player.core.client.playtime.session.PlayerSessionEpochs
+import dev.slne.surf.player.core.common.playtime.bridge.transactionBridge
+import dev.slne.surf.player.core.common.playtime.config.PlaytimeConfig
+import dev.slne.surf.player.core.common.playtime.rabbit.packet.request.LoadSecondsByPlayerUuidAndServerNameRequestPacket
+import dev.slne.surf.player.core.common.playtime.service.PayCheckService
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong

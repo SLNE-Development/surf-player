@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.connection.command
+package dev.slne.surf.player.velocity.connection.command
 
 import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.api.core.command.args.awaiting
@@ -7,13 +7,13 @@ import dev.slne.surf.api.velocity.command.executors.anyExecutorSuspend
 import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.velocity.command.argument.surfOfflinePlayerArgument
-import dev.slne.surf.social.api.connection.SurfConnectionApi
-import dev.slne.surf.social.api.connection.findConnection
-import dev.slne.surf.social.api.connection.impl.DiscordConnection
-import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.velocity.connection.config
-import dev.slne.surf.social.velocity.connection.httpClient
-import dev.slne.surf.social.velocity.connection.permission.SocialPermissions
+import dev.slne.surf.player.api.connection.SurfConnectionApi
+import dev.slne.surf.player.api.connection.findConnection
+import dev.slne.surf.player.api.connection.impl.DiscordConnection
+import dev.slne.surf.player.api.connection.impl.TwitchConnection
+import dev.slne.surf.player.velocity.connection.config
+import dev.slne.surf.player.velocity.connection.httpClient
+import dev.slne.surf.player.velocity.connection.permission.SocialPermissions
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.async
@@ -121,7 +121,7 @@ private suspend fun respondMinecraftAuth(playerUuid: UUID, code: String): Boolea
                 url(MINECRAFT_LINK_ENDPOINT)
                 contentType(ContentType.Application.Json)
                 bearerAuth(config.minecraftAuthToken)
-                userAgent("surf-social-velocity/LinkCommand")
+                userAgent("surf-player-velocity/LinkCommand")
 
                 setBody(MinecraftLinkRequest(playerUuid.toString(), code))
             }.status.isSuccess()

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.clan.clan
+package dev.slne.surf.player.core.common.clan.clan
 
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 

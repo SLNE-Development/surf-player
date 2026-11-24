@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.client.minimap.xaero
+package dev.slne.surf.player.core.client.minimap.xaero
 
-import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
-import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
-import dev.slne.surf.social.core.client.minimap.global.OptionOverlay
+import dev.slne.surf.player.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.player.core.client.minimap.global.OptionOverlay
 
 /**
  * Applies `global-settings` to the options of `xaero.yml`. An enforced Xaero option locks the player's own setting,

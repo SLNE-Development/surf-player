@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.chat.webhook
+package dev.slne.surf.player.core.client.chat.webhook
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*

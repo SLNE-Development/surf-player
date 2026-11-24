@@ -1,14 +1,14 @@
-package dev.slne.surf.social.core.client.connection.service
+package dev.slne.surf.player.core.client.connection.service
 
-import dev.slne.surf.social.api.connection.SocialConnection
-import dev.slne.surf.social.api.connection.impl.DiscordConnection
-import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
+import dev.slne.surf.player.api.connection.SocialConnection
+import dev.slne.surf.player.api.connection.impl.DiscordConnection
+import dev.slne.surf.player.api.connection.impl.TwitchConnection
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.common.connection.rabbit.rpc.SocialConnectionRpc
 import java.util.*
 
 object SocialConnectionsService {
-    private val rpc by lazy { SocialClient.rabbitApi.createRpcService<SocialConnectionRpc>() }
+    private val rpc by lazy { SurfPlayerClient.rabbitApi.createRpcService<SocialConnectionRpc>() }
 
     @Suppress("UNCHECKED_CAST")
     suspend fun <T : SocialConnection> findConnection(

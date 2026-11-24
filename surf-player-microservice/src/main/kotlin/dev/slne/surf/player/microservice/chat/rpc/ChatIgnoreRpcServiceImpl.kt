@@ -1,10 +1,10 @@
-package dev.slne.surf.social.microservice.chat.rpc
+package dev.slne.surf.player.microservice.chat.rpc
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
-import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatIgnoreRpcService
-import dev.slne.surf.social.microservice.chat.repository.ignore.IgnoreRepository
-import dev.slne.surf.social.microservice.friends.db.repository.FriendRequestRepository
+import dev.slne.surf.player.api.chat.entry.IgnoreListEntry
+import dev.slne.surf.player.core.common.chat.rabbit.rpc.ChatIgnoreRpcService
+import dev.slne.surf.player.microservice.chat.repository.ignore.IgnoreRepository
+import dev.slne.surf.player.microservice.friends.db.repository.FriendRequestRepository
 import java.util.*
 
 object ChatIgnoreRpcServiceImpl : ChatIgnoreRpcService {

@@ -1,6 +1,6 @@
-package dev.slne.surf.social.microservice.playtime.database.repository
+package dev.slne.surf.player.microservice.playtime.database.repository
 
-import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

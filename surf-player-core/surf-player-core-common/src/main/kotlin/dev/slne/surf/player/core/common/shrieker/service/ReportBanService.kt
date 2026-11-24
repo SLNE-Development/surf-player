@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.shrieker.service
+package dev.slne.surf.player.core.common.shrieker.service
 
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID

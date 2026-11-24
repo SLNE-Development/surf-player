@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.contentcreator.client
+package dev.slne.surf.player.core.client.contentcreator.client
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

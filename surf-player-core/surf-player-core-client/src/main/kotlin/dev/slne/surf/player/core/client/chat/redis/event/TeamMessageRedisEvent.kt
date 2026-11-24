@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.chat.redis.event
+package dev.slne.surf.player.core.client.chat.redis.event
 
 import dev.slne.surf.api.core.serializer.adventure.component.SerializableComponent
 import dev.slne.surf.redis.event.RedisEvent

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.chat.config
+package dev.slne.surf.player.core.client.chat.config
 
 import com.openai.core.LogLevel
 import dev.slne.surf.api.core.config.constraints.NotBlank

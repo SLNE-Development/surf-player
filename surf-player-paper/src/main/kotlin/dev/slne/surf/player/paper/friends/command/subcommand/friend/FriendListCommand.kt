@@ -1,9 +1,9 @@
-package dev.slne.surf.social.paper.friends.command.subcommand.friend
+package dev.slne.surf.player.paper.friends.command.subcommand.friend
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.core.client.friends.command.friendListComponent
-import dev.slne.surf.social.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.player.core.client.friends.command.friendListComponent
+import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 
 class FriendListCommand(commandName: String) : CommandAPICommand(commandName) {
     init {

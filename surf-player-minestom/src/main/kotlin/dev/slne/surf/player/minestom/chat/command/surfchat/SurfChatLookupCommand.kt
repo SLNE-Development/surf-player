@@ -1,4 +1,4 @@
-package dev.slne.surf.social.minestom.chat.command.surfchat
+package dev.slne.surf.player.minestom.chat.command.surfchat
 
 import dev.slne.surf.api.minestom.command.CommandAPI
 import dev.slne.surf.api.minestom.command.CommandAPICommand
@@ -6,13 +6,13 @@ import dev.slne.surf.api.minestom.command.dsl.greedyStringArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.api.chat.entry.HistoryFilter
-import dev.slne.surf.social.core.client.chat.lookup.RenderData
-import dev.slne.surf.social.core.client.chat.lookup.lookupPagination
-import dev.slne.surf.social.core.client.chat.lookup.parseFilters
-import dev.slne.surf.social.core.client.chat.lookup.resolveSenderNames
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.common.chat.service.HistoryService
+import dev.slne.surf.player.api.chat.entry.HistoryFilter
+import dev.slne.surf.player.core.client.chat.lookup.RenderData
+import dev.slne.surf.player.core.client.chat.lookup.lookupPagination
+import dev.slne.surf.player.core.client.chat.lookup.parseFilters
+import dev.slne.surf.player.core.client.chat.lookup.resolveSenderNames
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.common.chat.service.HistoryService
 import kotlinx.coroutines.TimeoutCancellationException
 
 fun CommandAPICommand.surfChatLookupCommand(): CommandAPICommand = withSubcommand(

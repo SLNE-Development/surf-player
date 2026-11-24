@@ -1,12 +1,12 @@
-package dev.slne.surf.social.core.common.friends.rpc
+package dev.slne.surf.player.core.common.friends.rpc
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
-import dev.slne.surf.social.api.friends.model.FriendRequest
-import dev.slne.surf.social.api.friends.model.Friendship
-import dev.slne.surf.social.api.friends.result.FriendRequestCreateResult
-import dev.slne.surf.social.api.friends.result.FriendRequestRemoveResult
-import dev.slne.surf.social.api.friends.result.FriendRequestStateResult
-import dev.slne.surf.social.api.friends.result.FriendshipRemoveResult
+import dev.slne.surf.player.api.friends.model.FriendRequest
+import dev.slne.surf.player.api.friends.model.Friendship
+import dev.slne.surf.player.api.friends.result.FriendRequestCreateResult
+import dev.slne.surf.player.api.friends.result.FriendRequestRemoveResult
+import dev.slne.surf.player.api.friends.result.FriendRequestStateResult
+import dev.slne.surf.player.api.friends.result.FriendshipRemoveResult
 import java.util.*
 
 /**

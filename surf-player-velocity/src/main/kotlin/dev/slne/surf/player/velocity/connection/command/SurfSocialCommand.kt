@@ -1,11 +1,11 @@
-package dev.slne.surf.social.velocity.connection.command
+package dev.slne.surf.player.velocity.connection.command
 
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.social.velocity.connection.permission.SocialPermissions
-import dev.slne.surf.social.velocity.connection.ConnectionVelocityFeature
+import dev.slne.surf.player.velocity.connection.permission.SocialPermissions
+import dev.slne.surf.player.velocity.connection.ConnectionVelocityFeature
 
 fun surfSocialCommand() = commandTree("surfsocial") {
     withPermission(SocialPermissions.COMMAND_SURF_SOCIAL)

@@ -1,14 +1,14 @@
-package dev.slne.surf.social.paper.vanish.listener
+package dev.slne.surf.player.paper.vanish.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.glow.SurfGlowingApi
 import dev.slne.surf.api.paper.util.forEachPlayerInRegion
-import dev.slne.surf.social.paper.vanish.core.service.vanishService
-import dev.slne.surf.social.paper.vanish.config.VanishConfiguration
-import dev.slne.surf.social.paper.vanish.plugin
-import dev.slne.surf.social.paper.vanish.util.VanishPermissionRegistry
-import dev.slne.surf.social.paper.vanish.util.canVanishSee
+import dev.slne.surf.player.paper.vanish.core.service.vanishService
+import dev.slne.surf.player.paper.vanish.config.VanishConfiguration
+import dev.slne.surf.player.paper.vanish.plugin
+import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
+import dev.slne.surf.player.paper.vanish.util.canVanishSee
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler

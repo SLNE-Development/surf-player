@@ -1,13 +1,13 @@
-package dev.slne.surf.social.minestom.friends.command
+package dev.slne.surf.player.minestom.friends.command
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
-import dev.slne.surf.social.core.client.friends.command.findFriend
-import dev.slne.surf.social.core.client.friends.command.findReceivedFriendRequestSender
-import dev.slne.surf.social.core.client.friends.command.findSentFriendRequestTarget
-import dev.slne.surf.social.core.client.friends.command.friendNames
-import dev.slne.surf.social.core.client.friends.command.receivedFriendRequestNames
-import dev.slne.surf.social.core.client.friends.command.sentFriendRequestNames
-import dev.slne.surf.social.minestom.command.PlayerLookupArgument
+import dev.slne.surf.player.core.client.friends.command.findFriend
+import dev.slne.surf.player.core.client.friends.command.findReceivedFriendRequestSender
+import dev.slne.surf.player.core.client.friends.command.findSentFriendRequestTarget
+import dev.slne.surf.player.core.client.friends.command.friendNames
+import dev.slne.surf.player.core.client.friends.command.receivedFriendRequestNames
+import dev.slne.surf.player.core.client.friends.command.sentFriendRequestNames
+import dev.slne.surf.player.minestom.command.PlayerLookupArgument
 
 /**
  * Adds an argument naming one of the executor's friends, see [resolveFriend].

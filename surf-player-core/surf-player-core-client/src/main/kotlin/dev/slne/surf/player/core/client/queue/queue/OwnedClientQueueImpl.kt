@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.client.queue.queue
+package dev.slne.surf.player.core.client.queue.queue
 
-import dev.slne.surf.social.core.client.queue.metrics.QueueMetrics
-import dev.slne.surf.social.core.client.queue.queue.cleanup.QueueCleanup
-import dev.slne.surf.social.core.client.queue.queue.transfer.QueueTransferProcessor
-import dev.slne.surf.social.core.common.queue.queue.AbstractTickableQueue
-import dev.slne.surf.social.core.common.queue.queue.tick.QueueScheduler
-import dev.slne.surf.social.core.common.queue.queue.tick.SafeQueueTick
+import dev.slne.surf.player.core.client.queue.metrics.QueueMetrics
+import dev.slne.surf.player.core.client.queue.queue.cleanup.QueueCleanup
+import dev.slne.surf.player.core.client.queue.queue.transfer.QueueTransferProcessor
+import dev.slne.surf.player.core.common.queue.queue.AbstractTickableQueue
+import dev.slne.surf.player.core.common.queue.queue.tick.QueueScheduler
+import dev.slne.surf.player.core.common.queue.queue.tick.SafeQueueTick
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 

@@ -1,13 +1,13 @@
-package dev.slne.surf.social.velocity.connection.redis
+package dev.slne.surf.player.velocity.connection.redis
 
 import dev.slne.surf.redis.libs.redisson.api.stream.StreamAddArgs
 import dev.slne.surf.redis.libs.redisson.client.codec.StringCodec
-import dev.slne.surf.social.core.client.SocialClient
+import dev.slne.surf.player.core.client.SurfPlayerClient
 import kotlinx.coroutines.future.await
 
 /**
  * Asks surf-discord to grant or revoke the Discord roles of linked accounts. Uses the shared
- * surf-social Redis connection owned by [SocialClient].
+ * surf-player Redis connection owned by [SurfPlayerClient].
  */
 object DiscordRolesPublisher {
     /**
@@ -17,7 +17,7 @@ object DiscordRolesPublisher {
     private const val STREAM_FIELD = "request"
     private const val MAX_STREAM_LENGTH = 10_000
 
-    private val redisApi get() = SocialClient.redisApi
+    private val redisApi get() = SurfPlayerClient.redisApi
 
     private val stream by lazy {
         redisApi.redisson.getStream<String, String>(STREAM_NAME, StringCodec.INSTANCE)

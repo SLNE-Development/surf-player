@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.shrieker.service
+package dev.slne.surf.player.core.common.shrieker.service
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 

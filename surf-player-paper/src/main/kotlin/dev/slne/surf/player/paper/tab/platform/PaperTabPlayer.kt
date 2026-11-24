@@ -1,8 +1,8 @@
-package dev.slne.surf.social.paper.tab.platform
+package dev.slne.surf.player.paper.tab.platform
 
 import com.github.shynixn.mccoroutine.folia.entityDispatcher
-import dev.slne.surf.social.core.client.tab.platform.TabPlayer
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.player.core.client.tab.platform.TabPlayer
+import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.withContext
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player

@@ -1,12 +1,12 @@
-package dev.slne.surf.social.paper.friends.command.subcommand.request
+package dev.slne.surf.player.paper.friends.command.subcommand.request
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.command.args.awaiting
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
-import dev.slne.surf.social.paper.friends.command.argument.receivedFriendRequestArgument
-import dev.slne.surf.social.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.paper.friends.command.argument.receivedFriendRequestArgument
+import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 
 fun CommandAPICommand.friendRequestAcceptCommand() = subcommand("accept") {
     withPermission(FriendPermissions.COMMAND_FRIEND_REQUEST_ACCEPT)

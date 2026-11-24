@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.connection.table
+package dev.slne.surf.player.microservice.connection.table
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Table
 import java.util.*

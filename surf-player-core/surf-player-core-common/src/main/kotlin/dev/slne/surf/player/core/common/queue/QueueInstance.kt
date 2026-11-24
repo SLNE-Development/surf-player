@@ -1,11 +1,11 @@
-package dev.slne.surf.social.core.common.queue
+package dev.slne.surf.player.core.common.queue
 
 import dev.slne.surf.api.core.component.SurfComponentApi
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.core.common.queue.queue.AbstractQueue
-import dev.slne.surf.social.core.common.queue.queue.RedisQueueService
-import dev.slne.surf.social.core.common.queue.queue.tick.QueueScheduler
-import dev.slne.surf.social.core.common.queue.redis.RedisInstance
+import dev.slne.surf.player.core.common.queue.queue.AbstractQueue
+import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
+import dev.slne.surf.player.core.common.queue.queue.tick.QueueScheduler
+import dev.slne.surf.player.core.common.queue.redis.RedisInstance
 import org.jetbrains.annotations.MustBeInvokedByOverriders
 
 /**

@@ -1,14 +1,14 @@
-package dev.slne.surf.social.minestom.clan.command.subcommands.player
+package dev.slne.surf.player.minestom.clan.command.subcommands.player
 
-import dev.slne.surf.social.api.clan.player.ClanPlayer
-import dev.slne.surf.social.minestom.command.failCommand
+import dev.slne.surf.player.api.clan.player.ClanPlayer
+import dev.slne.surf.player.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.booleanArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.social.core.client.clan.command.NOTHING_CHANGED
-import dev.slne.surf.social.core.client.clan.command.clanInvitesToggledMessage
-import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
+import dev.slne.surf.player.core.client.clan.command.NOTHING_CHANGED
+import dev.slne.surf.player.core.client.clan.command.clanInvitesToggledMessage
+import dev.slne.surf.player.core.client.clan.permission.ClanPermissions
 
 fun CommandAPICommand.clanPlayerCommand(): CommandAPICommand = withSubcommand(
     subcommand("player") {

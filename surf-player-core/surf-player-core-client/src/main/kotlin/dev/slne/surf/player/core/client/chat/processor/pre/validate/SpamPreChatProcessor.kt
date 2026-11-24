@@ -1,15 +1,15 @@
-package dev.slne.surf.social.core.client.chat.processor.pre.validate
+package dev.slne.surf.player.core.client.chat.processor.pre.validate
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.Expiry
 import com.sksamuel.aedile.core.expireAfterWrite
-import dev.slne.surf.social.api.chat.message.MessageContext
-import dev.slne.surf.social.api.chat.processor.PreChatProcessor
-import dev.slne.surf.social.core.client.chat.config.chatConfig
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.client.chat.processor.ProcessorOrder
-import dev.slne.surf.social.core.client.chat.util.hasPermission
-import dev.slne.surf.social.core.client.chat.util.sendText
+import dev.slne.surf.player.api.chat.message.MessageContext
+import dev.slne.surf.player.api.chat.processor.PreChatProcessor
+import dev.slne.surf.player.core.client.chat.config.chatConfig
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.processor.ProcessorOrder
+import dev.slne.surf.player.core.client.chat.util.hasPermission
+import dev.slne.surf.player.core.client.chat.util.sendText
 import java.time.Duration
 import java.util.*
 import kotlin.time.Duration.Companion.minutes

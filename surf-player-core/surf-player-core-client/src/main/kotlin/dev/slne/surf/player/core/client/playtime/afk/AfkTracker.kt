@@ -1,12 +1,12 @@
-package dev.slne.surf.social.core.client.playtime.afk
+package dev.slne.surf.player.core.client.playtime.afk
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.emptyObjectSet
 import dev.slne.surf.core.api.common.SurfCoreApi
-import dev.slne.surf.social.api.playtime.session.PlaytimeSession
-import dev.slne.surf.social.core.client.playtime.platform.PlaytimePlatform
-import dev.slne.surf.social.core.common.playtime.service.AfkService
-import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.player.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.core.client.playtime.platform.PlaytimePlatform
+import dev.slne.surf.player.core.common.playtime.service.AfkService
+import dev.slne.surf.player.core.common.playtime.service.PlaytimeService
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import java.time.LocalDateTime
 import java.util.*

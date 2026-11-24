@@ -12,7 +12,7 @@ surfMicroservice {
 }
 
 surfPaperPluginApi {
-    mainClass("dev.slne.surf.social.paper.SocialPaperPlugin")
+    mainClass("dev.slne.surf.player.paper.PlayerPaperPlugin")
     foliaSupported(true)
     generateLibraryLoader(false)
 
@@ -37,7 +37,7 @@ surfPaperPluginApi {
 }
 
 dependencies {
-    api(projects.surfSocialCore.surfSocialCoreClient)
+    api(projects.surfPlayerCore.surfPlayerCoreClient)
 
     compileOnly(libs.mini.placeholders)
     compileOnly(libs.luckperms.api)

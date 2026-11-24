@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.chat.config.configs
+package dev.slne.surf.player.core.client.chat.config.configs
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 

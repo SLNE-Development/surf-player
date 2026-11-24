@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.chat.command.surfchat.functionality
+package dev.slne.surf.player.paper.chat.command.surfchat.functionality
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.getValue
@@ -7,9 +7,9 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
 import dev.slne.surf.core.api.common.SurfCoreApi
-import dev.slne.surf.social.core.common.chat.service.FunctionalityService
-import dev.slne.surf.social.paper.chat.command.argument.niceToggleArgument
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.paper.chat.command.argument.niceToggleArgument
+import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import org.bukkit.Bukkit
 
 fun CommandAPICommand.functionalityChangeCommand() = subcommand("change") {

@@ -1,8 +1,8 @@
-package dev.slne.surf.social.core.common.chat.rabbit.rpc
+package dev.slne.surf.player.core.common.chat.rabbit.rpc
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
-import dev.slne.surf.social.api.chat.entry.HistoryEntry
-import dev.slne.surf.social.api.chat.entry.HistoryFilter
+import dev.slne.surf.player.api.chat.entry.HistoryEntry
+import dev.slne.surf.player.api.chat.entry.HistoryFilter
 import java.time.OffsetDateTime
 import java.util.*
 

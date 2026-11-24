@@ -1,4 +1,4 @@
-package dev.slne.surf.social.api.friends.utils
+package dev.slne.surf.player.api.friends.utils
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.core.api.common.SurfCoreApi

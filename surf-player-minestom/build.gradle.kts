@@ -8,7 +8,7 @@ surfMinestomApi {
 }
 
 minestomPluginFile {
-    main = "dev.slne.surf.social.minestom.SocialMinestomPlugin"
+    main = "dev.slne.surf.player.minestom.PlayerMinestomPlugin"
     authors = listOf("red", "twisti")
 
     pluginDependencies {
@@ -20,7 +20,7 @@ minestomPluginFile {
 }
 
 dependencies {
-    api(projects.surfSocialCore.surfSocialCoreClient)
+    api(projects.surfPlayerCore.surfPlayerCoreClient)
 
     compileOnly(libs.luckperms.api)
     compileOnly("dev.slne.surf.playtime:surf-playtime-api-minestom:+")

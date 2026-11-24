@@ -1,15 +1,15 @@
-package dev.slne.surf.social.minestom.chat.command
+package dev.slne.surf.player.minestom.chat.command
 
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.greedyStringArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
-import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.api.chat.message.MessageType
-import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
-import dev.slne.surf.social.core.client.chat.redis.event.TeamchatMessageRedisEvent
-import dev.slne.surf.social.core.client.SocialClient.redisApi
-import dev.slne.surf.social.core.common.chat.service.HistoryService
+import dev.slne.surf.player.api.chat.message.MessageData
+import dev.slne.surf.player.api.chat.message.MessageType
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService
+import dev.slne.surf.player.core.client.chat.redis.event.TeamchatMessageRedisEvent
+import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
+import dev.slne.surf.player.core.common.chat.service.HistoryService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.text.Component
 import java.time.OffsetDateTime

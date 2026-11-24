@@ -1,6 +1,6 @@
-package dev.slne.surf.social.api.chat.processor
+package dev.slne.surf.player.api.chat.processor
 
-import dev.slne.surf.social.api.chat.message.MessageContext
+import dev.slne.surf.player.api.chat.message.MessageContext
 
 interface PreChatProcessor {
     val order: Int

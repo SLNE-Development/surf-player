@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.minimap.voxelmap
+package dev.slne.surf.player.core.client.minimap.voxelmap
 
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.buildJsonObject

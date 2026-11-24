@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.client.clan.chat
+package dev.slne.surf.player.core.client.clan.chat
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import net.kyori.adventure.text.Component

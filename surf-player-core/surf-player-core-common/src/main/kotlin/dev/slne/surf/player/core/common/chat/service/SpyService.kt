@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.chat.service
+package dev.slne.surf.player.core.common.chat.service
 
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

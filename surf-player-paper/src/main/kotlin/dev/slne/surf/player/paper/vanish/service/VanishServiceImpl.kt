@@ -1,4 +1,4 @@
-package dev.slne.surf.social.paper.vanish.service
+package dev.slne.surf.player.paper.vanish.service
 
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
@@ -12,16 +12,16 @@ import dev.slne.surf.api.paper.glow.SurfGlowingApi
 import dev.slne.surf.api.paper.scoreboard.SurfScoreboard
 import dev.slne.surf.api.paper.scoreboard.SurfScoreboardApi
 import dev.slne.surf.api.paper.util.forEachPlayerInRegion
-import dev.slne.surf.social.api.vanish.event.PlayerReappearEvent
-import dev.slne.surf.social.api.vanish.event.PlayerVanishEvent
-import dev.slne.surf.social.paper.vanish.core.redisLoader
-import dev.slne.surf.social.paper.vanish.core.service.VanishService
-import dev.slne.surf.social.paper.vanish.core.service.vanishService
-import dev.slne.surf.social.paper.vanish.config
-import dev.slne.surf.social.paper.vanish.config.VanishConfiguration
-import dev.slne.surf.social.paper.vanish.hook.LuckPermsHook
-import dev.slne.surf.social.paper.vanish.plugin
-import dev.slne.surf.social.paper.vanish.util.*
+import dev.slne.surf.player.api.vanish.event.PlayerReappearEvent
+import dev.slne.surf.player.api.vanish.event.PlayerVanishEvent
+import dev.slne.surf.player.paper.vanish.core.redisLoader
+import dev.slne.surf.player.paper.vanish.core.service.VanishService
+import dev.slne.surf.player.paper.vanish.core.service.vanishService
+import dev.slne.surf.player.paper.vanish.config
+import dev.slne.surf.player.paper.vanish.config.VanishConfiguration
+import dev.slne.surf.player.paper.vanish.hook.LuckPermsHook
+import dev.slne.surf.player.paper.vanish.plugin
+import dev.slne.surf.player.paper.vanish.util.*
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import net.kyori.adventure.text.Component
