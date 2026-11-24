@@ -4,8 +4,9 @@ import dev.slne.surf.social.api.chat.message.MessageType
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.ULongIdTable
+import dev.slne.surf.social.microservice.SocialSchemas
 
-object HistoryTable : ULongIdTable("chat_histories") {
+object HistoryTable : ULongIdTable("${SocialSchemas.chat}.chat_histories") {
     val messageUuid = nativeUuid("message_uuid").uniqueIndex()
     val senderUuid = nativeUuid("sender_uuid")
     val receiverUuid = nativeUuid("receiver_uuid").nullable()

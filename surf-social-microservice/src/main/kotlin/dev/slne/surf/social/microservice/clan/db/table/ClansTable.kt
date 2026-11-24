@@ -4,11 +4,12 @@ import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Column
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Table
 import dev.slne.surf.database.table.AuditableLongIdTable
+import dev.slne.surf.social.microservice.SocialSchemas
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 import java.util.*
 
-object ClansTable : AuditableLongIdTable("clan_clans") {
+object ClansTable : AuditableLongIdTable("${SocialSchemas.clan}.clan_clans") {
     const val UUID_UQ_INDEX_NAME = "clan_clans_uuid_uq_idx"
     const val NAME_UQ_INDEX_NAME = "clan_clans_name_uq_idx"
     const val TAG_UQ_INDEX_NAME = "clan_clans_tag_uq_idx"

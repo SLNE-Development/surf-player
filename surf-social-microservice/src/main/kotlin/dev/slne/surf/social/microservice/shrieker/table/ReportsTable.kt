@@ -4,8 +4,9 @@ import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import dev.slne.surf.social.api.shrieker.type.ReportType
+import dev.slne.surf.social.microservice.SocialSchemas
 
-object ReportsTable : LongIdTable("shrieker_reports") {
+object ReportsTable : LongIdTable("${SocialSchemas.shrieker}.shrieker_reports") {
     val reporter = nativeUuid("reporter")
     val reported = nativeUuid("reported")
     val reportedAt = offsetDateTime("reported_at")

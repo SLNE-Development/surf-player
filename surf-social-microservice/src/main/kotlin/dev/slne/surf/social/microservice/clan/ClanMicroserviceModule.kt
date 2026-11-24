@@ -1,8 +1,10 @@
 package dev.slne.surf.social.microservice.clan
 
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Schema
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
 import dev.slne.surf.social.core.common.clan.ClanInstance
+import dev.slne.surf.social.microservice.SocialSchemas
 import dev.slne.surf.social.core.common.clan.rpc.ClanInviteRpcService
 import dev.slne.surf.social.core.common.clan.rpc.ClanMemberRpcService
 import dev.slne.surf.social.core.common.clan.rpc.ClanPlayerRpcService
@@ -32,6 +34,7 @@ lateinit var clanMicroservice: SocialMicroservice
 object ClanMicroserviceModule {
     /** Must be called inside a transaction. */
     suspend fun createTables() {
+        SchemaUtils.createSchema(Schema(SocialSchemas.clan))
         SchemaUtils.create(
             ClansTable,
             ClanMembersTable,
