@@ -31,4 +31,14 @@ object VanishedPlayers {
 
     /** The priority the player identified by [uuid] is vanished with, `null` if they are not vanished. */
     fun vanishPriority(uuid: UUID): Int? = players?.get(uuid)
+
+    /**
+     * [vanishPriority], asking Redis when the local view of this server does not list [uuid]: the
+     * local view may not have received a vanish that just happened on another server yet. For
+     * decisions that must never reveal a vanished player, e.g. the friend count of the join greeting.
+     */
+    suspend fun committedVanishPriority(uuid: UUID): Int? {
+        val map = players ?: return null
+        return map[uuid] ?: map.getRemote(uuid)
+    }
 }

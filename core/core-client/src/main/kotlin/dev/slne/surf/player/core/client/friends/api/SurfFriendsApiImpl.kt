@@ -162,7 +162,8 @@ class SurfFriendsApiImpl : SurfFriendsApi {
             return result
         }
 
-        FriendsClient.friendRequests.add(result.friendRequest)
+        // Committed before the event, so the target's server can find it when they answer at once.
+        FriendsClient.addFriendRequest(result.friendRequest)
 
         publish(FriendsAction.REQUEST_SENT, uuid, target)
 
@@ -176,7 +177,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
     )
 
     override suspend fun revokeFriendRequest(uuid: UUID, target: UUID): FriendRequestRemoveResult {
-        if (!hasSentFriendRequest(uuid, target)) {
+        if (!FriendsClient.hasFriendRequestCommitted(senderUuid = uuid, targetUuid = target)) {
             return FriendRequestRemoveResult.NotSentFriendRequest(target)
         }
 
@@ -194,7 +195,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
     }
 
     override suspend fun acceptFriendRequest(uuid: UUID, sender: UUID): FriendRequestStateResult {
-        if (!hasReceivedFriendRequest(uuid, sender)) {
+        if (!FriendsClient.hasFriendRequestCommitted(senderUuid = sender, targetUuid = uuid)) {
             return FriendRequestStateResult.NoFriendRequest(sender)
         }
 
@@ -209,7 +210,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
         // The friendships exactly as the microservice stored them, timestamps included.
         if (answer is FriendRequestAnswer.Accepted) {
             for (friendship in answer.friendships) {
-                FriendsClient.friendships.add(friendship)
+                FriendsClient.addFriendship(friendship)
             }
         }
 
@@ -219,7 +220,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
     }
 
     override suspend fun declineFriendRequest(uuid: UUID, sender: UUID): FriendRequestStateResult {
-        if (!hasReceivedFriendRequest(uuid, sender)) {
+        if (!FriendsClient.hasFriendRequestCommitted(senderUuid = sender, targetUuid = uuid)) {
             return FriendRequestStateResult.NoFriendRequest(sender)
         }
 
@@ -237,7 +238,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
     }
 
     override suspend fun removeFriendship(uuid: UUID, friend: UUID): FriendshipRemoveResult {
-        if (!hasFriendship(uuid, friend)) {
+        if (!FriendsClient.hasFriendshipCommitted(uuid, friend)) {
             return FriendshipRemoveResult.NotFriends(friend)
         }
 
@@ -247,10 +248,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
             return result
         }
 
-        FriendsClient.friendships.removeIf {
-            (it.playerUuid == uuid && it.friendUuid == friend) ||
-                    (it.playerUuid == friend && it.friendUuid == uuid)
-        }
+        FriendsClient.removeFriendshipsBetween(uuid, friend)
 
         publish(FriendsAction.FRIENDSHIP_REMOVED, uuid, friend)
 

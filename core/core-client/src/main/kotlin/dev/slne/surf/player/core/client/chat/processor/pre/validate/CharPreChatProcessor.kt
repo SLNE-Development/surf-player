@@ -37,8 +37,7 @@ object CharPreChatProcessor : PreChatProcessor {
 
         if (containsIllegalCharacters(messageData.plainMessage)) {
             messageData.sender.sendText {
-                appendWarningPrefix()
-                error("Deine Nachricht enthält unerlaubte Zeichen.")
+                append(ChatRejectionMessages.ILLEGAL_CHARACTERS)
             }
 
             context.cancel()

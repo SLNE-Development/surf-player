@@ -4,7 +4,7 @@ import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.CommonComponents
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.pagination.Pagination
-import dev.slne.surf.api.core.service.PlayerLookupService
+import dev.slne.surf.player.core.client.friends.util.resolveUsername
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
@@ -65,7 +65,8 @@ suspend fun friendListComponent(player: UUID, page: Int = 1, viewer: CommandView
         val onlinePlayer = SurfCoreApi.getPlayer(friendUuid)
             ?.takeIf { PlayerVisibility.network.canSee(viewer, friendUuid) }
         val surfPlayer = onlinePlayer ?: SurfCoreApi.getOfflinePlayer(friendUuid)
-        val friendName = PlayerLookupService.getUsername(friendUuid) ?: continue
+        // Never leave a friend out because their name is unknown to the lookup service.
+        val friendName = resolveUsername(friendUuid) ?: friendUuid.toString()
 
         if (onlinePlayer != null) {
             online.add(

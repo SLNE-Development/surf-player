@@ -10,6 +10,7 @@ import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.minestom.command.visibleOfflinePlayerArgument
 import dev.slne.surf.player.api.SurfCommunityPlayer
 import dev.slne.surf.player.core.client.friends.command.*
+import dev.slne.surf.player.core.client.friends.friendRequestAnswerFailureMessage
 import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 import dev.slne.surf.player.minestom.command.asViewer
 import dev.slne.surf.player.minestom.command.CONFIRMATION_LIFETIME
@@ -73,7 +74,8 @@ fun registerFriendCommands() {
             withArguments(PlayerLookupArgument(PLAYER, ::findReceivedFriendRequestSender, ::receivedFriendRequestNames))
             playerExecutorSuspend { player, args ->
                 val sender = args.resolve(PLAYER, NO_RECEIVED_FRIEND_REQUEST_MESSAGE)
-                SurfCommunityPlayer(player.uuid).acceptFriendRequest(sender.uuid)
+                friendRequestAnswerFailureMessage(SurfCommunityPlayer(player.uuid).acceptFriendRequest(sender.uuid))
+                    ?.let(player::sendMessage)
             }
         })
 
@@ -82,7 +84,8 @@ fun registerFriendCommands() {
             withArguments(PlayerLookupArgument(PLAYER, ::findReceivedFriendRequestSender, ::receivedFriendRequestNames))
             playerExecutorSuspend { player, args ->
                 val sender = args.resolve(PLAYER, NO_RECEIVED_FRIEND_REQUEST_MESSAGE)
-                SurfCommunityPlayer(player.uuid).declineFriendRequest(sender.uuid)
+                friendRequestAnswerFailureMessage(SurfCommunityPlayer(player.uuid).declineFriendRequest(sender.uuid))
+                    ?.let(player::sendMessage)
             }
         })
 

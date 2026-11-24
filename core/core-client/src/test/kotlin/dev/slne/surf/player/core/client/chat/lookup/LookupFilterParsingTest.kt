@@ -71,6 +71,36 @@ class LookupFilterParsingTest {
     }
 
     @Test
+    fun `a lookup name resolves to the network uuid before the mojang uuid`() {
+        val networkUuid = UUID.randomUUID()
+        val mojangUuid = UUID.randomUUID()
+
+        val resolved = runBlocking {
+            ChatCommands.resolveLookupPlayer("DevPlayer1", { networkUuid }, { mojangUuid })
+        }
+
+        assertEquals(networkUuid, resolved)
+    }
+
+    @Test
+    fun `a name the network has never seen falls back to mojang`() {
+        val mojangUuid = UUID.randomUUID()
+
+        assertEquals(mojangUuid, runBlocking { ChatCommands.resolveLookupPlayer("Notch", { null }, { mojangUuid }) })
+        assertNull(runBlocking { ChatCommands.resolveLookupPlayer("Nobody", { null }, { null }) })
+    }
+
+    @Test
+    fun `sender, receiver and limit end up in the filter`() {
+        val filter = (parse(ChatCommands.parseLookupQuery("--sender Keviro --receiver NotAmmo --limit 3"))
+                as ParsedLookupFilters.Valid).filter
+
+        assertEquals(keviro, filter.senderUuid)
+        assertEquals(ammo, filter.receiverUuid)
+        assertEquals(3, filter.limit)
+    }
+
+    @Test
     fun `the lookup queries with the resolved filter`() {
         var queriedSender: UUID? = null
 

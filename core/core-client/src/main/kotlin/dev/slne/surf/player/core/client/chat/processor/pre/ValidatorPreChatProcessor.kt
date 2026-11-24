@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.chat.processor.pre
 
-import dev.slne.surf.api.core.messages.Colors
+import dev.slne.surf.player.core.client.chat.processor.pre.validate.ChatRejectionMessages
 import dev.slne.surf.player.api.chat.message.MessageContext
 import dev.slne.surf.player.api.chat.processor.PreChatProcessor
 import dev.slne.surf.player.core.client.chat.message.MessageValidator
@@ -19,8 +19,7 @@ object ValidatorPreChatProcessor : PreChatProcessor {
             val error = validationResult.getErrorOrThrow()
 
             senderUuid.sendText {
-                appendErrorPrefix()
-                append(error.errorMessage.colorIfAbsent(Colors.ERROR))
+                append(ChatRejectionMessages.validationFailed(error))
             }
 
             context.cancel()

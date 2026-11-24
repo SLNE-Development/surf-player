@@ -71,21 +71,30 @@ fun registerChat() {
         note("${A} klickt [✘] auf unsignierte Nachricht: „${e.plain.trim()}“")
     }
 
-    scenario("chat-07", "Teleport per Namensklick") {
+    // Changed on purpose: clicking the name suggests `/msg <name> ` for everybody; staff teleport
+    // with a separate [TP] button in front of the name, which has its own hover text.
+    scenario("chat-07", "Teleport per [TP]-Button, Namensklick schlägt /msg vor") {
         on(PAPER, admin, p1)
         val text = uniq("tp")
         val m = admin.mark()
         p1.say(text)
         val r = admin.expect(text, since = m)
-        val hover = r.hovers.firstOrNull { it.second.contains("Teleportiere zu ${P1}") }
-            ?: bad("Kein Hover „Teleportiere zu ${P1}“: ${r.hovers.map { it.second }}")
+
+        check(r.clicks.any { Text.has(it.text, "${P1}") && it.value == "/msg ${P1} " }) {
+            "Klick auf den Namen schlägt nicht „/msg ${P1} “ vor: ${r.clicks.map { it.text to it.value }}"
+        }
+        val nameHover = r.hovers.firstOrNull { it.second.contains("${P1} eine private Nachricht zu schreiben") }
+            ?: bad("Kein Hover „Klicke, um ${P1} eine private Nachricht zu schreiben“ am Namen: ${r.hovers.map { it.second }}")
+        val tpHover = r.hovers.firstOrNull { Text.has(it.first, "TP") && it.second.contains("dich zu ${P1} zu teleportieren") }
+            ?: bad("Kein [TP]-Button mit Hover „Klicke, um dich zu ${P1} zu teleportieren“: ${r.hovers.map { it.first to it.second }}")
+
         val before = admin.teleports.get()
-        admin.clickIn(r, "${P1}")
-        eventually(5000, "Teleport von ${A} nach Klick") { if (admin.teleports.get() > before) true else null }
+        admin.clickIn(r, "TP")
+        eventually(5000, "Teleport von ${A} nach Klick auf [TP]") { if (admin.teleports.get() > before) true else null }
         val before2 = admin.teleports.get()
-        admin.clickIn(r, "${P1}")
+        admin.clickIn(r, "TP")
         eventually(5000, "zweiter Teleport") { if (admin.teleports.get() > before2) true else null }
-        note("Hover „${hover.second}“, Klick teleportiert ${A} (zweimal nutzbar)")
+        note("Name: Hover „${nameHover.second}“, Klick schlägt „/msg ${P1} “ vor; [TP]: Hover „${tpHover.second}“, teleportiert ${A} (zweimal nutzbar)")
     }
 
     scenario("chat-08", "Kein Teleport ohne Permission") {
@@ -370,13 +379,16 @@ fun registerChat() {
     }
 
     scenario("chat-32", "Verbindungsnachrichten per Config aus") {
-        on(PAPER, admin); on(LOBBY, p1)
+        // DevAdmin holds `*` and with it the always-show permission, so a normal player observes.
+        on(PAPER, admin, p2); on(LOBBY, p1)
         withConfig(PAPER, "chat/config.yml", { Yaml.set(it, "connection-message-config.enabled", "false") }, { reloadOn(PAPER, "chat") }) {
-            val m = admin.mark()
+            val m = p2.mark()
+            val ma = admin.mark()
             on(PAPER, p1)
             on(LOBBY, p1)
-            admin.expectNone("${P1}", since = m, within = 2000)
-            note("Keine Join-/Quit-Nachricht (auch keine Vanilla-Nachricht)")
+            p2.expectNone("${P1}", since = m, within = 2000)
+            val shown = admin.expect("[+]", "${P1}", since = ma)
+            note("${P2} sieht keine Join-/Quit-Nachricht (auch keine Vanilla-Nachricht); ${A} (always-show) sieht „${shown.plain.trim()}“")
         }
     }
 

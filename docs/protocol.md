@@ -141,7 +141,9 @@ Redis:
 
 ## friends
 
-RPC: `FriendsRpcService`. Clients check the preconditions against the synchronized lists; the
+RPC: `FriendsRpcService`. Clients check the preconditions against the synchronized lists (asking
+Redis when the local view lacks the entry, since the event about a request can arrive before the
+list change) and commit a new request or friendship to Redis before publishing its event; the
 microservice checks ignores, the target's setting `friend:requests` (read in-process from the
 settings tables) and cooldowns.
 
