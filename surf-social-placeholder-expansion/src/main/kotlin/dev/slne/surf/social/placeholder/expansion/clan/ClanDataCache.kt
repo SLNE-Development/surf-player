@@ -1,11 +1,11 @@
-package dev.slne.surf.clan.placeholder.expansion
+package dev.slne.surf.social.placeholder.expansion.clan
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.asLoadingCache
 import com.sksamuel.aedile.core.expireAfterWrite
 import com.sksamuel.aedile.core.refreshAfterWrite
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.clan.listener.ClanUpdatedListener
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.clan.listener.ClanUpdatedListener
 import net.kyori.adventure.text.Component
 import java.util.*
 import java.util.concurrent.CompletableFuture.completedFuture

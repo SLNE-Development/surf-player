@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.lookup
+package dev.slne.surf.social.core.client.chat.lookup
 
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.Colors
@@ -6,12 +6,12 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.clickOpensUrl
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.service.PlayerLookupService
-import dev.slne.surf.chat.api.entry.HistoryEntry
-import dev.slne.surf.chat.api.entry.HistoryFilter
-import dev.slne.surf.chat.api.message.MessageType
-import dev.slne.surf.chat.core.client.message.format.appendLinePrefix
-import dev.slne.surf.chat.core.client.util.formatAgo
-import dev.slne.surf.chat.core.client.util.formatTime
+import dev.slne.surf.social.api.chat.entry.HistoryEntry
+import dev.slne.surf.social.api.chat.entry.HistoryFilter
+import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.social.core.client.chat.message.format.appendLinePrefix
+import dev.slne.surf.social.core.client.chat.util.formatAgo
+import dev.slne.surf.social.core.client.chat.util.formatTime
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch

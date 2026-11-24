@@ -1,4 +1,4 @@
-package dev.slne.surf.shrieker.microservice
+package dev.slne.surf.social.microservice.shrieker
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.database.DatabaseApi
@@ -6,12 +6,12 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.microservice.api.microservice.Microservice
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
-import dev.slne.surf.shrieker.microservice.handler.ReportBansHandler
-import dev.slne.surf.shrieker.microservice.handler.ReportsHandler
-import dev.slne.surf.shrieker.microservice.handler.VoiceLogHandler
-import dev.slne.surf.shrieker.microservice.table.ReportBansTable
-import dev.slne.surf.shrieker.microservice.table.ReportDataTable
-import dev.slne.surf.shrieker.microservice.table.ReportsTable
+import dev.slne.surf.social.microservice.shrieker.handler.ReportBansHandler
+import dev.slne.surf.social.microservice.shrieker.handler.ReportsHandler
+import dev.slne.surf.social.microservice.shrieker.handler.VoiceLogHandler
+import dev.slne.surf.social.microservice.shrieker.table.ReportBansTable
+import dev.slne.surf.social.microservice.shrieker.table.ReportDataTable
+import dev.slne.surf.social.microservice.shrieker.table.ReportsTable
 import kotlin.io.path.Path
 
 @AutoService(Microservice::class)

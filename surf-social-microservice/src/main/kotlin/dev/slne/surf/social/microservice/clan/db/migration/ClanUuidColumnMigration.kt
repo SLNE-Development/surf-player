@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.microservice.db.migration
+package dev.slne.surf.social.microservice.clan.db.migration
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.vendors.currentDialect

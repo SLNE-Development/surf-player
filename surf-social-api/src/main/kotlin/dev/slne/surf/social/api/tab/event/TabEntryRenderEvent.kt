@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.api.event
+package dev.slne.surf.social.api.tab.event
 
 import dev.slne.surf.api.core.event.SurfAsyncEvent
 import dev.slne.surf.api.core.event.SurfCancellableEvent

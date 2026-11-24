@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.clan
+package dev.slne.surf.social.core.common.clan.clan
 
-import dev.slne.clan.api.clan.ClanTagColor
-import dev.slne.clan.api.invite.ClanInviteView
-import dev.slne.clan.api.member.ClanMemberView
+import dev.slne.surf.social.api.clan.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.invite.ClanInviteView
+import dev.slne.surf.social.api.clan.member.ClanMemberView
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import java.time.OffsetDateTime
 import java.util.*

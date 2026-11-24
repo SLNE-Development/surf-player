@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.microservice.handler.member
+package dev.slne.surf.social.microservice.clan.handler.member
 
-import dev.slne.surf.clan.core.protocol.member.findByUuid.FindClanMemberByUuidRequestPacket
-import dev.slne.surf.clan.core.protocol.member.findByUuid.FindClanMemberByUuidResponsePacket
-import dev.slne.surf.clan.microservice.db.repository.ClanMemberRepository
+import dev.slne.surf.social.core.common.clan.protocol.member.findByUuid.FindClanMemberByUuidRequestPacket
+import dev.slne.surf.social.core.common.clan.protocol.member.findByUuid.FindClanMemberByUuidResponsePacket
+import dev.slne.surf.social.microservice.clan.db.repository.ClanMemberRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,7 @@
-package dev.slne.surf.tab.minestom.hook
+package dev.slne.surf.social.minestom.tab.hook
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
-import dev.slne.surf.tab.core.client.hook.LuckPermsHook
+import dev.slne.surf.social.core.client.tab.hook.LuckPermsHook
 import net.luckperms.api.event.node.NodeAddEvent
 import net.luckperms.api.event.node.NodeRemoveEvent
 import net.luckperms.api.event.user.UserDataRecalculateEvent

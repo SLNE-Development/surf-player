@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.paper.service
+package dev.slne.surf.social.paper.chat.service
 
 import com.github.shynixn.mccoroutine.folia.scope
 import dev.slne.surf.api.core.messages.adventure.text
@@ -6,14 +6,14 @@ import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.api.paper.nms.NmsUseWithCaution
 import dev.slne.surf.api.paper.nms.bridges.SurfPaperNmsPlayerBridge
 import dev.slne.surf.api.paper.nms.bridges.packets.player.SurfPaperNmsPlayerPackets
-import dev.slne.surf.chat.core.client.redis.rpc.SendSignedMessageHandledRedisResponse
-import dev.slne.surf.chat.core.client.redis.rpc.SendSignedMessageRedisRequest
-import dev.slne.surf.chat.core.client.redis.rpc.SignedChatMessage
-import dev.slne.surf.chat.core.client.redisApi
-import dev.slne.surf.chat.paper.plugin
-import dev.slne.surf.chat.paper.redis.rpc.chatSession
-import dev.slne.surf.chat.paper.redis.rpc.toMirror
-import dev.slne.surf.chat.paper.redis.rpc.toWire
+import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageHandledRedisResponse
+import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
+import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
+import dev.slne.surf.social.core.client.chat.redisApi
+import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.chat.redis.rpc.chatSession
+import dev.slne.surf.social.paper.chat.redis.rpc.toMirror
+import dev.slne.surf.social.paper.chat.redis.rpc.toWire
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.redis.request.RequestTimeoutException
 import net.kyori.adventure.chat.SignedMessage

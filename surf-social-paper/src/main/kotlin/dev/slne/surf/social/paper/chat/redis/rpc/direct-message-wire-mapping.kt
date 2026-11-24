@@ -1,9 +1,9 @@
-package dev.slne.surf.chat.paper.redis.rpc
+package dev.slne.surf.social.paper.chat.redis.rpc
 
 import dev.slne.surf.api.paper.nms.NmsUseWithCaution
 import dev.slne.surf.api.paper.nms.bridges.data.chat.PlayerChatMessageMirror
 import dev.slne.surf.api.paper.nms.bridges.data.chat.RemoteChatSessionData
-import dev.slne.surf.chat.core.client.redis.rpc.SignedChatMessage
+import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
 
 @OptIn(NmsUseWithCaution::class)
 fun PlayerChatMessageMirror.toWire(session: RemoteChatSessionData?) = SignedChatMessage(

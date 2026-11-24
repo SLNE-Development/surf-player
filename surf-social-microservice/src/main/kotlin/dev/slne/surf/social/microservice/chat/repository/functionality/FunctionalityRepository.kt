@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.microservice.repository.functionality
+package dev.slne.surf.social.microservice.chat.repository.functionality
 
-import dev.slne.surf.chat.api.functionality.Functionalities
-import dev.slne.surf.chat.microservice.table.FunctionalityTable
+import dev.slne.surf.social.api.chat.functionality.Functionalities
+import dev.slne.surf.social.microservice.chat.table.FunctionalityTable
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insertIgnore

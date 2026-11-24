@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.player
+package dev.slne.surf.social.core.common.clan.player
 
-import dev.slne.clan.api.player.ClanPlayerService
+import dev.slne.surf.social.api.clan.player.ClanPlayerService
 
 interface CoreClanPlayerService : ClanPlayerService {
     suspend fun invalidateCaches()

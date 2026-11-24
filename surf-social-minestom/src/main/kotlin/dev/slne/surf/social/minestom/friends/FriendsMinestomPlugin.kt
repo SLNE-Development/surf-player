@@ -1,11 +1,11 @@
-package dev.slne.surf.friends.minestom
+package dev.slne.surf.social.minestom.friends
 
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
-import dev.slne.surf.friends.core.client.FriendsClientInstance
-import dev.slne.surf.friends.minestom.command.friendCommand
-import dev.slne.surf.friends.minestom.command.subcommand.friend.friendListCommand
-import dev.slne.surf.friends.minestom.command.subcommand.request.friendRequestSendCommand
-import dev.slne.surf.friends.minestom.listener.ConnectionListener
+import dev.slne.surf.social.core.client.friends.FriendsClientInstance
+import dev.slne.surf.social.minestom.friends.command.friendCommand
+import dev.slne.surf.social.minestom.friends.command.subcommand.friend.friendListCommand
+import dev.slne.surf.social.minestom.friends.command.subcommand.request.friendRequestSendCommand
+import dev.slne.surf.social.minestom.friends.listener.ConnectionListener
 
 object FriendsMinestomPlugin : SurfMinestomPlugin() {
     override suspend fun onLoad() {

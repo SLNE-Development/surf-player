@@ -1,9 +1,9 @@
-package dev.slne.surf.tab.core.client.service
+package dev.slne.surf.social.core.client.tab.service
 
-import dev.slne.surf.tab.api.placeholder.TabPlaceholder
-import dev.slne.surf.tab.api.placeholder.UpdateCondition
-import dev.slne.surf.tab.core.client.platform.tabPlatform
-import dev.slne.surf.tab.core.client.service.TablistUpdateReason
+import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
+import dev.slne.surf.social.api.tab.placeholder.UpdateCondition
+import dev.slne.surf.social.core.client.tab.platform.tabPlatform
+import dev.slne.surf.social.core.client.tab.service.TablistUpdateReason
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext

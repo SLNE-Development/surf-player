@@ -1,9 +1,9 @@
-package dev.slne.surf.chat.microservice.handler
+package dev.slne.surf.social.microservice.chat.handler
 
-import dev.slne.surf.chat.core.common.rabbit.packet.request.ignore.FindIgnoreListEntriesRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.ignore.UpdateIgnoreRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.response.ignore.ManyIgnorelistEntryResponsePacket
-import dev.slne.surf.chat.microservice.repository.ignore.IgnoreRepository
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.FindIgnoreListEntriesRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.UpdateIgnoreRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.response.ignore.ManyIgnorelistEntryResponsePacket
+import dev.slne.surf.social.microservice.chat.repository.ignore.IgnoreRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.protocol.player.findByUuid
+package dev.slne.surf.social.core.common.clan.protocol.player.findByUuid
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import kotlinx.serialization.Contextual

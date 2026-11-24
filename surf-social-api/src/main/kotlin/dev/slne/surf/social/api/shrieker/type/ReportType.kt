@@ -1,4 +1,4 @@
-package dev.slne.surf.shrieker.api.type
+package dev.slne.surf.social.api.shrieker.type
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import net.kyori.adventure.text.Component

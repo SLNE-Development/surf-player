@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.core.client
+package dev.slne.surf.social.core.client.chat
 
-import dev.slne.surf.chat.core.common.ChatInstance
-import dev.slne.surf.chat.core.common.rabbit.rpc.ModerationService
+import dev.slne.surf.social.core.common.chat.ChatInstance
+import dev.slne.surf.social.core.common.chat.rabbit.rpc.ModerationService
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 import dev.slne.surf.redis.RedisApi
 

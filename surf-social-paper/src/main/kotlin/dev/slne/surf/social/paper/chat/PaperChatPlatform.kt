@@ -1,11 +1,11 @@
-package dev.slne.surf.chat.paper
+package dev.slne.surf.social.paper.chat
 
 import com.github.shynixn.mccoroutine.folia.entityDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.playSound
 import dev.slne.surf.api.paper.extensions.server
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
 import kotlinx.coroutines.CoroutineScope
 import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component

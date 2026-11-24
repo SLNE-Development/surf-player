@@ -1,12 +1,12 @@
-package dev.slne.surf.chat.core.client.service
+package dev.slne.surf.social.core.client.chat.service
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.chat.api.functionality.Functionalities
-import dev.slne.surf.chat.core.client.rabbitApi
-import dev.slne.surf.chat.core.common.rabbit.packet.request.functionality.FindAllFunctionalitiesRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.functionality.FindFunctionalityRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.functionality.UpsertFunctionalityRequestPacket
-import dev.slne.surf.chat.core.common.service.FunctionalityService
+import dev.slne.surf.social.api.chat.functionality.Functionalities
+import dev.slne.surf.social.core.client.chat.rabbitApi
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindAllFunctionalitiesRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindFunctionalityRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.UpsertFunctionalityRequestPacket
+import dev.slne.surf.social.core.common.chat.service.FunctionalityService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.util.Services
 

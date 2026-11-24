@@ -1,12 +1,12 @@
-package dev.slne.surf.chat.core.client.service
+package dev.slne.surf.social.core.client.chat.service
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
-import dev.slne.surf.chat.api.entry.IgnoreListEntry
-import dev.slne.surf.chat.core.client.rabbitApi
-import dev.slne.surf.chat.core.common.rabbit.packet.request.ignore.FindIgnoreListEntriesRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.ignore.UpdateIgnoreRequestPacket
-import dev.slne.surf.chat.core.common.service.IgnoreService
+import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
+import dev.slne.surf.social.core.client.chat.rabbitApi
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.FindIgnoreListEntriesRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.UpdateIgnoreRequestPacket
+import dev.slne.surf.social.core.common.chat.service.IgnoreService
 import java.time.OffsetDateTime
 import java.util.*
 

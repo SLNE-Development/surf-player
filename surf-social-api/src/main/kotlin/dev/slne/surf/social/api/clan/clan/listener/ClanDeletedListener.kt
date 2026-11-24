@@ -1,6 +1,6 @@
-package dev.slne.clan.api.clan.listener
+package dev.slne.surf.social.api.clan.clan.listener
 
-import dev.slne.clan.api.clan.ClanView
+import dev.slne.surf.social.api.clan.clan.ClanView
 
 /**
  * Listener for clan deletion events.
@@ -20,8 +20,8 @@ import dev.slne.clan.api.clan.ClanView
  * ```
  *
  * @see ClanListener
- * @see dev.slne.clan.api.clan.Clan.registerListener
- * @see dev.slne.clan.api.clan.Clan.unregisterListener
+ * @see dev.slne.surf.social.api.clan.clan.Clan.registerListener
+ * @see dev.slne.surf.social.api.clan.clan.Clan.unregisterListener
  */
 fun interface ClanDeletedListener : ClanListener {
     /**

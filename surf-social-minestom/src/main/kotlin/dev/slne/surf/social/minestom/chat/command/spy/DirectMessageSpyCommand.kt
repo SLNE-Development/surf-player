@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.minestom.command.spy
+package dev.slne.surf.social.minestom.chat.command.spy
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.minestom.command.CommandAPI
@@ -6,8 +6,8 @@ import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.playerArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
 import dev.slne.surf.api.minestom.permission.hasPermission
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.common.service.SpyService
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.common.chat.service.SpyService
 import net.minestom.server.entity.Player
 
 fun directMessageSpyCommand() = commandTree("spy") {

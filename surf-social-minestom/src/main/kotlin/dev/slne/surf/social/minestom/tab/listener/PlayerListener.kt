@@ -1,9 +1,9 @@
-package dev.slne.surf.tab.minestom.listener
+package dev.slne.surf.social.minestom.tab.listener
 
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.tab.core.client.service.TablistService
-import dev.slne.surf.tab.minestom.platform.MinestomTabPlayer
+import dev.slne.surf.social.core.client.tab.service.TablistService
+import dev.slne.surf.social.minestom.tab.platform.MinestomTabPlayer
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
 import net.minestom.server.event.player.PlayerDisconnectEvent

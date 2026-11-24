@@ -1,14 +1,14 @@
-package dev.slne.clan.minestom.command.arguments
+package dev.slne.surf.social.minestom.clan.command.arguments
 
-import dev.slne.clan.api.invite.ClanInvite
-import dev.slne.clan.minestom.command.failCommand
+import dev.slne.surf.social.api.clan.invite.ClanInvite
+import dev.slne.surf.social.minestom.clan.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.argument.Argument
 import dev.slne.surf.api.minestom.command.argument.CustomArgument
 import dev.slne.surf.api.minestom.command.argument.StringArgument
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
-import dev.slne.surf.clan.core.client.command.CLAN_INVITE_ARGUMENT_NEEDS_PLAYER
-import dev.slne.surf.clan.core.client.command.invitedClanNames
+import dev.slne.surf.social.core.client.clan.command.CLAN_INVITE_ARGUMENT_NEEDS_PLAYER
+import dev.slne.surf.social.core.client.clan.command.invitedClanNames
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import net.minestom.server.entity.Player

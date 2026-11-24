@@ -1,12 +1,12 @@
-package dev.slne.surf.friends.microservice.rabbit.handler
+package dev.slne.surf.social.microservice.friends.rabbit.handler
 
-import dev.slne.surf.friends.api.model.FriendRequest
-import dev.slne.surf.friends.api.result.FriendRequestCreateResult
-import dev.slne.surf.friends.api.result.FriendRequestRemoveResult
-import dev.slne.surf.friends.api.result.FriendRequestStateResult
-import dev.slne.surf.friends.core.common.packets.friendrequest.*
-import dev.slne.surf.friends.microservice.db.repository.FriendRequestRepository
-import dev.slne.surf.friends.microservice.db.repository.FriendshipsRepository
+import dev.slne.surf.social.api.friends.model.FriendRequest
+import dev.slne.surf.social.api.friends.result.FriendRequestCreateResult
+import dev.slne.surf.social.api.friends.result.FriendRequestRemoveResult
+import dev.slne.surf.social.api.friends.result.FriendRequestStateResult
+import dev.slne.surf.social.core.common.friends.packets.friendrequest.*
+import dev.slne.surf.social.microservice.friends.db.repository.FriendRequestRepository
+import dev.slne.surf.social.microservice.friends.db.repository.FriendshipsRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime

@@ -1,13 +1,13 @@
-package dev.slne.surf.clan.microservice.services
+package dev.slne.surf.social.microservice.clan.services
 
 import com.google.auto.service.AutoService
-import dev.slne.clan.api.member.ClanMember
-import dev.slne.clan.api.member.ClanMemberAddResult
-import dev.slne.clan.api.member.ClanMemberRole
-import dev.slne.clan.api.member.ClanMemberService
-import dev.slne.clan.api.member.listener.ClanMemberListener
-import dev.slne.surf.clan.core.member.ClanMemberImpl
-import dev.slne.surf.clan.core.member.CoreClanMemberService
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMemberService
+import dev.slne.surf.social.api.clan.member.listener.ClanMemberListener
+import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
+import dev.slne.surf.social.core.common.clan.member.CoreClanMemberService
 import java.util.*
 
 @AutoService(ClanMemberService::class)

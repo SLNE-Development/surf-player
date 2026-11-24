@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.protocol.clan.findByID
+package dev.slne.surf.social.core.common.clan.protocol.clan.findByID
 
-import dev.slne.surf.clan.core.protocol.clan.OptionalClanResponsePacket
+import dev.slne.surf.social.core.common.clan.protocol.clan.OptionalClanResponsePacket
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import kotlinx.serialization.Serializable
 

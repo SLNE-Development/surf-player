@@ -1,7 +1,7 @@
-package dev.slne.surf.clan.core.client.tagcolor
+package dev.slne.surf.social.core.client.clan.tagcolor
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.clan.ClanTagColor
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 import org.junit.jupiter.api.Assertions.assertFalse

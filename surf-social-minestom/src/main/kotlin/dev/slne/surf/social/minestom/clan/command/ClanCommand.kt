@@ -1,17 +1,17 @@
-package dev.slne.clan.minestom.command
+package dev.slne.surf.social.minestom.clan.command
 
-import dev.slne.clan.minestom.command.subcommands.*
-import dev.slne.clan.minestom.command.subcommands.admin.clanAdminCommand
-import dev.slne.clan.minestom.command.subcommands.member.clanKickMemberCommand
-import dev.slne.clan.minestom.command.subcommands.member.clanMembersCommand
-import dev.slne.clan.minestom.command.subcommands.member.invite.clanAcceptCommand
-import dev.slne.clan.minestom.command.subcommands.member.invite.clanDenyCommand
-import dev.slne.clan.minestom.command.subcommands.member.invite.clanInviteCommand
-import dev.slne.clan.minestom.command.subcommands.member.role.clanDemoteMemberCommand
-import dev.slne.clan.minestom.command.subcommands.member.role.clanPromoteMemberCommand
-import dev.slne.clan.minestom.command.subcommands.player.clanPlayerCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.*
+import dev.slne.surf.social.minestom.clan.command.subcommands.admin.clanAdminCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.member.clanKickMemberCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.member.clanMembersCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.member.invite.clanAcceptCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.member.invite.clanDenyCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.member.invite.clanInviteCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.member.role.clanDemoteMemberCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.member.role.clanPromoteMemberCommand
+import dev.slne.surf.social.minestom.clan.command.subcommands.player.clanPlayerCommand
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
-import dev.slne.surf.clan.core.client.permission.ClanPermissions
+import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
 
 fun clanCommand() = commandAPICommand("clan") {
     withPermission(ClanPermissions.CLAN_COMMAND)

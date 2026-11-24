@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.microservice.db.repository
+package dev.slne.surf.social.microservice.friends.db.repository
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
@@ -6,8 +6,8 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import dev.slne.surf.friends.api.model.FriendRequest
-import dev.slne.surf.friends.microservice.db.table.FriendRequestsTable
+import dev.slne.surf.social.api.friends.model.FriendRequest
+import dev.slne.surf.social.microservice.friends.db.table.FriendRequestsTable
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import java.util.*

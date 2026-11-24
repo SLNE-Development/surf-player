@@ -1,9 +1,9 @@
-package dev.slne.clan.minestom.listener
+package dev.slne.surf.social.minestom.clan.listener
 
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.clan.core.client.tagcolor.ClanTagColorEnforcer
+import dev.slne.surf.social.core.client.clan.tagcolor.ClanTagColorEnforcer
 import kotlinx.coroutines.launch
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode

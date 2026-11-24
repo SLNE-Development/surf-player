@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.core.client.platform
+package dev.slne.surf.social.core.client.friends.platform
 
 import dev.slne.surf.api.core.util.requiredService
 import net.kyori.adventure.text.Component

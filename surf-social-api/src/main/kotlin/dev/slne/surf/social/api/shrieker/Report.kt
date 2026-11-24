@@ -1,8 +1,8 @@
-package dev.slne.surf.shrieker.api
+package dev.slne.surf.social.api.shrieker
 
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
-import dev.slne.surf.shrieker.api.type.ReportType
+import dev.slne.surf.social.api.shrieker.type.ReportType
 import kotlinx.serialization.Serializable
 import net.kyori.adventure.key.Key
 

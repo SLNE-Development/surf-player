@@ -1,11 +1,11 @@
-package dev.slne.surf.friends.minestom.command
+package dev.slne.surf.social.minestom.friends.command
 
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
-import dev.slne.surf.friends.core.client.permission.FriendPermissions
-import dev.slne.surf.friends.minestom.command.subcommand.friend.friendListCommand
-import dev.slne.surf.friends.minestom.command.subcommand.friend.friendInfoCommand
-import dev.slne.surf.friends.minestom.command.subcommand.friend.friendRemoveCommand
-import dev.slne.surf.friends.minestom.command.subcommand.request.*
+import dev.slne.surf.social.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.social.minestom.friends.command.subcommand.friend.friendListCommand
+import dev.slne.surf.social.minestom.friends.command.subcommand.friend.friendInfoCommand
+import dev.slne.surf.social.minestom.friends.command.subcommand.friend.friendRemoveCommand
+import dev.slne.surf.social.minestom.friends.command.subcommand.request.*
 
 fun friendCommand() = commandAPICommand("friend") {
     withPermission(FriendPermissions.COMMAND_FRIEND)

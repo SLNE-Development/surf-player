@@ -1,8 +1,8 @@
-package dev.slne.clan.paper
+package dev.slne.surf.social.paper.clan
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.extensions.pluginManager
-import dev.slne.surf.clan.core.ClanInstance
+import dev.slne.surf.social.core.common.clan.ClanInstance
 import org.bukkit.plugin.java.JavaPlugin
 
 class PaperMain : SuspendingJavaPlugin() {

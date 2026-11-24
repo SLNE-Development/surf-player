@@ -1,6 +1,6 @@
 @file:Suppress("RETURN_IN_FUNCTION_WITH_EXPRESSION_BODY_WARNING")
 
-package dev.slne.surf.chat.core.client.message.format
+package dev.slne.surf.social.core.client.chat.message.format
 
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
@@ -8,14 +8,14 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
 import dev.slne.surf.api.core.minimessage.miniMessage
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.core.client.hook.LuckPermsHook
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
-import dev.slne.surf.chat.core.client.util.formatTime
-import dev.slne.surf.chat.core.client.util.nameOrUnknown
-import dev.slne.surf.chat.core.client.util.updateLinks
-import dev.slne.surf.chat.core.common.service.DeletionService
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.core.client.chat.hook.LuckPermsHook
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.core.client.chat.util.formatTime
+import dev.slne.surf.social.core.client.chat.util.nameOrUnknown
+import dev.slne.surf.social.core.client.chat.util.updateLinks
+import dev.slne.surf.social.core.common.chat.service.DeletionService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component

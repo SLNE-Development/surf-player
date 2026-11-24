@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.hook
+package dev.slne.surf.social.core.client.chat.hook
 
 import net.luckperms.api.LuckPermsProvider
 import java.util.UUID

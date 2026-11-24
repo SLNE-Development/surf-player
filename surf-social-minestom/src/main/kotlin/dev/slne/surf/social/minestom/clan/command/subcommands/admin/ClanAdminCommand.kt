@@ -1,19 +1,19 @@
-package dev.slne.clan.minestom.command.subcommands.admin
+package dev.slne.surf.social.minestom.clan.command.subcommands.admin
 
-import dev.slne.clan.minestom.command.arguments.clanByClanTagArgument
-import dev.slne.clan.minestom.command.resolveClanArgument
+import dev.slne.surf.social.minestom.clan.command.arguments.clanByClanTagArgument
+import dev.slne.surf.social.minestom.clan.command.resolveClanArgument
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
 import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.clan.core.clan.ClanImpl
-import dev.slne.surf.clan.core.client.command.clanConfigReloadedMessage
-import dev.slne.surf.clan.core.client.command.clanDeletedMessage
-import dev.slne.surf.clan.core.client.command.invalidatedCachesMessage
-import dev.slne.surf.clan.core.client.command.invalidatingCachesMessage
-import dev.slne.surf.clan.core.client.permission.ClanPermissions
-import dev.slne.surf.clan.core.client.redis.RedisService
-import dev.slne.surf.clan.core.config.ClanConfig
+import dev.slne.surf.social.core.common.clan.clan.ClanImpl
+import dev.slne.surf.social.core.client.clan.command.clanConfigReloadedMessage
+import dev.slne.surf.social.core.client.clan.command.clanDeletedMessage
+import dev.slne.surf.social.core.client.clan.command.invalidatedCachesMessage
+import dev.slne.surf.social.core.client.clan.command.invalidatingCachesMessage
+import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
+import dev.slne.surf.social.core.client.clan.redis.RedisService
+import dev.slne.surf.social.core.common.clan.config.ClanConfig
 
 fun CommandAPICommand.clanAdminCommand(): CommandAPICommand = withSubcommand(
     subcommand("admin") {

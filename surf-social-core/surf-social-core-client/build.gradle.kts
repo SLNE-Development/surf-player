@@ -1,4 +1,3 @@
-import dev.slne.surf.api.gradle.util.slneReleases
 import dev.slne.surf.microservice.gradle.plugin.rabbit.RabbitModule
 
 plugins {
@@ -16,13 +15,16 @@ surfMicroservice {
 }
 
 dependencies {
-    api(projects.surfChatCore.surfChatCoreCommon)
+    api(projects.surfSocialCore.surfSocialCoreCommon)
 
     compileOnly(libs.luckperms.api)
-    compileOnly("dev.slne.surf.settings:surf-settings-api:+")
+    compileOnly(libs.mini.placeholders)
+    compileOnlyApi("dev.slne.surf.settings:surf-settings-api:+")
     compileOnly("dev.slne.surf.punish:surf-punish-api-common:+")
+    compileOnly("dev.slne.surf.playtime:surf-playtime-api-common:+")
+    compileOnly("dev.slne.surf.content.creator:surf-content-creator-api:+")
 
-    api("com.openai:openai-java:4.42.0") {
+    api(libs.openai) {
         exclude(group = "org.apache.httpcomponents.client5")
         exclude(group = "org.apache.httpcomponents.core5")
         exclude(group = "org.jetbrains.kotlin")
@@ -32,11 +34,4 @@ dependencies {
 sourceSets.test {
     compileClasspath += sourceSets.main.get().compileClasspath
     runtimeClasspath += sourceSets.main.get().compileClasspath
-}
-
-
-publishing {
-    repositories {
-        slneReleases()
-    }
 }

@@ -1,11 +1,11 @@
-package dev.slne.surf.chat.core.client.processor.pre.validate
+package dev.slne.surf.social.core.client.chat.processor.pre.validate
 
-import dev.slne.surf.chat.api.message.MessageContext
-import dev.slne.surf.chat.api.processor.PreChatProcessor
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.client.processor.ProcessorOrder
-import dev.slne.surf.chat.core.client.util.hasPermission
-import dev.slne.surf.chat.core.client.util.sendText
+import dev.slne.surf.social.api.chat.message.MessageContext
+import dev.slne.surf.social.api.chat.processor.PreChatProcessor
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.processor.ProcessorOrder
+import dev.slne.surf.social.core.client.chat.util.hasPermission
+import dev.slne.surf.social.core.client.chat.util.sendText
 import it.unimi.dsi.fastutil.chars.CharOpenHashSet
 
 private const val ADDITIONAL_VALID_CHARACTERS = "äöüÄÖÜß€@£¥|²³µ½¼¾«»¡¿°§´`^~¨"

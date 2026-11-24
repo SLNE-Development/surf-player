@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.core.common.rabbit.rpc
+package dev.slne.surf.social.core.common.chat.rabbit.rpc
 
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.core.common.aimoderation.ModerationClassificationResult
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationResult
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 
 @RpcService

@@ -1,9 +1,9 @@
-package dev.slne.surf.friends.minestom.listener
+package dev.slne.surf.social.minestom.friends.listener
 
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.friends.core.client.connection.FriendConnectionNotifier
+import dev.slne.surf.social.core.client.friends.connection.FriendConnectionNotifier
 import kotlinx.coroutines.launch
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode

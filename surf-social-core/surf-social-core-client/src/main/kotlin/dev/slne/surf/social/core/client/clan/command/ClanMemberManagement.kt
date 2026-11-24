@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.client.command
+package dev.slne.surf.social.core.client.clan.command
 
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import dev.slne.surf.api.core.messages.adventure.buildText
 
 const val CANNOT_KICK_SELF = "Du kannst dich nicht selbst rauswerfen."

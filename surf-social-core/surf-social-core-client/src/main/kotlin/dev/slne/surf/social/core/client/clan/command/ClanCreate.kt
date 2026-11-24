@@ -1,13 +1,13 @@
-package dev.slne.surf.clan.core.client.command
+package dev.slne.surf.social.core.client.clan.command
 
-import dev.slne.clan.api.clan.ClanCreationResult
-import dev.slne.clan.api.clan.ClanValidationResult
+import dev.slne.surf.social.api.clan.clan.ClanCreationResult
+import dev.slne.surf.social.api.clan.clan.ClanValidationResult
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
-import dev.slne.surf.clan.core.clan.ClanImpl
-import dev.slne.surf.clan.core.client.Messages
-import dev.slne.surf.clan.core.client.components.Components
+import dev.slne.surf.social.core.common.clan.clan.ClanImpl
+import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.core.client.clan.components.Components
 import net.kyori.adventure.text.format.TextDecoration
 
 /**

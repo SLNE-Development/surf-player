@@ -1,7 +1,7 @@
-package dev.slne.surf.clan.core.client.command
+package dev.slne.surf.social.core.client.clan.command
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
@@ -9,8 +9,8 @@ import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.api.core.util.dateTimeFormatter
-import dev.slne.surf.clan.core.clan.ClanImpl
-import dev.slne.surf.clan.core.client.components.Components
+import dev.slne.surf.social.core.common.clan.clan.ClanImpl
+import dev.slne.surf.social.core.client.clan.components.Components
 import dev.slne.surf.core.api.common.SurfCoreApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope

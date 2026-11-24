@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.paper.util
+package dev.slne.surf.social.paper.chat.util
 
 import dev.slne.surf.api.core.messages.adventure.nameOrNull
 import net.kyori.adventure.audience.Audience

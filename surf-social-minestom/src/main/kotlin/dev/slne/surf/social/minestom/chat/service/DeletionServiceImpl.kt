@@ -1,13 +1,13 @@
-package dev.slne.surf.chat.minestom.service
+package dev.slne.surf.social.minestom.chat.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.core.client.message.format.Components
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
-import dev.slne.surf.chat.core.common.service.DeletionService
-import dev.slne.surf.chat.core.common.service.HistoryService
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.core.client.chat.message.format.Components
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.core.common.chat.service.DeletionService
+import dev.slne.surf.social.core.common.chat.service.HistoryService
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import net.kyori.adventure.audience.Audience

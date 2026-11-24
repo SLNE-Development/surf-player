@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.common.aimoderation
+package dev.slne.surf.social.core.common.chat.aimoderation
 
 import kotlinx.serialization.Serializable
 

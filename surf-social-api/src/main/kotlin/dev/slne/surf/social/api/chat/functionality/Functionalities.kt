@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.api.functionality
+package dev.slne.surf.social.api.chat.functionality
 
 import kotlinx.serialization.Serializable
 

@@ -1,12 +1,12 @@
-package dev.slne.surf.friends.core.client
+package dev.slne.surf.social.core.client.friends
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.friends.api.model.FriendRequest
-import dev.slne.surf.friends.api.model.Friendship
-import dev.slne.surf.friends.core.client.redis.listener.FriendRequestRedisListener
-import dev.slne.surf.friends.core.client.redis.listener.FriendshipRedisListener
-import dev.slne.surf.friends.core.common.packets.friendrequest.FetchFriendRequestsRequestPacket
-import dev.slne.surf.friends.core.common.packets.friendship.FetchFriendshipsRequestPacket
+import dev.slne.surf.social.api.friends.model.FriendRequest
+import dev.slne.surf.social.api.friends.model.Friendship
+import dev.slne.surf.social.core.client.friends.redis.listener.FriendRequestRedisListener
+import dev.slne.surf.social.core.client.friends.redis.listener.FriendshipRedisListener
+import dev.slne.surf.social.core.common.friends.packets.friendrequest.FetchFriendRequestsRequestPacket
+import dev.slne.surf.social.core.common.friends.packets.friendship.FetchFriendshipsRequestPacket
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 import dev.slne.surf.redis.RedisApi
 import dev.slne.surf.redis.sync.list.SyncList

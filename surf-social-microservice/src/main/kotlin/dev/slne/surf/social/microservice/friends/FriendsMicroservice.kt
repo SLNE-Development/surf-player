@@ -1,13 +1,13 @@
-package dev.slne.surf.friends.microservice
+package dev.slne.surf.social.microservice.friends
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.database.DatabaseApi
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import dev.slne.surf.friends.microservice.db.table.FriendRequestsTable
-import dev.slne.surf.friends.microservice.db.table.FriendshipsTable
-import dev.slne.surf.friends.microservice.rabbit.handler.FriendRequestHandler
-import dev.slne.surf.friends.microservice.rabbit.handler.FriendshipHandler
+import dev.slne.surf.social.microservice.friends.db.table.FriendRequestsTable
+import dev.slne.surf.social.microservice.friends.db.table.FriendshipsTable
+import dev.slne.surf.social.microservice.friends.rabbit.handler.FriendRequestHandler
+import dev.slne.surf.social.microservice.friends.rabbit.handler.FriendshipHandler
 import dev.slne.surf.microservice.api.microservice.Microservice
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
 import java.nio.file.Path

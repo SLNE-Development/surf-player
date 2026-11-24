@@ -1,6 +1,6 @@
-package dev.slne.surf.chat.microservice.table
+package dev.slne.surf.social.microservice.chat.table
 
-import dev.slne.surf.chat.api.message.MessageType
+import dev.slne.surf.social.api.chat.message.MessageType
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.ULongIdTable

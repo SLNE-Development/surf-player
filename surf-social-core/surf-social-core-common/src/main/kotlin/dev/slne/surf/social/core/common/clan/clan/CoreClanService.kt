@@ -1,11 +1,11 @@
-package dev.slne.surf.clan.core.clan
+package dev.slne.surf.social.core.common.clan.clan
 
-import dev.slne.clan.api.clan.ClanService
-import dev.slne.clan.api.clan.ClanTagColor
-import dev.slne.clan.api.invite.ClanInviteResult
-import dev.slne.clan.api.member.ClanMemberAddResult
-import dev.slne.clan.api.member.ClanMemberRole
-import dev.slne.surf.clan.core.invite.ClanInviteImpl
+import dev.slne.surf.social.api.clan.clan.ClanService
+import dev.slne.surf.social.api.clan.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.invite.ClanInviteResult
+import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
+import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
 import java.util.*
 
 interface CoreClanService : ClanService {

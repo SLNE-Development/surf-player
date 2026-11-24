@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.core.common.packets.friendship
+package dev.slne.surf.social.core.common.friends.packets.friendship
 
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket

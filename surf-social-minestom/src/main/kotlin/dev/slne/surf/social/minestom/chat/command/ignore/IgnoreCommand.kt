@@ -1,10 +1,10 @@
-package dev.slne.surf.chat.minestom.command.ignore
+package dev.slne.surf.social.minestom.chat.command.ignore
 
 import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.common.service.IgnoreService
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.common.chat.service.IgnoreService
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument
 import kotlinx.coroutines.Deferred

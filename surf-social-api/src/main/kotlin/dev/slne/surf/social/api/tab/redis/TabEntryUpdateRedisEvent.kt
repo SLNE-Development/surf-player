@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.api.redis
+package dev.slne.surf.social.api.tab.redis
 
 import dev.slne.surf.redis.event.RedisEvent
 import kotlinx.serialization.Contextual

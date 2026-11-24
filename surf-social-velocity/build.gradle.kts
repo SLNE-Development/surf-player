@@ -15,15 +15,10 @@ surfMicroservice {
 }
 
 velocityPluginFile {
-    main = "dev.slne.clan.velocity.VelocityMain"
-
-    pluginDependencies {
-//        register("miniplaceholders")
-    }
-
+    main = "dev.slne.surf.social.velocity.SocialVelocityPlugin"
     authors = listOf("Ammo", "red", "twisti")
 }
 
 dependencies {
-    api(projects.surfClanCore.surfClanCoreClient)
+    api(projects.surfSocialCore.surfSocialCoreClient)
 }

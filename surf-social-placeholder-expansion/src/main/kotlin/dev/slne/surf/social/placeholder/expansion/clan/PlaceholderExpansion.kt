@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.placeholder.expansion
+package dev.slne.surf.social.placeholder.expansion.clan
 
 import io.github.miniplaceholders.api.Expansion
 import io.github.miniplaceholders.api.provider.ExpansionProvider

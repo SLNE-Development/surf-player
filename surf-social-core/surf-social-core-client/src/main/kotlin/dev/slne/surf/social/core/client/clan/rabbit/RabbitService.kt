@@ -1,7 +1,7 @@
-package dev.slne.surf.clan.core.client.rabbit
+package dev.slne.surf.social.core.client.clan.rabbit
 
-import dev.slne.surf.clan.core.ClanCoreSerializerModule
-import dev.slne.surf.clan.core.ClanInstance
+import dev.slne.surf.social.core.common.clan.ClanCoreSerializerModule
+import dev.slne.surf.social.core.common.clan.ClanInstance
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 
 object RabbitService {

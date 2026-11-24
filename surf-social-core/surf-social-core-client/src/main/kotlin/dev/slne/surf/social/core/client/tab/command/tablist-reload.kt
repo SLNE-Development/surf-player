@@ -1,7 +1,7 @@
-package dev.slne.surf.tab.core.client.command
+package dev.slne.surf.social.core.client.tab.command
 
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.tab.core.client.service.TablistService
+import dev.slne.surf.social.core.client.tab.service.TablistService
 import net.kyori.adventure.audience.Audience
 
 /**

@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.core.client.redis
+package dev.slne.surf.social.core.client.tab.redis
 
 import dev.slne.surf.redis.RedisApi
 

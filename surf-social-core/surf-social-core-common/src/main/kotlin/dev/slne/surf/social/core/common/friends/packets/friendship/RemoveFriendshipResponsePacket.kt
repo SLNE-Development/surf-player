@@ -1,6 +1,6 @@
-package dev.slne.surf.friends.core.common.packets.friendship
+package dev.slne.surf.social.core.common.friends.packets.friendship
 
-import dev.slne.surf.friends.api.result.FriendshipRemoveResult
+import dev.slne.surf.social.api.friends.result.FriendshipRemoveResult
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import kotlinx.serialization.Serializable
 

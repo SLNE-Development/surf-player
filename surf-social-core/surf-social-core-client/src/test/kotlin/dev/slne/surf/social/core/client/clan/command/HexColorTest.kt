@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.client.command
+package dev.slne.surf.social.core.client.clan.command
 
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

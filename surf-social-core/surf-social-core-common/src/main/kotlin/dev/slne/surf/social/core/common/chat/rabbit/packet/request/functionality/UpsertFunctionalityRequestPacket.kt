@@ -1,6 +1,6 @@
-package dev.slne.surf.chat.core.common.rabbit.packet.request.functionality
+package dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality
 
-import dev.slne.surf.chat.api.functionality.Functionalities
+import dev.slne.surf.social.api.chat.functionality.Functionalities
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.serialization.Serializable

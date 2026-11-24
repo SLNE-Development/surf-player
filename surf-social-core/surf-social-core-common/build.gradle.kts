@@ -1,4 +1,3 @@
-import dev.slne.surf.api.gradle.util.slneReleases
 import dev.slne.surf.microservice.gradle.plugin.rabbit.RabbitModule
 
 plugins {
@@ -11,16 +10,10 @@ surfCoreApi {
     withSurfRedis()
 }
 
-dependencies {
-    api(projects.surfChatApi)
-}
-
 surfMicroservice {
-    withRabbitModule(RabbitModule.COMMON_API)
+    withRabbitModule(RabbitModule.CLIENT_API)
 }
 
-publishing {
-    repositories {
-        slneReleases()
-    }
+dependencies {
+    api(projects.surfSocialApi)
 }

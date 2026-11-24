@@ -1,13 +1,13 @@
-package dev.slne.surf.chat.core.client.message
+package dev.slne.surf.social.core.client.chat.message
 
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.api.message.MessageType
-import dev.slne.surf.chat.api.message.MessageValidationResult
-import dev.slne.surf.chat.core.client.config.chatConfig
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
-import dev.slne.surf.chat.core.client.util.hasPermission
-import dev.slne.surf.chat.core.common.service.FunctionalityService
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.social.api.chat.message.MessageValidationResult
+import dev.slne.surf.social.core.client.chat.config.chatConfig
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.core.client.chat.util.hasPermission
+import dev.slne.surf.social.core.common.chat.service.FunctionalityService
 import java.util.UUID
 
 fun hasTooManyCapsInARow(message: String, maxInRow: Int): Boolean {

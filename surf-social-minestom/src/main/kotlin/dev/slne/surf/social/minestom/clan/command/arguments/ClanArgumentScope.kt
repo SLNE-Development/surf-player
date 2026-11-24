@@ -1,4 +1,4 @@
-package dev.slne.clan.minestom.command.arguments
+package dev.slne.surf.social.minestom.clan.command.arguments
 
 import dev.slne.surf.api.core.util.logger
 import kotlinx.coroutines.*

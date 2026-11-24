@@ -1,15 +1,15 @@
-package dev.slne.clan.minestom.command.subcommands.member.invite
+package dev.slne.surf.social.minestom.clan.command.subcommands.member.invite
 
-import dev.slne.clan.minestom.command.arguments.clanInviteArgument
-import dev.slne.clan.minestom.command.failCommand
-import dev.slne.clan.minestom.command.resolveClanInvite
+import dev.slne.surf.social.minestom.clan.command.arguments.clanInviteArgument
+import dev.slne.surf.social.minestom.clan.command.failCommand
+import dev.slne.surf.social.minestom.clan.command.resolveClanInvite
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.clan.core.client.command.INVITE_ALREADY_DENIED
-import dev.slne.surf.clan.core.client.command.inviteDeniedMessage
-import dev.slne.surf.clan.core.client.command.inviteDeniedNotification
-import dev.slne.surf.clan.core.client.permission.ClanPermissions
+import dev.slne.surf.social.core.client.clan.command.INVITE_ALREADY_DENIED
+import dev.slne.surf.social.core.client.clan.command.inviteDeniedMessage
+import dev.slne.surf.social.core.client.clan.command.inviteDeniedNotification
+import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
 import dev.slne.surf.core.api.common.SurfCoreApi
 
 fun CommandAPICommand.clanDenyCommand(): CommandAPICommand = withSubcommand(

@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.api.denylist
+package dev.slne.surf.social.api.chat.denylist
 
 /**
  * Represents an action to be applied to a user in the denylist system.

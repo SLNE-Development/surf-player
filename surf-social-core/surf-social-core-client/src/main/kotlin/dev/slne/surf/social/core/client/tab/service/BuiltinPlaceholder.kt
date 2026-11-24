@@ -1,14 +1,14 @@
-package dev.slne.surf.tab.core.client.service
+package dev.slne.surf.social.core.client.tab.service
 
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.text
 import dev.slne.surf.api.core.util.freeze
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.tab.api.placeholder.TabPlaceholder
-import dev.slne.surf.tab.api.placeholder.UpdateCondition
-import dev.slne.surf.tab.core.client.platform.tabPlatform
-import dev.slne.surf.tab.core.client.util.formatTablistDate
-import dev.slne.surf.tab.core.client.util.formatTablistTime
+import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
+import dev.slne.surf.social.api.tab.placeholder.UpdateCondition
+import dev.slne.surf.social.core.client.tab.platform.tabPlatform
+import dev.slne.surf.social.core.client.tab.util.formatTablistDate
+import dev.slne.surf.social.core.client.tab.util.formatTablistTime
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import net.kyori.adventure.text.Component
 import java.time.ZonedDateTime

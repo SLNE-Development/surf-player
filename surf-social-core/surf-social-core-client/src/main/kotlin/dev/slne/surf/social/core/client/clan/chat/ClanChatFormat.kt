@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.client.chat
+package dev.slne.surf.social.core.client.clan.chat
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.luckperms.prefix

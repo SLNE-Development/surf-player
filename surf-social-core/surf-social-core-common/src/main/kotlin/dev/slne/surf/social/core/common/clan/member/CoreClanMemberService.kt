@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.member
+package dev.slne.surf.social.core.common.clan.member
 
-import dev.slne.clan.api.member.ClanMemberAddResult
-import dev.slne.clan.api.member.ClanMemberRole
-import dev.slne.clan.api.member.ClanMemberService
+import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMemberService
 import java.util.*
 
 interface CoreClanMemberService : ClanMemberService {

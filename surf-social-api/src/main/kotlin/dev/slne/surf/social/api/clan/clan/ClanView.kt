@@ -1,8 +1,8 @@
-package dev.slne.clan.api.clan
+package dev.slne.surf.social.api.clan.clan
 
-import dev.slne.clan.api.invite.ClanInviteView
-import dev.slne.clan.api.member.ClanMemberView
-import dev.slne.clan.api.permission.ClanPermission
+import dev.slne.surf.social.api.clan.invite.ClanInviteView
+import dev.slne.surf.social.api.clan.member.ClanMemberView
+import dev.slne.surf.social.api.clan.permission.ClanPermission
 import net.kyori.adventure.text.Component
 import org.jetbrains.annotations.ApiStatus
 import java.time.OffsetDateTime

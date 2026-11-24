@@ -1,4 +1,4 @@
-package dev.slne.surf.shrieker.microservice.handler
+package dev.slne.surf.social.microservice.shrieker.handler
 
 object VoiceLogHandler {
 }

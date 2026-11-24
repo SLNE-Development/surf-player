@@ -1,10 +1,10 @@
-package dev.slne.clan.paper.commands.arguments.color
+package dev.slne.surf.social.paper.clan.commands.arguments.color
 
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.TextArgument
-import dev.slne.clan.paper.commands.failCommand
-import dev.slne.surf.clan.core.client.command.*
+import dev.slne.surf.social.paper.clan.commands.failCommand
+import dev.slne.surf.social.core.client.clan.command.*
 
 abstract class BaseHexColorArgument<T>(
     nodeName: String,

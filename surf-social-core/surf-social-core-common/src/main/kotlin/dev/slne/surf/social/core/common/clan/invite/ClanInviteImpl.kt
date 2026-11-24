@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.invite
+package dev.slne.surf.social.core.common.clan.invite
 
-import dev.slne.clan.api.invite.ClanInvite
-import dev.slne.clan.api.invite.ClanInviteAcceptResult
-import dev.slne.clan.api.invite.ClanInviteView
+import dev.slne.surf.social.api.clan.invite.ClanInvite
+import dev.slne.surf.social.api.clan.invite.ClanInviteAcceptResult
+import dev.slne.surf.social.api.clan.invite.ClanInviteView
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableStringUUID
 import kotlinx.serialization.Serializable

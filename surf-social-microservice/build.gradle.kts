@@ -6,8 +6,9 @@ plugins {
 }
 
 surfStandaloneApi {
-    withSurfDatabaseR2dbc("2.3.5", "dev.slne.surf.chat.libs.database")
+    withSurfDatabaseR2dbc("2.3.5", "dev.slne.surf.social.libs.database")
     withCoreCommon()
+    withSurfRedis()
 }
 
 surfMicroservice {
@@ -16,5 +17,5 @@ surfMicroservice {
 }
 
 dependencies {
-    api(projects.surfChatCore.surfChatCoreCommon)
+    api(projects.surfSocialCore.surfSocialCoreCommon)
 }

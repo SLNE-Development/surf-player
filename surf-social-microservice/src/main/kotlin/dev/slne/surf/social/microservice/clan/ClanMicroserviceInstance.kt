@@ -1,7 +1,7 @@
-package dev.slne.surf.clan.microservice
+package dev.slne.surf.social.microservice.clan
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.clan.core.ClanInstance
+import dev.slne.surf.social.core.common.clan.ClanInstance
 import java.nio.file.Path
 
 @AutoService(ClanInstance::class)

@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.client
+package dev.slne.surf.social.core.client.clan
 
-import dev.slne.surf.clan.core.ClanInstance
-import dev.slne.surf.clan.core.client.rabbit.RabbitService
-import dev.slne.surf.clan.core.client.redis.RedisService
+import dev.slne.surf.social.core.common.clan.ClanInstance
+import dev.slne.surf.social.core.client.clan.rabbit.RabbitService
+import dev.slne.surf.social.core.client.clan.redis.RedisService
 
 abstract class ClientClanInstance : ClanInstance {
 

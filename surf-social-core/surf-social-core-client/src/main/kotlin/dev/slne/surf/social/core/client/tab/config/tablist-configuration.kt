@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.core.client.config
+package dev.slne.surf.social.core.client.tab.config
 
 val tablistConfiguration = TablistConfigProvider()
 val tablistConfig get() = tablistConfiguration.config

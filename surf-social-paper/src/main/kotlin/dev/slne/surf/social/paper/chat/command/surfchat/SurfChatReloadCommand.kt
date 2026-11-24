@@ -1,13 +1,13 @@
-package dev.slne.surf.chat.paper.command.surfchat
+package dev.slne.surf.social.paper.chat.command.surfchat
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.chat.core.client.config.AiModerationConfig
-import dev.slne.surf.chat.core.client.config.chatConfigProvider
-import dev.slne.surf.chat.core.client.util.coloredComponent
-import dev.slne.surf.chat.paper.permission.PermissionRegistry
+import dev.slne.surf.social.core.client.chat.config.AiModerationConfig
+import dev.slne.surf.social.core.client.chat.config.chatConfigProvider
+import dev.slne.surf.social.core.client.chat.util.coloredComponent
+import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
 import kotlin.system.measureTimeMillis
 
 fun CommandAPICommand.surfChatReloadCommand() = subcommand("reload") {

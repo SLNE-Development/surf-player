@@ -1,10 +1,10 @@
-package dev.slne.surf.clan.core.clan
+package dev.slne.surf.social.core.common.clan.clan
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.clan.ClanView
-import dev.slne.clan.api.permission.ClanPermission
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.clan.ClanView
+import dev.slne.surf.social.api.clan.permission.ClanPermission
 import dev.slne.surf.bitmap.common.provider.BitmapProvider
-import dev.slne.surf.clan.core.config.ClanConfig
+import dev.slne.surf.social.core.common.clan.config.ClanConfig
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.text.Component
 import java.time.OffsetDateTime

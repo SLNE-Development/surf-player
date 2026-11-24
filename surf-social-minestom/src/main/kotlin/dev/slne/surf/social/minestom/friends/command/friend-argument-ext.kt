@@ -1,11 +1,11 @@
-package dev.slne.surf.friends.minestom.command
+package dev.slne.surf.social.minestom.friends.command
 
 import dev.slne.surf.api.minestom.command.CommandAPI
 import dev.slne.surf.api.minestom.command.executor.CommandArguments
-import dev.slne.surf.friends.api.player.FriendsPlayer
-import dev.slne.surf.friends.core.client.command.NOT_FRIENDS_MESSAGE
-import dev.slne.surf.friends.core.client.command.NO_RECEIVED_FRIEND_REQUEST_MESSAGE
-import dev.slne.surf.friends.core.client.command.NO_SENT_FRIEND_REQUEST_MESSAGE
+import dev.slne.surf.social.api.friends.player.FriendsPlayer
+import dev.slne.surf.social.core.client.friends.command.NOT_FRIENDS_MESSAGE
+import dev.slne.surf.social.core.client.friends.command.NO_RECEIVED_FRIEND_REQUEST_MESSAGE
+import dev.slne.surf.social.core.client.friends.command.NO_SENT_FRIEND_REQUEST_MESSAGE
 import kotlinx.coroutines.Deferred
 
 /**

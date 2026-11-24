@@ -1,4 +1,4 @@
-package dev.slne.clan.api.clan.listener
+package dev.slne.surf.social.api.clan.clan.listener
 
 /**
  * Marker interface for all clan-related event listeners.

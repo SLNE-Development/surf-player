@@ -1,18 +1,18 @@
-package dev.slne.surf.chat.minestom
+package dev.slne.surf.social.minestom.chat
 
-import dev.slne.surf.chat.api.processor.chatProcessorRegistry
-import dev.slne.surf.chat.core.client.processor.post.AiModerationPostChatProcessor
-import dev.slne.surf.chat.core.client.processor.post.LogPostChatProcessor
-import dev.slne.surf.chat.core.client.processor.post.PrivateMessageSpyPostChatProcessor
-import dev.slne.surf.chat.core.client.processor.pre.IgnorePreChatProcessor
-import dev.slne.surf.chat.core.client.processor.pre.SlowChatPreChatProcessor
-import dev.slne.surf.chat.core.client.processor.pre.ValidatorPreChatProcessor
-import dev.slne.surf.chat.core.client.processor.pre.validate.CharPreChatProcessor
-import dev.slne.surf.chat.core.client.processor.pre.validate.LinkPreChatProcessor
-import dev.slne.surf.chat.core.client.processor.pre.validate.SpamPreChatProcessor
-import dev.slne.surf.chat.minestom.listener.ChatEventListener
-import dev.slne.surf.chat.minestom.processor.pre.CorrectViewersPreChatProcessor
-import dev.slne.surf.chat.minestom.processor.pre.FormatPreChatProcessor
+import dev.slne.surf.social.api.chat.processor.chatProcessorRegistry
+import dev.slne.surf.social.core.client.chat.processor.post.AiModerationPostChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.post.LogPostChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.post.PrivateMessageSpyPostChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.pre.IgnorePreChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.pre.SlowChatPreChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.pre.ValidatorPreChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.pre.validate.CharPreChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.pre.validate.LinkPreChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.pre.validate.SpamPreChatProcessor
+import dev.slne.surf.social.minestom.chat.listener.ChatEventListener
+import dev.slne.surf.social.minestom.chat.processor.pre.CorrectViewersPreChatProcessor
+import dev.slne.surf.social.minestom.chat.processor.pre.FormatPreChatProcessor
 
 /**
  * Registers the chat processors that make up the chat pipeline of this platform.

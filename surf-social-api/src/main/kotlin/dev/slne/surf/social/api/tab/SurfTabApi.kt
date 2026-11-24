@@ -1,7 +1,7 @@
-package dev.slne.surf.tab.api
+package dev.slne.surf.social.api.tab
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.tab.api.placeholder.TabPlaceholder
+import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
 import java.util.*
 
 interface SurfTabApi {
@@ -32,7 +32,7 @@ interface SurfTabApi {
      * only when the rendered result differs from the previous result.
      *
      * For placeholders using
-     * [dev.slne.surf.tab.api.placeholder.UpdateCondition.OnDemand], invalidation is the only update
+     * [dev.slne.surf.social.api.tab.placeholder.UpdateCondition.OnDemand], invalidation is the only update
      * trigger. For all other update conditions, it acts as an additional trigger.
      *
      * @param placeholders the placeholders to invalidate
@@ -43,7 +43,7 @@ interface SurfTabApi {
      * Re-renders the tab entry of the player identified by [uuid].
      *
      * The updated entry is sent only if its visible content has changed. Plugins that modify their
-     * contribution in [dev.slne.surf.tab.api.event.TabEntryRenderEvent] should call this method after
+     * contribution in [dev.slne.surf.social.api.tab.event.TabEntryRenderEvent] should call this method after
      * the relevant data changes.
      *
      * @param uuid the UUID of the player whose tab entry should be updated

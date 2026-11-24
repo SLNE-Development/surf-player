@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.webhook.components
+package dev.slne.surf.social.core.client.chat.webhook.components
 
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonObjectBuilder

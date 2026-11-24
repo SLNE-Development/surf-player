@@ -1,11 +1,11 @@
-package dev.slne.clan.api.clan
+package dev.slne.surf.social.api.clan.clan
 
-import dev.slne.clan.api.clan.listener.ClanListener
-import dev.slne.clan.api.invite.ClanInvite
-import dev.slne.clan.api.invite.ClanInviteResult
-import dev.slne.clan.api.member.ClanMember
-import dev.slne.clan.api.member.ClanMemberAddResult
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.clan.listener.ClanListener
+import dev.slne.surf.social.api.clan.invite.ClanInvite
+import dev.slne.surf.social.api.clan.invite.ClanInviteResult
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 import org.jetbrains.annotations.ApiStatus

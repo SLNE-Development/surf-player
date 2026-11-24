@@ -1,12 +1,12 @@
-package dev.slne.clan.minestom.command.arguments
+package dev.slne.surf.social.minestom.clan.command.arguments
 
-import dev.slne.clan.api.clan.Clan
+import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.argument.Argument
 import dev.slne.surf.api.minestom.command.argument.CustomArgument
 import dev.slne.surf.api.minestom.command.argument.StringArgument
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
-import dev.slne.surf.clan.core.clan.CoreClanService
+import dev.slne.surf.social.core.common.clan.clan.CoreClanService
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 

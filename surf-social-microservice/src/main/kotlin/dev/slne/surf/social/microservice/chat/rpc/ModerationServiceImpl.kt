@@ -1,9 +1,9 @@
-package dev.slne.surf.chat.microservice.rpc
+package dev.slne.surf.social.microservice.chat.rpc
 
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.core.common.aimoderation.ModerationClassificationResult
-import dev.slne.surf.chat.core.common.rabbit.rpc.ModerationService
-import dev.slne.surf.chat.microservice.table.ModerationsTable
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationResult
+import dev.slne.surf.social.core.common.chat.rabbit.rpc.ModerationService
+import dev.slne.surf.social.microservice.chat.table.ModerationsTable
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 

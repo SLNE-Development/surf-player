@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.core.common.service
+package dev.slne.surf.social.core.common.chat.service
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.chat.api.functionality.Functionalities
+import dev.slne.surf.social.api.chat.functionality.Functionalities
 
 private val service = requiredService<FunctionalityService>()
 

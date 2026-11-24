@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.paper.command.surfchat
+package dev.slne.surf.social.paper.chat.command.surfchat
 
 import dev.jorel.commandapi.CommandAPI
 import dev.jorel.commandapi.CommandAPICommand
@@ -8,13 +8,13 @@ import dev.jorel.commandapi.kotlindsl.optionalArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.chat.api.entry.HistoryFilter
-import dev.slne.surf.chat.core.client.lookup.RenderData
-import dev.slne.surf.chat.core.client.lookup.lookupPagination
-import dev.slne.surf.chat.core.client.lookup.parseFilters
-import dev.slne.surf.chat.core.client.lookup.resolveSenderNames
-import dev.slne.surf.chat.core.common.service.HistoryService
-import dev.slne.surf.chat.paper.permission.PermissionRegistry
+import dev.slne.surf.social.api.chat.entry.HistoryFilter
+import dev.slne.surf.social.core.client.chat.lookup.RenderData
+import dev.slne.surf.social.core.client.chat.lookup.lookupPagination
+import dev.slne.surf.social.core.client.chat.lookup.parseFilters
+import dev.slne.surf.social.core.client.chat.lookup.resolveSenderNames
+import dev.slne.surf.social.core.common.chat.service.HistoryService
+import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
 import kotlinx.coroutines.TimeoutCancellationException
 
 fun CommandAPICommand.surfChatLookupCommand() = subcommand("lookup") {

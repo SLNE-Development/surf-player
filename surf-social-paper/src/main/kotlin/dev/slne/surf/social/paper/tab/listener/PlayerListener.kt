@@ -1,7 +1,7 @@
-package dev.slne.surf.tab.paper.listener
+package dev.slne.surf.social.paper.tab.listener
 
-import dev.slne.surf.tab.core.client.service.TablistService
-import dev.slne.surf.tab.paper.platform.PaperTabPlayer
+import dev.slne.surf.social.core.client.tab.service.TablistService
+import dev.slne.surf.social.paper.tab.platform.PaperTabPlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

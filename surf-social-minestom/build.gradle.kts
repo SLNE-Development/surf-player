@@ -1,4 +1,3 @@
-import dev.slne.surf.api.gradle.util.slneReleases
 import dev.slne.surf.microservice.gradle.plugin.rabbit.RabbitModule
 
 plugins {
@@ -11,28 +10,28 @@ surfMinestomApi {
     withSurfRedis()
 }
 
+surfMicroservice {
+    withRabbitModule(RabbitModule.CLIENT_API)
+}
+
 minestomPluginFile {
-    main = "dev.slne.surf.chat.minestom.SurfChatMinestomPlugin"
-    authors = listOf("red")
+    main = "dev.slne.surf.social.minestom.SocialMinestomPlugin"
+    authors = listOf("red", "twisti")
 
     pluginDependencies {
         register("surf-rabbitmq-minestom")
         register("surf-redis-minestom")
         register("surf-settings-minestom")
+        register("surf-playtime-minestom")
+        register("surf-content-creator-minestom")
     }
-}
-
-surfMicroservice {
-    withRabbitModule(RabbitModule.CLIENT_API)
 }
 
 dependencies {
-    api(projects.surfChatCore.surfChatCoreClient)
-    compileOnly("dev.slne.surf.punish:surf-punish-api-common:+")
-}
+    api(projects.surfSocialCore.surfSocialCoreClient)
 
-publishing {
-    repositories {
-        slneReleases()
-    }
+    compileOnly(libs.luckperms.api)
+    compileOnly("dev.slne.surf.punish:surf-punish-api-common:+")
+    compileOnly("dev.slne.surf.playtime:surf-playtime-api-minestom:+")
+    compileOnly("dev.slne.surf.content.creator:surf-content-creator-api:+")
 }

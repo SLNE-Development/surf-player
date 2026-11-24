@@ -1,8 +1,8 @@
-package dev.slne.surf.chat.paper.util
+package dev.slne.surf.social.paper.chat.util
 
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
-import dev.slne.surf.chat.core.client.hook.LuckPermsHook
-import dev.slne.surf.chat.core.client.message.format.appendName
+import dev.slne.surf.social.core.client.chat.hook.LuckPermsHook
+import dev.slne.surf.social.core.client.chat.message.format.appendName
 import org.bukkit.entity.Player
 
 fun SurfComponentBuilder.appendName(player: Player, allowTeleport: Boolean) =

@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.protocol.member.findByUuid
+package dev.slne.surf.social.core.common.clan.protocol.member.findByUuid
 
-import dev.slne.surf.clan.core.member.ClanMemberImpl
+import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import kotlinx.serialization.Serializable
 

@@ -1,6 +1,6 @@
-package dev.slne.surf.tab.core.client.service
+package dev.slne.surf.social.core.client.tab.service
 
-import dev.slne.surf.tab.api.placeholder.TabPlaceholder
+import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
 import net.kyori.adventure.text.minimessage.MiniMessage
 
 /**

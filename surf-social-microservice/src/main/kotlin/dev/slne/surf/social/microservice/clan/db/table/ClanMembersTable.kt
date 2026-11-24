@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.microservice.db.table
+package dev.slne.surf.social.microservice.clan.db.table
 
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ReferenceOption
 import dev.slne.surf.database.table.AuditableLongIdTable

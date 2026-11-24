@@ -1,9 +1,12 @@
 [versions]
-mini-placeholders = "3.0.1"
-mini-placeholders-kotlin = "3.0.1"
+placeholder-api = "2.11.6"
+mini-placeholders = "3.1.0"
 luckperms-api = "5.5"
+openai = "4.42.0"
 
 [libraries]
+placeholder-api = { module = "me.clip:placeholderapi", version.ref = "placeholder-api" }
 mini-placeholders = { module = "io.github.miniplaceholders:miniplaceholders-api", version.ref = "mini-placeholders" }
-mini-placeholders-kotlin = { module = "io.github.miniplaceholders:miniplaceholders-kotlin-ext", version.ref = "mini-placeholders-kotlin" }
+mini-placeholders-kotlin = { module = "io.github.miniplaceholders:miniplaceholders-kotlin-ext", version.ref = "mini-placeholders" }
 luckperms-api = { module = "net.luckperms:api", version.ref = "luckperms-api" }
+openai = { module = "com.openai:openai-java", version.ref = "openai" }

@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.microservice.table
+package dev.slne.surf.social.microservice.chat.table
 
-import dev.slne.surf.chat.core.common.aimoderation.ModerationCategory
-import dev.slne.surf.chat.core.common.aimoderation.ModerationClassificationAction
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationCategory
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationAction
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.json.json
 import dev.slne.surf.database.table.AuditableLongIdTable

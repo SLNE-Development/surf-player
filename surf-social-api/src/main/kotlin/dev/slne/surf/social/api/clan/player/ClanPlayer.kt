@@ -1,4 +1,4 @@
-package dev.slne.clan.api.player
+package dev.slne.surf.social.api.clan.player
 
 import org.jetbrains.annotations.ApiStatus
 import java.util.*

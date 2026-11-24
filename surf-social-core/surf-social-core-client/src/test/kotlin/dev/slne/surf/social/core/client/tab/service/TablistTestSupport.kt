@@ -1,8 +1,8 @@
-package dev.slne.surf.tab.core.client.service
+package dev.slne.surf.social.core.client.tab.service
 
-import dev.slne.surf.tab.api.placeholder.TabPlaceholder
-import dev.slne.surf.tab.api.placeholder.UpdateCondition
-import dev.slne.surf.tab.core.client.platform.TabViewer
+import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
+import dev.slne.surf.social.api.tab.placeholder.UpdateCondition
+import dev.slne.surf.social.core.client.tab.platform.TabViewer
 import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component

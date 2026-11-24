@@ -1,4 +1,4 @@
-package dev.slne.surf.shrieker.paper
+package dev.slne.surf.social.paper.shrieker
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import org.bukkit.plugin.java.JavaPlugin

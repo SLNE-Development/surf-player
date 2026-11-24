@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.client.command
+package dev.slne.surf.social.core.client.clan.command
 
 import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.clan.core.clan.ClanImpl
-import dev.slne.surf.clan.core.client.components.Components
+import dev.slne.surf.social.core.common.clan.clan.ClanImpl
+import dev.slne.surf.social.core.client.clan.components.Components
 import net.kyori.adventure.text.event.ClickEvent
 
 const val NO_INVITE_PERMISSION = "Du hast keine Berechtigung, Spieler in den Clan einzuladen."

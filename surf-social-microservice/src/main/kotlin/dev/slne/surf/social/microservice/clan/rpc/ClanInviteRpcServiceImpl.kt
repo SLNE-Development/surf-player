@@ -1,9 +1,9 @@
-package dev.slne.surf.clan.microservice.rpc
+package dev.slne.surf.social.microservice.clan.rpc
 
-import dev.slne.clan.api.invite.ClanInviteResult
-import dev.slne.surf.clan.core.invite.ClanInviteImpl
-import dev.slne.surf.clan.core.rpc.ClanInviteRpcService
-import dev.slne.surf.clan.microservice.db.repository.ClanInviteRepository
+import dev.slne.surf.social.api.clan.invite.ClanInviteResult
+import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.social.core.common.clan.rpc.ClanInviteRpcService
+import dev.slne.surf.social.microservice.clan.db.repository.ClanInviteRepository
 import java.util.*
 
 object ClanInviteRpcServiceImpl : ClanInviteRpcService {

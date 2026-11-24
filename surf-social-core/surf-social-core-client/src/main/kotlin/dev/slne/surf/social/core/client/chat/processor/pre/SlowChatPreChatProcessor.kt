@@ -1,12 +1,12 @@
-package dev.slne.surf.chat.core.client.processor.pre
+package dev.slne.surf.social.core.client.chat.processor.pre
 
-import dev.slne.surf.chat.api.message.MessageContext
-import dev.slne.surf.chat.api.message.MessageType
-import dev.slne.surf.chat.api.processor.PreChatProcessor
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
-import dev.slne.surf.chat.core.client.processor.ProcessorOrder
-import dev.slne.surf.chat.core.client.service.SlowChatService
-import dev.slne.surf.chat.core.client.util.sendText
+import dev.slne.surf.social.api.chat.message.MessageContext
+import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.social.api.chat.processor.PreChatProcessor
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.core.client.chat.processor.ProcessorOrder
+import dev.slne.surf.social.core.client.chat.service.SlowChatService
+import dev.slne.surf.social.core.client.chat.util.sendText
 
 object SlowChatPreChatProcessor : PreChatProcessor {
     override val order: Int = ProcessorOrder.SLOW_CHAT

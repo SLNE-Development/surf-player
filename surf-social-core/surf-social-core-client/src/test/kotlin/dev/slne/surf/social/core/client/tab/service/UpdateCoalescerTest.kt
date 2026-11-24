@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.core.client.service
+package dev.slne.surf.social.core.client.tab.service
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CompletableDeferred

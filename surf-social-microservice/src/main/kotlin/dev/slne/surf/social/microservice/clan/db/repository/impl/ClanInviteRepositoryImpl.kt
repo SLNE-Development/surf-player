@@ -1,13 +1,13 @@
-package dev.slne.surf.clan.microservice.db.repository.impl
+package dev.slne.surf.social.microservice.clan.db.repository.impl
 
 import com.google.auto.service.AutoService
-import dev.slne.clan.api.invite.ClanInviteResult
-import dev.slne.surf.clan.core.invite.ClanInviteImpl
-import dev.slne.surf.clan.microservice.db.repository.ClanInviteRepository
-import dev.slne.surf.clan.microservice.db.table.ClanInvitesTable
-import dev.slne.surf.clan.microservice.db.table.ClanMembersTable
-import dev.slne.surf.clan.microservice.db.table.ClanPlayerTable
-import dev.slne.surf.clan.microservice.db.table.ClansTable
+import dev.slne.surf.social.api.clan.invite.ClanInviteResult
+import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.social.microservice.clan.db.repository.ClanInviteRepository
+import dev.slne.surf.social.microservice.clan.db.table.ClanInvitesTable
+import dev.slne.surf.social.microservice.clan.db.table.ClanMembersTable
+import dev.slne.surf.social.microservice.clan.db.table.ClanPlayerTable
+import dev.slne.surf.social.microservice.clan.db.table.ClansTable
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq

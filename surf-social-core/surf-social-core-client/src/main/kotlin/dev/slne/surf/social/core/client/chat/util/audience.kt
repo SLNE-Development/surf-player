@@ -1,9 +1,9 @@
-package dev.slne.surf.chat.core.client.util
+package dev.slne.surf.social.core.client.chat.util
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.nameOrNull
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
 import net.kyori.adventure.audience.Audience
 import java.util.*
 

@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client
+package dev.slne.surf.social.core.client.chat
 
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 import dev.slne.surf.redis.RedisApi

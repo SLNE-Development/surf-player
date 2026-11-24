@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.core.common.packets.friendrequest
+package dev.slne.surf.social.core.common.friends.packets.friendrequest
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import kotlinx.serialization.Serializable

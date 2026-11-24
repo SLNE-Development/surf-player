@@ -1,19 +1,19 @@
-package dev.slne.clan.paper.commands.subcommands.member.role
+package dev.slne.surf.social.paper.clan.commands.subcommands.member.role
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.argument
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.member.ClanMember
-import dev.slne.clan.api.permission.ClanPermission
-import dev.slne.clan.paper.commands.arguments.ClanMemberArgument
-import dev.slne.clan.paper.commands.failCommand
-import dev.slne.clan.paper.permission.ClanPermissions
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.api.clan.permission.ClanPermission
+import dev.slne.surf.social.paper.clan.commands.arguments.ClanMemberArgument
+import dev.slne.surf.social.paper.clan.commands.failCommand
+import dev.slne.surf.social.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaiting
 import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.clan.core.client.Messages
-import dev.slne.surf.clan.core.client.command.*
+import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.core.client.clan.command.*
 
 fun CommandAPICommand.clanDemoteMemberCommand() = subcommand("demote") {
     withPermission(ClanPermissions.CLAN_DEMOTE_MEMBER_COMMAND)

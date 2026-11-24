@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.paper.hook
+package dev.slne.surf.social.paper.tab.hook
 
 import dev.slne.surf.vanish.api.SurfVanishApi
 import org.bukkit.Bukkit

@@ -1,6 +1,6 @@
-package dev.slne.surf.tab.paper.listener
+package dev.slne.surf.social.paper.tab.listener
 
-import dev.slne.surf.tab.core.client.service.TablistService
+import dev.slne.surf.social.core.client.tab.service.TablistService
 import dev.slne.surf.vanish.api.event.PlayerNickEvent
 import dev.slne.surf.vanish.api.event.PlayerReappearEvent
 import dev.slne.surf.vanish.api.event.PlayerUnNickEvent

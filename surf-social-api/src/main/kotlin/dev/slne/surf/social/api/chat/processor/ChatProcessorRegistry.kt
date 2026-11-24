@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.api.processor
+package dev.slne.surf.social.api.chat.processor
 
 import java.util.concurrent.CopyOnWriteArrayList
 

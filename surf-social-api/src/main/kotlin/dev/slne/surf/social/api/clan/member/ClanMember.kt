@@ -1,6 +1,6 @@
-package dev.slne.clan.api.member
+package dev.slne.surf.social.api.clan.member
 
-import dev.slne.clan.api.member.listener.ClanMemberListener
+import dev.slne.surf.social.api.clan.member.listener.ClanMemberListener
 import org.jetbrains.annotations.ApiStatus
 import java.util.*
 

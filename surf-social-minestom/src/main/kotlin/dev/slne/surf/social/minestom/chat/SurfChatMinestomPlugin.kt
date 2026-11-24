@@ -1,18 +1,18 @@
-package dev.slne.surf.chat.minestom
+package dev.slne.surf.social.minestom.chat
 
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
-import dev.slne.surf.chat.core.client.config.AiModerationConfig
-import dev.slne.surf.chat.core.client.config.initChatConfig
-import dev.slne.surf.chat.core.common.service.FunctionalityService
-import dev.slne.surf.chat.minestom.command.direct.directMessageCommand
-import dev.slne.surf.chat.minestom.command.direct.replyCommand
-import dev.slne.surf.chat.minestom.command.ignore.ignoreCommand
-import dev.slne.surf.chat.minestom.command.slowChatCommand
-import dev.slne.surf.chat.minestom.command.spy.directMessageSpyCommand
-import dev.slne.surf.chat.minestom.command.surfchat.surfChatCommand
-import dev.slne.surf.chat.minestom.command.teamchatCommand
-import dev.slne.surf.chat.minestom.listener.ConnectionListener
-import dev.slne.surf.chat.minestom.redis.listener.MinestomRedisEventListener
+import dev.slne.surf.social.core.client.chat.config.AiModerationConfig
+import dev.slne.surf.social.core.client.chat.config.initChatConfig
+import dev.slne.surf.social.core.common.chat.service.FunctionalityService
+import dev.slne.surf.social.minestom.chat.command.direct.directMessageCommand
+import dev.slne.surf.social.minestom.chat.command.direct.replyCommand
+import dev.slne.surf.social.minestom.chat.command.ignore.ignoreCommand
+import dev.slne.surf.social.minestom.chat.command.slowChatCommand
+import dev.slne.surf.social.minestom.chat.command.spy.directMessageSpyCommand
+import dev.slne.surf.social.minestom.chat.command.surfchat.surfChatCommand
+import dev.slne.surf.social.minestom.chat.command.teamchatCommand
+import dev.slne.surf.social.minestom.chat.listener.ConnectionListener
+import dev.slne.surf.social.minestom.chat.redis.listener.MinestomRedisEventListener
 import dev.slne.surf.core.api.common.SurfCoreApi
 
 object SurfChatMinestomPlugin : SurfMinestomPlugin() {

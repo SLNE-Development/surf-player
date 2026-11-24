@@ -1,11 +1,11 @@
-package dev.slne.surf.friends.paper
+package dev.slne.surf.social.paper.friends
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
-import dev.slne.surf.friends.core.client.FriendsClientInstance
-import dev.slne.surf.friends.paper.command.friendCommand
-import dev.slne.surf.friends.paper.command.subcommand.friend.FriendListCommand
-import dev.slne.surf.friends.paper.command.subcommand.request.FriendRequestSendCommand
-import dev.slne.surf.friends.paper.listener.ConnectionListener
+import dev.slne.surf.social.core.client.friends.FriendsClientInstance
+import dev.slne.surf.social.paper.friends.command.friendCommand
+import dev.slne.surf.social.paper.friends.command.subcommand.friend.FriendListCommand
+import dev.slne.surf.social.paper.friends.command.subcommand.request.FriendRequestSendCommand
+import dev.slne.surf.social.paper.friends.listener.ConnectionListener
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(SurfFriendsPaper::class.java)

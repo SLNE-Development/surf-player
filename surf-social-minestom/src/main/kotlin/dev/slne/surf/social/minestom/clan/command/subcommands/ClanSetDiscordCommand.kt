@@ -1,16 +1,16 @@
-package dev.slne.clan.minestom.command.subcommands
+package dev.slne.surf.social.minestom.clan.command.subcommands
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.permission.ClanPermission
-import dev.slne.clan.minestom.command.failCommand
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.permission.ClanPermission
+import dev.slne.surf.social.minestom.clan.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.greedyStringArgument
 import dev.slne.surf.api.minestom.command.dsl.includeSuggestions
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.clan.core.client.Messages
-import dev.slne.surf.clan.core.client.command.*
-import dev.slne.surf.clan.core.client.permission.ClanPermissions
+import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.core.client.clan.command.*
+import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
 
 fun CommandAPICommand.clanSetDiscordCommand(): CommandAPICommand = withSubcommand(
     subcommand("setdiscord") {

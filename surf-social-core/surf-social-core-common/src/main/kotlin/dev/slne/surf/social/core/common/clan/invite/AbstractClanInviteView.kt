@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.invite
+package dev.slne.surf.social.core.common.clan.invite
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.invite.ClanInviteView
-import dev.slne.surf.clan.core.clan.CoreClanService
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.invite.ClanInviteView
+import dev.slne.surf.social.core.common.clan.clan.CoreClanService
 
 abstract class AbstractClanInviteView : ClanInviteView {
     abstract val clanID: ULong

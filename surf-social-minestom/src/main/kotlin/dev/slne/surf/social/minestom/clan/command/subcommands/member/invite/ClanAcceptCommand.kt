@@ -1,17 +1,17 @@
-package dev.slne.clan.minestom.command.subcommands.member.invite
+package dev.slne.surf.social.minestom.clan.command.subcommands.member.invite
 
-import dev.slne.clan.api.invite.ClanInviteAcceptResult
-import dev.slne.clan.minestom.command.arguments.clanInviteArgument
-import dev.slne.clan.minestom.command.failCommand
-import dev.slne.clan.minestom.command.resolveClanInvite
+import dev.slne.surf.social.api.clan.invite.ClanInviteAcceptResult
+import dev.slne.surf.social.minestom.clan.command.arguments.clanInviteArgument
+import dev.slne.surf.social.minestom.clan.command.failCommand
+import dev.slne.surf.social.minestom.clan.command.resolveClanInvite
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.clan.core.clan.ClanImpl
-import dev.slne.surf.clan.core.client.Messages
-import dev.slne.surf.clan.core.client.command.inviteAcceptedMessage
-import dev.slne.surf.clan.core.client.command.memberJoinedMessage
-import dev.slne.surf.clan.core.client.permission.ClanPermissions
+import dev.slne.surf.social.core.common.clan.clan.ClanImpl
+import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.core.client.clan.command.inviteAcceptedMessage
+import dev.slne.surf.social.core.client.clan.command.memberJoinedMessage
+import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
 
 fun CommandAPICommand.clanAcceptCommand(): CommandAPICommand = withSubcommand(
     subcommand("accept") {

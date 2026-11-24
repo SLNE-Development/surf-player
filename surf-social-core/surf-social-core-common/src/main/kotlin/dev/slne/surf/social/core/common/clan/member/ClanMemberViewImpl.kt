@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.member
+package dev.slne.surf.social.core.common.clan.member
 
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import java.time.OffsetDateTime
 import java.util.*
 

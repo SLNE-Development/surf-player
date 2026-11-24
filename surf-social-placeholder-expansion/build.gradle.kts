@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(projects.surfClanApi)
-    compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.1.0")
+    compileOnly(projects.surfSocialApi)
+    compileOnly(libs.mini.placeholders)
 }

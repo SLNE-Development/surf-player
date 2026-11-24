@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.protocol.clan.findTagsByPrefixLimited
+package dev.slne.surf.social.core.common.clan.protocol.clan.findTagsByPrefixLimited
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import kotlinx.serialization.Serializable

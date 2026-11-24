@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.client.redis
+package dev.slne.surf.social.core.client.clan.redis
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.clan.core.clan.CoreClanService
-import dev.slne.surf.clan.core.player.CoreClanPlayerService
+import dev.slne.surf.social.core.common.clan.clan.CoreClanService
+import dev.slne.surf.social.core.common.clan.player.CoreClanPlayerService
 import dev.slne.surf.redis.RedisApi
 import dev.slne.surf.redis.event.RedisEvent
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,7 @@
-package dev.slne.surf.clan.core.client.tagcolor
+package dev.slne.surf.social.core.client.clan.tagcolor
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.clan.ClanTagColor
 
 /**
  * Which of the three clan tag color permissions the clan owner currently holds.

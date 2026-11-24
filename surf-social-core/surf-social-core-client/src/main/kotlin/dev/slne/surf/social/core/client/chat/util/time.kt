@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.util
+package dev.slne.surf.social.core.client.chat.util
 
 import java.time.Instant
 import java.time.OffsetDateTime

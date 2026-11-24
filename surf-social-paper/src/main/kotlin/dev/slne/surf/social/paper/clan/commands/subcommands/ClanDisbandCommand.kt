@@ -1,17 +1,17 @@
-package dev.slne.clan.paper.commands.subcommands
+package dev.slne.surf.social.paper.clan.commands.subcommands
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.paper.commands.failCommand
-import dev.slne.clan.paper.permission.ClanPermissions
-import dev.slne.clan.paper.plugin
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.paper.clan.commands.failCommand
+import dev.slne.surf.social.paper.clan.permission.ClanPermissions
+import dev.slne.surf.social.paper.clan.plugin
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.clan.core.client.Messages
-import dev.slne.surf.clan.core.client.command.canBeDisbandedBy
-import dev.slne.surf.clan.core.client.command.disbandConfirmationMessage
-import dev.slne.surf.clan.core.client.command.handleDisbandClick
+import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.core.client.clan.command.canBeDisbandedBy
+import dev.slne.surf.social.core.client.clan.command.disbandConfirmationMessage
+import dev.slne.surf.social.core.client.clan.command.handleDisbandClick
 import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.entity.Player

@@ -1,10 +1,10 @@
-package dev.slne.surf.chat.paper.processor.pre
+package dev.slne.surf.social.paper.chat.processor.pre
 
-import dev.slne.surf.chat.api.message.MessageContext
-import dev.slne.surf.chat.api.message.MessageType
-import dev.slne.surf.chat.api.processor.PreChatProcessor
-import dev.slne.surf.chat.core.client.processor.ProcessorOrder
-import dev.slne.surf.chat.paper.message.MessageFormatter
+import dev.slne.surf.social.api.chat.message.MessageContext
+import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.social.api.chat.processor.PreChatProcessor
+import dev.slne.surf.social.core.client.chat.processor.ProcessorOrder
+import dev.slne.surf.social.paper.chat.message.MessageFormatter
 
 object FormatPreChatProcessor : PreChatProcessor {
     override val order = ProcessorOrder.FORMAT

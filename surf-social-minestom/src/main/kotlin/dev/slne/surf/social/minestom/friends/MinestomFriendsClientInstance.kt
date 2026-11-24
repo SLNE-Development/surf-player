@@ -1,9 +1,9 @@
-package dev.slne.surf.friends.minestom
+package dev.slne.surf.social.minestom.friends
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.coroutine.MinestomDispatchers
 import dev.slne.surf.api.minestom.coroutine.minestomScope
-import dev.slne.surf.friends.core.client.FriendsClientInstance
+import dev.slne.surf.social.core.client.friends.FriendsClientInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch

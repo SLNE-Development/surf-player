@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.hook
+package dev.slne.surf.social.core.client.chat.hook
 
 import dev.slne.surf.settings.api.SurfSettingsApi
 import dev.slne.surf.settings.api.setting.SettingKeys

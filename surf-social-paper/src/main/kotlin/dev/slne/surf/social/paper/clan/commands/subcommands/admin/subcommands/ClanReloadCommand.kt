@@ -1,11 +1,11 @@
-package dev.slne.clan.paper.commands.subcommands.admin.subcommands
+package dev.slne.surf.social.paper.clan.commands.subcommands.admin.subcommands
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.clan.paper.permission.ClanPermissions
-import dev.slne.surf.clan.core.client.command.clanConfigReloadedMessage
-import dev.slne.surf.clan.core.config.ClanConfig
+import dev.slne.surf.social.paper.clan.permission.ClanPermissions
+import dev.slne.surf.social.core.client.clan.command.clanConfigReloadedMessage
+import dev.slne.surf.social.core.common.clan.config.ClanConfig
 
 fun CommandAPICommand.clanReloadCommand() = subcommand("reload") {
     withPermission(ClanPermissions.CLAN_ADMIN_RELOAD_COMMAND)

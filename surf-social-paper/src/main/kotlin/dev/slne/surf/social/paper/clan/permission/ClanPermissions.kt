@@ -1,7 +1,7 @@
-package dev.slne.clan.paper.permission
+package dev.slne.surf.social.paper.clan.permission
 
 import dev.slne.surf.api.paper.permission.PermissionRegistry
-import dev.slne.surf.clan.core.client.permission.ClanPermissions as SharedClanPermissions
+import dev.slne.surf.social.core.client.clan.permission.ClanPermissions as SharedClanPermissions
 
 object ClanPermissions : PermissionRegistry() {
     val CLAN_COMMAND = create(SharedClanPermissions.CLAN_COMMAND)

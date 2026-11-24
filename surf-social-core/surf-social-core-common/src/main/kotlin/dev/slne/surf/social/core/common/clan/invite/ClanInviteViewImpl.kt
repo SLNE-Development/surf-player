@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.invite
+package dev.slne.surf.social.core.common.clan.invite
 
 import java.time.OffsetDateTime
 import java.util.*

@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.core.client.redis.listener
+package dev.slne.surf.social.core.client.friends.redis.listener
 
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
@@ -6,15 +6,15 @@ import dev.slne.surf.api.core.messages.adventure.clickCallback
 import dev.slne.surf.api.core.messages.adventure.clickRunsCommand
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.util.sendText
-import dev.slne.surf.friends.api.player.FriendsPlayer
-import dev.slne.surf.friends.api.utils.displayName
-import dev.slne.surf.friends.api.utils.toSurfPlayer
-import dev.slne.surf.friends.core.client.FriendsClientInstance
-import dev.slne.surf.friends.core.client.platform.FriendsPlatform
-import dev.slne.surf.friends.core.client.redis.event.FriendRequestAcceptRedisEvent
-import dev.slne.surf.friends.core.client.redis.event.FriendRequestDenyRedisEvent
-import dev.slne.surf.friends.core.client.redis.event.FriendRequestRevokeRedisEvent
-import dev.slne.surf.friends.core.client.redis.event.FriendRequestSendRedisEvent
+import dev.slne.surf.social.api.friends.player.FriendsPlayer
+import dev.slne.surf.social.api.friends.utils.displayName
+import dev.slne.surf.social.api.friends.utils.toSurfPlayer
+import dev.slne.surf.social.core.client.friends.FriendsClientInstance
+import dev.slne.surf.social.core.client.friends.platform.FriendsPlatform
+import dev.slne.surf.social.core.client.friends.redis.event.FriendRequestAcceptRedisEvent
+import dev.slne.surf.social.core.client.friends.redis.event.FriendRequestDenyRedisEvent
+import dev.slne.surf.social.core.client.friends.redis.event.FriendRequestRevokeRedisEvent
+import dev.slne.surf.social.core.client.friends.redis.event.FriendRequestSendRedisEvent
 import dev.slne.surf.redis.event.OnRedisEvent
 import net.kyori.adventure.text.event.HoverEvent
 

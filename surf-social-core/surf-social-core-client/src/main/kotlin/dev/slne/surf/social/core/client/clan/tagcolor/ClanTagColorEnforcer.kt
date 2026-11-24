@@ -1,12 +1,12 @@
-package dev.slne.surf.clan.core.client.tagcolor
+package dev.slne.surf.social.core.client.clan.tagcolor
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.expireAfterWrite
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.clan.core.client.permission.ClanPermissions
+import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
 import net.luckperms.api.cacheddata.CachedPermissionData
 import java.util.*
 import kotlin.time.Duration.Companion.minutes

@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.protocol.invite.findPendingByClanID
+package dev.slne.surf.social.core.common.clan.protocol.invite.findPendingByClanID
 
-import dev.slne.surf.clan.core.invite.ClanInviteImpl
+import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import kotlinx.serialization.Serializable
 

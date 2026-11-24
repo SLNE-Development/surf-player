@@ -1,10 +1,10 @@
-package dev.slne.surf.tab.minestom.platform
+package dev.slne.surf.social.minestom.tab.platform
 
 import dev.slne.surf.api.minestom.coroutine.withEntity
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.luckperms.prefix
 import dev.slne.surf.api.core.minimessage.miniMessage
-import dev.slne.surf.tab.core.client.platform.TabPlayer
+import dev.slne.surf.social.core.client.tab.platform.TabPlayer
 import net.kyori.adventure.text.Component
 import net.minestom.server.entity.Player
 import java.util.*

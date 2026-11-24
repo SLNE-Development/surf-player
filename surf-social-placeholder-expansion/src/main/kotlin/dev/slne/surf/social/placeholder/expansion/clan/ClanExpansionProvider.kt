@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.placeholder.expansion
+package dev.slne.surf.social.placeholder.expansion.clan
 
-import dev.slne.clan.api.clan.Clan
+import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.api.core.messages.adventure.uuid
-import dev.slne.surf.clan.placeholder.expansion.ClanDataCache.CachedClanData
+import dev.slne.surf.social.placeholder.expansion.clan.ClanDataCache.CachedClanData
 import io.github.miniplaceholders.api.Expansion
 import io.github.miniplaceholders.api.utils.Tags
 import net.kyori.adventure.text.Component.text

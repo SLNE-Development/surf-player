@@ -1,9 +1,9 @@
-package dev.slne.surf.tab.core.client.util
+package dev.slne.surf.social.core.client.tab.util
 
 import dev.slne.surf.api.core.minimessage.miniMessage
-import dev.slne.surf.tab.core.client.platform.TabViewer
-import dev.slne.surf.tab.core.client.service.TablistRenderer
-import dev.slne.surf.tab.core.client.service.TablistValues
+import dev.slne.surf.social.core.client.tab.platform.TabViewer
+import dev.slne.surf.social.core.client.tab.service.TablistRenderer
+import dev.slne.surf.social.core.client.tab.service.TablistValues
 import io.github.miniplaceholders.api.MiniPlaceholders
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.tag.Tag.selfClosingInserting

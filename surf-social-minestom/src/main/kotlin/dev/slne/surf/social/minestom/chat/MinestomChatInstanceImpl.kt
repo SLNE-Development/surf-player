@@ -1,10 +1,10 @@
-package dev.slne.surf.chat.minestom
+package dev.slne.surf.social.minestom.chat
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.chat.core.client.ChatClientLoader
-import dev.slne.surf.chat.core.client.ClientChatInstance
-import dev.slne.surf.chat.core.common.ChatInstance
-import dev.slne.surf.chat.core.common.rabbit.rpc.ModerationService
+import dev.slne.surf.social.core.client.chat.ChatClientLoader
+import dev.slne.surf.social.core.client.chat.ClientChatInstance
+import dev.slne.surf.social.core.common.chat.ChatInstance
+import dev.slne.surf.social.core.common.chat.rabbit.rpc.ModerationService
 import net.kyori.adventure.util.Services
 
 /**

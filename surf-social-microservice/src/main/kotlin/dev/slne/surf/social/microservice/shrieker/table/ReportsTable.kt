@@ -1,9 +1,9 @@
-package dev.slne.surf.shrieker.microservice.table
+package dev.slne.surf.social.microservice.shrieker.table
 
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.LongIdTable
-import dev.slne.surf.shrieker.api.type.ReportType
+import dev.slne.surf.social.api.shrieker.type.ReportType
 
 object ReportsTable : LongIdTable("shrieker_reports") {
     val reporter = nativeUuid("reporter")

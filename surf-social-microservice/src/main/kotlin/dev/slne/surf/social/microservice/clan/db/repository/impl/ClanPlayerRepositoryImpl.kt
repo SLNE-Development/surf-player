@@ -1,9 +1,9 @@
-package dev.slne.surf.clan.microservice.db.repository.impl
+package dev.slne.surf.social.microservice.clan.db.repository.impl
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.clan.core.player.ClanPlayerImpl
-import dev.slne.surf.clan.microservice.db.repository.ClanPlayerRepository
-import dev.slne.surf.clan.microservice.db.table.ClanPlayerTable
+import dev.slne.surf.social.core.common.clan.player.ClanPlayerImpl
+import dev.slne.surf.social.microservice.clan.db.repository.ClanPlayerRepository
+import dev.slne.surf.social.microservice.clan.db.table.ClanPlayerTable
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insertReturning

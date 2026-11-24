@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.api.message
+package dev.slne.surf.social.api.chat.message
 
 import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.chat.api.denylist.DenylistEntry
+import dev.slne.surf.social.api.chat.denylist.DenylistEntry
 import net.kyori.adventure.text.Component
 
 private val EMPTY_CONTENT_MESSAGE = buildText { error("Deine Nachricht darf nicht leer sein.") }

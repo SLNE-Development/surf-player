@@ -1,4 +1,4 @@
-package dev.slne.clan.velocity
+package dev.slne.surf.social.velocity.clan
 
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.google.inject.Inject
@@ -9,7 +9,7 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
-import dev.slne.surf.clan.core.ClanInstance
+import dev.slne.surf.social.core.common.clan.ClanInstance
 import kotlinx.coroutines.runBlocking
 import java.nio.file.Path
 

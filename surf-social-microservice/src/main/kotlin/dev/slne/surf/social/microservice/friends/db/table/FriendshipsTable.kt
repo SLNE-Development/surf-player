@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.microservice.db.table
+package dev.slne.surf.social.microservice.friends.db.table
 
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.columns.time.offsetDateTime

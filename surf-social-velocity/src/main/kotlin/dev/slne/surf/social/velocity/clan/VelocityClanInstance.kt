@@ -1,9 +1,9 @@
-package dev.slne.clan.velocity
+package dev.slne.surf.social.velocity.clan
 
 import com.google.auto.service.AutoService
-import dev.slne.clan.velocity.listener.JoinInviteListener
-import dev.slne.surf.clan.core.ClanInstance
-import dev.slne.surf.clan.core.client.ClientClanInstance
+import dev.slne.surf.social.velocity.clan.listener.JoinInviteListener
+import dev.slne.surf.social.core.common.clan.ClanInstance
+import dev.slne.surf.social.core.client.clan.ClientClanInstance
 
 @AutoService(ClanInstance::class)
 class VelocityClanInstance : ClientClanInstance() {

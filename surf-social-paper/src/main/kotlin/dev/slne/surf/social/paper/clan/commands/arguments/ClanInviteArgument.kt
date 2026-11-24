@@ -1,15 +1,15 @@
-package dev.slne.clan.paper.commands.arguments
+package dev.slne.surf.social.paper.clan.commands.arguments
 
 import com.github.shynixn.mccoroutine.folia.scope
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.StringArgument
-import dev.slne.clan.api.invite.ClanInvite
-import dev.slne.clan.paper.commands.failCommand
-import dev.slne.clan.paper.plugin
+import dev.slne.surf.social.api.clan.invite.ClanInvite
+import dev.slne.surf.social.paper.clan.commands.failCommand
+import dev.slne.surf.social.paper.clan.plugin
 import dev.slne.surf.api.paper.command.args.SuspendCustomArgument
-import dev.slne.surf.clan.core.client.Messages
-import dev.slne.surf.clan.core.client.command.CLAN_INVITE_ARGUMENT_NEEDS_PLAYER
-import dev.slne.surf.clan.core.client.command.invitedClanNames
+import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.core.client.clan.command.CLAN_INVITE_ARGUMENT_NEEDS_PLAYER
+import dev.slne.surf.social.core.client.clan.command.invitedClanNames
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 import org.bukkit.command.CommandSender

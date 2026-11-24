@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.protocol.member.changeRole
+package dev.slne.surf.social.core.common.clan.protocol.member.changeRole
 
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.serialization.Serializable

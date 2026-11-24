@@ -1,9 +1,9 @@
-package dev.slne.surf.friends.api.utils
+package dev.slne.surf.social.api.friends.utils
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.friends.api.player.FriendsPlayer
+import dev.slne.surf.social.api.friends.player.FriendsPlayer
 import java.util.*
 
 suspend fun UUID.toSurfPlayer() = SurfCoreApi.getPlayer(this)

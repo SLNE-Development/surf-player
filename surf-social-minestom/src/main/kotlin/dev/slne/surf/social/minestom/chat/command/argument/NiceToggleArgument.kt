@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.minestom.command.argument
+package dev.slne.surf.social.minestom.chat.command.argument
 
 import dev.slne.surf.api.minestom.command.CommandAPI
 import dev.slne.surf.api.minestom.command.CommandAPICommand

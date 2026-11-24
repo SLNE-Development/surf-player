@@ -1,6 +1,6 @@
-package dev.slne.surf.clan.core.protocol.clan.create
+package dev.slne.surf.social.core.common.clan.protocol.clan.create
 
-import dev.slne.clan.api.clan.ClanCreationResult
+import dev.slne.surf.social.api.clan.clan.ClanCreationResult
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import kotlinx.serialization.Serializable
 

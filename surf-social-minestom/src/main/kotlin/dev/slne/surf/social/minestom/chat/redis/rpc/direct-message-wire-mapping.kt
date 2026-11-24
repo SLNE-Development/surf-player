@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.minestom.redis.rpc
+package dev.slne.surf.social.minestom.chat.redis.rpc
 
 import dev.slne.surf.api.minestom.chat.RemoteSignedMessage
-import dev.slne.surf.chat.core.client.redis.rpc.SignedChatMessage
+import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
 import net.minestom.server.crypto.ChatSession
 import net.minestom.server.crypto.MessageSignature
 import net.minestom.server.crypto.PlayerPublicKey

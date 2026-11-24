@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.microservice.repository.ignore
+package dev.slne.surf.social.microservice.chat.repository.ignore
 
-import dev.slne.surf.chat.api.entry.IgnoreListEntry
-import dev.slne.surf.chat.microservice.table.IgnoreListTable
+import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
+import dev.slne.surf.social.microservice.chat.table.IgnoreListTable
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.ExposedR2dbcException

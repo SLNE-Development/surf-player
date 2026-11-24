@@ -1,12 +1,12 @@
-package dev.slne.surf.clan.core.client.services
+package dev.slne.surf.social.core.client.clan.services
 
 import com.google.auto.service.AutoService
-import dev.slne.clan.api.player.ClanPlayer
-import dev.slne.clan.api.player.ClanPlayerService
-import dev.slne.surf.clan.core.client.redis.RedisService
-import dev.slne.surf.clan.core.client.rpc.clanPlayerRpcService
-import dev.slne.surf.clan.core.player.ClanPlayerImpl
-import dev.slne.surf.clan.core.player.CoreClanPlayerService
+import dev.slne.surf.social.api.clan.player.ClanPlayer
+import dev.slne.surf.social.api.clan.player.ClanPlayerService
+import dev.slne.surf.social.core.client.clan.redis.RedisService
+import dev.slne.surf.social.core.client.clan.rpc.clanPlayerRpcService
+import dev.slne.surf.social.core.common.clan.player.ClanPlayerImpl
+import dev.slne.surf.social.core.common.clan.player.CoreClanPlayerService
 import java.util.*
 import kotlin.time.Duration.Companion.minutes
 

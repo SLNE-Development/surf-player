@@ -1,14 +1,14 @@
-package dev.slne.surf.chat.api
+package dev.slne.surf.social.api.chat
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.chat.api.entry.HistoryEntry
-import dev.slne.surf.chat.api.entry.HistoryFilter
-import dev.slne.surf.chat.api.entry.IgnoreListEntry
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.api.message.redirector.MessageRedirector
-import dev.slne.surf.chat.api.message.redirector.MessageRedirectorRegistry
-import dev.slne.surf.chat.api.processor.PostChatProcessor
-import dev.slne.surf.chat.api.processor.PreChatProcessor
+import dev.slne.surf.social.api.chat.entry.HistoryEntry
+import dev.slne.surf.social.api.chat.entry.HistoryFilter
+import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.api.chat.message.redirector.MessageRedirector
+import dev.slne.surf.social.api.chat.message.redirector.MessageRedirectorRegistry
+import dev.slne.surf.social.api.chat.processor.PostChatProcessor
+import dev.slne.surf.social.api.chat.processor.PreChatProcessor
 import it.unimi.dsi.fastutil.objects.ObjectList
 import kotlinx.coroutines.TimeoutCancellationException
 import net.kyori.adventure.chat.SignedMessage

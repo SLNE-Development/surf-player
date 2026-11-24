@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.api.player
+package dev.slne.surf.social.api.friends.player
 
 import dev.slne.surf.api.core.util.requiredService
 import it.unimi.dsi.fastutil.objects.ObjectSet

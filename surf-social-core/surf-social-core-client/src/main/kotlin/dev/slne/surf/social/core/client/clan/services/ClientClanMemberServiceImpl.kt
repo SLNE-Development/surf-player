@@ -1,18 +1,18 @@
-package dev.slne.surf.clan.core.client.services
+package dev.slne.surf.social.core.client.clan.services
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
-import dev.slne.clan.api.member.ClanMember
-import dev.slne.clan.api.member.ClanMemberAddResult
-import dev.slne.clan.api.member.ClanMemberRole
-import dev.slne.clan.api.member.ClanMemberService
-import dev.slne.clan.api.member.listener.ClanMemberChangedRoleListener
-import dev.slne.clan.api.member.listener.ClanMemberListener
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMemberService
+import dev.slne.surf.social.api.clan.member.listener.ClanMemberChangedRoleListener
+import dev.slne.surf.social.api.clan.member.listener.ClanMemberListener
 import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.clan.core.client.rpc.clanMemberRpcService
-import dev.slne.surf.clan.core.member.ClanMemberImpl
-import dev.slne.surf.clan.core.member.CoreClanMemberService
+import dev.slne.surf.social.core.client.clan.rpc.clanMemberRpcService
+import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
+import dev.slne.surf.social.core.common.clan.member.CoreClanMemberService
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 

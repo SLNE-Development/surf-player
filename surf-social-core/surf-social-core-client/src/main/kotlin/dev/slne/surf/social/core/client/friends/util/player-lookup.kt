@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.core.client.util
+package dev.slne.surf.social.core.client.friends.util
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.asLoadingCache

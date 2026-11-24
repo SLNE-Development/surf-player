@@ -1,15 +1,15 @@
-package dev.slne.surf.chat.paper.listener
+package dev.slne.surf.social.paper.chat.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
-import dev.slne.surf.chat.api.message.MessageContext
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.api.message.MessageType
-import dev.slne.surf.chat.api.message.redirector.MessageRedirectorRegistry
-import dev.slne.surf.chat.core.client.processor.runPostProcessors
-import dev.slne.surf.chat.core.client.processor.runPreProcessors
-import dev.slne.surf.chat.paper.plugin
-import dev.slne.surf.chat.paper.util.cancel
+import dev.slne.surf.social.api.chat.message.MessageContext
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.social.api.chat.message.redirector.MessageRedirectorRegistry
+import dev.slne.surf.social.core.client.chat.processor.runPostProcessors
+import dev.slne.surf.social.core.client.chat.processor.runPreProcessors
+import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.chat.util.cancel
 import dev.slne.surf.core.api.common.SurfCoreApi
 import io.papermc.paper.event.player.AsyncChatEvent
 import kotlinx.coroutines.runBlocking

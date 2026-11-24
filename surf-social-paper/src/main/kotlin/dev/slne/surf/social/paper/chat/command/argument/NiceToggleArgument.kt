@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.paper.command.argument
+package dev.slne.surf.social.paper.chat.command.argument
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.arguments.Argument

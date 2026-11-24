@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.common.rabbit.packet.request.ignore
+package dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore
 
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket

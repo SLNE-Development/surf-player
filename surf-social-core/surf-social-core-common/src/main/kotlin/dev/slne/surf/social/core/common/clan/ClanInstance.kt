@@ -1,7 +1,7 @@
-package dev.slne.surf.clan.core
+package dev.slne.surf.social.core.common.clan
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.clan.core.clan.CoreClanService
+import dev.slne.surf.social.core.common.clan.clan.CoreClanService
 import org.jetbrains.annotations.MustBeInvokedByOverriders
 import java.nio.file.Path
 

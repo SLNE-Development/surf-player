@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.paper.command.surfchat
+package dev.slne.surf.social.paper.chat.command.surfchat
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.playerExecutor
@@ -8,7 +8,7 @@ import dev.slne.surf.api.core.messages.CommonComponents
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.pagination.Pagination
-import dev.slne.surf.chat.paper.permission.PermissionRegistry
+import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
 import net.kyori.adventure.text.format.TextDecoration
 
 fun CommandAPICommand.surfChatLookupHelpCommand() = subcommand("lookuphelp") {

@@ -1,9 +1,9 @@
-package dev.slne.surf.clan.core.client.command
+package dev.slne.surf.social.core.client.clan.command
 
-import dev.slne.clan.api.clan.Clan
+import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.clan.core.clan.ClanImpl
-import dev.slne.surf.clan.core.client.components.Components
+import dev.slne.surf.social.core.common.clan.clan.ClanImpl
+import dev.slne.surf.social.core.client.clan.components.Components
 import net.kyori.adventure.text.event.ClickEvent
 
 const val NO_TAG_COLOR_PERMISSION = "Du hast keine Berechtigung, die Farbe des Clan-Tags zu ändern."

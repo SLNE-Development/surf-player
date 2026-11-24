@@ -1,14 +1,14 @@
-package dev.slne.surf.chat.minestom.command.surfchat.functionality
+package dev.slne.surf.social.minestom.chat.command.surfchat.functionality
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
-import dev.slne.surf.chat.core.common.service.FunctionalityService
-import dev.slne.surf.chat.minestom.command.argument.niceToggleArgument
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.core.common.chat.service.FunctionalityService
+import dev.slne.surf.social.minestom.chat.command.argument.niceToggleArgument
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.minestom.server.entity.Player
 

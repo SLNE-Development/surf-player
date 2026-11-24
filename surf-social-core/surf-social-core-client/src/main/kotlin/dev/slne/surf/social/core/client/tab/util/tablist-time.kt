@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.core.client.util
+package dev.slne.surf.social.core.client.tab.util
 
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter

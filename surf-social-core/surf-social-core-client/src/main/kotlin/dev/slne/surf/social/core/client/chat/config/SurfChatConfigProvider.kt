@@ -1,8 +1,8 @@
-package dev.slne.surf.chat.core.client.config
+package dev.slne.surf.social.core.client.chat.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
 import dev.slne.surf.api.core.config.surfConfigApi
-import dev.slne.surf.chat.core.client.config.configs.SurfChatConfig
+import dev.slne.surf.social.core.client.chat.config.configs.SurfChatConfig
 import java.nio.file.Path
 
 class SurfChatConfigProvider(dataPath: Path) {

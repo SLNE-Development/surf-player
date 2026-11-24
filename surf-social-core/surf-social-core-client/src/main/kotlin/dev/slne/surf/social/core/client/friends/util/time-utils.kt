@@ -1,4 +1,4 @@
-package dev.slne.surf.friends.core.client.util
+package dev.slne.surf.social.core.client.friends.util
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import java.time.OffsetDateTime

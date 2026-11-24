@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.minestom.command.surfchat
+package dev.slne.surf.social.minestom.chat.command.surfchat
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
@@ -8,7 +8,7 @@ import dev.slne.surf.api.core.messages.CommonComponents
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.pagination.Pagination
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
 import net.kyori.adventure.text.format.TextDecoration
 
 fun CommandAPICommand.surfChatLookupHelpCommand(): CommandAPICommand = withSubcommand(

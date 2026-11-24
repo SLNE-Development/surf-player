@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.protocol.invite.accept
+package dev.slne.surf.social.core.common.clan.protocol.invite.accept
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse

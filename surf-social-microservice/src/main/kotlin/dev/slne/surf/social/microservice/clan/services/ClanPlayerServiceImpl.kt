@@ -1,9 +1,9 @@
-package dev.slne.surf.clan.microservice.services
+package dev.slne.surf.social.microservice.clan.services
 
 import com.google.auto.service.AutoService
-import dev.slne.clan.api.player.ClanPlayerService
-import dev.slne.surf.clan.core.player.ClanPlayerImpl
-import dev.slne.surf.clan.core.player.CoreClanPlayerService
+import dev.slne.surf.social.api.clan.player.ClanPlayerService
+import dev.slne.surf.social.core.common.clan.player.ClanPlayerImpl
+import dev.slne.surf.social.core.common.clan.player.CoreClanPlayerService
 import java.util.*
 
 @AutoService(ClanPlayerService::class)

@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.minestom.listener
+package dev.slne.surf.social.minestom.chat.listener
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.minimessage.miniMessage
@@ -6,15 +6,15 @@ import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.extension.addListener
 import dev.slne.surf.api.minestom.permission.hasPermission
-import dev.slne.surf.chat.core.client.config.chatConfig
-import dev.slne.surf.chat.core.client.hook.LuckPermsHook
-import dev.slne.surf.chat.core.client.hook.SettingsHook
-import dev.slne.surf.chat.core.client.message.format.buildConnectionMessage
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
-import dev.slne.surf.chat.core.common.service.IgnoreService
-import dev.slne.surf.chat.core.common.service.SpyService
-import dev.slne.surf.chat.minestom.message.MinestomMessageFormatter
+import dev.slne.surf.social.core.client.chat.config.chatConfig
+import dev.slne.surf.social.core.client.chat.hook.LuckPermsHook
+import dev.slne.surf.social.core.client.chat.hook.SettingsHook
+import dev.slne.surf.social.core.client.chat.message.format.buildConnectionMessage
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.core.common.chat.service.IgnoreService
+import dev.slne.surf.social.core.common.chat.service.SpyService
+import dev.slne.surf.social.minestom.chat.message.MinestomMessageFormatter
 import net.minestom.server.entity.Player
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode

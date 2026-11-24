@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.paper.util
+package dev.slne.surf.social.paper.chat.util
 
 import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.wrapper.PacketWrapper

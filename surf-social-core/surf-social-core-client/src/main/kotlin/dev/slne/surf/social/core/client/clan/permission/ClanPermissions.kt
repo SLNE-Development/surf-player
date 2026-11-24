@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.client.permission
+package dev.slne.surf.social.core.client.clan.permission
 
 /**
  * Platform-neutral registry of all permission node strings used by surf-clan.

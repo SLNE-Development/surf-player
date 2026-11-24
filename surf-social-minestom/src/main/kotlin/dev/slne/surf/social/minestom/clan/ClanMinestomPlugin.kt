@@ -1,10 +1,10 @@
-package dev.slne.clan.minestom
+package dev.slne.surf.social.minestom.clan
 
-import dev.slne.clan.minestom.command.clanChatCommand
-import dev.slne.clan.minestom.command.clanCommand
-import dev.slne.clan.minestom.listener.ClanTagColorJoinListener
+import dev.slne.surf.social.minestom.clan.command.clanChatCommand
+import dev.slne.surf.social.minestom.clan.command.clanCommand
+import dev.slne.surf.social.minestom.clan.listener.ClanTagColorJoinListener
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
-import dev.slne.surf.clan.core.ClanInstance
+import dev.slne.surf.social.core.common.clan.ClanInstance
 
 object ClanMinestomPlugin : SurfMinestomPlugin() {
     override suspend fun onLoad() {

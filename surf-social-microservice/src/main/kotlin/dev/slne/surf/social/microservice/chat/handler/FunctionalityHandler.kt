@@ -1,11 +1,11 @@
-package dev.slne.surf.chat.microservice.handler
+package dev.slne.surf.social.microservice.chat.handler
 
-import dev.slne.surf.chat.core.common.rabbit.packet.request.functionality.FindAllFunctionalitiesRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.functionality.FindFunctionalityRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.functionality.UpsertFunctionalityRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.response.functionality.FunctionalitiesResponsePacket
-import dev.slne.surf.chat.core.common.rabbit.packet.response.functionality.ManyFunctionalitiesResponsePacket
-import dev.slne.surf.chat.microservice.repository.functionality.FunctionalityRepository
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindAllFunctionalitiesRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindFunctionalityRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.UpsertFunctionalityRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.response.functionality.FunctionalitiesResponsePacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.response.functionality.ManyFunctionalitiesResponsePacket
+import dev.slne.surf.social.microservice.chat.repository.functionality.FunctionalityRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.coroutines.launch

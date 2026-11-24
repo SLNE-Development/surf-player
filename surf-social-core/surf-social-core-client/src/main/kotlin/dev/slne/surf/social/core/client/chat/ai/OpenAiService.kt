@@ -1,15 +1,15 @@
-package dev.slne.surf.chat.core.client.ai
+package dev.slne.surf.social.core.client.chat.ai
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync
 import com.openai.models.moderations.Moderation
 import com.openai.models.moderations.ModerationCreateParams
 import com.sksamuel.aedile.core.asLoadingCache
-import dev.slne.surf.chat.core.common.aimoderation.ModerationCategory
-import dev.slne.surf.chat.core.common.aimoderation.ModerationClassificationAction
-import dev.slne.surf.chat.core.client.config.AiModerationThresholds
-import dev.slne.surf.chat.core.client.config.aiModerationConfig
-import dev.slne.surf.chat.core.common.aimoderation.ModerationClassificationResult
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationCategory
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationAction
+import dev.slne.surf.social.core.client.chat.config.AiModerationThresholds
+import dev.slne.surf.social.core.client.chat.config.aiModerationConfig
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationResult
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap
 import kotlinx.coroutines.future.await

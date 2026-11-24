@@ -1,7 +1,7 @@
-package dev.slne.surf.clan.microservice.handler.player
+package dev.slne.surf.social.microservice.clan.handler.player
 
-import dev.slne.surf.clan.core.protocol.player.updateAccepsClanInvites.UpdateClanPlayerAcceptsInvitesRequestPacket
-import dev.slne.surf.clan.microservice.db.repository.ClanPlayerRepository
+import dev.slne.surf.social.core.common.clan.protocol.player.updateAccepsClanInvites.UpdateClanPlayerAcceptsInvitesRequestPacket
+import dev.slne.surf.social.microservice.clan.db.repository.ClanPlayerRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.coroutines.launch

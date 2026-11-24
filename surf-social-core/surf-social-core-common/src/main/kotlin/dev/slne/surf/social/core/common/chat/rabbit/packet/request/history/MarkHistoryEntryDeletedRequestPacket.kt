@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.common.rabbit.packet.request.history
+package dev.slne.surf.social.core.common.chat.rabbit.packet.request.history
 
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID

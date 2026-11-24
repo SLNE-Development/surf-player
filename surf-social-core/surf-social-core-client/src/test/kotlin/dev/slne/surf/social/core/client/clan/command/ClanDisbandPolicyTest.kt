@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.client.command
+package dev.slne.surf.social.core.client.clan.command
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.member.ClanMember
-import dev.slne.clan.api.permission.ClanPermission
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.api.clan.permission.ClanPermission
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals

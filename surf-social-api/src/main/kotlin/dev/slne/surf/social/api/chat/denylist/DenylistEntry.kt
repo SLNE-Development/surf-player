@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.api.denylist
+package dev.slne.surf.social.api.chat.denylist
 
 import dev.slne.surf.core.api.common.SurfCoreApi
 import java.time.OffsetDateTime

@@ -1,7 +1,7 @@
-package dev.slne.clan.api.member.listener
+package dev.slne.surf.social.api.clan.member.listener
 
-import dev.slne.clan.api.member.ClanMember
-import dev.slne.clan.api.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
 
 /**
  * Listener for clan member role change events.

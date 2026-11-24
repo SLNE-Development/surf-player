@@ -1,16 +1,16 @@
-package dev.slne.surf.clan.core.clan
+package dev.slne.surf.social.core.common.clan.clan
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.clan.ClanTagColor
-import dev.slne.clan.api.invite.ClanInvite
-import dev.slne.clan.api.invite.ClanInviteResult
-import dev.slne.clan.api.member.ClanMember
-import dev.slne.clan.api.member.ClanMemberAddResult
-import dev.slne.clan.api.member.ClanMemberRole
-import dev.slne.clan.api.util.InternalClanApi
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.invite.ClanInvite
+import dev.slne.surf.social.api.clan.invite.ClanInviteResult
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
+import dev.slne.surf.social.api.clan.util.InternalClanApi
 import dev.slne.surf.api.core.util.freeze
 import dev.slne.surf.api.core.util.mutableObjectSetOf
-import dev.slne.surf.clan.core.member.ClanMemberImpl
+import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.time.OffsetDateTime

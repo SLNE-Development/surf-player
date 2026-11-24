@@ -1,4 +1,4 @@
-package dev.slne.surf.shrieker.microservice.table
+package dev.slne.surf.social.microservice.shrieker.table
 
 import dev.slne.surf.api.core.messages.adventure.toKey
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.ULongIdTable

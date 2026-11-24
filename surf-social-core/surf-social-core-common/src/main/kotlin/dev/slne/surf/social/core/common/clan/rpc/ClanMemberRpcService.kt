@@ -1,8 +1,8 @@
-package dev.slne.surf.clan.core.rpc
+package dev.slne.surf.social.core.common.clan.rpc
 
-import dev.slne.clan.api.member.ClanMemberAddResult
-import dev.slne.clan.api.member.ClanMemberRole
-import dev.slne.surf.clan.core.member.ClanMemberImpl
+import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
+import dev.slne.surf.social.api.clan.member.ClanMemberRole
+import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 import java.util.*
 

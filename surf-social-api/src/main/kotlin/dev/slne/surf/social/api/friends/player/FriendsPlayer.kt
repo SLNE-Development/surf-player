@@ -1,12 +1,12 @@
-package dev.slne.surf.friends.api.player
+package dev.slne.surf.social.api.friends.player
 
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.friends.api.model.FriendRequest
-import dev.slne.surf.friends.api.model.Friendship
-import dev.slne.surf.friends.api.result.FriendRequestCreateResult
-import dev.slne.surf.friends.api.result.FriendRequestRemoveResult
-import dev.slne.surf.friends.api.result.FriendRequestStateResult
-import dev.slne.surf.friends.api.result.FriendshipRemoveResult
+import dev.slne.surf.social.api.friends.model.FriendRequest
+import dev.slne.surf.social.api.friends.model.Friendship
+import dev.slne.surf.social.api.friends.result.FriendRequestCreateResult
+import dev.slne.surf.social.api.friends.result.FriendRequestRemoveResult
+import dev.slne.surf.social.api.friends.result.FriendRequestStateResult
+import dev.slne.surf.social.api.friends.result.FriendshipRemoveResult
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*

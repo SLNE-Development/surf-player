@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.core.client.permission
+package dev.slne.surf.social.core.client.tab.permission
 
 /**
  * Platform-neutral registry of all permission node strings used by surf-tab.

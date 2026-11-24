@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.protocol.clan.updateDiscordInvite
+package dev.slne.surf.social.core.common.clan.protocol.clan.updateDiscordInvite
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse

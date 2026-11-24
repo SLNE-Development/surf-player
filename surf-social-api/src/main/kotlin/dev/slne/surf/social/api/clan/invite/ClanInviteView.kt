@@ -1,6 +1,6 @@
-package dev.slne.clan.api.invite
+package dev.slne.surf.social.api.clan.invite
 
-import dev.slne.clan.api.clan.Clan
+import dev.slne.surf.social.api.clan.clan.Clan
 import org.jetbrains.annotations.ApiStatus
 import java.time.OffsetDateTime
 import java.util.*

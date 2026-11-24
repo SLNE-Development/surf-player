@@ -1,10 +1,10 @@
-package dev.slne.surf.chat.microservice.handler
+package dev.slne.surf.social.microservice.chat.handler
 
-import dev.slne.surf.chat.core.common.rabbit.packet.request.history.CreateHistoryEntryRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.history.FindHistoriesRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.request.history.MarkHistoryEntryDeletedRequestPacket
-import dev.slne.surf.chat.core.common.rabbit.packet.response.history.ManyHistoriesResponsePacket
-import dev.slne.surf.chat.microservice.repository.history.HistoryRepository
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.CreateHistoryEntryRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.FindHistoriesRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.MarkHistoryEntryDeletedRequestPacket
+import dev.slne.surf.social.core.common.chat.rabbit.packet.response.history.ManyHistoriesResponsePacket
+import dev.slne.surf.social.microservice.chat.repository.history.HistoryRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.coroutines.launch

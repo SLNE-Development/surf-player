@@ -1,7 +1,7 @@
-package dev.slne.surf.chat.api.message
+package dev.slne.surf.social.api.chat.message
 
 import dev.slne.surf.api.core.messages.adventure.plain
-import dev.slne.surf.chat.api.serializer.SerializableSignature
+import dev.slne.surf.social.api.chat.serializer.SerializableSignature
 import dev.slne.surf.core.api.common.SurfCoreApi
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

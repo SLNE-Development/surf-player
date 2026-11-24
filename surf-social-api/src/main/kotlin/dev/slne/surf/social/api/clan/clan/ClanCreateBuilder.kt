@@ -1,4 +1,4 @@
-package dev.slne.clan.api.clan
+package dev.slne.surf.social.api.clan.clan
 
 import java.util.*
 

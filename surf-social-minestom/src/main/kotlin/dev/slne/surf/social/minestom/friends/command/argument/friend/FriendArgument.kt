@@ -1,14 +1,14 @@
-package dev.slne.surf.friends.minestom.command.argument.friend
+package dev.slne.surf.social.minestom.friends.command.argument.friend
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.argument.Argument
 import dev.slne.surf.api.minestom.command.argument.CustomArgument
 import dev.slne.surf.api.minestom.command.argument.StringArgument
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
-import dev.slne.surf.friends.api.player.FriendsPlayer
-import dev.slne.surf.friends.core.client.command.findFriend
-import dev.slne.surf.friends.core.client.command.friendNames
-import dev.slne.surf.friends.minestom.command.friendArgumentScope
+import dev.slne.surf.social.api.friends.player.FriendsPlayer
+import dev.slne.surf.social.core.client.friends.command.findFriend
+import dev.slne.surf.social.core.client.friends.command.friendNames
+import dev.slne.surf.social.minestom.friends.command.friendArgumentScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import net.minestom.server.entity.Player

@@ -1,6 +1,6 @@
-package dev.slne.surf.chat.core.common.rabbit.packet.response.ignore
+package dev.slne.surf.social.core.common.chat.rabbit.packet.response.ignore
 
-import dev.slne.surf.chat.api.entry.IgnoreListEntry
+import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import kotlinx.serialization.Serializable
 

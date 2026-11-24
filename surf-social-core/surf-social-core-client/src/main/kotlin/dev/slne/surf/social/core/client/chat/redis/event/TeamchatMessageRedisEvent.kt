@@ -1,6 +1,6 @@
-package dev.slne.surf.chat.core.client.redis.event
+package dev.slne.surf.social.core.client.chat.redis.event
 
-import dev.slne.surf.chat.api.message.MessageData
+import dev.slne.surf.social.api.chat.message.MessageData
 import dev.slne.surf.redis.event.RedisEvent
 import kotlinx.serialization.Serializable
 

@@ -1,13 +1,13 @@
-package dev.slne.surf.chat.minestom.command.surfchat
+package dev.slne.surf.social.minestom.chat.command.surfchat
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.chat.core.client.config.AiModerationConfig
-import dev.slne.surf.chat.core.client.config.chatConfigProvider
-import dev.slne.surf.chat.core.client.permission.ChatPermissions
-import dev.slne.surf.chat.core.client.util.coloredComponent
+import dev.slne.surf.social.core.client.chat.config.AiModerationConfig
+import dev.slne.surf.social.core.client.chat.config.chatConfigProvider
+import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.social.core.client.chat.util.coloredComponent
 import kotlin.system.measureTimeMillis
 
 fun CommandAPICommand.surfChatReloadCommand(): CommandAPICommand = withSubcommand(

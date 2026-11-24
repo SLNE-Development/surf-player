@@ -1,12 +1,12 @@
-package dev.slne.surf.friends.minestom.command.subcommand.request
+package dev.slne.surf.social.minestom.friends.command.subcommand.request
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.friends.api.player.FriendsPlayer
-import dev.slne.surf.friends.core.client.permission.FriendPermissions
-import dev.slne.surf.friends.minestom.command.argument.request.receivedFriendRequestArgument
-import dev.slne.surf.friends.minestom.command.resolveReceivedFriendRequestSender
+import dev.slne.surf.social.api.friends.player.FriendsPlayer
+import dev.slne.surf.social.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.social.minestom.friends.command.argument.request.receivedFriendRequestArgument
+import dev.slne.surf.social.minestom.friends.command.resolveReceivedFriendRequestSender
 
 fun CommandAPICommand.friendRequestDeclineCommand(): CommandAPICommand = withSubcommand(
     subcommand("decline") {

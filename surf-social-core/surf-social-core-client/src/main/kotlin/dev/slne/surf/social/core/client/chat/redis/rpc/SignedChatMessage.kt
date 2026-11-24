@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.redis.rpc
+package dev.slne.surf.social.core.client.chat.redis.rpc
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

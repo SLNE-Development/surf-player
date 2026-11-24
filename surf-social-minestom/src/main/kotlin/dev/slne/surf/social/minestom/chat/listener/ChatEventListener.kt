@@ -1,15 +1,15 @@
-package dev.slne.surf.chat.minestom.listener
+package dev.slne.surf.social.minestom.chat.listener
 
 import dev.slne.surf.api.minestom.chat.AsyncPlayerChatEvent
 import dev.slne.surf.api.minestom.chat.ChatRenderer
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
-import dev.slne.surf.chat.api.message.MessageContext
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.api.message.MessageType
-import dev.slne.surf.chat.api.message.redirector.MessageRedirectorRegistry
-import dev.slne.surf.chat.core.client.platform.ChatPlatform
-import dev.slne.surf.chat.core.client.processor.runPostProcessors
-import dev.slne.surf.chat.core.client.processor.runPreProcessors
+import dev.slne.surf.social.api.chat.message.MessageContext
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.social.api.chat.message.redirector.MessageRedirectorRegistry
+import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.core.client.chat.processor.runPostProcessors
+import dev.slne.surf.social.core.client.chat.processor.runPreProcessors
 import dev.slne.surf.core.api.common.SurfCoreApi
 import java.time.OffsetDateTime
 import java.util.*

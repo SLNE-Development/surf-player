@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.paper.hook
+package dev.slne.surf.social.paper.chat.hook
 
 import io.github.miniplaceholders.api.MiniPlaceholders
 import net.kyori.adventure.text.Component

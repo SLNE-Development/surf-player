@@ -1,8 +1,8 @@
-package dev.slne.surf.chat.microservice.repository.history
+package dev.slne.surf.social.microservice.chat.repository.history
 
-import dev.slne.surf.chat.api.entry.HistoryEntry
-import dev.slne.surf.chat.api.entry.HistoryFilter
-import dev.slne.surf.chat.microservice.table.HistoryTable
+import dev.slne.surf.social.api.chat.entry.HistoryEntry
+import dev.slne.surf.social.api.chat.entry.HistoryFilter
+import dev.slne.surf.social.microservice.chat.table.HistoryTable
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.*
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.andWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert

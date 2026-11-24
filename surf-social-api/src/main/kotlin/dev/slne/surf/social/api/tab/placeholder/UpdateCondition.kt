@@ -1,4 +1,4 @@
-package dev.slne.surf.tab.api.placeholder
+package dev.slne.surf.social.api.tab.placeholder
 
 import dev.slne.surf.api.core.event.SurfEvent
 import kotlin.time.Duration
@@ -21,7 +21,7 @@ sealed interface UpdateCondition {
 
     /**
      * Indicates that the placeholder value changes only when explicitly invalidated through
-     * [dev.slne.surf.tab.api.SurfTabApi.invalidate].
+     * [dev.slne.surf.social.api.tab.SurfTabApi.invalidate].
      */
     data object OnDemand : UpdateCondition
 

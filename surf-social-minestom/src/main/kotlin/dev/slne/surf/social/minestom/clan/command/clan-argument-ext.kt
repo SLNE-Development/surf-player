@@ -1,10 +1,10 @@
-package dev.slne.clan.minestom.command
+package dev.slne.surf.social.minestom.clan.command
 
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.api.invite.ClanInvite
-import dev.slne.clan.api.member.ClanMember
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.api.clan.invite.ClanInvite
+import dev.slne.surf.social.api.clan.member.ClanMember
 import dev.slne.surf.api.minestom.command.executor.CommandArguments
-import dev.slne.surf.clan.core.client.Messages
+import dev.slne.surf.social.core.client.clan.Messages
 import kotlinx.coroutines.Deferred
 import java.util.*
 

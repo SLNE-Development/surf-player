@@ -1,4 +1,4 @@
-package dev.slne.surf.clan.core.client
+package dev.slne.surf.social.core.client.clan
 
 @DslMarker
 annotation class MessageMarker

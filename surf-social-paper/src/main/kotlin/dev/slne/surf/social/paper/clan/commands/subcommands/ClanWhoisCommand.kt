@@ -1,14 +1,14 @@
-package dev.slne.clan.paper.commands.subcommands
+package dev.slne.surf.social.paper.clan.commands.subcommands
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.clan.api.clan.Clan
-import dev.slne.clan.paper.permission.ClanPermissions
+import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.clan.core.client.Messages
-import dev.slne.surf.clan.core.client.command.whoisMessage
+import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.core.client.clan.command.whoisMessage
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
 

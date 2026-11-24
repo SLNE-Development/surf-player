@@ -1,8 +1,8 @@
-package dev.slne.surf.tab.core.client.config
+package dev.slne.surf.social.core.client.tab.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
 import dev.slne.surf.api.core.config.surfConfigApi
-import dev.slne.surf.tab.core.client.platform.tabPlatform
+import dev.slne.surf.social.core.client.tab.platform.tabPlatform
 
 class TablistConfigProvider {
     private val configManager: SpongeConfigManager<TablistConfig>

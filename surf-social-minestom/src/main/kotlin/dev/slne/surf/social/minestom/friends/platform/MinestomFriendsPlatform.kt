@@ -1,8 +1,8 @@
-package dev.slne.surf.friends.minestom.platform
+package dev.slne.surf.social.minestom.friends.platform
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.extension.ConnectionManager
-import dev.slne.surf.friends.core.client.platform.FriendsPlatform
+import dev.slne.surf.social.core.client.friends.platform.FriendsPlatform
 import net.kyori.adventure.text.Component
 import java.util.*
 

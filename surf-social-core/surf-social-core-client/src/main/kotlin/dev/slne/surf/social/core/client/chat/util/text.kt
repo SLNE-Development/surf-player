@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.util
+package dev.slne.surf.social.core.client.chat.util
 
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.*

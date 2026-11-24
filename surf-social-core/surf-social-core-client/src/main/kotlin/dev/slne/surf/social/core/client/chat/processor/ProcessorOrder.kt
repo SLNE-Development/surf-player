@@ -1,4 +1,4 @@
-package dev.slne.surf.chat.core.client.processor
+package dev.slne.surf.social.core.client.chat.processor
 
 object ProcessorOrder {
     const val FORMAT = 0

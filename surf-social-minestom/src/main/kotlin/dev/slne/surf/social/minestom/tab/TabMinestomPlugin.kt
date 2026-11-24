@@ -1,15 +1,15 @@
-package dev.slne.surf.tab.minestom
+package dev.slne.surf.social.minestom.tab
 
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
-import dev.slne.surf.tab.core.client.hook.ClanHook
-import dev.slne.surf.tab.core.client.hook.ContentCreatorHook
-import dev.slne.surf.tab.core.client.redis.redisLoader
-import dev.slne.surf.tab.core.client.service.TablistService
-import dev.slne.surf.tab.minestom.command.surfTabCommand
-import dev.slne.surf.tab.minestom.hook.registerLuckPermsListeners
-import dev.slne.surf.tab.minestom.listener.PlayerListener
-import dev.slne.surf.tab.minestom.listener.PlaytimeListener
-import dev.slne.surf.tab.minestom.platform.MinestomTabPlatform
+import dev.slne.surf.social.core.client.tab.hook.ClanHook
+import dev.slne.surf.social.core.client.tab.hook.ContentCreatorHook
+import dev.slne.surf.social.core.client.tab.redis.redisLoader
+import dev.slne.surf.social.core.client.tab.service.TablistService
+import dev.slne.surf.social.minestom.tab.command.surfTabCommand
+import dev.slne.surf.social.minestom.tab.hook.registerLuckPermsListeners
+import dev.slne.surf.social.minestom.tab.listener.PlayerListener
+import dev.slne.surf.social.minestom.tab.listener.PlaytimeListener
+import dev.slne.surf.social.minestom.tab.platform.MinestomTabPlatform
 
 object TabMinestomPlugin : SurfMinestomPlugin() {
     override suspend fun onLoad() {

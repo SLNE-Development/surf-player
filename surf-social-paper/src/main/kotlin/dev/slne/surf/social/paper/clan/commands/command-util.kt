@@ -1,4 +1,4 @@
-package dev.slne.clan.paper.commands
+package dev.slne.surf.social.paper.clan.commands
 
 import dev.jorel.commandapi.CommandAPIPaper
 import dev.slne.surf.api.core.messages.adventure.buildText

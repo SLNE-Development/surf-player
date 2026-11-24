@@ -1,11 +1,11 @@
-package dev.slne.surf.chat.core.client.webhook
+package dev.slne.surf.social.core.client.chat.webhook
 
-import dev.slne.surf.chat.api.message.MessageData
-import dev.slne.surf.chat.core.client.config.aiModerationConfig
-import dev.slne.surf.chat.core.common.aimoderation.ModerationClassificationAction
-import dev.slne.surf.chat.core.common.aimoderation.ModerationClassificationResult
-import dev.slne.surf.chat.core.client.webhook.components.SeparatorSpacing
-import dev.slne.surf.chat.core.client.webhook.components.componentsV2Message
+import dev.slne.surf.social.api.chat.message.MessageData
+import dev.slne.surf.social.core.client.chat.config.aiModerationConfig
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationAction
+import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationResult
+import dev.slne.surf.social.core.client.chat.webhook.components.SeparatorSpacing
+import dev.slne.surf.social.core.client.chat.webhook.components.componentsV2Message
 
 object DiscordMessages {
     private const val MAX_MESSAGE_PREVIEW = 1000
