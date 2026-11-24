@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.minestom.platform
+package dev.slne.surf.social.minestom.minimap.platform
 
 import net.minestom.server.network.ConnectionState
 import net.minestom.server.network.NetworkBuffer

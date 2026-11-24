@@ -1,7 +1,7 @@
-package dev.slne.surf.playtime.core.client.command
+package dev.slne.surf.social.core.client.playtime.command
 
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.playtime.api.common.session.PlaytimeStreakPause
+import dev.slne.surf.social.api.playtime.session.PlaytimeStreakPause
 import net.kyori.adventure.audience.Audience
 
 fun Audience.sendConfigurationReloaded() = sendText {

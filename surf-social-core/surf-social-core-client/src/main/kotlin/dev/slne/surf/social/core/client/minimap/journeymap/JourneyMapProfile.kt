@@ -1,8 +1,8 @@
-package dev.slne.surf.minimapcompanion.core.journeymap
+package dev.slne.surf.social.core.client.minimap.journeymap
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.config.JourneyMapConfig
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
 
 /**
  * What this server enforces on JourneyMap, as the strings JourneyMap's permissions JSON carries:

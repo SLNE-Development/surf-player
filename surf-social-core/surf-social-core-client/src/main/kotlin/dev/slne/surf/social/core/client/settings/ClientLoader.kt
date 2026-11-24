@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.core.client
+package dev.slne.surf.social.core.client.settings
 
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 import java.nio.file.Path

@@ -1,9 +1,9 @@
-package dev.slne.surf.playtime.paper.listener
+package dev.slne.surf.social.paper.playtime.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.playtime.core.client.session.endPlaytimeSessions
-import dev.slne.surf.playtime.core.client.session.invalidatePlaytimeCaches
-import dev.slne.surf.playtime.paper.plugin
+import dev.slne.surf.social.core.client.playtime.session.endPlaytimeSessions
+import dev.slne.surf.social.core.client.playtime.session.invalidatePlaytimeCaches
+import dev.slne.surf.social.paper.playtime.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerQuitEvent

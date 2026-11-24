@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.paper.command.argument
+package dev.slne.surf.social.paper.settings.command.argument
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.CommandTree
@@ -6,8 +6,8 @@ import dev.jorel.commandapi.arguments.Argument
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.StringArgument
-import dev.slne.surf.settings.core.client.command.NiceToggle
-import dev.slne.surf.settings.core.client.command.SettingsCommandMessages
+import dev.slne.surf.social.core.client.settings.command.NiceToggle
+import dev.slne.surf.social.core.client.settings.command.SettingsCommandMessages
 
 class NiceToggleArgument(nodeName: String) :
     CustomArgument<Boolean, String>(StringArgument(nodeName), { info ->

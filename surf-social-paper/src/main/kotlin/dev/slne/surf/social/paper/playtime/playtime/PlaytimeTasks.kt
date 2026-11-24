@@ -1,8 +1,8 @@
-package dev.slne.surf.playtime.paper.playtime
+package dev.slne.surf.social.paper.playtime.playtime
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.playtime.core.common.service.PlaytimeService
-import dev.slne.surf.playtime.paper.plugin
+import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.social.paper.playtime.plugin
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import org.bukkit.Bukkit
 import java.util.concurrent.TimeUnit

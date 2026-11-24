@@ -1,14 +1,14 @@
-package dev.slne.surf.queue.velocity
+package dev.slne.surf.social.velocity.queue
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.queue.common.QueueInstance
-import dev.slne.surf.queue.common.queue.AbstractQueue
-import dev.slne.surf.queue.common.queue.tick.QueueScheduler
-import dev.slne.surf.queue.velocity.command.queueCommand
-import dev.slne.surf.queue.velocity.config.VelocityQueueConfig
-import dev.slne.surf.queue.velocity.listener.QueuePlayerListener
-import dev.slne.surf.queue.velocity.listener.QueuePriorityListener
-import dev.slne.surf.queue.velocity.queue.VelocityQueueImpl
+import dev.slne.surf.social.core.common.queue.QueueInstance
+import dev.slne.surf.social.core.common.queue.queue.AbstractQueue
+import dev.slne.surf.social.core.common.queue.queue.tick.QueueScheduler
+import dev.slne.surf.social.velocity.queue.command.queueCommand
+import dev.slne.surf.social.velocity.queue.config.VelocityQueueConfig
+import dev.slne.surf.social.velocity.queue.listener.QueuePlayerListener
+import dev.slne.surf.social.velocity.queue.listener.QueuePriorityListener
+import dev.slne.surf.social.velocity.queue.queue.VelocityQueueImpl
 
 @AutoService(QueueInstance::class)
 class VelocitySurfQueueInstance : QueueInstance() {

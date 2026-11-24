@@ -1,7 +1,7 @@
-package dev.slne.surf.queue.client.config
+package dev.slne.surf.social.core.client.queue.config
 
 import dev.slne.surf.api.core.config.SpongeYmlConfigClass
-import dev.slne.surf.queue.client.ClientQueueInstance
+import dev.slne.surf.social.core.client.queue.ClientQueueInstance
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 
 @ConfigSerializable

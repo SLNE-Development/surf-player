@@ -16,8 +16,8 @@ import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.client.friends.redis.event.*
 import dev.slne.surf.social.core.client.friends.rpc.friendsRpcService
 import dev.slne.surf.social.core.common.friends.rpc.FriendRequestState
-import dev.slne.surf.settings.api.SurfSettingsApi
-import dev.slne.surf.settings.api.setting.SettingKeys
+import dev.slne.surf.social.api.settings.SurfSettingsApi
+import dev.slne.surf.social.api.settings.setting.SettingKeys
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import it.unimi.dsi.fastutil.objects.ObjectSet

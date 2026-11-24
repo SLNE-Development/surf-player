@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.velocity.command.pause
+package dev.slne.surf.social.velocity.queue.command.pause
 
 import dev.jorel.commandapi.CommandTree
 import dev.jorel.commandapi.kotlindsl.getValue
@@ -7,8 +7,8 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.velocity.command.executors.anyExecutorSuspend
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.velocity.command.argument.surfBackendServerArgument
-import dev.slne.surf.queue.api.queue
-import dev.slne.surf.queue.velocity.permission.SurfQueuePermissions
+import dev.slne.surf.social.api.queue.queue
+import dev.slne.surf.social.velocity.queue.permission.SurfQueuePermissions
 
 fun CommandTree.queuePauseCommand() = literalArgument("pause") {
     withPermission(SurfQueuePermissions.COMMAND_PAUSE)

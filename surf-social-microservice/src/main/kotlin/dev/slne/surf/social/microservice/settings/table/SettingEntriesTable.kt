@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.microservice.table
+package dev.slne.surf.social.microservice.settings.table
 
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.table.AuditableLongIdTable

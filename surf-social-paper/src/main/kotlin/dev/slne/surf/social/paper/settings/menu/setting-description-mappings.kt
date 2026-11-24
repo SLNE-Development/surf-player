@@ -1,6 +1,6 @@
-package dev.slne.surf.settings.paper.menu
+package dev.slne.surf.social.paper.settings.menu
 
-import dev.slne.surf.settings.api.setting.SettingKeys
+import dev.slne.surf.social.api.settings.setting.SettingKeys
 import org.bukkit.Material
 
 val settingKeyMappings = mapOf(

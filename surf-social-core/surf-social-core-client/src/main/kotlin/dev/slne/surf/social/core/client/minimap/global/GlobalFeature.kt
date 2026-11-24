@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.global
+package dev.slne.surf.social.core.client.minimap.global
 
 /**
  * A map feature that more than one supported mod has, switched for all of them by its [key] under

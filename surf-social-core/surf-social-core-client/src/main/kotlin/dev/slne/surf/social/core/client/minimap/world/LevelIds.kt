@@ -1,6 +1,6 @@
-package dev.slne.surf.minimapcompanion.core.world
+package dev.slne.surf.social.core.client.minimap.world
 
-import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
+import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
 import net.kyori.adventure.key.Key
 import java.nio.ByteBuffer
 import java.security.MessageDigest

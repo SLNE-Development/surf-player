@@ -1,18 +1,18 @@
-package dev.slne.surf.playtime.paper
+package dev.slne.surf.social.paper.playtime
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.api.paper.extensions.pluginManager
-import dev.slne.surf.playtime.core.client.ClientPlaytimeInstance
-import dev.slne.surf.playtime.core.client.config.playtimeConfig
-import dev.slne.surf.playtime.core.common.service.PayCheckService
-import dev.slne.surf.playtime.core.common.service.PlaytimeService
-import dev.slne.surf.playtime.paper.command.playtimeAdminCommand
-import dev.slne.surf.playtime.paper.command.playtimeCommand
-import dev.slne.surf.playtime.paper.listener.PlayerAfkListener
-import dev.slne.surf.playtime.paper.listener.PlayerJoinListener
-import dev.slne.surf.playtime.paper.listener.PlayerQuitListener
-import dev.slne.surf.playtime.paper.playtime.playtimeTasks
+import dev.slne.surf.social.core.client.playtime.ClientPlaytimeInstance
+import dev.slne.surf.social.core.client.playtime.config.playtimeConfig
+import dev.slne.surf.social.core.common.playtime.service.PayCheckService
+import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
+import dev.slne.surf.social.paper.playtime.command.playtimeAdminCommand
+import dev.slne.surf.social.paper.playtime.command.playtimeCommand
+import dev.slne.surf.social.paper.playtime.listener.PlayerAfkListener
+import dev.slne.surf.social.paper.playtime.listener.PlayerJoinListener
+import dev.slne.surf.social.paper.playtime.listener.PlayerQuitListener
+import dev.slne.surf.social.paper.playtime.playtime.playtimeTasks
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)

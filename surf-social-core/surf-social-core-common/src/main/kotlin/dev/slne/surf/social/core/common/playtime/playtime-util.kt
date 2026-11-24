@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.core.common
+package dev.slne.surf.social.core.common.playtime
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols

@@ -1,16 +1,16 @@
-package dev.slne.surf.playtime.paper.command
+package dev.slne.surf.social.paper.playtime.command
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
-import dev.slne.surf.playtime.core.client.command.*
-import dev.slne.surf.playtime.core.client.config.playtimeConfig
-import dev.slne.surf.playtime.core.client.config.playtimeConfigManager
-import dev.slne.surf.playtime.core.client.permission.PlaytimePermissions
-import dev.slne.surf.playtime.core.common.service.PayCheckService
-import dev.slne.surf.playtime.core.common.service.PlaytimeStreakService
-import dev.slne.surf.playtime.paper.plugin
+import dev.slne.surf.social.core.client.playtime.command.*
+import dev.slne.surf.social.core.client.playtime.config.playtimeConfig
+import dev.slne.surf.social.core.client.playtime.config.playtimeConfigManager
+import dev.slne.surf.social.core.client.playtime.permission.PlaytimePermissions
+import dev.slne.surf.social.core.common.playtime.service.PayCheckService
+import dev.slne.surf.social.core.common.playtime.service.PlaytimeStreakService
+import dev.slne.surf.social.paper.playtime.plugin
 import kotlinx.coroutines.Deferred
 
 fun playtimeAdminCommand() = commandTree("playtimeadmin") {

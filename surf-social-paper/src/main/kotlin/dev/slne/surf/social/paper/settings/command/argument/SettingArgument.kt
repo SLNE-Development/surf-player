@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.paper.command.argument
+package dev.slne.surf.social.paper.settings.command.argument
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.CommandTree
@@ -6,9 +6,9 @@ import dev.jorel.commandapi.arguments.Argument
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.StringArgument
-import dev.slne.surf.settings.api.setting.Setting
-import dev.slne.surf.settings.core.client.command.SettingsCommandMessages
-import dev.slne.surf.settings.core.common.service.SettingsService
+import dev.slne.surf.social.api.settings.setting.Setting
+import dev.slne.surf.social.core.client.settings.command.SettingsCommandMessages
+import dev.slne.surf.social.core.common.settings.service.SettingsService
 
 class SettingArgument(nodeName: String) :
     CustomArgument<Setting, String>(StringArgument(nodeName), { info ->

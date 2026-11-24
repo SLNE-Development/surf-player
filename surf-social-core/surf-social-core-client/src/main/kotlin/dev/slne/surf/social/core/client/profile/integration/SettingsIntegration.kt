@@ -1,6 +1,6 @@
-package dev.slne.surf.profile.core.client.integration
+package dev.slne.surf.social.core.client.profile.integration
 
-import dev.slne.surf.settings.api.SurfSettingsApi
+import dev.slne.surf.social.api.settings.SurfSettingsApi
 import java.util.*
 
 object SettingsIntegration {

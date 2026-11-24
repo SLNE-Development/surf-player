@@ -1,8 +1,8 @@
-package dev.slne.surf.playtime.core.common.rabbit.packet
+package dev.slne.surf.social.core.common.playtime.rabbit.packet
 
-import dev.slne.surf.playtime.api.common.session.PlaytimeFilter
-import dev.slne.surf.playtime.core.common.rabbit.packet.request.LoadPlaytimePerPlayerRequestPacket
-import dev.slne.surf.playtime.core.common.rabbit.packet.response.PlaytimePerPlayerResponsePacket
+import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.LoadPlaytimePerPlayerRequestPacket
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.response.PlaytimePerPlayerResponsePacket
 import dev.slne.surf.rabbitmq.api.InternalRabbitMQ
 import dev.slne.surf.rabbitmq.api.RabbitMQApi
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap

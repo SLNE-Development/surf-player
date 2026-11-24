@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.client.permission
+package dev.slne.surf.social.core.client.queue.permission
 
 /**
  * Platform-neutral registry of all permission node strings used by surf-queue.

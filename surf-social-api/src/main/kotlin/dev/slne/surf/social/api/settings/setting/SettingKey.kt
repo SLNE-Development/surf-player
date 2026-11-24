@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.api.setting
+package dev.slne.surf.social.api.settings.setting
 
 import net.kyori.adventure.key.Key
 

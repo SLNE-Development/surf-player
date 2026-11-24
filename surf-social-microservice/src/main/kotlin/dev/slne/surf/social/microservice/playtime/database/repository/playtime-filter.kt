@@ -1,6 +1,6 @@
-package dev.slne.surf.playtime.database.repository
+package dev.slne.surf.social.microservice.playtime.database.repository
 
-import dev.slne.surf.playtime.api.common.session.PlaytimeFilter
+import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
 
 /**
  * Whether one of the restrictions of this filter is an empty set, so no session can match.

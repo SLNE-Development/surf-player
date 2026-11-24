@@ -1,6 +1,6 @@
-package dev.slne.surf.queue.velocity.queue
+package dev.slne.surf.social.velocity.queue.queue
 
-import dev.slne.surf.queue.velocity.util.toVelocityPlayer
+import dev.slne.surf.social.velocity.queue.util.toVelocityPlayer
 import it.unimi.dsi.fastutil.objects.ObjectList
 import java.util.*
 

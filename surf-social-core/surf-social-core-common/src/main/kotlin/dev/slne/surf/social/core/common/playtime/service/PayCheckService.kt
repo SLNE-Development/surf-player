@@ -1,7 +1,7 @@
-package dev.slne.surf.playtime.core.common.service
+package dev.slne.surf.social.core.common.playtime.service
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.playtime.core.common.config.PlaytimeConfig
+import dev.slne.surf.social.core.common.playtime.config.PlaytimeConfig
 import java.util.*
 
 private val service = requiredService<PayCheckService>()

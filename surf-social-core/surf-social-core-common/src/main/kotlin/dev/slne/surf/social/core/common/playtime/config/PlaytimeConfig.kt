@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.core.common.config
+package dev.slne.surf.social.core.common.playtime.config
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 

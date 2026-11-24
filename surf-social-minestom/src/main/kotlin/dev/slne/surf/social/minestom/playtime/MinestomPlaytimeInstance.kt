@@ -1,8 +1,8 @@
-package dev.slne.surf.playtime.minestom
+package dev.slne.surf.social.minestom.playtime
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.playtime.core.client.AbstractClientPlaytimeInstance
-import dev.slne.surf.playtime.core.common.PlaytimeInstance
+import dev.slne.surf.social.core.client.playtime.AbstractClientPlaytimeInstance
+import dev.slne.surf.social.core.common.playtime.PlaytimeInstance
 
 @AutoService(PlaytimeInstance::class)
 class MinestomPlaytimeInstance : AbstractClientPlaytimeInstance() {

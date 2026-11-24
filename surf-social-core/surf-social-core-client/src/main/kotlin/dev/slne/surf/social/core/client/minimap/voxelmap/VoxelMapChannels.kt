@@ -1,10 +1,10 @@
-package dev.slne.surf.minimapcompanion.core.voxelmap
+package dev.slne.surf.social.core.client.minimap.voxelmap
 
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
 
 /**
  * The plugin channel VoxelMap's server side sends its settings on. The world ID goes through
- * [dev.slne.surf.minimapcompanion.core.world.WorldInfo], which VoxelMap shares with JourneyMap.
+ * [dev.slne.surf.social.core.client.minimap.world.WorldInfo], which VoxelMap shares with JourneyMap.
  */
 object VoxelMapChannels {
     const val SETTINGS = "voxelmap:settings"

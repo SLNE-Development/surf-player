@@ -1,7 +1,7 @@
-package dev.slne.surf.queue.paper
+package dev.slne.surf.social.paper.queue
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
-import dev.slne.surf.queue.common.QueueInstance
+import dev.slne.surf.social.core.common.queue.QueueInstance
 import org.bukkit.plugin.java.JavaPlugin
 
 class PaperMain : SuspendingJavaPlugin() {

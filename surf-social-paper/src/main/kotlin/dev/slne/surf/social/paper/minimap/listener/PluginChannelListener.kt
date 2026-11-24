@@ -1,11 +1,11 @@
-package dev.slne.surf.minimapcompanion.paper.listener
+package dev.slne.surf.social.paper.minimap.listener
 
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
-import dev.slne.surf.minimapcompanion.core.service.MapSyncService
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
-import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
-import dev.slne.surf.minimapcompanion.paper.plugin
+import dev.slne.surf.social.core.client.minimap.journeymap.JourneyMapChannels
+import dev.slne.surf.social.core.client.minimap.service.MapSyncService
+import dev.slne.surf.social.core.client.minimap.voxelmap.VoxelMapChannels
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroChannels
+import dev.slne.surf.social.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.social.paper.minimap.plugin
 
 /**
  * Registers the map mods' plugin channels, as a server with the mods does, and answers the requests clients send

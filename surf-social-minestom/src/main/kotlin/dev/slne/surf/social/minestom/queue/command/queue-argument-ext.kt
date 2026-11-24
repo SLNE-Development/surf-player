@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.minestom.command
+package dev.slne.surf.social.minestom.queue.command
 
 import dev.slne.surf.api.minestom.command.CommandAPI
 import dev.slne.surf.api.core.messages.adventure.buildText

@@ -1,13 +1,13 @@
-package dev.slne.surf.profile.core.client.menu.own
+package dev.slne.surf.social.core.client.profile.menu.own
 
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
 import dev.slne.surf.api.core.util.dateTimeFormatter
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.playtime.api.common.surfPlaytimeApi
-import dev.slne.surf.profile.core.client.integration.LuckPermsIntegration
-import dev.slne.surf.profile.core.client.util.formatSeconds
+import dev.slne.surf.social.api.playtime.surfPlaytimeApi
+import dev.slne.surf.social.core.client.profile.integration.LuckPermsIntegration
+import dev.slne.surf.social.core.client.profile.util.formatSeconds
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.empty
 import net.kyori.adventure.text.TextComponent

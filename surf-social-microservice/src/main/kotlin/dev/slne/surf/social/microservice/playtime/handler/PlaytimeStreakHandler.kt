@@ -1,9 +1,9 @@
-package dev.slne.surf.playtime.microservice.handler
+package dev.slne.surf.social.microservice.playtime.handler
 
-import dev.slne.surf.playtime.core.common.rabbit.packet.request.*
-import dev.slne.surf.playtime.core.common.rabbit.packet.response.IntResponsePacket
-import dev.slne.surf.playtime.core.common.rabbit.packet.response.PlaytimeStreakResponsePacket
-import dev.slne.surf.playtime.database.repository.PlaytimeStreakRepository
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.*
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.response.IntResponsePacket
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.response.PlaytimeStreakResponsePacket
+import dev.slne.surf.social.microservice.playtime.database.repository.PlaytimeStreakRepository
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
 import kotlinx.coroutines.launch

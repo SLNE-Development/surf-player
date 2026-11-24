@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.api
+package dev.slne.surf.social.api.queue
 
 import dev.slne.surf.api.shared.api.annotation.InternalAPIMarker
 

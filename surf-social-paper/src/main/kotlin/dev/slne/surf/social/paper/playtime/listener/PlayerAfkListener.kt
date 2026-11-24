@@ -1,13 +1,13 @@
-package dev.slne.surf.playtime.paper.listener
+package dev.slne.surf.social.paper.playtime.listener
 
 import com.github.shynixn.mccoroutine.folia.entityDispatcher
 import com.github.shynixn.mccoroutine.folia.globalRegionDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import com.github.shynixn.mccoroutine.folia.scope
 import dev.slne.surf.api.core.util.runAtFixedRate
-import dev.slne.surf.playtime.api.paper.event.AfkStateChangeEvent
-import dev.slne.surf.playtime.core.client.afk.AfkTracker
-import dev.slne.surf.playtime.paper.plugin
+import dev.slne.surf.social.paper.playtime.api.event.AfkStateChangeEvent
+import dev.slne.surf.social.core.client.playtime.afk.AfkTracker
+import dev.slne.surf.social.paper.playtime.plugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler

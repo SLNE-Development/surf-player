@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.api
+package dev.slne.surf.social.api.minimap
 
 import dev.slne.surf.api.core.util.requiredService
 import net.kyori.adventure.key.Key

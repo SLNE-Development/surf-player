@@ -1,15 +1,15 @@
-package dev.slne.surf.settings.minestom
+package dev.slne.surf.social.minestom.settings
 
 import dev.slne.surf.api.minestom.inventory.framework.register
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
-import dev.slne.surf.settings.core.client.ClientSettingsInstance
-import dev.slne.surf.settings.core.client.createDefaultSettings
-import dev.slne.surf.settings.core.common.service.SettingsService
-import dev.slne.surf.settings.minestom.command.settingsCommand
-import dev.slne.surf.settings.minestom.command.surfSettingsCommand
-import dev.slne.surf.settings.minestom.listener.PlayerConnectionListener
-import dev.slne.surf.settings.minestom.menu.settingsCategoryView
-import dev.slne.surf.settings.minestom.menu.settingsView
+import dev.slne.surf.social.core.client.settings.ClientSettingsInstance
+import dev.slne.surf.social.core.client.settings.createDefaultSettings
+import dev.slne.surf.social.core.common.settings.service.SettingsService
+import dev.slne.surf.social.minestom.settings.command.settingsCommand
+import dev.slne.surf.social.minestom.settings.command.surfSettingsCommand
+import dev.slne.surf.social.minestom.settings.listener.PlayerConnectionListener
+import dev.slne.surf.social.minestom.settings.menu.settingsCategoryView
+import dev.slne.surf.social.minestom.settings.menu.settingsView
 
 object SurfSettingsMinestomPlugin : SurfMinestomPlugin() {
     override suspend fun onLoad() {

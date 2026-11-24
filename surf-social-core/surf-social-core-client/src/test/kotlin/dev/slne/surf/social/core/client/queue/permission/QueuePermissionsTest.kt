@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.client.permission
+package dev.slne.surf.social.core.client.queue.permission
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

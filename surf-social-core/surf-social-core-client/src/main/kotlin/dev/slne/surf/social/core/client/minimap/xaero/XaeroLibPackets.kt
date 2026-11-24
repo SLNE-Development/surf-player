@@ -1,6 +1,6 @@
-package dev.slne.surf.minimapcompanion.core.xaero
+package dev.slne.surf.social.core.client.minimap.xaero
 
-import dev.slne.surf.minimapcompanion.core.xaero.nbt.toNetworkBytes
+import dev.slne.surf.social.core.client.minimap.xaero.nbt.toNetworkBytes
 import net.kyori.adventure.nbt.CompoundBinaryTag
 import net.kyori.adventure.nbt.ListBinaryTag
 

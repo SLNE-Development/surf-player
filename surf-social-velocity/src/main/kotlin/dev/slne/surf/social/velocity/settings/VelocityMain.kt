@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.velocity
+package dev.slne.surf.social.velocity.settings
 
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.google.inject.Inject
@@ -8,10 +8,10 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
-import dev.slne.surf.settings.core.client.ClientSettingsInstance
-import dev.slne.surf.settings.core.client.createDefaultSettings
-import dev.slne.surf.settings.core.common.service.SettingsService
-import dev.slne.surf.settings.velocity.listener.PlayerConnectionListener
+import dev.slne.surf.social.core.client.settings.ClientSettingsInstance
+import dev.slne.surf.social.core.client.settings.createDefaultSettings
+import dev.slne.surf.social.core.common.settings.service.SettingsService
+import dev.slne.surf.social.velocity.settings.listener.PlayerConnectionListener
 import java.nio.file.Path
 
 lateinit var plugin: VelocityMain

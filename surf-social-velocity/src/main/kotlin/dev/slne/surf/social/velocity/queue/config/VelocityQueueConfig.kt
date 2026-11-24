@@ -1,8 +1,8 @@
-package dev.slne.surf.queue.velocity.config
+package dev.slne.surf.social.velocity.queue.config
 
 import dev.slne.surf.api.core.config.SpongeYmlConfigClass
 import dev.slne.surf.api.core.config.type.ConfigDuration
-import dev.slne.surf.queue.velocity.plugin
+import dev.slne.surf.social.velocity.queue.plugin
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 import org.spongepowered.configurate.objectmapping.meta.Comment
 import kotlin.time.Duration.Companion.seconds

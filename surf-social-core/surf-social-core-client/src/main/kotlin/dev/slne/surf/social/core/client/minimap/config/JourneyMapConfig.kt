@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.config
+package dev.slne.surf.social.core.client.minimap.config
 
 import org.spongepowered.configurate.ConfigurationNode
 import org.spongepowered.configurate.objectmapping.ConfigSerializable

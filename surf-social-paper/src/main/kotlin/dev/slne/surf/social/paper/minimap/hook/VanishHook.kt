@@ -1,6 +1,6 @@
-package dev.slne.surf.minimapcompanion.paper.hook
+package dev.slne.surf.social.paper.minimap.hook
 
-import dev.slne.surf.vanish.api.SurfVanishApi
+import dev.slne.surf.social.api.vanish.SurfVanishApi
 import org.bukkit.entity.Player
 
 /**

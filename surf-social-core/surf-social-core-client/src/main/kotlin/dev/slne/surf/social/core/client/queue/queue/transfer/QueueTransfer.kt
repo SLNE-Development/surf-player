@@ -1,12 +1,12 @@
-package dev.slne.surf.queue.client.queue.transfer
+package dev.slne.surf.social.core.client.queue.queue.transfer
 
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.common.server.connection.SurfServerConnectResult
-import dev.slne.surf.queue.client.platform.QueuePlatform
-import dev.slne.surf.queue.client.platform.TransferKickReason
+import dev.slne.surf.social.core.client.queue.platform.QueuePlatform
+import dev.slne.surf.social.core.client.queue.platform.TransferKickReason
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withTimeout
 import net.kyori.adventure.text.Component

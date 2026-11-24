@@ -1,9 +1,9 @@
-package dev.slne.surf.minimapcompanion.core.config
+package dev.slne.surf.social.core.client.minimap.config
 
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapProfile
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapProfile
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroServerProfile
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.journeymap.JourneyMapProfile
+import dev.slne.surf.social.core.client.minimap.voxelmap.VoxelMapProfile
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroServerProfile
 
 /**
  * The four config files as they were loaded together, with what they enforce on each mod. A sync reads one snapshot,

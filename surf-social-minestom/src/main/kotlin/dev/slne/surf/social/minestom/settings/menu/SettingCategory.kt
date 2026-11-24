@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.minestom.menu
+package dev.slne.surf.social.minestom.settings.menu
 
 import net.minestom.server.item.Material
 

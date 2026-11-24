@@ -1,15 +1,15 @@
-package dev.slne.surf.settings.minestom.command
+package dev.slne.surf.social.minestom.settings.command
 
 import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.literalArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
-import dev.slne.surf.settings.api.SurfSettingsApi
-import dev.slne.surf.settings.api.setting.Setting
-import dev.slne.surf.settings.core.client.command.SettingsCommandActions
-import dev.slne.surf.settings.core.client.command.SettingsCommandMessages
-import dev.slne.surf.settings.core.client.permission.SettingsPermissions
-import dev.slne.surf.settings.minestom.command.argument.niceToggleArgument
-import dev.slne.surf.settings.minestom.command.argument.settingArgument
+import dev.slne.surf.social.api.settings.SurfSettingsApi
+import dev.slne.surf.social.api.settings.setting.Setting
+import dev.slne.surf.social.core.client.settings.command.SettingsCommandActions
+import dev.slne.surf.social.core.client.settings.command.SettingsCommandMessages
+import dev.slne.surf.social.core.client.settings.permission.SettingsPermissions
+import dev.slne.surf.social.minestom.settings.command.argument.niceToggleArgument
+import dev.slne.surf.social.minestom.settings.command.argument.settingArgument
 
 fun settingsCommand() = commandTree("settings") {
     withPermission(SettingsPermissions.COMMAND_SETTINGS)

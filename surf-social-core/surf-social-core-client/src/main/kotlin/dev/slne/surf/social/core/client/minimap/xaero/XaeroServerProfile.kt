@@ -1,11 +1,11 @@
-package dev.slne.surf.minimapcompanion.core.xaero
+package dev.slne.surf.social.core.client.minimap.xaero
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
-import dev.slne.surf.minimapcompanion.core.xaero.option.EnforcedOptions
-import dev.slne.surf.minimapcompanion.core.xaero.option.MinimapOptions
-import dev.slne.surf.minimapcompanion.core.xaero.option.WorldMapOptions
+import dev.slne.surf.social.core.client.minimap.config.XaeroConfig
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.xaero.option.EnforcedOptions
+import dev.slne.surf.social.core.client.minimap.xaero.option.MinimapOptions
+import dev.slne.surf.social.core.client.minimap.xaero.option.WorldMapOptions
 
 /**
  * What this server enforces on Xaero's mods, like the enforced server profile of a server with the mods installed.

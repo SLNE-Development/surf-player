@@ -1,7 +1,7 @@
-package dev.slne.surf.playtime.core.common.rabbit.packet.request
+package dev.slne.surf.social.core.common.playtime.rabbit.packet.request
 
-import dev.slne.surf.playtime.api.common.session.PlaytimeFilter
-import dev.slne.surf.playtime.core.common.rabbit.packet.response.PlaytimePerPlayerResponsePacket
+import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.response.PlaytimePerPlayerResponsePacket
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import kotlinx.serialization.Serializable
 

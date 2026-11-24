@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.paper.menu
+package dev.slne.surf.social.paper.settings.menu
 
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.playSound
@@ -29,9 +29,9 @@ import dev.slne.surf.api.paper.inventory.framework.view.state.get
 import dev.slne.surf.api.paper.inventory.framework.view.state.initialState
 import dev.slne.surf.api.paper.inventory.framework.view.surfView
 import dev.slne.surf.api.paper.util.BukkitSound
-import dev.slne.surf.settings.api.setting.PlayerSetting
-import dev.slne.surf.settings.core.client.platform.SettingsPlatform
-import dev.slne.surf.settings.core.common.service.SettingsService
+import dev.slne.surf.social.api.settings.setting.PlayerSetting
+import dev.slne.surf.social.core.client.settings.platform.SettingsPlatform
+import dev.slne.surf.social.core.common.settings.service.SettingsService
 import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap

@@ -1,13 +1,13 @@
-package dev.slne.surf.settings.paper.command
+package dev.slne.surf.social.paper.settings.command
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
-import dev.slne.surf.settings.core.client.command.SettingsCommandMessages
-import dev.slne.surf.settings.core.common.service.SettingsService
-import dev.slne.surf.settings.paper.permission.PermissionRegistry
-import dev.slne.surf.settings.paper.plugin
+import dev.slne.surf.social.core.client.settings.command.SettingsCommandMessages
+import dev.slne.surf.social.core.common.settings.service.SettingsService
+import dev.slne.surf.social.paper.settings.permission.PermissionRegistry
+import dev.slne.surf.social.paper.settings.plugin
 import kotlin.system.measureTimeMillis
 
 fun surfSettingsCommand() = commandTree("surfSettings") {

@@ -1,6 +1,6 @@
-package dev.slne.surf.queue.velocity.util
+package dev.slne.surf.social.velocity.queue.util
 
-import dev.slne.surf.queue.velocity.plugin
+import dev.slne.surf.social.velocity.queue.plugin
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 

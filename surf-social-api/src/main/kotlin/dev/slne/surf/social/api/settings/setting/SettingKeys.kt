@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.api.setting
+package dev.slne.surf.social.api.settings.setting
 
 import dev.slne.surf.api.core.messages.adventure.key
 

@@ -1,17 +1,17 @@
-package dev.slne.surf.vanish.paper
+package dev.slne.surf.social.paper.vanish
 
 import com.github.retrooper.packetevents.PacketEvents
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.core.api.paper.CorePlayerStatusAccess
-import dev.slne.surf.vanish.core.redisLoader
-import dev.slne.surf.vanish.core.service.vanishService
-import dev.slne.surf.vanish.paper.command.nickCommand
-import dev.slne.surf.vanish.paper.command.vanishCommand
-import dev.slne.surf.vanish.paper.config.VanishConfiguration
-import dev.slne.surf.vanish.paper.listener.*
-import dev.slne.surf.vanish.paper.service.VanishServiceImpl
-import dev.slne.surf.vanish.paper.util.canVanishSee
+import dev.slne.surf.social.paper.vanish.core.redisLoader
+import dev.slne.surf.social.paper.vanish.core.service.vanishService
+import dev.slne.surf.social.paper.vanish.command.nickCommand
+import dev.slne.surf.social.paper.vanish.command.vanishCommand
+import dev.slne.surf.social.paper.vanish.config.VanishConfiguration
+import dev.slne.surf.social.paper.vanish.listener.*
+import dev.slne.surf.social.paper.vanish.service.VanishServiceImpl
+import dev.slne.surf.social.paper.vanish.util.canVanishSee
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 

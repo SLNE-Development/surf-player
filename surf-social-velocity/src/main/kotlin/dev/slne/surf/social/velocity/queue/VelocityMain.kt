@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.velocity
+package dev.slne.surf.social.velocity.queue
 
 import com.github.shynixn.mccoroutine.velocity.SuspendingPluginContainer
 import com.google.inject.Inject
@@ -8,7 +8,7 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
-import dev.slne.surf.queue.common.QueueInstance
+import dev.slne.surf.social.core.common.queue.QueueInstance
 import kotlinx.coroutines.runBlocking
 import java.nio.file.Path
 

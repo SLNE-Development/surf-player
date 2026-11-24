@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.xaero.option
+package dev.slne.surf.social.core.client.minimap.xaero.option
 
 import net.kyori.adventure.nbt.*
 

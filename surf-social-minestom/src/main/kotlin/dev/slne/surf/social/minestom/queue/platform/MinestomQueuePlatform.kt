@@ -1,11 +1,11 @@
-package dev.slne.surf.queue.minestom.platform
+package dev.slne.surf.social.minestom.queue.platform
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.queue.client.platform.QueuePlatform
-import dev.slne.surf.queue.client.platform.TransferKickReason
+import dev.slne.surf.social.core.client.queue.platform.QueuePlatform
+import dev.slne.surf.social.core.client.queue.platform.TransferKickReason
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*

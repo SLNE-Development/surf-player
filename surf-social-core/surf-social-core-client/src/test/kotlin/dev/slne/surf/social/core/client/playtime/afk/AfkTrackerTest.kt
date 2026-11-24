@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.core.client.afk
+package dev.slne.surf.social.core.client.playtime.afk
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse

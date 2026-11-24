@@ -1,12 +1,12 @@
-package dev.slne.surf.profile.paper.platform
+package dev.slne.surf.social.paper.profile.platform
 
 import com.github.shynixn.mccoroutine.folia.entityDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.inventory.framework.open
-import dev.slne.surf.profile.core.client.platform.ProfilePlatform
-import dev.slne.surf.profile.paper.menu.own.ownProfileMenu
-import dev.slne.surf.profile.paper.plugin
+import dev.slne.surf.social.core.client.profile.platform.ProfilePlatform
+import dev.slne.surf.social.paper.profile.menu.own.ownProfileMenu
+import dev.slne.surf.social.paper.profile.plugin
 import net.kyori.adventure.util.Services
 import org.bukkit.Bukkit
 import java.util.*

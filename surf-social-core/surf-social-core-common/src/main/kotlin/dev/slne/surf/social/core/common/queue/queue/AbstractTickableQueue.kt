@@ -1,9 +1,9 @@
-package dev.slne.surf.queue.common.queue
+package dev.slne.surf.social.core.common.queue.queue
 
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.runAtFixedRate
-import dev.slne.surf.queue.common.queue.tick.QueueScheduler
-import dev.slne.surf.queue.common.queue.tick.SafeQueueTick
+import dev.slne.surf.social.core.common.queue.queue.tick.QueueScheduler
+import dev.slne.surf.social.core.common.queue.queue.tick.SafeQueueTick
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel

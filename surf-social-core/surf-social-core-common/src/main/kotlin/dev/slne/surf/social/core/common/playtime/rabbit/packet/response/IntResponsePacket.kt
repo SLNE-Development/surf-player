@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.core.common.rabbit.packet.response
+package dev.slne.surf.social.core.common.playtime.rabbit.packet.response
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import kotlinx.serialization.Serializable

@@ -1,7 +1,7 @@
-package dev.slne.surf.playtime.core.common.rabbit.packet.request
+package dev.slne.surf.social.core.common.playtime.rabbit.packet.request
 
 import dev.slne.surf.api.core.serializer.java.datetime.date.local.SerializableLocalDate
-import dev.slne.surf.playtime.core.common.rabbit.packet.response.PlaytimeStreakPauseResponsePacket
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.response.PlaytimeStreakPauseResponsePacket
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import kotlinx.serialization.Serializable
 

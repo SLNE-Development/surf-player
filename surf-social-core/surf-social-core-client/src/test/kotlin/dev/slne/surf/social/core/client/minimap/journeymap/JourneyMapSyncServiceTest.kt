@@ -1,10 +1,10 @@
-package dev.slne.surf.minimapcompanion.core.journeymap
+package dev.slne.surf.social.core.client.minimap.journeymap
 
-import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
-import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
-import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
-import dev.slne.surf.minimapcompanion.core.service.FakePlayer
-import dev.slne.surf.minimapcompanion.core.world.WorldInfo
+import dev.slne.surf.social.core.client.minimap.config.GlobalSettingsConfig
+import dev.slne.surf.social.core.client.minimap.config.JourneyMapConfig
+import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
+import dev.slne.surf.social.core.client.minimap.service.FakePlayer
+import dev.slne.surf.social.core.client.minimap.world.WorldInfo
 import kotlinx.serialization.json.JsonPrimitive
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test

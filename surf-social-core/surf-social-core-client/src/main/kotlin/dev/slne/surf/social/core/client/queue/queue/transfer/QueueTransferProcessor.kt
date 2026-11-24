@@ -1,18 +1,18 @@
-package dev.slne.surf.queue.client.queue.transfer
+package dev.slne.surf.social.core.client.queue.queue.transfer
 
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.queue.api.SurfQueueAvailableSlotsProvider
-import dev.slne.surf.queue.client.config.SurfQueueConfig
-import dev.slne.surf.queue.client.metrics.QueueMetrics
-import dev.slne.surf.queue.common.QueueInstance
-import dev.slne.surf.queue.common.queue.RedisQueueLockManager
-import dev.slne.surf.queue.common.queue.RedisQueueScore
-import dev.slne.surf.queue.common.queue.RedisQueueStore
-import dev.slne.surf.queue.common.queue.entry.QueueEntry
+import dev.slne.surf.social.api.queue.SurfQueueAvailableSlotsProvider
+import dev.slne.surf.social.core.client.queue.config.SurfQueueConfig
+import dev.slne.surf.social.core.client.queue.metrics.QueueMetrics
+import dev.slne.surf.social.core.common.queue.QueueInstance
+import dev.slne.surf.social.core.common.queue.queue.RedisQueueLockManager
+import dev.slne.surf.social.core.common.queue.queue.RedisQueueScore
+import dev.slne.surf.social.core.common.queue.queue.RedisQueueStore
+import dev.slne.surf.social.core.common.queue.queue.entry.QueueEntry
 import dev.slne.surf.redis.libs.redisson.config.DecorrelatedJitterDelay
 import dev.slne.surf.redis.libs.redisson.config.DelayStrategy
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet

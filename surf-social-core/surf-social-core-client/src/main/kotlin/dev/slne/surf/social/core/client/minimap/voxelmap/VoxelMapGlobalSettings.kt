@@ -1,8 +1,8 @@
-package dev.slne.surf.minimapcompanion.core.voxelmap
+package dev.slne.surf.social.core.client.minimap.voxelmap
 
-import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
-import dev.slne.surf.minimapcompanion.core.global.OptionOverlay
+import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.global.OptionOverlay
 
 /**
  * Applies `global-settings` to the options of `voxelmap.yml`. VoxelMap's switches allow a feature when `true`, so

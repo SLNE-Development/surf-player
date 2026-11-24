@@ -1,14 +1,14 @@
-package dev.slne.surf.minimapcompanion.core.xaero.option
+package dev.slne.surf.social.core.client.minimap.xaero.option
 
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.anyInt
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.bool
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.dimensions
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.double
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.indexed
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.int
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.nonNegativeDouble
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.positiveDouble
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.string
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.anyInt
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.bool
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.dimensions
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.double
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.indexed
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.int
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.nonNegativeDouble
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.positiveDouble
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.string
 
 /**
  * The options a server can enforce on Xaero's Minimap, as Xaero's Minimap 26.6.2 defines them.

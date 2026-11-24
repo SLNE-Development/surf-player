@@ -1,11 +1,11 @@
-package dev.slne.surf.playtime.core.client.api
+package dev.slne.surf.social.core.client.playtime.api
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.playtime.api.common.SurfPlaytimeApi
-import dev.slne.surf.playtime.api.common.session.PlaytimeFilter
-import dev.slne.surf.playtime.api.common.session.PlaytimeSession
-import dev.slne.surf.playtime.core.common.service.AfkService
-import dev.slne.surf.playtime.core.common.service.PlaytimeService
+import dev.slne.surf.social.api.playtime.SurfPlaytimeApi
+import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.social.api.playtime.session.PlaytimeSession
+import dev.slne.surf.social.core.common.playtime.service.AfkService
+import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import net.kyori.adventure.util.Services

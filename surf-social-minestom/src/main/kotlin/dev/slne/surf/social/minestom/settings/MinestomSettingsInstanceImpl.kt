@@ -1,9 +1,9 @@
-package dev.slne.surf.settings.minestom
+package dev.slne.surf.social.minestom.settings
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.settings.core.client.ClientLoader
-import dev.slne.surf.settings.core.client.ClientSettingsInstance
-import dev.slne.surf.settings.core.common.SettingsInstance
+import dev.slne.surf.social.core.client.settings.ClientLoader
+import dev.slne.surf.social.core.client.settings.ClientSettingsInstance
+import dev.slne.surf.social.core.common.settings.SettingsInstance
 import net.kyori.adventure.util.Services
 
 @AutoService(SettingsInstance::class)

@@ -1,7 +1,7 @@
-package dev.slne.surf.settings.core.client
+package dev.slne.surf.social.core.client.settings
 
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
-import dev.slne.surf.settings.core.common.SettingsInstance
+import dev.slne.surf.social.core.common.settings.SettingsInstance
 
 interface ClientSettingsInstance : SettingsInstance {
     val clientLoader: ClientLoader

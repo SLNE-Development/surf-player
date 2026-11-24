@@ -1,10 +1,10 @@
-package dev.slne.surf.profile.minestom
+package dev.slne.surf.social.minestom.profile
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.inventory.framework.open
-import dev.slne.surf.profile.core.client.platform.ProfilePlatform
-import dev.slne.surf.profile.minestom.menu.own.ownProfileMenu
+import dev.slne.surf.social.core.client.profile.platform.ProfilePlatform
+import dev.slne.surf.social.minestom.profile.menu.own.ownProfileMenu
 import java.util.*
 
 @AutoService(ProfilePlatform::class)

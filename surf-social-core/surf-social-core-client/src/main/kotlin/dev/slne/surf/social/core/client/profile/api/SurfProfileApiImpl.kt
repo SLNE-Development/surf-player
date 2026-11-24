@@ -1,8 +1,8 @@
-package dev.slne.surf.profile.core.client.api
+package dev.slne.surf.social.core.client.profile.api
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.profile.api.SurfProfileApi
-import dev.slne.surf.profile.core.client.platform.ProfilePlatform
+import dev.slne.surf.social.api.profile.SurfProfileApi
+import dev.slne.surf.social.core.client.profile.platform.ProfilePlatform
 import net.kyori.adventure.util.Services
 import java.util.*
 

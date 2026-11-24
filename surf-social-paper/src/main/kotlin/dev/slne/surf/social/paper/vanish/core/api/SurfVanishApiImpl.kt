@@ -1,9 +1,9 @@
-package dev.slne.surf.vanish.core.api
+package dev.slne.surf.social.paper.vanish.core.api
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.util.toObjectSet
-import dev.slne.surf.vanish.api.SurfVanishApi
-import dev.slne.surf.vanish.core.service.vanishService
+import dev.slne.surf.social.api.vanish.SurfVanishApi
+import dev.slne.surf.social.paper.vanish.core.service.vanishService
 import net.kyori.adventure.util.Services
 import org.bukkit.OfflinePlayer
 

@@ -1,8 +1,8 @@
-package dev.slne.surf.minimapcompanion.core.voxelmap
+package dev.slne.surf.social.core.client.minimap.voxelmap
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.minimapcompanion.core.config.VoxelMapConfig
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.config.VoxelMapConfig
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
 
 /**
  * What this server enforces on VoxelMap: `Boolean` values for the keys in [BOOLEANS] and a `String` for

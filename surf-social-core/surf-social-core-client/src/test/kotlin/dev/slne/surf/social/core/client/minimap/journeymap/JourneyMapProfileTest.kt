@@ -1,8 +1,8 @@
-package dev.slne.surf.minimapcompanion.core.journeymap
+package dev.slne.surf.social.core.client.minimap.journeymap
 
-import dev.slne.surf.minimapcompanion.core.config.JourneyMapConfig
-import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.config.JourneyMapConfig
+import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
 import org.junit.jupiter.api.Test
 import org.spongepowered.configurate.BasicConfigurationNode
 import kotlin.test.assertEquals

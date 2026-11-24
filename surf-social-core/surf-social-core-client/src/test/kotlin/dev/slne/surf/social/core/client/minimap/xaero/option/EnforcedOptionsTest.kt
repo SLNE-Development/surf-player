@@ -1,12 +1,12 @@
-package dev.slne.surf.minimapcompanion.core.xaero.option
+package dev.slne.surf.social.core.client.minimap.xaero.option
 
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.bool
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.dimensions
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.double
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.indexed
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.int
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.positiveDouble
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.string
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.bool
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.dimensions
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.double
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.indexed
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.int
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.positiveDouble
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.string
 import net.kyori.adventure.nbt.BinaryTagTypes
 import net.kyori.adventure.nbt.CompoundBinaryTag
 import net.kyori.adventure.nbt.ListBinaryTag

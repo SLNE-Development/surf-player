@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.tracker
+package dev.slne.surf.social.core.client.minimap.tracker
 
 /**
  * Where a tracked player is: a position in the world with the key [dimension], such as `minecraft:overworld`.

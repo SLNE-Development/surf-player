@@ -1,9 +1,9 @@
-package dev.slne.surf.playtime.minestom.hook
+package dev.slne.surf.social.minestom.playtime.hook
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.playtime.core.client.paycheck.PayCheckPayout
-import dev.slne.surf.playtime.core.client.platform.PlaytimePlatform
-import dev.slne.surf.playtime.core.common.bridge.TransactionBridge
+import dev.slne.surf.social.core.client.playtime.paycheck.PayCheckPayout
+import dev.slne.surf.social.core.client.playtime.platform.PlaytimePlatform
+import dev.slne.surf.social.core.common.playtime.bridge.TransactionBridge
 import java.util.*
 
 @AutoService(TransactionBridge::class)

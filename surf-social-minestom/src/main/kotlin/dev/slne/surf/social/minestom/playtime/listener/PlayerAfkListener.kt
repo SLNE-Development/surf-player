@@ -1,11 +1,11 @@
-package dev.slne.surf.playtime.minestom.listener
+package dev.slne.surf.social.minestom.playtime.listener
 
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.extension.GlobalEventHandler
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.playtime.api.minestom.event.AfkStateChangeEvent
-import dev.slne.surf.playtime.core.client.afk.AfkTracker
+import dev.slne.surf.social.minestom.playtime.api.event.AfkStateChangeEvent
+import dev.slne.surf.social.core.client.playtime.afk.AfkTracker
 import net.minestom.server.entity.Player
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode

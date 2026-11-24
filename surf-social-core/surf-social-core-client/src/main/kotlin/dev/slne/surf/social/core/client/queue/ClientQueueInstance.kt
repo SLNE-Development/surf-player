@@ -1,15 +1,15 @@
-package dev.slne.surf.queue.client
+package dev.slne.surf.social.core.client.queue
 
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.queue.api.SurfQueueAvailableSlotsProvider
-import dev.slne.surf.queue.client.config.SurfQueueConfig
-import dev.slne.surf.queue.client.metrics.QueueMetricsLogger
-import dev.slne.surf.queue.client.queue.ClientQueueImpl
-import dev.slne.surf.queue.client.queue.DefaultSurfQueueAvailableSlotsProvider
-import dev.slne.surf.queue.client.queue.OwnedClientQueueImpl
-import dev.slne.surf.queue.common.QueueInstance
-import dev.slne.surf.queue.common.queue.AbstractQueue
-import dev.slne.surf.queue.common.queue.tick.QueueScheduler
+import dev.slne.surf.social.api.queue.SurfQueueAvailableSlotsProvider
+import dev.slne.surf.social.core.client.queue.config.SurfQueueConfig
+import dev.slne.surf.social.core.client.queue.metrics.QueueMetricsLogger
+import dev.slne.surf.social.core.client.queue.queue.ClientQueueImpl
+import dev.slne.surf.social.core.client.queue.queue.DefaultSurfQueueAvailableSlotsProvider
+import dev.slne.surf.social.core.client.queue.queue.OwnedClientQueueImpl
+import dev.slne.surf.social.core.common.queue.QueueInstance
+import dev.slne.surf.social.core.common.queue.queue.AbstractQueue
+import dev.slne.surf.social.core.common.queue.queue.tick.QueueScheduler
 import org.jetbrains.annotations.MustBeInvokedByOverriders
 import java.nio.file.Path
 

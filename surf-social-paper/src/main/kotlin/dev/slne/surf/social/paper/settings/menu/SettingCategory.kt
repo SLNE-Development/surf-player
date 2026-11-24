@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.paper.menu
+package dev.slne.surf.social.paper.settings.menu
 
 import org.bukkit.Material
 

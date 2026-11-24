@@ -1,8 +1,8 @@
-package dev.slne.surf.minimapcompanion.core.tracker
+package dev.slne.surf.social.core.client.minimap.tracker
 
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroPackets
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroChannels
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroPackets
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

@@ -1,4 +1,4 @@
-package dev.slne.surf.profile.minestom.menu
+package dev.slne.surf.social.minestom.profile.menu
 
 import dev.slne.surf.api.core.messages.adventure.playSound
 import me.devnatan.inventoryframework.context.SlotClickContext

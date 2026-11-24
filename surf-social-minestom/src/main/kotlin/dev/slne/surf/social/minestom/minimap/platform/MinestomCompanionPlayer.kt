@@ -1,6 +1,6 @@
-package dev.slne.surf.minimapcompanion.minestom.platform
+package dev.slne.surf.social.minestom.minimap.platform
 
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
 import net.kyori.adventure.key.Key
 import net.minestom.server.entity.Player
 import net.minestom.server.instance.Instance

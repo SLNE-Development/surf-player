@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.global
+package dev.slne.surf.social.core.client.minimap.global
 
 /**
  * Applies global entries to one option map of a mod file, as [raw] holds it, and reports through [hint] each

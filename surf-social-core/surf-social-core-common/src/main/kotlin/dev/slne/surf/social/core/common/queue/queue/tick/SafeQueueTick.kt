@@ -1,7 +1,7 @@
-package dev.slne.surf.queue.common.queue.tick
+package dev.slne.surf.social.core.common.queue.queue.tick
 
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.queue.common.queue.AbstractQueue
+import dev.slne.surf.social.core.common.queue.queue.AbstractQueue
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive

@@ -1,16 +1,16 @@
-package dev.slne.surf.playtime.microservice
+package dev.slne.surf.social.microservice.playtime
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.database.DatabaseApi
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.microservice.api.microservice.Microservice
-import dev.slne.surf.playtime.database.table.PlaytimeSessionsTable
-import dev.slne.surf.playtime.database.table.PlaytimeStreakPausesTable
-import dev.slne.surf.playtime.database.table.PlaytimeStreaksTable
-import dev.slne.surf.playtime.microservice.handler.PlaytimeSessionHandler
-import dev.slne.surf.playtime.microservice.handler.PlaytimeStreakHandler
-import dev.slne.surf.playtime.microservice.handler.PlaytimeStreakPauseHandler
+import dev.slne.surf.social.microservice.playtime.database.table.PlaytimeSessionsTable
+import dev.slne.surf.social.microservice.playtime.database.table.PlaytimeStreakPausesTable
+import dev.slne.surf.social.microservice.playtime.database.table.PlaytimeStreaksTable
+import dev.slne.surf.social.microservice.playtime.handler.PlaytimeSessionHandler
+import dev.slne.surf.social.microservice.playtime.handler.PlaytimeStreakHandler
+import dev.slne.surf.social.microservice.playtime.handler.PlaytimeStreakPauseHandler
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
 import kotlin.io.path.Path
 

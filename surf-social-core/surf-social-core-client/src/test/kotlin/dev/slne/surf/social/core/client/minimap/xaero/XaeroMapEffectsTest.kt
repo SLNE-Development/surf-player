@@ -1,6 +1,6 @@
-package dev.slne.surf.minimapcompanion.core.xaero
+package dev.slne.surf.social.core.client.minimap.xaero
 
-import dev.slne.surf.minimapcompanion.core.service.FakePlayer
+import dev.slne.surf.social.core.client.minimap.service.FakePlayer
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

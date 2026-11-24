@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.paper.command
+package dev.slne.surf.social.paper.minimap.command
 
 import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
@@ -6,15 +6,15 @@ import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.literalArgument
-import dev.slne.surf.minimapcompanion.core.command.MapInfo
-import dev.slne.surf.minimapcompanion.core.command.sendMapInfo
-import dev.slne.surf.minimapcompanion.core.command.sendReloadResult
-import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
-import dev.slne.surf.minimapcompanion.core.permission.CompanionPermissions
-import dev.slne.surf.minimapcompanion.core.service.MapSyncService
-import dev.slne.surf.minimapcompanion.paper.platform.PaperCompanionPlayer
-import dev.slne.surf.minimapcompanion.paper.plugin
-import dev.slne.surf.minimapcompanion.paper.tracker.PaperTracker
+import dev.slne.surf.social.core.client.minimap.command.MapInfo
+import dev.slne.surf.social.core.client.minimap.command.sendMapInfo
+import dev.slne.surf.social.core.client.minimap.command.sendReloadResult
+import dev.slne.surf.social.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.social.core.client.minimap.permission.CompanionPermissions
+import dev.slne.surf.social.core.client.minimap.service.MapSyncService
+import dev.slne.surf.social.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.social.paper.minimap.plugin
+import dev.slne.surf.social.paper.minimap.tracker.PaperTracker
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 

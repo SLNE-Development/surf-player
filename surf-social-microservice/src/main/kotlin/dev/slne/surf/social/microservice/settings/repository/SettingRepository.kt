@@ -1,12 +1,12 @@
-package dev.slne.surf.settings.microservice.repository
+package dev.slne.surf.social.microservice.settings.repository
 
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
-import dev.slne.surf.settings.api.setting.Setting
-import dev.slne.surf.settings.microservice.table.SettingsTable
+import dev.slne.surf.social.api.settings.setting.Setting
+import dev.slne.surf.social.microservice.settings.table.SettingsTable
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 

@@ -1,11 +1,11 @@
-package dev.slne.surf.queue.paper.platform
+package dev.slne.surf.social.paper.queue.platform
 
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
-import dev.slne.surf.queue.client.platform.QueuePlatform
-import dev.slne.surf.queue.client.platform.TransferKickReason
-import dev.slne.surf.queue.paper.listener.PlayerKickedDueToFullServerListener
-import dev.slne.surf.queue.paper.plugin
+import dev.slne.surf.social.core.client.queue.platform.QueuePlatform
+import dev.slne.surf.social.core.client.queue.platform.TransferKickReason
+import dev.slne.surf.social.paper.queue.listener.PlayerKickedDueToFullServerListener
+import dev.slne.surf.social.paper.queue.plugin
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import java.util.*

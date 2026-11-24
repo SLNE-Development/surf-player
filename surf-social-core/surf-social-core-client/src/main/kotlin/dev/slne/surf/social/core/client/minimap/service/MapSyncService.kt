@@ -1,16 +1,16 @@
-package dev.slne.surf.minimapcompanion.core.service
+package dev.slne.surf.social.core.client.minimap.service
 
-import dev.slne.surf.minimapcompanion.core.config.CompanionConfigs
-import dev.slne.surf.minimapcompanion.core.config.CompanionSettings
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapSyncService
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlatform
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapSyncService
-import dev.slne.surf.minimapcompanion.core.world.WorldInfo
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroSyncService
+import dev.slne.surf.social.core.client.minimap.config.CompanionConfigs
+import dev.slne.surf.social.core.client.minimap.config.CompanionSettings
+import dev.slne.surf.social.core.client.minimap.journeymap.JourneyMapChannels
+import dev.slne.surf.social.core.client.minimap.journeymap.JourneyMapSyncService
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlatform
+import dev.slne.surf.social.core.client.minimap.voxelmap.VoxelMapChannels
+import dev.slne.surf.social.core.client.minimap.voxelmap.VoxelMapSyncService
+import dev.slne.surf.social.core.client.minimap.world.WorldInfo
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroChannels
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroSyncService
 import java.util.*
 
 /**

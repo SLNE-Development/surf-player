@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.config
+package dev.slne.surf.social.core.client.minimap.config
 
 import dev.slne.surf.api.core.config.SpongeConfigClass
 import java.io.UncheckedIOException

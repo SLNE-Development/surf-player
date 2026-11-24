@@ -1,8 +1,8 @@
-package dev.slne.surf.minimapcompanion.minestom.platform
+package dev.slne.surf.social.minestom.minimap.platform
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlatform
-import dev.slne.surf.minimapcompanion.minestom.MinimapCompanionMinestomPlugin
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlatform
+import dev.slne.surf.social.minestom.minimap.MinimapCompanionMinestomPlugin
 import net.kyori.adventure.key.Key
 import net.minestom.server.MinecraftServer
 

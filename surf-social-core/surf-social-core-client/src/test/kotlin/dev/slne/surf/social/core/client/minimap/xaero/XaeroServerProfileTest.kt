@@ -1,9 +1,9 @@
-package dev.slne.surf.minimapcompanion.core.xaero
+package dev.slne.surf.social.core.client.minimap.xaero
 
-import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
-import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
-import dev.slne.surf.minimapcompanion.core.xaero.option.EnforcedOptions
+import dev.slne.surf.social.core.client.minimap.config.XaeroConfig
+import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.xaero.option.EnforcedOptions
 import org.junit.jupiter.api.Test
 import org.spongepowered.configurate.BasicConfigurationNode
 import kotlin.test.assertContentEquals

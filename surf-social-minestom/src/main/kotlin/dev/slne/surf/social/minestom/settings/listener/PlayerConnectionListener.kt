@@ -1,9 +1,9 @@
-package dev.slne.surf.settings.minestom.listener
+package dev.slne.surf.social.minestom.settings.listener
 
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.settings.core.client.platform.SettingsPlatform
-import dev.slne.surf.settings.core.common.service.SettingsService
+import dev.slne.surf.social.core.client.settings.platform.SettingsPlatform
+import dev.slne.surf.social.core.common.settings.service.SettingsService
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
 import net.minestom.server.event.player.PlayerDisconnectEvent

@@ -1,7 +1,7 @@
-package dev.slne.surf.queue.velocity.hook
+package dev.slne.surf.social.velocity.queue.hook
 
-import dev.slne.surf.queue.velocity.hook.integration.SurfSettingsIntegration
-import dev.slne.surf.queue.velocity.plugin
+import dev.slne.surf.social.velocity.queue.hook.integration.SurfSettingsIntegration
+import dev.slne.surf.social.velocity.queue.plugin
 import java.util.UUID
 
 object SettingsHook {

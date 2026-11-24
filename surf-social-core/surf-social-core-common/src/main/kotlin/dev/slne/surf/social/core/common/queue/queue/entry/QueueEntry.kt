@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.common.queue.entry
+package dev.slne.surf.social.core.common.queue.queue.entry
 
 import java.util.*
 

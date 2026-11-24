@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.common.priority
+package dev.slne.surf.social.core.common.queue.priority
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.luckperms.getMeta

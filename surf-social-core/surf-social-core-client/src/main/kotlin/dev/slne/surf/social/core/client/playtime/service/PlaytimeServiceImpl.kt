@@ -1,16 +1,16 @@
-package dev.slne.surf.playtime.core.client.service
+package dev.slne.surf.social.core.client.playtime.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.util.toObjectSet
-import dev.slne.surf.playtime.api.common.session.PlaytimeFilter
-import dev.slne.surf.playtime.api.common.session.PlaytimeSession
-import dev.slne.surf.playtime.core.client.ClientPlaytimeInstance
-import dev.slne.surf.playtime.core.common.rabbit.packet.request.LoadPlaytimePerPlayerRequestPacket
-import dev.slne.surf.playtime.core.common.rabbit.packet.request.LoadSessionsByPlayerUuidAndServerCategoryRequestPacket
-import dev.slne.surf.playtime.core.common.rabbit.packet.request.LoadSessionsByPlayerUuidAndServerNameRequestPacket
-import dev.slne.surf.playtime.core.common.rabbit.packet.request.LoadSessionsByPlayerUuidRequestPacket
-import dev.slne.surf.playtime.core.common.rabbit.packet.request.SaveSessionRequestPacket
-import dev.slne.surf.playtime.core.common.service.PlaytimeService
+import dev.slne.surf.social.api.playtime.session.PlaytimeFilter
+import dev.slne.surf.social.api.playtime.session.PlaytimeSession
+import dev.slne.surf.social.core.client.playtime.ClientPlaytimeInstance
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.LoadPlaytimePerPlayerRequestPacket
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.LoadSessionsByPlayerUuidAndServerCategoryRequestPacket
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.LoadSessionsByPlayerUuidAndServerNameRequestPacket
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.LoadSessionsByPlayerUuidRequestPacket
+import dev.slne.surf.social.core.common.playtime.rabbit.packet.request.SaveSessionRequestPacket
+import dev.slne.surf.social.core.common.playtime.service.PlaytimeService
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.Object2LongMaps
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap

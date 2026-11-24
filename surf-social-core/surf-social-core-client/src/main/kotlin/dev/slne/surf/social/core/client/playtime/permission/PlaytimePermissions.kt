@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.core.client.permission
+package dev.slne.surf.social.core.client.playtime.permission
 
 /**
  * Platform-neutral registry of all permission node strings used by surf-playtime.

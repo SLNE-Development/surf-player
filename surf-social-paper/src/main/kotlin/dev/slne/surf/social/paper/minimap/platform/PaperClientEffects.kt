@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.paper.platform
+package dev.slne.surf.social.paper.minimap.platform
 
 import com.github.retrooper.packetevents.protocol.player.ClientVersion
 import com.github.retrooper.packetevents.protocol.potion.PotionType

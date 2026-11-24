@@ -1,4 +1,4 @@
-package dev.slne.surf.profile.core.client.integration
+package dev.slne.surf.social.core.client.profile.integration
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.minimessage.miniMessage

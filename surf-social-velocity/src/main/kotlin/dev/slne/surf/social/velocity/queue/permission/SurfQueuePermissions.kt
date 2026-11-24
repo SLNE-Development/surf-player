@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.velocity.permission
+package dev.slne.surf.social.velocity.queue.permission
 
 object SurfQueuePermissions {
     private const val PREFIX = "surf.queue."

@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.api.paper.event
+package dev.slne.surf.social.paper.playtime.api.event
 
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList

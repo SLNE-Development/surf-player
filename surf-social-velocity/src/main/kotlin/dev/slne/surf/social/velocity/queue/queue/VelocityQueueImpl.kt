@@ -1,8 +1,8 @@
-package dev.slne.surf.queue.velocity.queue
+package dev.slne.surf.social.velocity.queue.queue
 
-import dev.slne.surf.queue.common.queue.AbstractTickableQueue
-import dev.slne.surf.queue.common.queue.tick.QueueScheduler
-import dev.slne.surf.queue.common.queue.tick.SafeQueueTick
+import dev.slne.surf.social.core.common.queue.queue.AbstractTickableQueue
+import dev.slne.surf.social.core.common.queue.queue.tick.QueueScheduler
+import dev.slne.surf.social.core.common.queue.queue.tick.SafeQueueTick
 import java.util.*
 
 class VelocityQueueImpl(serverName: String, scheduler: QueueScheduler) : AbstractTickableQueue(serverName, scheduler) {

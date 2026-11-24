@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.core.common.rabbit.packet.request
+package dev.slne.surf.social.core.common.settings.rabbit.packet.request
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse

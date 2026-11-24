@@ -1,4 +1,4 @@
-package dev.slne.surf.profile.minestom.menu.own
+package dev.slne.surf.social.minestom.profile.menu.own
 
 import dev.slne.surf.api.minestom.builder.ItemDsl
 import dev.slne.surf.api.minestom.inventory.framework.dsl.slot
@@ -7,9 +7,9 @@ import dev.slne.surf.api.minestom.inventory.framework.view.onFirstRender
 import dev.slne.surf.api.minestom.inventory.framework.view.settings
 import dev.slne.surf.api.minestom.inventory.framework.view.surfView
 import dev.slne.surf.core.api.minestom.util.toSurfPlayer
-import dev.slne.surf.profile.core.client.integration.SettingsIntegration
-import dev.slne.surf.profile.core.client.menu.own.OwnProfileMenuContent
-import dev.slne.surf.profile.minestom.menu.playClickSound
+import dev.slne.surf.social.core.client.profile.integration.SettingsIntegration
+import dev.slne.surf.social.core.client.profile.menu.own.OwnProfileMenuContent
+import dev.slne.surf.social.minestom.profile.menu.playClickSound
 import net.minestom.server.component.DataComponents
 import net.minestom.server.entity.Player
 import net.minestom.server.item.Material

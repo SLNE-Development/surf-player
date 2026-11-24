@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.paper.hook.startup
+package dev.slne.surf.social.paper.queue.hook.startup
 
 import dev.slne.surf.api.shared.api.component.SurfComponentMeta
 import dev.slne.surf.api.shared.api.component.requirement.ConditionalOnMissingComponent

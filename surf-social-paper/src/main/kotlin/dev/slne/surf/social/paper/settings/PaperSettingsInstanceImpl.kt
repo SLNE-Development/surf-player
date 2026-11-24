@@ -1,9 +1,9 @@
-package dev.slne.surf.settings.paper
+package dev.slne.surf.social.paper.settings
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.settings.core.common.SettingsInstance
-import dev.slne.surf.settings.core.client.ClientLoader
-import dev.slne.surf.settings.core.client.ClientSettingsInstance
+import dev.slne.surf.social.core.common.settings.SettingsInstance
+import dev.slne.surf.social.core.client.settings.ClientLoader
+import dev.slne.surf.social.core.client.settings.ClientSettingsInstance
 import net.kyori.adventure.util.Services
 
 @AutoService(SettingsInstance::class)

@@ -1,10 +1,10 @@
-package dev.slne.surf.settings.paper
+package dev.slne.surf.social.paper.settings
 
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.inventory.framework.open
-import dev.slne.surf.settings.core.client.platform.SettingsPlatform
-import dev.slne.surf.settings.paper.menu.settingsView
+import dev.slne.surf.social.core.client.settings.platform.SettingsPlatform
+import dev.slne.surf.social.paper.settings.menu.settingsView
 import kotlinx.coroutines.CoroutineScope
 import net.kyori.adventure.util.Services
 import org.bukkit.Bukkit

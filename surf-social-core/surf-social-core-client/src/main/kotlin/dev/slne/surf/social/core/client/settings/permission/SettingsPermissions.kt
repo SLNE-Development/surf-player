@@ -1,4 +1,4 @@
-package dev.slne.surf.settings.core.client.permission
+package dev.slne.surf.social.core.client.settings.permission
 
 object SettingsPermissions {
     const val BASE = "surf.settings"

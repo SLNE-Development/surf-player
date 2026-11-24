@@ -1,13 +1,13 @@
-package dev.slne.surf.minimapcompanion.core.voxelmap
+package dev.slne.surf.social.core.client.minimap.voxelmap
 
-import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
-import dev.slne.surf.minimapcompanion.core.config.VoxelMapConfig
-import dev.slne.surf.minimapcompanion.core.global.GlobalSettings
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
+import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
+import dev.slne.surf.social.core.client.minimap.config.VoxelMapConfig
+import dev.slne.surf.social.core.client.minimap.global.GlobalSettings
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
 
 /**
  * Sends VoxelMap clients the settings VoxelMap's server part sends. The world ID is only sent when the client
- * asks for it, through [dev.slne.surf.minimapcompanion.core.world.WorldInfo].
+ * asks for it, through [dev.slne.surf.social.core.client.minimap.world.WorldInfo].
  */
 object VoxelMapSyncService {
 

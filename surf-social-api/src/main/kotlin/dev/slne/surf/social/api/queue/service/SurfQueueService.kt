@@ -1,7 +1,7 @@
-package dev.slne.surf.queue.api.service
+package dev.slne.surf.social.api.queue.service
 
-import dev.slne.surf.queue.api.InternalSurfQueueApi
-import dev.slne.surf.queue.api.SurfQueue
+import dev.slne.surf.social.api.queue.InternalSurfQueueApi
+import dev.slne.surf.social.api.queue.SurfQueue
 import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.api.core.util.requiredService
 

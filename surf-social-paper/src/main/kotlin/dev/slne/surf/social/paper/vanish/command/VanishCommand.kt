@@ -1,4 +1,4 @@
-package dev.slne.surf.vanish.paper.command
+package dev.slne.surf.social.paper.vanish.command
 
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
@@ -6,9 +6,9 @@ import dev.jorel.commandapi.kotlindsl.literalArgument
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.vanish.core.service.vanishService
-import dev.slne.surf.vanish.paper.plugin
-import dev.slne.surf.vanish.paper.util.VanishPermissionRegistry
+import dev.slne.surf.social.paper.vanish.core.service.vanishService
+import dev.slne.surf.social.paper.vanish.plugin
+import dev.slne.surf.social.paper.vanish.util.VanishPermissionRegistry
 import kotlin.system.measureTimeMillis
 
 fun vanishCommand() = commandTree("vanish") {

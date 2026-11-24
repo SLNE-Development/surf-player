@@ -1,6 +1,6 @@
-package dev.slne.surf.settings.minestom.menu
+package dev.slne.surf.social.minestom.settings.menu
 
-import dev.slne.surf.settings.api.setting.SettingKeys
+import dev.slne.surf.social.api.settings.setting.SettingKeys
 import net.minestom.server.item.Material
 
 val settingKeyMappings = mapOf(

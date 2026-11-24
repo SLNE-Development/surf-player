@@ -1,9 +1,9 @@
-package dev.slne.surf.minimapcompanion.minestom.listener
+package dev.slne.surf.social.minestom.minimap.listener
 
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
-import dev.slne.surf.minimapcompanion.minestom.platform.RegisteredChannels
+import dev.slne.surf.social.core.client.minimap.journeymap.JourneyMapChannels
+import dev.slne.surf.social.core.client.minimap.voxelmap.VoxelMapChannels
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroChannels
+import dev.slne.surf.social.minestom.minimap.platform.RegisteredChannels
 import net.minestom.server.coordinate.Pos
 import net.minestom.server.network.packet.server.common.PluginMessagePacket
 import net.minestom.server.network.packet.server.play.JoinGamePacket

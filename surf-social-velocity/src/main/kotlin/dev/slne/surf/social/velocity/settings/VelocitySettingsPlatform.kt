@@ -1,8 +1,8 @@
-package dev.slne.surf.settings.velocity
+package dev.slne.surf.social.velocity.settings
 
 import com.github.shynixn.mccoroutine.velocity.launch
 import com.google.auto.service.AutoService
-import dev.slne.surf.settings.core.client.platform.SettingsPlatform
+import dev.slne.surf.social.core.client.settings.platform.SettingsPlatform
 import kotlinx.coroutines.CoroutineScope
 import java.util.UUID
 

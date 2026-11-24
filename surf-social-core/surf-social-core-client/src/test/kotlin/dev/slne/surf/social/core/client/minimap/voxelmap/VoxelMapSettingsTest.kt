@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.voxelmap
+package dev.slne.surf.social.core.client.minimap.voxelmap
 
 import kotlinx.serialization.json.*
 import org.junit.jupiter.api.Test

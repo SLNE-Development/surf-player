@@ -1,8 +1,8 @@
-package dev.slne.surf.queue.client.queue
+package dev.slne.surf.social.core.client.queue.queue
 
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.queue.api.SurfQueueAvailableSlotsProvider
-import dev.slne.surf.queue.client.platform.QueuePlatform
+import dev.slne.surf.social.api.queue.SurfQueueAvailableSlotsProvider
+import dev.slne.surf.social.core.client.queue.platform.QueuePlatform
 
 object DefaultSurfQueueAvailableSlotsProvider : SurfQueueAvailableSlotsProvider {
     override suspend fun getAvailableSlots(server: SurfServer): Int {

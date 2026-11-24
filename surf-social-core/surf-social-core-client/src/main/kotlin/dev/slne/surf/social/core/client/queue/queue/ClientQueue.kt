@@ -1,7 +1,7 @@
-package dev.slne.surf.queue.client.queue
+package dev.slne.surf.social.core.client.queue.queue
 
-import dev.slne.surf.queue.api.SurfQueue
-import dev.slne.surf.queue.common.queue.RedisQueueLockResetResult
+import dev.slne.surf.social.api.queue.SurfQueue
+import dev.slne.surf.social.core.common.queue.queue.RedisQueueLockResetResult
 
 interface ClientQueue : SurfQueue {
     suspend fun delete()

@@ -1,4 +1,4 @@
-package dev.slne.surf.profile.core.client.permission
+package dev.slne.surf.social.core.client.profile.permission
 
 object ProfilePermissions {
     const val COMMAND_PROFILE = "surf.profile.command.profile"

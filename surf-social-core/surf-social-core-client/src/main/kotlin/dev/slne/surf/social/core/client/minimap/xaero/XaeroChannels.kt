@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.xaero
+package dev.slne.surf.social.core.client.minimap.xaero
 
 /**
  * The plugin channels Xaero's World Map, Minimap and Xaero's Lib listen on.

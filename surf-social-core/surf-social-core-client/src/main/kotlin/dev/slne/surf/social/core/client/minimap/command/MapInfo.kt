@@ -1,14 +1,14 @@
-package dev.slne.surf.minimapcompanion.core.command
+package dev.slne.surf.social.core.client.minimap.command
 
-import dev.slne.surf.minimapcompanion.core.config.CompanionSettings
-import dev.slne.surf.minimapcompanion.core.global.GlobalFeature
-import dev.slne.surf.minimapcompanion.core.journeymap.JourneyMapChannels
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
-import dev.slne.surf.minimapcompanion.core.voxelmap.VoxelMapChannels
-import dev.slne.surf.minimapcompanion.core.world.LevelIds
-import dev.slne.surf.minimapcompanion.core.world.WorldInfo
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroChannels
-import dev.slne.surf.minimapcompanion.core.xaero.XaeroSyncService
+import dev.slne.surf.social.core.client.minimap.config.CompanionSettings
+import dev.slne.surf.social.core.client.minimap.global.GlobalFeature
+import dev.slne.surf.social.core.client.minimap.journeymap.JourneyMapChannels
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.social.core.client.minimap.voxelmap.VoxelMapChannels
+import dev.slne.surf.social.core.client.minimap.world.LevelIds
+import dev.slne.surf.social.core.client.minimap.world.WorldInfo
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroChannels
+import dev.slne.surf.social.core.client.minimap.xaero.XaeroSyncService
 
 /**
  * What the companion knows and sends about one player, for `/minimapcompanion info`. Read it on the player's

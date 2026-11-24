@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.core.client.command
+package dev.slne.surf.social.core.client.playtime.command
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull

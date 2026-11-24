@@ -1,8 +1,8 @@
-package dev.slne.surf.queue.common.queue
+package dev.slne.surf.social.core.common.queue.queue
 
-import dev.slne.surf.queue.common.queue.entry.QueueEntryCodec
-import dev.slne.surf.queue.common.queue.entry.QueueEntry
-import dev.slne.surf.queue.common.redis.redisApi
+import dev.slne.surf.social.core.common.queue.queue.entry.QueueEntryCodec
+import dev.slne.surf.social.core.common.queue.queue.entry.QueueEntry
+import dev.slne.surf.social.core.common.queue.redis.redisApi
 import dev.slne.surf.redis.codec.UUIDCodec
 import dev.slne.surf.redis.libs.redisson.api.BatchOptions
 import dev.slne.surf.redis.libs.redisson.api.BatchResult

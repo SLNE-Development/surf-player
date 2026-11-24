@@ -1,4 +1,4 @@
-package dev.slne.surf.queue.client.metrics
+package dev.slne.surf.social.core.client.queue.metrics
 
 data class QueueMetricsSnapshot(
     val totalTransfers: Long,

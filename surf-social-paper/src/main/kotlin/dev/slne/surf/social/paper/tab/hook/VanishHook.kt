@@ -1,6 +1,6 @@
 package dev.slne.surf.social.paper.tab.hook
 
-import dev.slne.surf.vanish.api.SurfVanishApi
+import dev.slne.surf.social.api.vanish.SurfVanishApi
 import org.bukkit.Bukkit
 import java.util.*
 

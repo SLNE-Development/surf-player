@@ -1,11 +1,11 @@
-package dev.slne.surf.minimapcompanion.core.xaero.option
+package dev.slne.surf.social.core.client.minimap.xaero.option
 
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.bool
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.dimensions
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.double
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.indexed
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.int
-import dev.slne.surf.minimapcompanion.core.xaero.option.XaeroOption.Companion.string
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.bool
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.dimensions
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.double
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.indexed
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.int
+import dev.slne.surf.social.core.client.minimap.xaero.option.XaeroOption.Companion.string
 
 /**
  * The options a server can enforce on Xaero's World Map, as Xaero's World Map 1.47.2 defines them.

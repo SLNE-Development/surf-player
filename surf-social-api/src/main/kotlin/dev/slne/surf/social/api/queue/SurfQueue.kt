@@ -1,8 +1,8 @@
-package dev.slne.surf.queue.api
+package dev.slne.surf.social.api.queue
 
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.queue.api.service.SurfQueueService
+import dev.slne.surf.social.api.queue.service.SurfQueueService
 import it.unimi.dsi.fastutil.objects.Object2IntMap
 import it.unimi.dsi.fastutil.objects.ObjectList
 import java.util.*

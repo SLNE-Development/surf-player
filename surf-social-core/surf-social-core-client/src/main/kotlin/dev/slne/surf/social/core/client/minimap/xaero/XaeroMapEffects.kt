@@ -1,6 +1,6 @@
-package dev.slne.surf.minimapcompanion.core.xaero
+package dev.slne.surf.social.core.client.minimap.xaero
 
-import dev.slne.surf.minimapcompanion.core.platform.CompanionPlayer
+import dev.slne.surf.social.core.client.minimap.platform.CompanionPlayer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

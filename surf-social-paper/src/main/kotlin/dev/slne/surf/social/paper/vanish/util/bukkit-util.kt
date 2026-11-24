@@ -1,7 +1,7 @@
-package dev.slne.surf.vanish.paper.util
+package dev.slne.surf.social.paper.vanish.util
 
-import dev.slne.surf.vanish.core.service.vanishService
-import dev.slne.surf.vanish.paper.plugin
+import dev.slne.surf.social.paper.vanish.core.service.vanishService
+import dev.slne.surf.social.paper.vanish.plugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.metadata.FixedMetadataValue

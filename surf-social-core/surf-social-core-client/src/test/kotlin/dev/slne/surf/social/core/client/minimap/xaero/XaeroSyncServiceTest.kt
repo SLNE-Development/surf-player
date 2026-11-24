@@ -1,9 +1,9 @@
-package dev.slne.surf.minimapcompanion.core.xaero
+package dev.slne.surf.social.core.client.minimap.xaero
 
-import dev.slne.surf.minimapcompanion.core.config.GlobalSettingsConfig
-import dev.slne.surf.minimapcompanion.core.config.XaeroConfig
-import dev.slne.surf.minimapcompanion.core.config.MinimapCompanionConfig
-import dev.slne.surf.minimapcompanion.core.service.FakePlayer
+import dev.slne.surf.social.core.client.minimap.config.GlobalSettingsConfig
+import dev.slne.surf.social.core.client.minimap.config.XaeroConfig
+import dev.slne.surf.social.core.client.minimap.config.MinimapCompanionConfig
+import dev.slne.surf.social.core.client.minimap.service.FakePlayer
 import net.kyori.adventure.nbt.CompoundBinaryTag
 import net.kyori.adventure.key.Key
 import org.junit.jupiter.api.Test

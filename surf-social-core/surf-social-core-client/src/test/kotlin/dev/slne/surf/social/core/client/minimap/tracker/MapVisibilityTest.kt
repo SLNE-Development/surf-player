@@ -1,4 +1,4 @@
-package dev.slne.surf.minimapcompanion.core.tracker
+package dev.slne.surf.social.core.client.minimap.tracker
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse

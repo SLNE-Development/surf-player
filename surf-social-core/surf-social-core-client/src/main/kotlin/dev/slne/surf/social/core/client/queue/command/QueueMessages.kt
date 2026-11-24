@@ -1,11 +1,11 @@
-package dev.slne.surf.queue.client.command
+package dev.slne.surf.social.core.client.queue.command
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.pagination.Pagination
-import dev.slne.surf.queue.client.metrics.QueueMetricsSnapshot
-import dev.slne.surf.queue.client.queue.QueueFixResult
-import dev.slne.surf.queue.common.queue.RedisQueueScore
-import dev.slne.surf.queue.common.queue.entry.QueueEntry
+import dev.slne.surf.social.core.client.queue.metrics.QueueMetricsSnapshot
+import dev.slne.surf.social.core.client.queue.queue.QueueFixResult
+import dev.slne.surf.social.core.common.queue.queue.RedisQueueScore
+import dev.slne.surf.social.core.common.queue.queue.entry.QueueEntry
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectList
 import net.kyori.adventure.text.Component

@@ -1,4 +1,4 @@
-package dev.slne.surf.vanish.paper.util
+package dev.slne.surf.social.paper.vanish.util
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.gson.JsonParser

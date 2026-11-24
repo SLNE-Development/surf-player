@@ -1,7 +1,7 @@
-package dev.slne.surf.settings.core.common.rabbit.packet.response
+package dev.slne.surf.social.core.common.settings.rabbit.packet.response
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
-import dev.slne.surf.settings.api.setting.Setting
+import dev.slne.surf.social.api.settings.setting.Setting
 import kotlinx.serialization.Serializable
 
 @Serializable

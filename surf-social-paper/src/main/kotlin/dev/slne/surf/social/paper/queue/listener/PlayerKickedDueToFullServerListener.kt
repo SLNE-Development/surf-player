@@ -1,8 +1,8 @@
-package dev.slne.surf.queue.paper.listener
+package dev.slne.surf.social.paper.queue.listener
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.expireAfterWrite
-import dev.slne.surf.queue.client.platform.TransferKickReason
+import dev.slne.surf.social.core.client.queue.platform.TransferKickReason
 import io.papermc.paper.event.player.PlayerServerFullCheckEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority

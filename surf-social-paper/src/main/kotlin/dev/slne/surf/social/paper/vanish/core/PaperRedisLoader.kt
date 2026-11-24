@@ -1,4 +1,4 @@
-package dev.slne.surf.vanish.core
+package dev.slne.surf.social.paper.vanish.core
 
 import dev.slne.surf.redis.RedisApi
 import dev.slne.surf.redis.sync.set.SyncSet

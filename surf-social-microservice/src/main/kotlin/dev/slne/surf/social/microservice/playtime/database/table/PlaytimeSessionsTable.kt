@@ -1,4 +1,4 @@
-package dev.slne.surf.playtime.database.table
+package dev.slne.surf.social.microservice.playtime.database.table
 
 import dev.slne.surf.database.columns.nativeUuid
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.dao.id.LongIdTable
