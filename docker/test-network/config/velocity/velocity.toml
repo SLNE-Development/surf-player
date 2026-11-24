@@ -1,0 +1,45 @@
+# Velocity config of the test network, synced into /server on every start (itzg/mc-proxy /config).
+# ${CFG_*} placeholders come from compose.yml. The modern-forwarding secret is passed through
+# the VELOCITY_FORWARDING_SECRET environment variable, which overrides forwarding.secret.
+config-version = "2.9"
+bind = "0.0.0.0:25565"
+motd = "<#09add3>surf-player test network"
+show-max-players = 100
+online-mode = ${CFG_PROXY_ONLINE_MODE}
+force-key-authentication = true
+prevent-client-proxy-connections = false
+player-info-forwarding-mode = "MODERN"
+forwarding-secret-file = "forwarding.secret"
+announce-forge = false
+kick-existing-players = false
+enable-player-address-logging = true
+
+# The names must match server-name in the surf-core configs of the backends.
+[servers]
+	lobby = "minestom:25565"
+	paper = "paper:25565"
+	try = ["lobby", "paper"]
+
+[forced-hosts]
+
+[advanced]
+	compression-threshold = 256
+	compression-level = -1
+	login-ratelimit = 3000
+	connection-timeout = 5000
+	read-timeout = 30000
+	haproxy-protocol = false
+	tcp-fast-open = false
+	bungee-plugin-message-channel = true
+	show-ping-requests = false
+	failover-on-unexpected-server-disconnect = true
+	announce-proxy-commands = true
+	log-command-executions = true
+	log-player-connections = true
+	accepts-transfers = false
+
+[query]
+	enabled = false
+	port = 25565
+	map = "Velocity"
+	show-plugins = false

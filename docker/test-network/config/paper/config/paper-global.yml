@@ -1,0 +1,8 @@
+# Partial Paper global config, synced into /data/config/ on every start (COPY_CONFIG_DEST=/data).
+# Paper fills in every other key with its default. ${CFG_*} placeholders come from compose.yml.
+_version: 31
+proxies:
+  velocity:
+    enabled: true
+    online-mode: true
+    secret: ${CFG_VELOCITY_FORWARDING_SECRET}

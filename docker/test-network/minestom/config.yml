@@ -1,0 +1,19 @@
+# Partial config of the surf-minestom-lobby server; every key not listed keeps its default.
+# start.sh fills the ${...} placeholders and writes the result to /server/config.yml on
+# every start, so edit this file (not the one in the volume) and restart the container.
+address:
+  host: 0.0.0.0
+  port: 25565
+velocity:
+  enabled: true
+  secret: "${VELOCITY_FORWARDING_SECRET}"
+database:
+  type: POSTGRESQL
+  url: jdbc:postgresql://postgres:5432/surf
+  schema: surf_minestom_lobby
+  username: surf
+  password: "${POSTGRES_PASSWORD}"
+performance:
+  spark:
+    profile-on-startup: false
+_config-version: 2

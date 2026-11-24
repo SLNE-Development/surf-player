@@ -1,0 +1,7 @@
+# surf-core server identity. surf-core refuses to start while any of the names is "unknown".
+# server-name has to match the server name in velocity.toml.
+server-name: lobby
+server-display-name: Lobby
+server-category: test
+server-uuid: 0b5c9c8e-3c43-4c38-9d0a-6d2f0f7a0002
+_config_version: 1

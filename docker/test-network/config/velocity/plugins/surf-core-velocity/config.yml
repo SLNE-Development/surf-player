@@ -1,0 +1,6 @@
+# surf-core server identity of the proxy.
+server-name: velocity
+server-display-name: Velocity
+server-category: proxy
+server-uuid: 0b5c9c8e-3c43-4c38-9d0a-6d2f0f7a0003
+_config_version: 1

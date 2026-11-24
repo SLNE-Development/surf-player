@@ -1,0 +1,255 @@
+# Local end-to-end test network for surf-player. See README.md in this directory.
+#
+#   ./fetch-plugins.sh && docker compose up -d
+#
+# Credentials come from .env (copy .env.example). Everything here is for local testing only.
+name: surf-player-test
+
+x-surf-env: &surf-env
+  # Docker Desktop's WSL2 kernel rejects io_uring_enter (EBADFD), and surf-rabbitmq picks
+  # io_uring whenever Netty reports it available. Fall back to NIO in every JVM, including the
+  # Netty copies relocated into the surf-rabbitmq and surf-redis plugin jars.
+  JAVA_TOOL_OPTIONS: >-
+    -Dio.netty.transport.noNative=true
+    -Ddev.slne.surf.rabbitmq.shaded.io.netty.transport.noNative=true
+    -Ddev.slne.surf.redis.shaded.io.netty.transport.noNative=true
+  SURF_RABBITMQ_HOST: rabbitmq
+  SURF_RABBITMQ_PORT: "5672"
+  SURF_RABBITMQ_USERNAME: surf
+  SURF_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?set in .env}
+  SURF_RABBITMQ_VHOST: /
+  SURF_REDIS_HOST: redis
+  SURF_REDIS_PORT: "6379"
+  SURF_REDIS_PASSWORD: ${REDIS_PASSWORD:?set in .env}
+
+x-database-env: &database-env
+  SURF_DATABASE_TYPE: POSTGRESQL
+  SURF_DATABASE_HOST: postgres
+  SURF_DATABASE_PORT: "5432"
+  SURF_DATABASE_NAME: surf
+  SURF_DATABASE_USERNAME: surf
+  SURF_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}
+  SURF_DATABASE_LOG_LEVEL: INFO
+
+# LuckPerms reads LUCKPERMS_<CONFIG_PATH> environment variables over its config.yml. All
+# platforms share one PostgreSQL database ("luckperms", created by postgres/init.sql) and push
+# changes to each other through Redis messaging. The Minestom LuckPerms is a surf-api feature
+# (surf-api-minestom-server-luckperms), not a plugin jar; it reads the same variables.
+x-luckperms-env: &luckperms-env
+  LUCKPERMS_STORAGE_METHOD: postgresql
+  LUCKPERMS_DATA_ADDRESS: postgres:5432
+  LUCKPERMS_DATA_DATABASE: luckperms
+  LUCKPERMS_DATA_USERNAME: surf
+  LUCKPERMS_DATA_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}
+  LUCKPERMS_MESSAGING_SERVICE: redis
+  LUCKPERMS_REDIS_ENABLED: "true"
+  LUCKPERMS_REDIS_ADDRESS: redis:6379
+  LUCKPERMS_REDIS_PASSWORD: ${REDIS_PASSWORD:?set in .env}
+
+x-infra-ready: &infra-ready
+  postgres:
+    condition: service_healthy
+  redis:
+    condition: service_healthy
+  rabbitmq:
+    condition: service_healthy
+
+services:
+  # ---------------------------------------------------------------------------------------------
+  # Infrastructure
+  # ---------------------------------------------------------------------------------------------
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: surf
+      POSTGRES_USER: surf
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/10-schemas.sql:ro
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U surf -d surf"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:?set in .env}", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set in .env}
+
+  rabbitmq:
+    image: rabbitmq:4.1-management-alpine
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: surf
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?set in .env}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    ports:
+      - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672"
+      - "127.0.0.1:${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_port_connectivity"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+
+  # ---------------------------------------------------------------------------------------------
+  # Microservices
+  # ---------------------------------------------------------------------------------------------
+  # surf-core: player registry ("surf-core".surf_players), needed by surf-core-* plugins and
+  # read by surf-player's clan module.
+  core-microservice:
+    image: eclipse-temurin:25-jre
+    working_dir: /app
+    command: ["java", "-XX:MaxRAMPercentage=75.0", "-XX:+ExitOnOutOfMemoryError", "-jar", "/opt/app.jar"]
+    environment:
+      <<: [*surf-env, *database-env]
+      SURF_DATABASE_SCHEMA: surf-core
+    volumes:
+      - ./plugins/microservice/surf-core-microservice.jar:/opt/app.jar:ro
+      - core-microservice-data:/app
+    depends_on: *infra-ready
+    restart: unless-stopped
+
+  player-microservice:
+    image: eclipse-temurin:25-jre
+    working_dir: /app
+    command: ["java", "-XX:MaxRAMPercentage=75.0", "-XX:+ExitOnOutOfMemoryError", "-jar", "/opt/app.jar"]
+    environment:
+      <<: [*surf-env, *database-env]
+      SURF_DATABASE_SCHEMA: public
+      # Defaults of surf-player; listed so they are easy to change for a test.
+      SURF_PLAYER_FRIEND_REQUEST_DECLINE_COOLDOWN: 24h
+      SURF_PLAYER_FRIEND_REQUEST_WITHDRAW_COOLDOWN: 30m
+    volumes:
+      - ./plugins/microservice/surf-player-microservice.jar:/opt/app.jar:ro
+      - player-microservice-data:/app
+    depends_on: *infra-ready
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------------------------
+  # Minecraft
+  # ---------------------------------------------------------------------------------------------
+  velocity:
+    image: itzg/mc-proxy:2026.11.2-java25
+    environment:
+      <<: [*surf-env, *luckperms-env]
+      LUCKPERMS_SERVER: velocity
+      TYPE: VELOCITY
+      VELOCITY_VERSION: ${VELOCITY_VERSION:-4.3.1}
+      MEMORY: 1G
+      # Console access: docker compose exec velocity rcon-cli <command> (Velocircon plugin).
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: ${RCON_PASSWORD:?set in .env}
+      REPLACE_ENV_VARIABLES: "true"
+      CFG_PROXY_ONLINE_MODE: ${PROXY_ONLINE_MODE:-true}
+      VELOCITY_FORWARDING_SECRET: ${VELOCITY_FORWARDING_SECRET:?set in .env}
+    volumes:
+      - ./plugins/velocity:/plugins:ro
+      - ./config/velocity:/config:ro
+      - velocity-data:/server
+    ports:
+      - "${PROXY_PORT:-25565}:25565"
+    depends_on:
+      paper:
+        condition: service_started
+      minestom:
+        condition: service_started
+    restart: unless-stopped
+
+  paper:
+    image: itzg/minecraft-server:2026.11.1-java25
+    environment:
+      <<: [*surf-env, *luckperms-env]
+      LUCKPERMS_SERVER: paper
+      # Console access: docker compose exec paper rcon-cli <command>
+      RCON_PASSWORD: ${RCON_PASSWORD:?set in .env}
+      EULA: "TRUE"
+      TYPE: PAPER
+      VERSION: ${PAPER_VERSION:-26.3}
+      PAPER_BUILD: ${PAPER_BUILD:-259}
+      MEMORY: 3G
+      ONLINE_MODE: "FALSE"
+      MOTD: surf-player test (paper)
+      VIEW_DISTANCE: "6"
+      # /config is synced into /data (not /data/config) so it can hold plugins/ and config/.
+      COPY_CONFIG_DEST: /data
+      REPLACE_ENV_VARIABLES: "TRUE"
+      CFG_VELOCITY_FORWARDING_SECRET: ${VELOCITY_FORWARDING_SECRET:?set in .env}
+    volumes:
+      - ./plugins/paper:/plugins:ro
+      - ./config/paper:/config:ro
+      - paper-data:/data
+    depends_on:
+      <<: *infra-ready
+      core-microservice:
+        condition: service_started
+      player-microservice:
+        condition: service_started
+    restart: unless-stopped
+
+  minestom:
+    image: eclipse-temurin:25-jre
+    entrypoint: ["sh", "/opt/lobby/start.sh"]
+    environment:
+      <<: [*surf-env, *luckperms-env]
+      LUCKPERMS_SERVER: lobby
+      JAVA_OPTS: ""
+      VELOCITY_FORWARDING_SECRET: ${VELOCITY_FORWARDING_SECRET:?set in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}
+    volumes:
+      - ./minestom/start.sh:/opt/lobby/start.sh:ro
+      - ./minestom/console.sh:/usr/local/bin/console:ro
+      - ./minestom/config.yml:/opt/lobby/config.yml:ro
+      - ./minestom/plugin-config:/opt/lobby/plugin-config:ro
+      - ./minestom/worlds:/opt/lobby/worlds:ro
+      - ./plugins/minestom-server/lobby.jar:/opt/lobby/lobby.jar:ro
+      - ./plugins/minestom:/opt/plugins:ro
+      - minestom-data:/server
+    depends_on:
+      <<: *infra-ready
+      core-microservice:
+        condition: service_started
+      player-microservice:
+        condition: service_started
+    restart: unless-stopped
+
+  # One-shot: creates group admin (*), puts NotAmmo into it and FPNS into default only.
+  # See luckperms/init.sh. Re-run: docker compose run --rm -e FORCE=1 luckperms-init
+  luckperms-init:
+    image: itzg/minecraft-server:2026.11.1-java25
+    entrypoint: ["bash", "/opt/init.sh"]
+    environment:
+      RCON_PASSWORD: ${RCON_PASSWORD:?set in .env}
+    volumes:
+      - ./luckperms/init.sh:/opt/init.sh:ro
+      - luckperms-init-state:/state
+    depends_on:
+      paper:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  luckperms-init-state:
+  postgres-data:
+  redis-data:
+  rabbitmq-data:
+  core-microservice-data:
+  player-microservice-data:
+  velocity-data:
+  paper-data:
+  minestom-data:
