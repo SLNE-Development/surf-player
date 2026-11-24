@@ -1,10 +1,10 @@
 package dev.slne.surf.player.minestom.playtime.command
 
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
-import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
+import dev.slne.surf.player.minestom.command.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.longArgument
-import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
+import dev.slne.surf.player.minestom.command.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.stringArgument
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.command.executor.CommandArguments
@@ -53,7 +53,8 @@ fun playtimeAdminActions() = listOf(
         "[spieler]"
     ) {
         withOptionalArguments(VisibleOfflinePlayerArgument(PLAYER))
-        anyExecutorSuspend { sender, args ->
+        // Recalculating every streak legitimately takes longer than an interactive call may wait.
+        anyExecutorSuspend(timeout = null) { sender, args ->
             sender.reply(PlaytimeCommands.recalculate(sender, args.optionalPlayer(), all = PLAYER !in args))
         }
     },

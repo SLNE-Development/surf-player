@@ -18,8 +18,11 @@ import org.bukkit.Bukkit
 object PaperMinimapFeature : PaperPlayerFeature {
     override val name = "minimap"
 
-    override suspend fun onEnable() {
+    override suspend fun onLoad() {
         CompanionConfigs.init()
+    }
+
+    override suspend fun onEnable() {
         PluginChannelListener.register()
         CompanionListener.register()
         PaperTracker.configure()

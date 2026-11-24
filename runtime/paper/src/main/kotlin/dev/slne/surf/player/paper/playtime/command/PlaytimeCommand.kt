@@ -7,8 +7,8 @@ import dev.jorel.commandapi.kotlindsl.longArgument
 import dev.jorel.commandapi.kotlindsl.stringArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.command.args.awaitingOrNull
-import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
-import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
+import dev.slne.surf.player.paper.command.anyExecutorSuspend
+import dev.slne.surf.player.paper.command.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.core.client.playtime.command.PlaytimeCommands
 import dev.slne.surf.player.core.client.playtime.permission.PlaytimePermissions
@@ -50,7 +50,8 @@ fun playtimeAdminActions() = listOf(
         "[spieler]"
     ) {
         withOptionalArguments(VisibleOfflinePlayerArgument(PLAYER))
-        anyExecutorSuspend { sender, args ->
+        // Recalculating every streak legitimately takes longer than an interactive call may wait.
+        anyExecutorSuspend(timeout = null) { sender, args ->
             val all = args.getOptional(PLAYER).isEmpty
             sender.reply(PlaytimeCommands.recalculate(sender, args.awaitingOrNull<SurfPlayer?>(PLAYER), all))
         }

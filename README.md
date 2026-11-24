@@ -292,3 +292,19 @@ player.twitchConnection()
 ```
 
 Requires Java 25.
+
+## Automated player tests
+
+Everything a player can observe in game (messages, tab list, nametags, menus, tab completion,
+click events) is tested by three headless bots against the local Docker test network
+([`docker/test-network`](docker/test-network)): see [`test/player-tests`](test/player-tests)
+(standalone build, not part of `./gradlew build`).
+
+```shell
+test/player-tests/run.sh                 # build + deploy if needed, run all scenarios
+test/player-tests/run.sh --feature chat  # or --id friends-12, --failed
+```
+
+Results land in `test/player-tests/build/report.json`. For Claude Code the skill
+[`.claude/skills/automated-player-tests`](.claude/skills/automated-player-tests/SKILL.md) describes
+running the suite, reading the report and adding scenarios.

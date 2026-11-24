@@ -78,17 +78,15 @@ fun invalidatePlaytimeCaches(playerUuid: UUID) {
 }
 
 /**
- * Closes and persists every active session of a player that left this server.
+ * Closes and persists every active session of a player that left this server. A session whose save
+ * fails stays in memory and is saved by the next flush.
  */
 suspend fun endPlaytimeSessions(playerUuid: UUID) {
     val sessions = PlaytimeService.activeSessionsOf(playerUuid)
 
     val now = LocalDateTime.now()
-    sessions.forEach { session ->
-        session.endTime = now
-        PlaytimeService.saveSession(session)
-        PlaytimeService.removeCachedSession(session.sessionId)
-    }
+    sessions.forEach { PlaytimeService.endSession(it, now) }
+    sessions.forEach { PlaytimeService.saveEndedSession(it) }
 }
 
 private fun cacheStreakIfStillOnServer(playerUuid: UUID, epoch: Long?, streak: LoginStreak) {

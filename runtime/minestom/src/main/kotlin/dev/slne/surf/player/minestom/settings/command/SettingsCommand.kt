@@ -1,7 +1,7 @@
 package dev.slne.surf.player.minestom.settings.command
 
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
-import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
+import dev.slne.surf.player.minestom.command.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
 import dev.slne.surf.api.minestom.command.dsl.subcommand

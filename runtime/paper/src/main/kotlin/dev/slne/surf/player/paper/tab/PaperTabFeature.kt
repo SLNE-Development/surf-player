@@ -2,6 +2,7 @@ package dev.slne.surf.player.paper.tab
 
 import dev.slne.surf.api.core.event.SurfEventBus
 import dev.slne.surf.api.paper.event.register
+import dev.slne.surf.player.core.client.tab.config.TablistConfigFile
 import dev.slne.surf.player.core.client.tab.hook.ClanHook
 import dev.slne.surf.player.core.client.tab.hook.ContentCreatorHook
 import dev.slne.surf.player.core.client.tab.hook.LuckPermsHook
@@ -18,6 +19,7 @@ object PaperTabFeature : PaperPlayerFeature {
     override val name = "tab"
 
     override suspend fun onLoad() {
+        TablistConfigFile.init()
         TabRedisLoader.register()
     }
 

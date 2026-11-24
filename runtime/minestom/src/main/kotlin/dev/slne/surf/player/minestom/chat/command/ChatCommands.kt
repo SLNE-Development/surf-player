@@ -2,11 +2,11 @@ package dev.slne.surf.player.minestom.chat.command
 
 import dev.slne.surf.api.minestom.command.argument.StringArgument
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
-import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
+import dev.slne.surf.player.minestom.command.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.greedyStringArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
-import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
+import dev.slne.surf.player.minestom.command.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.signedMessageArgument
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
@@ -250,7 +250,8 @@ fun chatAdminActions() = listOf(
             })
         }
 
-        anyExecutorSuspend { sender, args ->
+        // The history lookup has its own time limit and message, see ChatCommands.lookup.
+        anyExecutorSuspend(timeout = null) { sender, args ->
             val filter = args.getOptional<String>("filter")
 
             sender.sendMessage(ChatCommands.lookupSearching)

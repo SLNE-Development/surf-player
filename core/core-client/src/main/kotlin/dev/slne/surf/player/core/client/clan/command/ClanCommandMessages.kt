@@ -119,14 +119,6 @@ fun clanInvitesToggledMessage(accept: Boolean) = buildText {
     success(".")
 }
 
-/**
- * Reports that the clan configuration was read from disk again.
- */
-fun clanConfigReloadedMessage() = buildText {
-    appendSuccessPrefix()
-    success("Die Clan-Konfiguration wurde neu geladen.")
-}
-
 fun invalidatingCachesMessage() = buildText {
     appendInfoPrefix()
     info("Die Clan-Caches werden geleert...")

@@ -9,10 +9,15 @@ lateinit var chatConfigProvider: SpongeYmlConfigClass<SurfChatConfig>
 
 val chatConfig: SurfChatConfig get() = chatConfigProvider.getConfig()
 
+/**
+ * Loads the chat `config.yml` from [dataPath], writing it with the defaults if it does not exist
+ * yet.
+ */
 fun initChatConfig(dataPath: Path) {
     chatConfigProvider = object : SpongeYmlConfigClass<SurfChatConfig>(
         SurfChatConfig::class.java,
         dataPath,
         "config.yml"
     ) {}
+    chatConfigProvider.init()
 }

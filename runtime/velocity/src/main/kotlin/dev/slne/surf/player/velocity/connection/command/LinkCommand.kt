@@ -4,8 +4,8 @@ import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.api.velocity.command.executors.anyExecutorSuspend
-import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
+import dev.slne.surf.player.velocity.command.anyExecutorSuspend
+import dev.slne.surf.player.velocity.command.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.api.connection.SurfConnectionApi
 import dev.slne.surf.player.core.client.command.CommandMessages

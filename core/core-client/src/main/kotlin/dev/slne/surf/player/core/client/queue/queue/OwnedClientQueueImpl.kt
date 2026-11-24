@@ -48,7 +48,7 @@ class OwnedClientQueueImpl(serverName: String, scheduler: QueueScheduler) :
         return QueueFixResult(sizeBefore, sizeAfter, wasPaused, lockReset)
     }
 
-    override suspend fun delete() {
-        store.deleteAll()
+    override suspend fun clear() {
+        store.clearEntries()
     }
 }

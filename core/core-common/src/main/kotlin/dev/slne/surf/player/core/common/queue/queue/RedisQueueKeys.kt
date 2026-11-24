@@ -15,6 +15,12 @@ data class RedisQueueKeys(
     val pausedKey = "$QUEUE_PREFIX$serverName:paused"
     val epochMsKey = "$QUEUE_PREFIX$serverName$EPOCH_MS_SUFFIX"
 
+    /**
+     * The keys holding the queued players (`/surfplayer queue clear` deletes exactly these). The
+     * queue's state ([pausedKey], [epochMsKey]) and its locks are not part of it.
+     */
+    val entryKeys = listOf(entriesKey, metaKey, lastSeenKey, retryCountKey)
+
     companion object {
         val QUEUE_PREFIX = queueRedisKey("servers:")
         val EPOCH_MS_KEY_PATTERN = "$QUEUE_PREFIX*$EPOCH_MS_SUFFIX"

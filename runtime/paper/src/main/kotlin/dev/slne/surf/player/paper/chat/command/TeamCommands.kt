@@ -6,7 +6,7 @@ import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.greedyStringArgument
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
+import dev.slne.surf.player.paper.command.playerExecutorSuspend
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType

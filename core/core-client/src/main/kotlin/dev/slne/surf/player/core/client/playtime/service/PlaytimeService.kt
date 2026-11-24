@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.playtime.service
 
+import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.core.util.toObjectSet
 import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
@@ -10,6 +11,7 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.Object2LongMaps
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
@@ -19,6 +21,8 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 private const val MAX_CONCURRENT_FLUSHES = 32
+
+private val log = logger()
 
 /**
  * The playtime sessions running on this server and access to the stored ones.
@@ -79,6 +83,28 @@ object PlaytimeService {
         playtimeRpcService.saveSession(session)
     }
 
+    private val pendingSaves = PendingSessionSaves { saveSession(it) }
+
+    /**
+     * Ends the running [session] at [endTime]: it is no longer tracked as running and is kept in
+     * memory until [saveEndedSession] or the next [flushAll] stored it, so a failed save (e.g. while
+     * the microservice is down) does not lose it.
+     */
+    fun endSession(session: PlaytimeSession, endTime: LocalDateTime) {
+        session.endTime = endTime
+        pendingSaves.add(session)
+        removeCachedSession(session.sessionId)
+    }
+
+    /**
+     * Saves the [session] ended with [endSession]; returns whether it is stored now. If not, the
+     * next [flushAll] tries again.
+     */
+    suspend fun saveEndedSession(session: PlaytimeSession): Boolean = pendingSaves.save(session)
+
+    /** How many ended sessions still wait for their save. */
+    val pendingSaveCount: Int get() = pendingSaves.size
+
     suspend fun loadSessions(playerUuid: UUID): ObjectSet<PlaytimeSession> =
         playtimeRpcService.findSessions(playerUuid).toObjectSet()
 
@@ -122,22 +148,40 @@ object PlaytimeService {
         return result
     }
 
+    /**
+     * Saves every running session up to now, and every ended session whose save failed before. A
+     * failed save of one session neither stops the others nor loses it: a running session is saved
+     * again with the next flush anyway, an ended one stays pending.
+     */
     suspend fun flushAll(): Unit = coroutineScope {
         val sessions = activePlaytimeSessions
 
-        if (sessions.isEmpty()) {
-            return@coroutineScope
-        }
+        if (sessions.isNotEmpty()) {
+            val semaphore = Semaphore(MAX_CONCURRENT_FLUSHES)
 
-        val semaphore = Semaphore(MAX_CONCURRENT_FLUSHES)
-
-        for (session in sessions) {
-            launch {
-                semaphore.withPermit {
-                    saveSession(session.apply { endTime = LocalDateTime.now() })
+            for (session in sessions) {
+                launch {
+                    semaphore.withPermit {
+                        // A session that ended meanwhile keeps its end time.
+                        if (sessionsById.containsKey(session.sessionId)) {
+                            session.endTime = LocalDateTime.now()
+                        }
+                        try {
+                            saveSession(session)
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            log.atWarning().log(
+                                "Could not save the playtime session %s of %s, retrying with the next flush: %s",
+                                session.sessionId, session.playerUuid, e.toString()
+                            )
+                        }
+                    }
                 }
             }
         }
+
+        pendingSaves.retry()
     }
 
     suspend fun updateAllActiveSessions() {

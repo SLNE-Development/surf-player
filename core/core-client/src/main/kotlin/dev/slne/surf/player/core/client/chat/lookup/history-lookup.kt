@@ -5,7 +5,6 @@ import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.clickOpensUrl
 import dev.slne.surf.api.core.messages.pagination.Pagination
-import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.player.api.chat.entry.HistoryEntry
 import dev.slne.surf.player.api.chat.entry.HistoryFilter
 import dev.slne.surf.player.api.chat.message.MessageType
@@ -148,13 +147,38 @@ private fun parseRangeToMillis(input: String): Long? {
     return millis
 }
 
-suspend fun Map<String, String>.parseFilters(): HistoryFilter {
-    val senderUuid = this["--sender"]?.let { PlayerLookupService.getUuid(it) }
-    val receiverUuid = this["--receiver"]?.let { PlayerLookupService.getUuid(it) }
-    val deleted = this["--deleted"]?.toBoolean()
-    val deletedBy = this["--deletedBy"]?.let { PlayerLookupService.getUuid(it) }
+/** The lookup filters whose value is a player name. */
+val playerFilterKeys = listOf("--sender", "--receiver", "--deletedBy")
 
-    return HistoryFilter(
+/**
+ * The filters of a lookup query: either a [Valid] filter or the name of a player filter value that
+ * does not belong to any known player, in which case no query may run.
+ */
+sealed interface ParsedLookupFilters {
+    data class Valid(val filter: HistoryFilter) : ParsedLookupFilters
+    data class UnknownPlayer(val key: String, val name: String) : ParsedLookupFilters
+}
+
+/**
+ * Parses the lookup filters; player names are resolved with [resolvePlayer]. An unknown player
+ * name never silently drops its filter, it makes the whole query [ParsedLookupFilters.UnknownPlayer].
+ */
+suspend fun Map<String, String>.parseFilters(
+    resolvePlayer: suspend (String) -> UUID?,
+): ParsedLookupFilters {
+    val players = HashMap<String, UUID>()
+    for (key in playerFilterKeys) {
+        val name = this[key]?.trim() ?: continue
+        players[key] = name.takeIf { it.isNotEmpty() }?.let { resolvePlayer(it) }
+            ?: return ParsedLookupFilters.UnknownPlayer(key, name)
+    }
+
+    val senderUuid = players["--sender"]
+    val receiverUuid = players["--receiver"]
+    val deleted = this["--deleted"]?.toBoolean()
+    val deletedBy = players["--deletedBy"]
+
+    return ParsedLookupFilters.Valid(HistoryFilter(
         messageUuid = this["--messageUuid"]?.let { runCatching { UUID.fromString(it) }.getOrNull() },
         senderUuid = senderUuid,
         receiverUuid = receiverUuid,
@@ -169,5 +193,5 @@ suspend fun Map<String, String>.parseFilters(): HistoryFilter {
         deletedBy = deletedBy,
         limit = this["--limit"]?.toIntOrNull() ?: 50,
         message = this["--message"]?.trim()?.removeSurrounding("\"")?.takeIf { it.isNotEmpty() },
-    )
+    ))
 }

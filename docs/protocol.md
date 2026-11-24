@@ -8,6 +8,9 @@ surf-player talks over two connections, both named `surf-player`:
   registered by the feature's `<Feature>MicroserviceModule`; clients use the lazies in
   `core.client.<feature>.rpc/RpcServices.kt`. Requests time out after the configured
   `requestTimeoutSeconds` (default 60 s); chat history lookups additionally give up after 10 s.
+  Commands wait at most 10 s (`INTERACTIVE_RPC_TIMEOUT`, core-client `command/ServiceCalls.kt`)
+  and then fail with "Der Dienst ist gerade nicht erreichbar. Bitte versuche es später erneut.";
+  the 60 s request timeout stays for background work such as playtime saves.
 - **Redis** (surf-redis) between the client plugins: events and requests for live cross-server
   messaging, synchronized structures and caches. The microservice does not use Redis.
 

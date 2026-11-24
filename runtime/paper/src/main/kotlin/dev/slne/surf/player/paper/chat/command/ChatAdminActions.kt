@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.future
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.optionalArgument
-import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
+import dev.slne.surf.player.paper.command.anyExecutorSuspend
 import dev.slne.surf.player.core.client.chat.command.ChatCommands
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.paper.chat.util.realName
@@ -49,7 +49,8 @@ fun chatAdminActions() = listOf(
             })
         )
 
-        anyExecutorSuspend { sender, args ->
+        // The history lookup has its own time limit and message, see ChatCommands.lookup.
+        anyExecutorSuspend(timeout = null) { sender, args ->
             val filter: String? by args
 
             sender.sendMessage(ChatCommands.lookupSearching)

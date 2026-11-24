@@ -6,7 +6,7 @@ import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.integerArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.command.args.awaitingOrNull
-import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
+import dev.slne.surf.player.paper.command.anyExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.paper.command.argument.surfBackendServerArgument

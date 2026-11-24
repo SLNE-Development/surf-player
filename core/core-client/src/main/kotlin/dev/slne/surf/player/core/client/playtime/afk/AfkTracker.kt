@@ -174,11 +174,10 @@ object AfkTracker {
     }
 
     private fun endSession(session: PlaytimeSession, now: LocalDateTime) {
-        session.endTime = now
-        PlaytimeService.removeCachedSession(session.sessionId)
+        PlaytimeService.endSession(session, now)
 
         PlaytimePlatform.launchAsync {
-            PlaytimeService.saveSession(session)
+            PlaytimeService.saveEndedSession(session)
         }
     }
 }

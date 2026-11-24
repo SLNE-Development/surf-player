@@ -15,8 +15,8 @@ class ClientQueueImpl(serverName: String) : AbstractQueue(serverName), ClientQue
         QueueMetrics.recordDequeue(serverName)
     }
 
-    override suspend fun delete() {
-        store.deleteAll()
+    override suspend fun clear() {
+        store.clearEntries()
     }
 
     override suspend fun forceCleanup() {

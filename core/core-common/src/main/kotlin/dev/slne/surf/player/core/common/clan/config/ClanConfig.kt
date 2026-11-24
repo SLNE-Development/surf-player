@@ -11,13 +11,17 @@ data class ClanConfig(
     companion object {
         private lateinit var provider: SpongeYmlConfigClass<ClanConfig>
 
-        /** Loads the clan config from the directory [dataPath]. Must run before [getConfig]. */
+        /**
+         * Loads the clan config from the directory [dataPath], writing `config.yml` with the
+         * defaults if it does not exist yet. Must run before [getConfig].
+         */
         fun init(dataPath: Path) {
             provider = object : SpongeYmlConfigClass<ClanConfig>(
                 ClanConfig::class.java,
                 dataPath,
                 "config.yml"
             ) {}
+            provider.init()
         }
 
         fun getConfig(): ClanConfig = provider.getConfig()

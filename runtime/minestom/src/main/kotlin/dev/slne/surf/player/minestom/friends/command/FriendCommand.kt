@@ -3,7 +3,7 @@ package dev.slne.surf.player.minestom.friends.command
 import dev.slne.surf.api.minestom.command.CommandAPI
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
-import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
+import dev.slne.surf.player.minestom.command.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.command.executor.CommandArguments
 import dev.slne.surf.core.api.common.player.SurfPlayer

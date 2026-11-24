@@ -13,6 +13,9 @@ import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.appendDelete
 import dev.slne.surf.player.core.client.chat.message.format.appendName
+import dev.slne.surf.player.core.client.chat.message.format.MentionRules
+import dev.slne.surf.player.core.client.vanish.PlayerVisibility
+import dev.slne.surf.player.minestom.command.asViewer
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.player.core.client.chat.util.formatTime
@@ -69,7 +72,7 @@ object MinestomMessageFormatter {
 
         var content = messageData.message
         if (highlightMentions && viewerPlayer != null) {
-            content = highlightPlayers(content, viewer)
+            content = highlightPlayers(content, viewer, viewerPlayer, senderPlayer)
         }
 
         append {
@@ -129,12 +132,18 @@ object MinestomMessageFormatter {
         rebuilt
     }
 
-    private fun highlightPlayers(rawMessage: Component, viewerUuid: UUID): Component {
+    /**
+     * Highlights the mentions in [rawMessage] that [viewer] may see and pings [viewer] if they are
+     * mentioned by a [sender] who may see them, see [MentionRules].
+     */
+    private fun highlightPlayers(rawMessage: Component, viewerUuid: UUID, viewer: Player, sender: Player): Component {
         val cache = mentionCache()
         val pattern = cache.pattern ?: return rawMessage
         val players = cache.playersByName
 
-        var viewerMentioned = false
+        val viewerSight = viewer.asViewer()
+        val senderSight = sender.asViewer()
+        var pingViewer = false
 
         val message = rawMessage.replaceText(
             TextReplacementConfig.builder()
@@ -145,8 +154,15 @@ object MinestomMessageFormatter {
 
                     val player = players[name] ?: return@replacement match
 
-                    if (player.uuid == viewerUuid) {
-                        viewerMentioned = true
+                    val decision = MentionRules.decide(
+                        PlayerVisibility.network, senderSight, viewerSight, player.uuid
+                    )
+                    if (!decision.highlight) {
+                        return@replacement match
+                    }
+
+                    if (decision.ping) {
+                        pingViewer = true
                     }
 
                     buildText {
@@ -160,7 +176,7 @@ object MinestomMessageFormatter {
                 .build()
         )
 
-        if (viewerMentioned && SurfSettingsApi.getSettingValue(viewerUuid, SettingKeys.CHAT_PINGS)) {
+        if (pingViewer && SurfSettingsApi.getSettingValue(viewerUuid, SettingKeys.CHAT_PINGS)) {
             ChatPlatform.playPingSound(viewerUuid)
         }
 

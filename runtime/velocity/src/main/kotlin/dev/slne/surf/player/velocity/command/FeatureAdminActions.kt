@@ -3,7 +3,6 @@ package dev.slne.surf.player.velocity.command
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.getValue
-import dev.slne.surf.api.velocity.command.executors.anyExecutorSuspend
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.velocity.command.argument.surfBackendServerArgument
 import dev.slne.surf.player.api.queue.SurfQueueApi

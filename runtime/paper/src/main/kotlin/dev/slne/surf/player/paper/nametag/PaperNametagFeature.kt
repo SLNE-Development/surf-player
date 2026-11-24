@@ -22,8 +22,11 @@ import dev.slne.surf.player.paper.nametag.listener.NametagListener
 object PaperNametagFeature : PaperPlayerFeature {
     override val name = "nametag"
 
-    override suspend fun onEnable() {
+    override suspend fun onLoad() {
         NametagConfig.init()
+    }
+
+    override suspend fun onEnable() {
         NametagListener.register()
 
         subscribeToLuckPermsUserChanges(LuckPermsHook::updatePlayer)

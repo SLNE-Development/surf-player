@@ -7,13 +7,19 @@ import dev.slne.surf.api.minestom.command.argument.CustomArgument
 import dev.slne.surf.api.minestom.command.argument.IntegerArgument
 import dev.slne.surf.api.minestom.command.argument.StringArgument
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
+import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend as surfAnyExecutorSuspend
+import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend as surfPlayerExecutorSuspend
 import dev.slne.surf.api.minestom.command.executor.CommandArguments
+import dev.slne.surf.api.minestom.command.executor.CommandExecutable
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.player.core.client.command.CommandHelp
+import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
+import dev.slne.surf.player.core.client.command.INTERACTIVE_RPC_TIMEOUT
 import dev.slne.surf.player.core.client.command.Toggle
+import dev.slne.surf.player.core.client.command.runServiceCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.kyori.adventure.text.event.ClickCallback
@@ -21,6 +27,7 @@ import net.kyori.adventure.text.event.ClickEvent
 import net.minestom.server.command.CommandSender
 import net.minestom.server.entity.Player
 import java.time.Duration
+import kotlin.time.Duration as KotlinDuration
 
 /**
  * Aborts the running command and shows [message] to its sender as an error.
@@ -30,6 +37,37 @@ fun failCommand(message: String): Nothing =
         appendErrorPrefix()
         error(message)
     })
+
+/**
+ * Runs [block], which calls the microservice, waiting at most [timeout] (no limit when `null`); if
+ * the microservice cannot be reached the command fails with [CommandMessages.SERVICE_UNAVAILABLE].
+ */
+suspend fun <T> serviceCall(
+    timeout: KotlinDuration? = INTERACTIVE_RPC_TIMEOUT,
+    block: suspend CoroutineScope.() -> T,
+): T = runServiceCall(timeout, { failCommand(CommandMessages.SERVICE_UNAVAILABLE) }, block)
+
+/**
+ * surf-api's `anyExecutorSuspend` with the executor run as a [serviceCall]: every suspending
+ * command of surf-player reports an unreachable microservice the same way, after [timeout].
+ */
+fun <SELF : CommandExecutable<SELF>> SELF.anyExecutorSuspend(
+    timeout: KotlinDuration? = INTERACTIVE_RPC_TIMEOUT,
+    executor: suspend CoroutineScope.(CommandSender, CommandArguments) -> Unit,
+): SELF = surfAnyExecutorSuspend { sender, arguments ->
+    serviceCall(timeout) { executor(sender, arguments) }
+}
+
+/**
+ * surf-api's `playerExecutorSuspend` with the executor run as a [serviceCall], see
+ * [anyExecutorSuspend].
+ */
+fun <SELF : CommandExecutable<SELF>> SELF.playerExecutorSuspend(
+    timeout: KotlinDuration? = INTERACTIVE_RPC_TIMEOUT,
+    executor: suspend CoroutineScope.(Player, CommandArguments) -> Unit,
+): SELF = surfPlayerExecutorSuspend { player, arguments ->
+    serviceCall(timeout) { executor(player, arguments) }
+}
 
 /**
  * Hands the [outcome] of a shared command to this sender: a reply is sent, a failure aborts the

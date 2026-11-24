@@ -3,9 +3,9 @@ package dev.slne.surf.player.minestom.clan.command
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.argument.GreedyStringArgument
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
-import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
+import dev.slne.surf.player.minestom.command.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
-import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
+import dev.slne.surf.player.minestom.command.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.signedMessageArgument
 import dev.slne.surf.api.minestom.command.dsl.stringArgument
 import dev.slne.surf.api.minestom.command.dsl.subcommand

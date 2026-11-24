@@ -26,6 +26,7 @@ private val builtinSettings: List<SettingKey<*>> = listOf(
  * call to the microservice. Every platform runs this once on startup, before players can join.
  */
 suspend fun loadSettings() {
+    SettingsService.declareSettings(builtinSettings.map { it.name })
     SettingsService.refreshSettings()
     SettingsService.createSettings(builtinSettings.associate { it.name to it.serializedDefaultValue() })
 }

@@ -2,6 +2,7 @@ package dev.slne.surf.player.paper.contentcreator
 
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.player.core.client.contentcreator.ContentCreatorLifecycle
+import dev.slne.surf.player.core.client.contentcreator.config.loadContentCreatorConfig
 import dev.slne.surf.player.paper.PaperPlayerFeature
 import dev.slne.surf.player.paper.contentcreator.command.contentCreatorAdminActions
 import dev.slne.surf.player.paper.contentcreator.listener.PlayerConnectionListener
@@ -11,6 +12,10 @@ import dev.slne.surf.player.paper.contentcreator.listener.PlayerConnectionListen
  */
 object PaperContentCreatorFeature : PaperPlayerFeature {
     override val name = "contentcreator"
+
+    override suspend fun onLoad() {
+        loadContentCreatorConfig()
+    }
 
     override suspend fun onEnable() {
         ContentCreatorLifecycle.enable()

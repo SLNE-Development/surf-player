@@ -26,6 +26,10 @@ interface MinestomPlayerFeature {
     val dataDirectory: Path
         get() = PlayerMinestomPlugin.dataDirectory.resolve(id).createDirectories()
 
+    /**
+     * Creates and loads every config file of the feature first (so they exist right after
+     * startup, not only after a reload), then sets up whatever must exist before enabling.
+     */
     suspend fun onLoad() = Unit
 
     suspend fun onEnable() = Unit

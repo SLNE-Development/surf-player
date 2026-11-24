@@ -2,7 +2,7 @@ package dev.slne.surf.player.minestom.queue.command
 
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
-import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
+import dev.slne.surf.player.minestom.command.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.integerArgument
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.command.executor.CommandArguments

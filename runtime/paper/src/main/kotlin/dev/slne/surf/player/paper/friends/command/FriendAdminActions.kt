@@ -2,7 +2,7 @@ package dev.slne.surf.player.paper.friends.command
 
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.command.args.awaitingOrNull
-import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
+import dev.slne.surf.player.paper.command.anyExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.friends.command.FriendAdminCommands

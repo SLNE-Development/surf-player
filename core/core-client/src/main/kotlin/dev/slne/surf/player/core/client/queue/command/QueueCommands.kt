@@ -70,7 +70,7 @@ object QueueCommands {
     suspend fun clear(serverName: String): CommandOutcome {
         val queue = queue(serverName) as ClientQueue
         val size = queue.size()
-        queue.delete()
+        queue.clear()
 
         return reply(QueueMessages.queueCleared(serverName, size))
     }

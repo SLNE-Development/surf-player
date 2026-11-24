@@ -1,6 +1,6 @@
 package dev.slne.surf.player.minestom.friends.command
 
-import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
+import dev.slne.surf.player.minestom.command.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.core.client.command.CommandMessages

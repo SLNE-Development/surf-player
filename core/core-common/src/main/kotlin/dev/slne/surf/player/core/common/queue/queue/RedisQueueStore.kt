@@ -16,7 +16,7 @@ import kotlinx.coroutines.future.await
 import java.math.BigDecimal
 import java.util.*
 
-class RedisQueueStore(keys: RedisQueueKeys) {
+class RedisQueueStore(private val keys: RedisQueueKeys) {
     private val scoredSet = redisApi.redisson.getScoredSortedSet<UUID>(keys.entriesKey, UUIDCodec.INSTANCE)
     private val metaMap = redisApi.redisson.getMap<UUID, QueueEntry>(
         keys.metaKey,
@@ -185,12 +185,12 @@ class RedisQueueStore(keys: RedisQueueKeys) {
         }
     }
 
-    suspend fun deleteAll() {
-        scoredSet.deleteAsync().await()
-        metaMap.deleteAsync().await()
-        lastSeenMap.deleteAsync().await()
-        retryCountMap.deleteAsync().await()
-        pausedBucket.deleteAsync().await()
+    /**
+     * Removes every queued player ([RedisQueueKeys.entryKeys]); whether the queue is paused stays
+     * as it is.
+     */
+    suspend fun clearEntries() {
+        redisApi.redisson.keys.deleteAsync(*keys.entryKeys.toTypedArray()).await()
     }
 
     suspend fun isPaused() = pausedBucket.getAsync().await() == 1

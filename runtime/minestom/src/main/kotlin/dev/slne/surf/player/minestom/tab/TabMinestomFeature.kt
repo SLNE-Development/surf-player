@@ -1,6 +1,7 @@
 package dev.slne.surf.player.minestom.tab
 
 import dev.slne.surf.api.core.event.SurfEventBus
+import dev.slne.surf.player.core.client.tab.config.TablistConfigFile
 import dev.slne.surf.player.core.client.tab.hook.ClanHook
 import dev.slne.surf.player.core.client.tab.hook.ContentCreatorHook
 import dev.slne.surf.player.core.client.tab.hook.LuckPermsHook
@@ -17,6 +18,7 @@ object TabMinestomFeature : MinestomPlayerFeature {
     override val id = "tab"
 
     override suspend fun onLoad() {
+        TablistConfigFile.init()
         TabRedisLoader.register()
 
         TablistService.start()

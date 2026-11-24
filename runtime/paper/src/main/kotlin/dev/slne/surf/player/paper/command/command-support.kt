@@ -1,6 +1,8 @@
 package dev.slne.surf.player.paper.command
 
 import com.github.shynixn.mccoroutine.folia.launch
+import com.github.shynixn.mccoroutine.folia.scope
+import dev.jorel.commandapi.BukkitExecutable
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.CommandAPIPaper
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
@@ -10,9 +12,14 @@ import dev.jorel.commandapi.arguments.StringArgument
 import dev.jorel.commandapi.executors.CommandArguments
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.slne.surf.api.core.messages.adventure.buildText
+import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend as surfAnyExecutorSuspend
+import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend as surfPlayerExecutorSuspend
 import dev.slne.surf.player.core.client.command.CommandHelp
+import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
+import dev.slne.surf.player.core.client.command.INTERACTIVE_RPC_TIMEOUT
 import dev.slne.surf.player.core.client.command.Toggle
+import dev.slne.surf.player.core.client.command.runServiceCall
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import net.kyori.adventure.text.event.ClickCallback
@@ -20,6 +27,7 @@ import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import java.time.Duration
+import kotlin.time.Duration as KotlinDuration
 
 /**
  * Aborts the running command and shows [message] to its sender as an error.
@@ -29,6 +37,37 @@ fun failCommand(message: String): Nothing =
         appendErrorPrefix()
         error(message)
     })
+
+/**
+ * Runs [block], which calls the microservice, waiting at most [timeout] (no limit when `null`); if
+ * the microservice cannot be reached the command fails with [CommandMessages.SERVICE_UNAVAILABLE].
+ */
+suspend fun <T> serviceCall(
+    timeout: KotlinDuration? = INTERACTIVE_RPC_TIMEOUT,
+    block: suspend CoroutineScope.() -> T,
+): T = runServiceCall(timeout, { failCommand(CommandMessages.SERVICE_UNAVAILABLE) }, block)
+
+/**
+ * surf-api's `anyExecutorSuspend` with the executor run as a [serviceCall]: every suspending
+ * command of surf-player reports an unreachable microservice the same way, after [timeout].
+ */
+fun BukkitExecutable<*>.anyExecutorSuspend(
+    timeout: KotlinDuration? = INTERACTIVE_RPC_TIMEOUT,
+    executor: suspend CoroutineScope.(CommandSender, CommandArguments) -> Unit,
+) = surfAnyExecutorSuspend({ plugin.scope }) { sender, arguments ->
+    serviceCall(timeout) { executor(sender, arguments) }
+}
+
+/**
+ * surf-api's `playerExecutorSuspend` with the executor run as a [serviceCall], see
+ * [anyExecutorSuspend].
+ */
+fun BukkitExecutable<*>.playerExecutorSuspend(
+    timeout: KotlinDuration? = INTERACTIVE_RPC_TIMEOUT,
+    executor: suspend CoroutineScope.(Player, CommandArguments) -> Unit,
+) = surfPlayerExecutorSuspend({ plugin.scope }) { player, arguments ->
+    serviceCall(timeout) { executor(player, arguments) }
+}
 
 /**
  * Hands the [outcome] of a shared command to this sender: a reply is sent, a failure aborts the

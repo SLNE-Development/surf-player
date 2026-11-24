@@ -4,7 +4,8 @@ import dev.slne.surf.player.api.queue.SurfQueue
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueLockResetResult
 
 interface ClientQueue : SurfQueue {
-    suspend fun delete()
+    /** Removes every queued player; the paused state of the queue stays. */
+    suspend fun clear()
     suspend fun fix(): QueueFixResult
     suspend fun forceCleanup()
 }

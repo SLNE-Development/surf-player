@@ -4,11 +4,6 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.player.api.playtime.session.PlaytimeStreakPause
 import net.kyori.adventure.audience.Audience
 
-fun Audience.sendConfigurationReloaded() = sendText {
-    appendSuccessPrefix()
-    success("Die Konfiguration wurde neu geladen.")
-}
-
 fun Audience.sendRecalculateAllStarted() = sendText {
     appendInfoPrefix()
     info("Die Login-Streaks aller Spieler werden neu berechnet...")

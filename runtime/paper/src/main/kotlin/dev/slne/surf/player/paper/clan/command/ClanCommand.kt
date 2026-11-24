@@ -11,8 +11,8 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.slne.surf.api.core.command.args.awaiting
 import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.paper.command.args.asyncSignedMessageArgument
-import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
-import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
+import dev.slne.surf.player.paper.command.anyExecutorSuspend
+import dev.slne.surf.player.paper.command.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.player.api.chat.SurfChatApi

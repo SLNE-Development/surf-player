@@ -9,7 +9,10 @@ import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.api.chat.entry.HistoryFilter
 import dev.slne.surf.player.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.player.core.client.chat.config.chatConfigProvider
+import dev.slne.surf.api.core.service.PlayerLookupService
+import dev.slne.surf.player.api.chat.entry.HistoryEntry
 import dev.slne.surf.player.core.client.chat.lookup.LookupQuerySuggestions
+import dev.slne.surf.player.core.client.chat.lookup.ParsedLookupFilters
 import dev.slne.surf.player.core.client.chat.lookup.RenderData
 import dev.slne.surf.player.core.client.chat.lookup.lookupPagination
 import dev.slne.surf.player.core.client.chat.lookup.parseFilters
@@ -283,12 +286,27 @@ object ChatCommands {
     /**
      * Looks the chat history up with the filters in [query] (`--sender Name --range 1d ...`).
      */
-    suspend fun lookup(query: Map<String, String>?): CommandOutcome {
-        val filter = query?.parseFilters() ?: HistoryFilter.empty()
+    suspend fun lookup(query: Map<String, String>?): CommandOutcome =
+        lookup(query, { PlayerLookupService.getUuid(it) }, HistoryService::findHistoryEntry)
+
+    /**
+     * [lookup] with the player resolution and the history query passed in: an unknown player in a
+     * player filter fails with [CommandMessages.PLAYER_NOT_FOUND] before [findHistory] runs.
+     */
+    internal suspend fun lookup(
+        query: Map<String, String>?,
+        resolvePlayer: suspend (String) -> UUID?,
+        findHistory: suspend (HistoryFilter) -> List<HistoryEntry>,
+    ): CommandOutcome {
+        val filter = when (val parsed = query?.parseFilters(resolvePlayer)) {
+            null -> HistoryFilter.empty()
+            is ParsedLookupFilters.UnknownPlayer -> return failure(CommandMessages.PLAYER_NOT_FOUND)
+            is ParsedLookupFilters.Valid -> parsed.filter
+        }
         val page = query?.get("--page")?.toIntOrNull() ?: 1
 
         val history = try {
-            HistoryService.findHistoryEntry(filter)
+            findHistory(filter)
         } catch (_: TimeoutCancellationException) {
             return failure("Die Suche hat zu lange gedauert und wurde abgebrochen.")
         }

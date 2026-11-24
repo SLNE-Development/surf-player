@@ -4,7 +4,7 @@ import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.slne.surf.api.core.command.args.awaiting
 import dev.slne.surf.api.paper.command.args.asyncSignedMessageArgument
-import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
+import dev.slne.surf.player.paper.command.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.core.client.chat.command.ChatCommands
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions

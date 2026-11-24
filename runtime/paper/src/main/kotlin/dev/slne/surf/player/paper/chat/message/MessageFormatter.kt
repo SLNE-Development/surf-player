@@ -17,7 +17,9 @@ import dev.slne.surf.player.core.client.chat.util.updateLinks
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.paper.chat.util.appendName
 import dev.slne.surf.player.paper.chat.util.playPingSound
-import dev.slne.surf.core.api.paper.CorePlayerStatusAccess
+import dev.slne.surf.player.core.client.chat.message.format.MentionRules
+import dev.slne.surf.player.core.client.vanish.PlayerVisibility
+import dev.slne.surf.player.paper.command.asViewer
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
@@ -72,7 +74,7 @@ object MessageFormatter {
 
         var content = messageData.message
         if (highlightMentions && viewerPlayer != null) {
-            content = highlightPlayers(content, viewer, viewerPlayer)
+            content = highlightPlayers(content, viewer, viewerPlayer, senderPlayer)
         }
 
         append {
@@ -181,20 +183,23 @@ object MessageFormatter {
         rebuilt
     }
 
+    /**
+     * Highlights the mentions in [rawMessage] that [viewer] may see and pings [viewer] if they are
+     * mentioned by a [sender] who may see them, see [MentionRules].
+     */
     private fun highlightPlayers(
         rawMessage: Component,
         viewerUuid: UUID,
-        viewer: Player
+        viewer: Player,
+        sender: Player
     ): Component {
         val cache = mentionCache()
         val pattern = cache.pattern ?: return rawMessage
         val players = cache.playersByName
 
-        if (players.values.none { CorePlayerStatusAccess.hasAccess(viewer, it) }) {
-            return rawMessage
-        }
-
-        var viewerMentioned = false
+        val viewerSight = viewer.asViewer()
+        val senderSight = sender.asViewer()
+        var pingViewer = false
 
         val message = rawMessage.replaceText(
             TextReplacementConfig.builder()
@@ -205,12 +210,15 @@ object MessageFormatter {
 
                     val player = players[name] ?: return@replacement match
 
-                    if (!CorePlayerStatusAccess.hasAccess(viewer, player)) {
+                    val decision = MentionRules.decide(
+                        PlayerVisibility.network, senderSight, viewerSight, player.uniqueId
+                    )
+                    if (!decision.highlight) {
                         return@replacement match
                     }
 
-                    if (player.uniqueId == viewerUuid) {
-                        viewerMentioned = true
+                    if (decision.ping) {
+                        pingViewer = true
                     }
 
                     buildText {
@@ -224,7 +232,7 @@ object MessageFormatter {
                 .build()
         )
 
-        if (viewerMentioned && SurfSettingsApi.getSettingValue(viewerUuid, SettingKeys.CHAT_PINGS)) {
+        if (pingViewer && SurfSettingsApi.getSettingValue(viewerUuid, SettingKeys.CHAT_PINGS)) {
             viewer.playPingSound()
         }
 

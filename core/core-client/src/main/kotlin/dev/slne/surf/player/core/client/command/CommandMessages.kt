@@ -17,6 +17,7 @@ object CommandMessages {
     const val NOT_YOURSELF = "Das kannst du nicht mit dir selbst tun."
     const val NOTHING_AVAILABLE = "Hier gibt es für dich nichts zu tun."
     const val CONFIRMATION_EXPIRED = "Die Bestätigung ist abgelaufen. Bitte führe den Befehl erneut aus."
+    const val SERVICE_UNAVAILABLE = "Der Dienst ist gerade nicht erreichbar. Bitte versuche es später erneut."
 
     /**
      * Reports that the configuration of [feature] was read from disk again, which took [millis].
@@ -31,14 +32,20 @@ object CommandMessages {
     }
 
     /**
-     * Reports that reading the configuration of [feature] failed; the old configuration stays
-     * active.
+     * Reports that reading the configuration of [feature] failed, optionally with the [reason];
+     * the old configuration stays active.
      */
-    fun configReloadFailed(feature: String): Component = buildText {
+    fun configReloadFailed(feature: String, reason: String? = null): Component = buildText {
         appendErrorPrefix()
         error("Die Konfiguration von ")
         variableValue(feature)
         error(" konnte nicht neu geladen werden. Die bisherige Konfiguration bleibt aktiv.")
+        if (reason != null) {
+            appendSpace()
+            spacer("(")
+            variableValue(reason)
+            spacer(")")
+        }
     }
 
     /**

@@ -2,7 +2,7 @@ package dev.slne.surf.player.velocity.connection.command
 
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
+import dev.slne.surf.player.velocity.command.playerExecutorSuspend
 import dev.slne.surf.player.core.client.connection.service.SocialConnectionsService
 import dev.slne.surf.player.core.common.connection.rpc.UnlinkResult
 import dev.slne.surf.player.core.client.connection.permission.ConnectionPermissions

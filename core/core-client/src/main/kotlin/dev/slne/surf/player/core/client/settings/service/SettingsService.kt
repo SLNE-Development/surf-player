@@ -168,8 +168,24 @@ object SettingsService {
         playerCache.remove(playerUuid)
     }
 
+    /**
+     * The names of the settings this build registers (the built-in ones and those created through
+     * the API since startup). Rows of the settings table with other names are settings that were
+     * removed from the code; they are ignored, not deleted (see docs/deployment-checklist.md).
+     */
+    private val declaredNames: MutableSet<String> = ConcurrentHashMap.newKeySet()
+
+    /** Marks [names] as settings this build registers, see [declaredNames]. */
+    fun declareSettings(names: Collection<String>) {
+        declaredNames.addAll(names)
+    }
+
+    /**
+     * Reloads the registered settings from the microservice, keeping only those this build
+     * declares.
+     */
     suspend fun refreshSettings() {
-        val loaded = settingsRpcService.findAllSettings()
+        val loaded = declaredOnly(settingsRpcService.findAllSettings(), declaredNames)
 
         val byName = mutableObject2ObjectMapOf<String, Setting>(loaded.size)
         for (setting in loaded) {
@@ -187,6 +203,7 @@ object SettingsService {
      * registered yet, with one call to the microservice; returns every requested setting by name.
      */
     suspend fun createSettings(defaultValues: Map<String, String>): Map<String, Setting> {
+        declareSettings(defaultValues.keys)
         val known = registry.get().byName
         val missing = defaultValues.filterKeys { it !in known }
 
@@ -207,6 +224,13 @@ object SettingsService {
         return defaultValues.keys.associateWith { byName.getValue(it) }
     }
 }
+
+/**
+ * The settings of [loaded] whose name is in [declared]: stored settings that no longer exist in
+ * the code are left out.
+ */
+internal fun declaredOnly(loaded: Collection<Setting>, declared: Set<String>): List<Setting> =
+    loaded.filter { it.name in declared }
 
 /** An immutable snapshot of the registered settings. */
 private class SettingRegistry(val byName: Object2ObjectOpenHashMap<String, Setting>) {
