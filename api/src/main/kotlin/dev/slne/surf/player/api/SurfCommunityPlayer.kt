@@ -1,18 +1,18 @@
 package dev.slne.surf.player.api
 
-import dev.slne.surf.player.api.chat.HasChat
-import dev.slne.surf.player.api.clan.HasClan
-import dev.slne.surf.player.api.connection.HasConnections
-import dev.slne.surf.player.api.contentcreator.HasContentCreator
-import dev.slne.surf.player.api.friends.HasFriends
-import dev.slne.surf.player.api.minimap.HasMinimap
-import dev.slne.surf.player.api.nametag.HasNametag
-import dev.slne.surf.player.api.playtime.HasPlaytime
-import dev.slne.surf.player.api.profile.HasProfile
-import dev.slne.surf.player.api.queue.HasQueue
-import dev.slne.surf.player.api.settings.HasSettings
-import dev.slne.surf.player.api.tab.HasTab
-import dev.slne.surf.player.api.vanish.HasVanish
+import dev.slne.surf.player.api.chat.ChatCapability
+import dev.slne.surf.player.api.clan.ClanCapability
+import dev.slne.surf.player.api.connection.ConnectionCapability
+import dev.slne.surf.player.api.contentcreator.ContentCreatorCapability
+import dev.slne.surf.player.api.friends.FriendsCapability
+import dev.slne.surf.player.api.minimap.MinimapCapability
+import dev.slne.surf.player.api.nametag.NametagCapability
+import dev.slne.surf.player.api.playtime.PlaytimeCapability
+import dev.slne.surf.player.api.profile.ProfileCapability
+import dev.slne.surf.player.api.queue.QueueCapability
+import dev.slne.surf.player.api.settings.SettingsCapability
+import dev.slne.surf.player.api.tab.TabCapability
+import dev.slne.surf.player.api.vanish.VanishCapability
 import java.util.*
 
 /**
@@ -30,16 +30,16 @@ import java.util.*
  */
 @JvmInline
 value class SurfCommunityPlayer(override val uuid: UUID) :
-    HasChat,
-    HasClan,
-    HasConnections,
-    HasContentCreator,
-    HasFriends,
-    HasMinimap,
-    HasNametag,
-    HasPlaytime,
-    HasProfile,
-    HasQueue,
-    HasSettings,
-    HasTab,
-    HasVanish
+    ChatCapability,
+    ClanCapability,
+    ConnectionCapability,
+    ContentCreatorCapability,
+    FriendsCapability,
+    MinimapCapability,
+    NametagCapability,
+    PlaytimeCapability,
+    ProfileCapability,
+    QueueCapability,
+    SettingsCapability,
+    TabCapability,
+    VanishCapability

@@ -28,28 +28,29 @@ interface SurfClanApi {
   top-level `val`s holding instances and no static helpers on domain types (`Clan.byTag(...)`)
   that duplicate the entry point.
 
-| Feature        | Entry point             | Player capability   |
-|----------------|-------------------------|---------------------|
-| chat           | `SurfChatApi`           | `HasChat`           |
-| clan           | `SurfClanApi`           | `HasClan`           |
-| connection     | `SurfConnectionApi`     | `HasConnections`    |
-| contentcreator | `SurfContentCreatorApi` | `HasContentCreator` |
-| friends        | `SurfFriendsApi`        | `HasFriends`        |
-| minimap        | `SurfMinimapApi`        | `HasMinimap`        |
-| nametag        | `SurfNametagApi`        | `HasNametag`        |
-| playtime       | `SurfPlaytimeApi`       | `HasPlaytime`       |
-| profile        | `SurfProfileApi`        | `HasProfile`        |
-| queue          | `SurfQueueApi`          | `HasQueue`          |
-| settings       | `SurfSettingsApi`       | `HasSettings`       |
-| tab            | `SurfTabApi`            | `HasTab`            |
-| vanish         | `SurfVanishApi`         | `HasVanish`         |
+| Feature        | Entry point             | Player capability          |
+|----------------|-------------------------|----------------------------|
+| chat           | `SurfChatApi`           | `ChatCapability`           |
+| clan           | `SurfClanApi`           | `ClanCapability`           |
+| connection     | `SurfConnectionApi`     | `ConnectionCapability`     |
+| contentcreator | `SurfContentCreatorApi` | `ContentCreatorCapability` |
+| friends        | `SurfFriendsApi`        | `FriendsCapability`        |
+| minimap        | `SurfMinimapApi`        | `MinimapCapability`        |
+| nametag        | `SurfNametagApi`        | `NametagCapability`        |
+| playtime       | `SurfPlaytimeApi`       | `PlaytimeCapability`       |
+| profile        | `SurfProfileApi`        | `ProfileCapability`        |
+| queue          | `SurfQueueApi`          | `QueueCapability`          |
+| settings       | `SurfSettingsApi`       | `SettingsCapability`       |
+| tab            | `SurfTabApi`            | `TabCapability`            |
+| vanish         | `SurfVanishApi`         | `VanishCapability`         |
 
-## 2. One capability per feature for a player: `Has<Feature>`
+## 2. One capability per feature for a player: `<Feature>Capability`
 
-Everything a single player can do or has in a feature lives in `Has<Feature>` in the same package:
+Everything a single player can do or has in a feature lives in `<Feature>Capability` in the same
+package:
 
 ```kotlin
-interface HasClan {
+interface ClanCapability {
     val uuid: UUID
 
     suspend fun clan(): Clan? = SurfClanApi.findClanByPlayer(uuid)
@@ -61,13 +62,13 @@ interface HasClan {
   that delegates to the feature's entry point, so the capability needs no implementation of its
   own.
 - `SurfCommunityPlayer` implements every capability, so member names must be unique across all
-  `Has<Feature>` interfaces. Name members after the feature when a name could clash
+  `<Feature>Capability` interfaces. Name members after the feature when a name could clash
   (`clanInvites()`, not `invites()`; `playtimeSession()`, not `session()`).
 - Player-specific functions on the entry point take the player's `UUID` as first parameter;
-  `Has<Feature>` is the convenient way to call them.
+  `<Feature>Capability` is the convenient way to call them.
 - Feature-specific "player" types that only exist to hold per-player functions
   (`FriendsPlayer`, `ClanPlayer`, ...) are removed from the API; their members move to
-  `Has<Feature>`. Real domain objects (`Clan`, `FriendRequest`, `SurfQueue`) stay.
+  `<Feature>Capability`. Real domain objects (`Clan`, `FriendRequest`, `SurfQueue`) stay.
 
 ## 3. One player type: `SurfCommunityPlayer`
 
@@ -79,7 +80,7 @@ player.isVanished
 ```
 
 `SurfCommunityPlayer` is a value class around the player's `UUID` that implements every
-`Has<Feature>`. It is cheap to create and never cached.
+`<Feature>Capability`. It is cheap to create and never cached.
 
 ## 4. Common rules
 
