@@ -155,7 +155,7 @@ Paper and Minestom: `/surfplayer`; Velocity: `/surfplayervelocity`.
 | `surf.chat.team.notify.functionality` | `surf.player.chat.notify.functionality` |
 | `surf.chat.team.notify.deletion` | `surf.player.chat.notify.deletion` |
 | `surf.chat.team` (AI moderation notices) | `surf.player.chat.notify.moderation` |
-| `surf.chat.connection.always-show` | `surf.player.chat.connection.always-show` (now: the holder sees every join/quit message, despite their setting and the config; of vanished players only if they may see them) |
+| `surf.chat.connection.always-show` | `surf.player.chat.connection.always-show` (unchanged: the holder's join/quit message reaches every player, despite their setting) |
 | – | `surf.player.chat.ignore.exempt` (new, team: cannot be ignored; messages, private messages and friend requests get through older ignores) |
 
 ### Clan
@@ -300,10 +300,9 @@ line each; everything not listed behaves as before.
   "Der Chat ist vorübergehend deaktiviert.").
 - Paper join/quit messages: as in surf-chat, a message another plugin removed (set to `null`) is
   left alone, and `PlayerJoinMessageEvent`/`PlayerQuitMessageEvent` and the chat MOTD only follow a
-  public announcement (connection messages enabled, player not vanished, event not cancelled). New:
-  holders of `surf.player.chat.connection.always-show` still get our message when connection
-  messages are disabled or the player is vanished (vanished only if they may see them); no event is
-  fired for it. Minestom sends the MOTD on every join, as before.
+  public announcement (connection messages enabled, player not vanished, event not cancelled).
+  Vanished players and disabled connection messages produce no message for anyone. Minestom sends
+  the MOTD on every join, as before.
 - MiniPlaceholders is required on Paper (surf-chat had a plain-MiniMessage fallback); see the
   deployment checklist.
 

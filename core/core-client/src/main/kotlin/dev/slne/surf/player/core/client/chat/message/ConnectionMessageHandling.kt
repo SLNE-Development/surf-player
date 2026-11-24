@@ -4,8 +4,8 @@ package dev.slne.surf.player.core.client.chat.message
  * How the chat feature handles the vanilla join or quit message of a player on Paper.
  *
  * Matches the original surf-chat behaviour: a message another plugin removed is left alone, and
- * the public announcement (the surf `PlayerJoinMessageEvent` / `PlayerQuitMessageEvent` and, on
- * join, the chat MOTD) only happens when connection messages are enabled and the player is not
+ * the announcement (the surf `PlayerJoinMessageEvent` / `PlayerQuitMessageEvent`, our message and,
+ * on join, the chat MOTD) only happens when connection messages are enabled and the player is not
  * vanished. Who sees our message is decided by [ConnectionMessageRecipients].
  */
 enum class ConnectionMessageMode {
@@ -13,12 +13,10 @@ enum class ConnectionMessageMode {
     LEAVE_UNTOUCHED,
 
     /**
-     * Remove the vanilla message and send ours only to the viewers [ConnectionMessageRecipients]
-     * allows, without firing the surf message event and without the MOTD. Used for vanished
-     * players and with connection messages disabled in the config; in both cases only holders of
-     * the always-show permission can receive it.
+     * Remove the vanilla message and send nothing (no event, no message, no MOTD). Used for
+     * vanished players and with connection messages disabled in the config.
      */
-    RECIPIENTS_ONLY,
+    SUPPRESS,
 
     /**
      * Remove the vanilla message, fire the surf message event and, unless it is cancelled, send
@@ -40,9 +38,9 @@ object ConnectionMessageHandling {
         configEnabled: Boolean,
         playerVanished: Boolean,
     ): ConnectionMessageMode = when {
-        playerVanished -> ConnectionMessageMode.RECIPIENTS_ONLY
+        playerVanished -> ConnectionMessageMode.SUPPRESS
         !vanillaMessagePresent -> ConnectionMessageMode.LEAVE_UNTOUCHED
-        !configEnabled -> ConnectionMessageMode.RECIPIENTS_ONLY
+        !configEnabled -> ConnectionMessageMode.SUPPRESS
         else -> ConnectionMessageMode.ANNOUNCE
     }
 }

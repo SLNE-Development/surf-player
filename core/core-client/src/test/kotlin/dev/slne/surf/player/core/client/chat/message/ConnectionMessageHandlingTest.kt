@@ -26,16 +26,16 @@ class ConnectionMessageHandlingTest {
     }
 
     @Test
-    fun `disabled connection messages are not announced`() {
-        assertEquals(ConnectionMessageMode.RECIPIENTS_ONLY, mode(configEnabled = false))
+    fun `disabled connection messages are suppressed`() {
+        assertEquals(ConnectionMessageMode.SUPPRESS, mode(configEnabled = false))
     }
 
     @Test
-    fun `vanished players are not announced even though their vanilla message is gone`() {
+    fun `vanished players are suppressed even though their vanilla message is gone`() {
         assertEquals(
-            ConnectionMessageMode.RECIPIENTS_ONLY,
+            ConnectionMessageMode.SUPPRESS,
             mode(vanillaMessagePresent = false, playerVanished = true),
         )
-        assertEquals(ConnectionMessageMode.RECIPIENTS_ONLY, mode(playerVanished = true))
+        assertEquals(ConnectionMessageMode.SUPPRESS, mode(playerVanished = true))
     }
 }

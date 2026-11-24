@@ -13,9 +13,7 @@ import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.player.core.client.chat.service.IgnoreService
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
-import dev.slne.surf.player.core.client.vanish.PlayerVisibility
 import dev.slne.surf.player.core.client.vanish.VanishedPlayers
-import dev.slne.surf.player.minestom.command.asViewer
 import dev.slne.surf.player.minestom.chat.message.MinestomMessageFormatter
 import net.kyori.adventure.text.Component
 import net.minestom.server.adventure.audience.Audiences
@@ -56,30 +54,28 @@ object ChatConnectionHandler {
         buildConnectionMessage(player.username, luckPermsPrefix(player.uuid), joined)
 
     /**
-     * Sends the join/quit [message] of [player] to every player on this server who sees it, see
-     * [ConnectionMessageRecipients.receives], and to the console unless [player] is vanished.
+     * Sends the join/quit [message] of [player] to the console and to every player on this server
+     * who sees it, see [ConnectionMessageRecipients.receives]. As in the original surf-chat,
+     * nothing is sent with connection messages disabled, and (as on Paper) nothing for a vanished
+     * player.
      */
     private fun sendConnectionMessage(player: Player, message: Component) {
-        val configEnabled = chatConfig.connectionMessageConfig.enabled
-        val vanished = VanishedPlayers.isVanished(player.uuid)
+        if (!chatConfig.connectionMessageConfig.enabled || VanishedPlayers.isVanished(player.uuid)) {
+            return
+        }
+
+        val alwaysShow = player.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW)
 
         for (viewer in ConnectionManager.onlinePlayers) {
-            val receives = ConnectionMessageRecipients.receives(
-                configEnabled = configEnabled,
-                playerVanished = vanished,
-                viewerIsPlayer = viewer.uuid == player.uuid,
-                viewerAlwaysShow = viewer.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW),
-                viewerSettingEnabled = { SurfSettingsApi.getSettingValue(viewer.uuid, SettingKeys.CONNECTION_MESSAGES) },
-                viewerCanSeeVanished = { PlayerVisibility.network.canSee(viewer.asViewer(), player.uuid) },
-            )
+            val receives = ConnectionMessageRecipients.receives(alwaysShow) {
+                SurfSettingsApi.getSettingValue(viewer.uuid, SettingKeys.CONNECTION_MESSAGES)
+            }
 
             if (receives) {
                 viewer.sendMessage(message)
             }
         }
 
-        if (configEnabled && !vanished) {
-            Audiences.console().sendMessage(message)
-        }
+        Audiences.console().sendMessage(message)
     }
 }

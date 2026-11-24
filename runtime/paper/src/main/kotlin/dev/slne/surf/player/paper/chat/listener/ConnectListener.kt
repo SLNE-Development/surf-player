@@ -31,14 +31,11 @@ object ConnectListener : Listener {
         val player = event.player
 
         // As in the original surf-chat: a message another plugin removed stays removed, and the
-        // surf event and the MOTD only follow a public announcement (enabled, not vanished, event
-        // not cancelled). broadcastConnectionMessage decides who sees our message.
+        // surf event, our message and the MOTD only follow an announcement (enabled, not vanished,
+        // event not cancelled). broadcastConnectionMessage decides who sees our message.
         when (connectionMessageMode(player, event.joinMessage())) {
             ConnectionMessageMode.LEAVE_UNTOUCHED -> return
-            ConnectionMessageMode.RECIPIENTS_ONLY -> {
-                event.joinMessage(null)
-                broadcastConnectionMessage(player, createJoinMessage(player))
-            }
+            ConnectionMessageMode.SUPPRESS -> event.joinMessage(null)
 
             ConnectionMessageMode.ANNOUNCE -> {
                 event.joinMessage(null)

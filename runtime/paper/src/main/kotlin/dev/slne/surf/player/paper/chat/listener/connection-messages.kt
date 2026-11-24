@@ -11,7 +11,6 @@ import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessa
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
 import dev.slne.surf.player.core.client.vanish.VanishedPlayers
-import dev.slne.surf.player.paper.vanish.util.canVanishSee
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -34,29 +33,21 @@ fun connectionMessageMode(player: Player, vanillaMessage: Component?): Connectio
     )
 
 /**
- * Sends the join/quit [message] of [player] to every player on this server who sees it, see
- * [ConnectionMessageRecipients.receives], and to the console unless [player] is vanished.
+ * Sends the announced join/quit [message] of [player] to the console and to every player on this
+ * server who sees it, see [ConnectionMessageRecipients.receives].
  */
 fun broadcastConnectionMessage(player: Player, message: Component) {
-    val configEnabled = chatConfig.connectionMessageConfig.enabled
-    val vanished = VanishedPlayers.isVanished(player.uniqueId)
+    val alwaysShow = player.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW)
 
     forEachPlayer { viewer ->
-        val receives = ConnectionMessageRecipients.receives(
-            configEnabled = configEnabled,
-            playerVanished = vanished,
-            viewerIsPlayer = viewer.uniqueId == player.uniqueId,
-            viewerAlwaysShow = viewer.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW),
-            viewerSettingEnabled = { SurfSettingsApi.getSettingValue(viewer.uniqueId, SettingKeys.CONNECTION_MESSAGES) },
-            viewerCanSeeVanished = { viewer.canVanishSee(player) },
-        )
+        val receives = ConnectionMessageRecipients.receives(alwaysShow) {
+            SurfSettingsApi.getSettingValue(viewer.uniqueId, SettingKeys.CONNECTION_MESSAGES)
+        }
 
         if (receives) {
             viewer.sendMessage(message)
         }
     }
 
-    if (configEnabled && !vanished) {
-        Bukkit.getConsoleSender().sendMessage(message)
-    }
+    Bukkit.getConsoleSender().sendMessage(message)
 }

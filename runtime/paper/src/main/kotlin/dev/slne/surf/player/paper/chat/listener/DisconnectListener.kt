@@ -22,10 +22,7 @@ object DisconnectListener : Listener {
         // Same rules as on join, see ConnectListener.
         when (connectionMessageMode(player, event.quitMessage())) {
             ConnectionMessageMode.LEAVE_UNTOUCHED -> return
-            ConnectionMessageMode.RECIPIENTS_ONLY -> {
-                event.quitMessage(null)
-                broadcastConnectionMessage(player, createQuitMessage(player))
-            }
+            ConnectionMessageMode.SUPPRESS -> event.quitMessage(null)
 
             ConnectionMessageMode.ANNOUNCE -> {
                 event.quitMessage(null)
