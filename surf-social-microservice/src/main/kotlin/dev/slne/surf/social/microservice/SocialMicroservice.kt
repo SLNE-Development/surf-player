@@ -44,7 +44,7 @@ class SocialMicroservice : Microservice() {
             modules.forEach { it.createTables() }
         }
 
-        modules.forEach { it.registerHandlers(rabbitApi) }
+        modules.forEach { it.registerRpcServices(rabbitApi) }
         rabbitApi.freezeAndConnect()
     }
 

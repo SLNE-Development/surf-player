@@ -7,7 +7,7 @@ import java.nio.file.Path
  * One feature hosted by [SocialMicroservice].
  *
  * The microservice drives every module through the same lifecycle: [loadConfig] for all modules,
- * then [createTables] for all modules inside one shared transaction, then [registerHandlers] for
+ * then [createTables] for all modules inside one shared transaction, then [registerRpcServices] for
  * all modules, before RabbitMQ connects.
  */
 interface SocialMicroserviceModule {
@@ -17,6 +17,6 @@ interface SocialMicroserviceModule {
     /** Creates the module's schema and tables. Runs inside the shared bootstrap transaction. */
     suspend fun createTables()
 
-    /** Registers the module's request handlers and RPC services. Runs before RabbitMQ connects. */
-    fun registerHandlers(rabbit: ServerRabbitMQApi) = Unit
+    /** Registers the module's RPC services. Runs before RabbitMQ connects. */
+    fun registerRpcServices(rabbit: ServerRabbitMQApi) = Unit
 }

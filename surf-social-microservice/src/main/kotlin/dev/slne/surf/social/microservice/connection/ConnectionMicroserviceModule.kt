@@ -5,7 +5,6 @@ import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
 import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
 import dev.slne.surf.social.microservice.SocialMicroserviceModule
 import dev.slne.surf.social.microservice.connection.config.SocialConfig
-import dev.slne.surf.social.microservice.connection.handler.SocialConnectionsHandler
 import dev.slne.surf.social.microservice.connection.rpc.SocialConnectionRpcImpl
 import dev.slne.surf.social.microservice.connection.table.AccountsTable
 import java.nio.file.Path
@@ -24,8 +23,7 @@ object ConnectionMicroserviceModule : SocialMicroserviceModule {
         SchemaUtils.create(AccountsTable)
     }
 
-    override fun registerHandlers(rabbit: ServerRabbitMQApi) {
-        rabbit.registerRequestHandler(SocialConnectionsHandler)
+    override fun registerRpcServices(rabbit: ServerRabbitMQApi) {
         rabbit.registerRpcService<SocialConnectionRpc>(SocialConnectionRpcImpl)
     }
 }

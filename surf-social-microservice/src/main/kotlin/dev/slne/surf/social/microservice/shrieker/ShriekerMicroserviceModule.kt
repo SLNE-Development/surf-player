@@ -7,7 +7,7 @@ import dev.slne.surf.social.microservice.shrieker.table.ReportBansTable
 import dev.slne.surf.social.microservice.shrieker.table.ReportDataTable
 import dev.slne.surf.social.microservice.shrieker.table.ReportsTable
 
-/** Report storage. The microservice keeps the tables; it has no request handlers yet. */
+/** Report storage. The microservice keeps the tables; it has no RPC services yet. */
 object ShriekerMicroserviceModule : SocialMicroserviceModule {
     override suspend fun createTables() {
         createSchemaWithTables(SocialSchemas.shrieker, ReportsTable, ReportDataTable, ReportBansTable)

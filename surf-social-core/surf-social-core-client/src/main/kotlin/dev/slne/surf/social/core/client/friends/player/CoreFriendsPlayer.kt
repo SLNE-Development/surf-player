@@ -12,14 +12,10 @@ import dev.slne.surf.social.api.friends.result.FriendRequestStateResult
 import dev.slne.surf.social.api.friends.result.FriendshipRemoveResult
 import dev.slne.surf.social.api.friends.utils.toSurfPlayer
 import dev.slne.surf.social.core.client.friends.FriendsClientInstance
-import dev.slne.surf.social.core.client.SocialClient.rabbitApi
 import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.client.friends.redis.event.*
-import dev.slne.surf.social.core.common.friends.packets.friendrequest.ChangeFriendRequestStateRequestPacket
-import dev.slne.surf.social.core.common.friends.packets.friendrequest.CreateFriendRequestRequestPacket
-import dev.slne.surf.social.core.common.friends.packets.friendrequest.FriendRequestState
-import dev.slne.surf.social.core.common.friends.packets.friendrequest.RevokeFriendRequestRequestPacket
-import dev.slne.surf.social.core.common.friends.packets.friendship.RemoveFriendshipRequestPacket
+import dev.slne.surf.social.core.client.friends.rpc.friendsRpcService
+import dev.slne.surf.social.core.common.friends.rpc.FriendRequestState
 import dev.slne.surf.settings.api.SurfSettingsApi
 import dev.slne.surf.settings.api.setting.SettingKeys
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
@@ -165,12 +161,7 @@ class CoreFriendsPlayer(
             return FriendRequestCreateResult.AlreadyFriends(targetUuid)
         }
 
-        val result = rabbitApi.sendRequest(
-            CreateFriendRequestRequestPacket(
-                senderUuid = uuid,
-                targetUuid = targetUuid
-            )
-        ).result
+        val result = friendsRpcService.createFriendRequest(senderUuid = uuid, targetUuid = targetUuid)
 
         if (result !is FriendRequestCreateResult.Success) {
             return result
@@ -194,12 +185,7 @@ class CoreFriendsPlayer(
 
         val targetUuid = target.uuid
 
-        val result = rabbitApi.sendRequest(
-            RevokeFriendRequestRequestPacket(
-                senderUuid = uuid,
-                targetUuid = targetUuid
-            )
-        ).result
+        val result = friendsRpcService.revokeFriendRequest(senderUuid = uuid, targetUuid = targetUuid)
 
         if (result !is FriendRequestRemoveResult.Success) {
             return result
@@ -225,13 +211,11 @@ class CoreFriendsPlayer(
 
         val targetUuid = target.uuid
 
-        val result = rabbitApi.sendRequest(
-            ChangeFriendRequestStateRequestPacket(
-                senderUuid = targetUuid,
-                targetUuid = uuid,
-                state = FriendRequestState.ACCEPT
-            )
-        ).result
+        val result = friendsRpcService.answerFriendRequest(
+            senderUuid = targetUuid,
+            targetUuid = uuid,
+            state = FriendRequestState.ACCEPT
+        )
 
         if (result !is FriendRequestStateResult.Success) {
             return result
@@ -275,13 +259,11 @@ class CoreFriendsPlayer(
 
         val targetUuid = target.uuid
 
-        val result = rabbitApi.sendRequest(
-            ChangeFriendRequestStateRequestPacket(
-                senderUuid = targetUuid,
-                targetUuid = uuid,
-                state = FriendRequestState.DECLINE
-            )
-        ).result
+        val result = friendsRpcService.answerFriendRequest(
+            senderUuid = targetUuid,
+            targetUuid = uuid,
+            state = FriendRequestState.DECLINE
+        )
 
         if (result !is FriendRequestStateResult.Success) {
             return result
@@ -307,12 +289,7 @@ class CoreFriendsPlayer(
 
         val targetUuid = target.uuid
 
-        val result = rabbitApi.sendRequest(
-            RemoveFriendshipRequestPacket(
-                senderUuid = uuid,
-                targetUuid = targetUuid
-            )
-        ).result
+        val result = friendsRpcService.removeFriendship(senderUuid = uuid, targetUuid = targetUuid)
 
         if (result !is FriendshipRemoveResult.Success) {
             return result

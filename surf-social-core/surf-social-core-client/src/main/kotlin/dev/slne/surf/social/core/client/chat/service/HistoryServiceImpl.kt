@@ -6,10 +6,7 @@ import dev.slne.surf.api.core.util.toObjectList
 import dev.slne.surf.social.api.chat.entry.HistoryEntry
 import dev.slne.surf.social.api.chat.entry.HistoryFilter
 import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.SocialClient.rabbitApi
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.CreateHistoryEntryRequestPacket
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.FindHistoriesRequestPacket
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.MarkHistoryEntryDeletedRequestPacket
+import dev.slne.surf.social.core.client.chat.rpc.chatHistoryRpcService
 import dev.slne.surf.social.core.common.chat.service.HistoryService
 import it.unimi.dsi.fastutil.objects.ObjectList
 import kotlinx.coroutines.sync.Semaphore
@@ -25,18 +22,16 @@ class HistoryServiceImpl : HistoryService, Services.Fallback {
     private val loadHistorySemaphore = Semaphore(16)
 
     override suspend fun logMessage(messageData: MessageData) {
-        rabbitApi.sendRequest(
-            CreateHistoryEntryRequestPacket(
-                HistoryEntry(
-                    messageUuid = messageData.messageUuid,
-                    senderUuid = messageData.sender,
-                    receiverUuid = messageData.receiver,
-                    messageType = messageData.type,
-                    sentAt = messageData.sentAt,
-                    message = messageData.message.plain(),
-                    server = messageData.server,
-                    deleted = false
-                )
+        chatHistoryRpcService.createHistoryEntry(
+            HistoryEntry(
+                messageUuid = messageData.messageUuid,
+                senderUuid = messageData.sender,
+                receiverUuid = messageData.receiver,
+                messageType = messageData.type,
+                sentAt = messageData.sentAt,
+                message = messageData.message.plain(),
+                server = messageData.server,
+                deleted = false
             )
         )
     }
@@ -45,7 +40,7 @@ class HistoryServiceImpl : HistoryService, Services.Fallback {
         filter: HistoryFilter
     ): ObjectList<HistoryEntry> = withTimeout(10.seconds) {
         loadHistorySemaphore.withPermit {
-            rabbitApi.sendRequest(FindHistoriesRequestPacket(filter)).histories.toObjectList()
+            chatHistoryRpcService.findHistories(filter).toObjectList()
         }
     }
 
@@ -59,6 +54,6 @@ class HistoryServiceImpl : HistoryService, Services.Fallback {
         deletionReason: String?,
         deletedAt: OffsetDateTime
     ) {
-        rabbitApi.sendRequest(MarkHistoryEntryDeletedRequestPacket(messageUuid, deletedBy, deletionReason, deletedAt))
+        chatHistoryRpcService.markHistoryEntryDeleted(messageUuid, deletedBy, deletionReason, deletedAt)
     }
 }

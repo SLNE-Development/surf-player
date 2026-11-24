@@ -1,12 +1,15 @@
 package dev.slne.surf.social.microservice.chat
 
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
+import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatFunctionalityRpcService
+import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatHistoryRpcService
+import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatIgnoreRpcService
 import dev.slne.surf.social.core.common.chat.rabbit.rpc.ModerationService
 import dev.slne.surf.social.microservice.SocialMicroserviceModule
 import dev.slne.surf.social.microservice.SocialSchemas
-import dev.slne.surf.social.microservice.chat.handler.FunctionalityHandler
-import dev.slne.surf.social.microservice.chat.handler.HistoryHandler
-import dev.slne.surf.social.microservice.chat.handler.IgnoreListHandler
+import dev.slne.surf.social.microservice.chat.rpc.ChatFunctionalityRpcServiceImpl
+import dev.slne.surf.social.microservice.chat.rpc.ChatHistoryRpcServiceImpl
+import dev.slne.surf.social.microservice.chat.rpc.ChatIgnoreRpcServiceImpl
 import dev.slne.surf.social.microservice.chat.rpc.ModerationServiceImpl
 import dev.slne.surf.social.microservice.chat.table.FunctionalityTable
 import dev.slne.surf.social.microservice.chat.table.HistoryTable
@@ -25,11 +28,10 @@ object ChatMicroserviceModule : SocialMicroserviceModule {
         )
     }
 
-    override fun registerHandlers(rabbit: ServerRabbitMQApi) {
-        rabbit.registerRequestHandler(HistoryHandler)
-        rabbit.registerRequestHandler(FunctionalityHandler)
-        rabbit.registerRequestHandler(IgnoreListHandler)
-
+    override fun registerRpcServices(rabbit: ServerRabbitMQApi) {
+        rabbit.registerRpcService<ChatHistoryRpcService>(ChatHistoryRpcServiceImpl)
+        rabbit.registerRpcService<ChatFunctionalityRpcService>(ChatFunctionalityRpcServiceImpl)
+        rabbit.registerRpcService<ChatIgnoreRpcService>(ChatIgnoreRpcServiceImpl)
         rabbit.registerRpcService<ModerationService>(ModerationServiceImpl)
     }
 }

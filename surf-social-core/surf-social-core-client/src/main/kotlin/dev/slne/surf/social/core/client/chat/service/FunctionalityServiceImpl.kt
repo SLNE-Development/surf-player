@@ -1,13 +1,10 @@
 package dev.slne.surf.social.core.client.chat.service
 
 import com.google.auto.service.AutoService
-import dev.slne.surf.social.api.chat.functionality.Functionalities
-import dev.slne.surf.social.core.client.SocialClient.rabbitApi
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindAllFunctionalitiesRequestPacket
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindFunctionalityRequestPacket
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.UpsertFunctionalityRequestPacket
-import dev.slne.surf.social.core.common.chat.service.FunctionalityService
 import dev.slne.surf.core.api.common.SurfCoreApi
+import dev.slne.surf.social.api.chat.functionality.Functionalities
+import dev.slne.surf.social.core.client.chat.rpc.chatFunctionalityRpcService
+import dev.slne.surf.social.core.common.chat.service.FunctionalityService
 import net.kyori.adventure.util.Services
 
 @AutoService(FunctionalityService::class)
@@ -16,8 +13,7 @@ class FunctionalityServiceImpl : FunctionalityService, Services.Fallback {
     private var functionalities = Functionalities.EMPTY
 
     override suspend fun fetch(localServer: String) {
-        val fetched = rabbitApi.sendRequest(FindFunctionalityRequestPacket(localServer)).functionalities
-        functionalities = fetched
+        functionalities = chatFunctionalityRpcService.findFunctionalities(localServer)
     }
 
     override fun getFunctionalities(): Functionalities {
@@ -32,17 +28,17 @@ class FunctionalityServiceImpl : FunctionalityService, Services.Fallback {
         functionalities: Functionalities,
         localServer: String
     ) {
-        rabbitApi.sendRequest(UpsertFunctionalityRequestPacket(localServer, functionalities))
+        chatFunctionalityRpcService.upsertFunctionalities(localServer, functionalities)
         if (localServer == SurfCoreApi.getCurrentServerName()) {
             this.functionalities = functionalities
         }
     }
 
     override suspend fun getFunctionalities(localServer: String): Functionalities {
-        return rabbitApi.sendRequest(FindFunctionalityRequestPacket(localServer)).functionalities
+        return chatFunctionalityRpcService.findFunctionalities(localServer)
     }
 
     override suspend fun getFunctionalitiesForAllServers(): Map<String, Functionalities> {
-        return rabbitApi.sendRequest(FindAllFunctionalitiesRequestPacket()).functionalities
+        return chatFunctionalityRpcService.findAllFunctionalities()
     }
 }

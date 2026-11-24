@@ -6,8 +6,7 @@ import dev.slne.surf.social.api.friends.model.Friendship
 import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.core.client.friends.redis.listener.FriendRequestRedisListener
 import dev.slne.surf.social.core.client.friends.redis.listener.FriendshipRedisListener
-import dev.slne.surf.social.core.common.friends.packets.friendrequest.FetchFriendRequestsRequestPacket
-import dev.slne.surf.social.core.common.friends.packets.friendship.FetchFriendshipsRequestPacket
+import dev.slne.surf.social.core.client.friends.rpc.friendsRpcService
 import dev.slne.surf.redis.sync.list.SyncList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -74,18 +73,14 @@ abstract class FriendsClientInstance {
     }
 
     suspend fun fetchFriendRequests() {
-        val fetched = SocialClient.rabbitApi.sendRequest(
-            FetchFriendRequestsRequestPacket()
-        ).friendRequests
+        val fetched = friendsRpcService.fetchFriendRequests()
 
         friendRequests.clear()
         fetched.forEach(friendRequests::add)
     }
 
     suspend fun fetchFriendships() {
-        val fetched = SocialClient.rabbitApi.sendRequest(
-            FetchFriendshipsRequestPacket()
-        ).friendships
+        val fetched = friendsRpcService.fetchFriendships()
 
         friendships.clear()
         fetched.forEach(friendships::add)

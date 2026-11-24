@@ -4,8 +4,6 @@ import dev.slne.surf.social.api.connection.SocialConnection
 import dev.slne.surf.social.api.connection.impl.DiscordConnection
 import dev.slne.surf.social.api.connection.impl.TwitchConnection
 import dev.slne.surf.social.core.client.SocialClient
-import dev.slne.surf.social.core.common.connection.rabbit.packet.request.FindDiscordConnectionRequestPacket
-import dev.slne.surf.social.core.common.connection.rabbit.packet.request.FindTwitchConnectionRequestPacket
 import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
 import java.util.*
 
@@ -17,14 +15,8 @@ object SocialConnectionsService {
         connectionClass: Class<T>,
         minecraftUuid: UUID
     ): T? = when (connectionClass) {
-        DiscordConnection::class.java -> SocialClient.rabbitApi.sendRequest(
-            FindDiscordConnectionRequestPacket(minecraftUuid)
-        ).connection as? T
-
-        TwitchConnection::class.java -> SocialClient.rabbitApi.sendRequest(
-            FindTwitchConnectionRequestPacket(minecraftUuid)
-        ).connection as? T
-
+        DiscordConnection::class.java -> rpc.findDiscordConnection(minecraftUuid) as? T
+        TwitchConnection::class.java -> rpc.findTwitchConnection(minecraftUuid) as? T
         else -> null
     }
 

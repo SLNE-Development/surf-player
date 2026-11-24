@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.friends.packets.friendrequest
+package dev.slne.surf.social.core.common.friends.rpc
 
 import kotlinx.serialization.Serializable
 

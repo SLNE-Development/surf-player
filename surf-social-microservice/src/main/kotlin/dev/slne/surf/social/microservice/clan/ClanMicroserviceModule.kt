@@ -30,7 +30,7 @@ object ClanMicroserviceModule : SocialMicroserviceModule {
         migrateLegacyClanUuidColumns()
     }
 
-    override fun registerHandlers(rabbit: ServerRabbitMQApi) {
+    override fun registerRpcServices(rabbit: ServerRabbitMQApi) {
         rabbit.registerRpcService<ClanRpcService>(ClanRpcServiceImpl)
         rabbit.registerRpcService<ClanInviteRpcService>(ClanInviteRpcServiceImpl)
         rabbit.registerRpcService<ClanMemberRpcService>(ClanMemberRpcServiceImpl)

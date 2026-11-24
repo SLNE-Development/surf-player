@@ -3,9 +3,7 @@ package dev.slne.surf.social.core.client.chat.service
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
 import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
-import dev.slne.surf.social.core.client.SocialClient.rabbitApi
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.FindIgnoreListEntriesRequestPacket
-import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.UpdateIgnoreRequestPacket
+import dev.slne.surf.social.core.client.chat.rpc.chatIgnoreRpcService
 import dev.slne.surf.social.core.common.chat.service.IgnoreService
 import java.time.OffsetDateTime
 import java.util.*
@@ -17,11 +15,7 @@ class IgnoreServiceImpl : IgnoreService {
         .build<UUID, List<IgnoreListEntry>>()
 
     override suspend fun ignore(uuid: UUID, ignoredUUID: UUID): Boolean {
-        val ignored = rabbitApi.sendRequest(
-            UpdateIgnoreRequestPacket(
-                uuid, ignoredUUID, true
-            )
-        ).value
+        val ignored = chatIgnoreRpcService.ignore(uuid, ignoredUUID)
         if (ignored) {
             cache.asMap().compute(uuid) { _, ignoreList ->
                 if (ignoreList == null) {
@@ -36,11 +30,7 @@ class IgnoreServiceImpl : IgnoreService {
     }
 
     override suspend fun unignore(uuid: UUID, ignoredUUID: UUID): Boolean {
-        val unignored = rabbitApi.sendRequest(
-            UpdateIgnoreRequestPacket(
-                uuid, ignoredUUID, false
-            )
-        ).value
+        val unignored = chatIgnoreRpcService.unignore(uuid, ignoredUUID)
         if (unignored) {
             cache.asMap().compute(uuid) { _, ignoreList ->
                 ignoreList?.filterNot { it.target == ignoredUUID }
@@ -67,7 +57,7 @@ class IgnoreServiceImpl : IgnoreService {
     }
 
     override suspend fun loadIgnoreList(uuid: UUID): List<IgnoreListEntry> {
-        val ignoreList = rabbitApi.sendRequest(FindIgnoreListEntriesRequestPacket(uuid)).entries
+        val ignoreList = chatIgnoreRpcService.findIgnoreListEntries(uuid)
         cache.put(uuid, ignoreList)
         return ignoreList
     }
