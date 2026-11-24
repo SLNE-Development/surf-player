@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.common.queue.redis
 
+import dev.slne.surf.player.core.common.playerRedisKey
 import dev.slne.surf.player.core.common.queue.QueueSystem
 import dev.slne.surf.redis.RedisApi
 
@@ -9,8 +10,5 @@ import dev.slne.surf.redis.RedisApi
  */
 val redisApi: RedisApi get() = QueueSystem.redisApi
 
-/**
- * Prefixes [key] with the queue namespace. Unchanged since surf-queue, so queues stored by older
- * versions are picked up.
- */
-fun queueRedisKey(key: String) = "surf-queue:$key"
+/** The Redis key `surf-player:queue:<key>`. */
+fun queueRedisKey(key: String) = playerRedisKey("queue", key)

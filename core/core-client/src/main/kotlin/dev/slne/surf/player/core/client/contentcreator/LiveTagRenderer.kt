@@ -35,7 +35,7 @@ object LiveTagRenderer {
         val creator = ContentCreatorService.getContentCreator(playerUuid) ?: return false
 
         return PlatformType.entries
-            .any { creator.getPlatform(it)?.state == PlatformState.ONLINE }
+            .any { creator.getStreamingPlatform(it)?.state == PlatformState.ONLINE }
     }
 
     internal fun renderTag(live: Boolean, space: Boolean, liveTag: Component): Component {

@@ -6,13 +6,17 @@ import dev.slne.surf.player.core.common.clan.member.ClanMemberImpl
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 import java.util.*
 
+/** Clan memberships, stored by the microservice. */
 @RpcService
 interface ClanMemberRpcService {
+    suspend fun createMember(clanId: ULong, player: UUID, role: ClanMemberRole, invitedBy: UUID?): ClanMemberAddResult
 
-    suspend fun createMember(clanID: ULong, player: UUID, role: ClanMemberRole, invitedBy: UUID?): ClanMemberAddResult
-    suspend fun deleteMember(clanID: ULong, player: UUID): Boolean
+    /** @return `false` if [player] is no member of [clanId] */
+    suspend fun deleteMember(clanId: ULong, player: UUID): Boolean
 
-    suspend fun changeMemberRole(memberID: ULong, role: ClanMemberRole): Boolean
+    /** @return `false` if there is no member [memberId] */
+    suspend fun updateMemberRole(memberId: ULong, role: ClanMemberRole): Boolean
 
-    suspend fun findMemberByUUID(uuid: UUID): ClanMemberImpl?
+    /** The membership of [uuid], or `null` if they are in no clan. */
+    suspend fun findMemberByUuid(uuid: UUID): ClanMemberImpl?
 }

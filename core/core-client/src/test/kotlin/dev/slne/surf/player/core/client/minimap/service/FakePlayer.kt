@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.minimap.service
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
 import net.kyori.adventure.key.Key
 import java.util.*
@@ -14,7 +14,7 @@ class FakePlayer(
     private val channels: Set<String> = XaeroChannels.ALL.toSet(),
     override val uuid: UUID = UUID.randomUUID(),
     override val vanillaEffectCount: Int? = 40,
-) : CompanionPlayer {
+) : MinimapPlayer {
     val sent = mutableListOf<Pair<String, ByteArray>>()
     val addedEffects = mutableListOf<Int>()
     val removedEffects = mutableListOf<Int>()

@@ -9,8 +9,9 @@ import dev.slne.surf.player.api.chat.message.MessageType
 import dev.slne.surf.player.core.client.chat.service.HistoryService
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService
-import dev.slne.surf.player.core.client.chat.redis.event.TeamchatMessageRedisEvent
+import dev.slne.surf.player.core.client.chat.message.format.formatTeamchat
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.redis.event.TeamBroadcastRedisEvent
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.text.Component
 import java.time.OffsetDateTime
@@ -37,12 +38,9 @@ fun teamchatCommand() = commandAPICommand("teamchat") {
         )
 
         SurfPlayerClient.redisApi.publishEvent(
-            TeamchatMessageRedisEvent(
-                messageData
-            )
+            TeamBroadcastRedisEvent(formatTeamchat(messageData), ChatPermissions.COMMAND_TEAMCHAT)
         ).await()
 
         HistoryService.logMessage(messageData)
-        ModerationRedisService.cache(messageData)
     }
 }

@@ -9,7 +9,7 @@ import dev.slne.surf.player.core.client.minimap.xaero.XaeroSyncService
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroMapEffects
-import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.minimap.tracker.PaperTracker
 import org.bukkit.entity.Player
@@ -35,20 +35,20 @@ object CompanionListener : Listener {
         val player = event.player
         player.scheduler.run(plugin, {
             if (XaeroChannels.isMap(channel)) PaperTracker.reset(player)
-            MapSyncService.syncChannels(PaperCompanionPlayer(player), listOf(channel))
+            MapSyncService.syncChannels(PaperMinimapPlayer(player), listOf(channel))
         }, null)
     }
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
-        MapSyncService.sync(PaperCompanionPlayer(player))
+        MapSyncService.sync(PaperMinimapPlayer(player))
         PaperTracker.reset(player)
         PaperTracker.track(player)
 
         for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
             val ticks = delay.inWholeMilliseconds / 50
-            player.scheduler.runDelayed(plugin, { MapSyncService.sync(PaperCompanionPlayer(player)) }, null, ticks)
+            player.scheduler.runDelayed(plugin, { MapSyncService.sync(PaperMinimapPlayer(player)) }, null, ticks)
         }
     }
 
@@ -56,14 +56,14 @@ object CompanionListener : Listener {
     @EventHandler
     fun onAddToWorld(event: EntityAddToWorldEvent) {
         val player = event.entity as? Player ?: return
-        MapSyncService.sync(PaperCompanionPlayer(player, event.world))
+        MapSyncService.sync(PaperMinimapPlayer(player, event.world))
         resendMapEffects(player)
     }
 
     // The client drops every effect on respawn, so the maps would come back.
     @EventHandler
     fun onPostRespawn(event: PlayerPostRespawnEvent) {
-        XaeroMapEffects.sync(PaperCompanionPlayer(event.player), CompanionConfigs.current.config.disableMaps)
+        XaeroMapEffects.sync(PaperMinimapPlayer(event.player), CompanionConfigs.current.config.disableMaps)
         resendMapEffects(event.player)
     }
 
@@ -72,7 +72,7 @@ object CompanionListener : Listener {
     // so the effects go out once more on the next tick.
     private fun resendMapEffects(player: Player) {
         player.scheduler.run(plugin, {
-            XaeroMapEffects.sync(PaperCompanionPlayer(player), CompanionConfigs.current.config.disableMaps)
+            XaeroMapEffects.sync(PaperMinimapPlayer(player), CompanionConfigs.current.config.disableMaps)
         }, null)
     }
 

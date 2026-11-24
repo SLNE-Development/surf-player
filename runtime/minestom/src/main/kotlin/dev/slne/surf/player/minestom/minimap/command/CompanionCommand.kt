@@ -12,7 +12,7 @@ import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
 import dev.slne.surf.player.core.client.minimap.config.ReloadResult
 import dev.slne.surf.player.core.client.minimap.permission.CompanionPermissions
 import dev.slne.surf.player.core.client.minimap.service.MapSyncService
-import dev.slne.surf.player.minestom.minimap.platform.MinestomCompanionPlayer
+import dev.slne.surf.player.minestom.minimap.platform.MinestomMinimapPlayer
 import kotlinx.coroutines.launch
 import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Player
@@ -33,7 +33,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
                         // too, so a later reload that overtook this one wins.
                         player.scheduler().scheduleNextTick {
                             val instance = player.instance ?: return@scheduleNextTick
-                            MapSyncService.sync(MinestomCompanionPlayer(player, instance))
+                            MapSyncService.sync(MinestomMinimapPlayer(player, instance))
                         }
                     }
                 }
@@ -51,7 +51,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
                 // The player's instance is only safe to read in their own tick. Minestom runs no player tracker.
                 target.scheduler().scheduleNextTick {
                     val instance = target.instance ?: return@scheduleNextTick
-                    sender.sendMapInfo(MapInfo.of(MinestomCompanionPlayer(target, instance), target.username, CompanionConfigs.current))
+                    sender.sendMapInfo(MapInfo.of(MinestomMinimapPlayer(target, instance), target.username, CompanionConfigs.current))
                 }
             }
         }

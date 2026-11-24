@@ -1,6 +1,6 @@
 package dev.slne.surf.player.minestom.minimap.platform
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import net.kyori.adventure.key.Key
 import net.minestom.server.entity.Player
 import net.minestom.server.instance.Instance
@@ -8,10 +8,10 @@ import net.minestom.server.instance.Instance
 /**
  * Wraps [player] in [instance]. Messages reach only the channels the client registered.
  */
-class MinestomCompanionPlayer(
+class MinestomMinimapPlayer(
     private val player: Player,
     private val instance: Instance,
-) : CompanionPlayer {
+) : MinimapPlayer {
     override val uuid get() = player.uuid
     override val worldKey get() = Key.key(instance.dimensionName)
     override val worldIdentity get() = instance.dimensionName

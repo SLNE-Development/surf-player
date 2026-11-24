@@ -10,14 +10,17 @@ import java.util.*
 @RpcService
 interface SettingsRpcService {
     /** Every registered setting. */
-    suspend fun fetchSettings(): List<Setting>
+    suspend fun findAllSettings(): List<Setting>
 
-    /** Registers the setting [name], or replaces its default value if it already exists. */
-    suspend fun createSetting(name: String, defaultValue: String): Setting
+    /**
+     * Registers every setting of [defaultValues] (setting name to default value) in one
+     * transaction, replacing the default value of settings that already exist.
+     */
+    suspend fun createSettings(defaultValues: Map<String, String>): List<Setting>
 
     /** The values [playerUuid] chose, by setting name. Settings left at their default are missing. */
-    suspend fun fetchPlayerSettings(playerUuid: UUID): Map<String, String>
+    suspend fun findPlayerSettings(playerUuid: UUID): Map<String, String>
 
     /** Stores [value] as the value [playerUuid] chose for the setting [settingName]. */
-    suspend fun savePlayerSetting(playerUuid: UUID, settingName: String, value: String): Boolean
+    suspend fun savePlayerSetting(playerUuid: UUID, settingName: String, value: String)
 }

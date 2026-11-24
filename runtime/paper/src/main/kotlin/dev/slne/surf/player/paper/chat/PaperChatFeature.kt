@@ -5,6 +5,7 @@ import dev.slne.surf.player.core.client.chat.processor.ChatProcessorRegistry
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.player.core.client.chat.config.initChatConfig
+import dev.slne.surf.player.core.client.chat.redis.ChatRedisListener
 import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.paper.chat.command.direct.directMessageCommand
 import dev.slne.surf.player.paper.chat.command.direct.replyCommand
@@ -38,7 +39,7 @@ object PaperChatFeature : PaperPlayerFeature {
         initChatConfig(dataPath)
         AiModerationConfig.init(dataPath)
 
-        SurfPlayerClient.redisApi.subscribeToEvents(RedisEventListener)
+        SurfPlayerClient.redisApi.subscribeToEvents(ChatRedisListener)
         SurfPlayerClient.redisApi.registerRequestHandler(RedisEventListener)
 
         ChatProcessorRegistry.register(CharPreChatProcessor)

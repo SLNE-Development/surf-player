@@ -11,7 +11,7 @@ private val platform = requiredService<ContentCreatorPlatform>()
 /**
  * Gives platform-neutral code access to the few things only the running platform can answer.
  *
- * Not to be confused with [dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform], a
+ * Not to be confused with [dev.slne.surf.player.api.contentcreator.StreamingPlatform], a
  * streaming platform of a content creator.
  */
 interface ContentCreatorPlatform {

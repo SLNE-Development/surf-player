@@ -3,7 +3,7 @@ package dev.slne.surf.player.core.client.minimap.command
 import dev.slne.surf.player.core.client.minimap.config.CompanionSettings
 import dev.slne.surf.player.core.client.minimap.global.GlobalFeature
 import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapChannels
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.world.LevelIds
 import dev.slne.surf.player.core.client.minimap.world.WorldInfo
@@ -53,7 +53,7 @@ data class MapInfo(
          * Collects what [player], shown as [playerName], gets under [settings].
          */
         fun of(
-            player: CompanionPlayer,
+            player: MinimapPlayer,
             playerName: String,
             settings: CompanionSettings,
             tracker: MapTrackerInfo? = null

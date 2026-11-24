@@ -6,8 +6,8 @@ import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService
-import dev.slne.surf.player.core.client.chat.redis.event.TeamchatMessageRedisEvent
+import dev.slne.surf.player.core.client.chat.message.format.formatTeamchat
+import dev.slne.surf.player.core.client.chat.redis.event.TeamBroadcastRedisEvent
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
 import dev.slne.surf.player.core.client.chat.service.HistoryService
 import dev.slne.surf.core.api.common.SurfCoreApi
@@ -36,12 +36,9 @@ fun teamchatCommand() = commandAPICommand("teamchat") {
         )
 
         redisApi.publishEvent(
-            TeamchatMessageRedisEvent(
-                messageData
-            )
+            TeamBroadcastRedisEvent(formatTeamchat(messageData), ChatPermissions.COMMAND_TEAMCHAT)
         ).await()
 
         HistoryService.logMessage(messageData)
-        ModerationRedisService.cache(messageData)
     }
 }

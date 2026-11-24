@@ -4,7 +4,7 @@ import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
 import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
 import dev.slne.surf.player.core.client.minimap.config.XaeroConfig
 import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.core.client.minimap.world.LevelIds
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -28,7 +28,7 @@ object XaeroSyncService {
      * are hidden too.
      */
     fun sync(
-        player: CompanionPlayer,
+        player: MinimapPlayer,
         channels: Collection<String> = XaeroChannels.ALL,
         config: MinimapCompanionConfig = CompanionConfigs.current.config,
         xaero: XaeroConfig = CompanionConfigs.current.xaero,
@@ -58,7 +58,7 @@ object XaeroSyncService {
 
     // Resent on every world join: the client drops the enforced config whenever a new world
     // reaches it before the dimension handshake does.
-    private fun syncLib(player: CompanionPlayer, profile: XaeroServerProfile) {
+    private fun syncLib(player: MinimapPlayer, profile: XaeroServerProfile) {
         player.sendPluginMessage(XaeroChannels.LIB, XaeroLibPackets.dimensionHandshake())
         player.sendPluginMessage(XaeroChannels.LIB, XaeroLibPackets.serverHandshake())
 

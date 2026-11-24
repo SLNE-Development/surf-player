@@ -22,28 +22,34 @@ interface PlaytimeRpcService {
      */
     suspend fun saveSession(session: PlaytimeSession): Boolean
 
-    suspend fun loadSessions(playerUuid: UUID): Set<PlaytimeSession>
-
-    suspend fun loadSessionsByServer(playerUuid: UUID, serverName: String): Set<PlaytimeSession>
-
-    suspend fun loadSessionsByCategory(playerUuid: UUID, category: String): Set<PlaytimeSession>
-
-    /** The sum of the stored playtime of [playerUuid] on [serverName] in seconds. */
-    suspend fun loadPlaytimeSecondsByServer(playerUuid: UUID, serverName: String): Long
-
-    /** See [dev.slne.surf.player.api.playtime.SurfPlaytimeApi.getPlaytimePerPlayer]. */
-    suspend fun loadPlaytimePerPlayer(filter: PlaytimeFilter): Map<UUID, Long>
-
-    suspend fun loadStreak(playerUuid: UUID): PlaytimeStreak?
+    /** Every stored session of [playerUuid]. */
+    suspend fun findSessions(playerUuid: UUID): Set<PlaytimeSession>
 
     /**
-     * Stores [streak] as the current login streak of [playerUuid] at [date], raising the longest
-     * streak if [streak] exceeds it.
+     * The summed duration in seconds of the stored sessions of [playerUuid], only counting sessions
+     * on [server] and in [category] where given, and leaving out the session [excludedSessionId]
+     * (the running session the caller adds itself).
      */
-    suspend fun saveStreak(playerUuid: UUID, streak: Int, date: LocalDate)
+    suspend fun findPlaytimeSeconds(
+        playerUuid: UUID,
+        server: String?,
+        category: String?,
+        excludedSessionId: UUID?
+    ): Long
 
-    /** Calculates the login streak of [playerUuid] up to today from the stored sessions. */
+    /** See [dev.slne.surf.player.api.playtime.SurfPlaytimeApi.getPlaytimePerPlayer]. */
+    suspend fun findPlaytimePerPlayer(filter: PlaytimeFilter): Map<UUID, Long>
+
+    suspend fun findStreak(playerUuid: UUID): PlaytimeStreak?
+
+    /** Calculates the login streak of [playerUuid] up to today from the stored sessions, without storing it. */
     suspend fun calculateStreak(playerUuid: UUID): Int
+
+    /**
+     * Advances the stored login streak of [playerUuid] for a login on [today] (the date of the
+     * client, which may live in another time zone than the microservice) and stores it.
+     */
+    suspend fun updateLoginStreak(playerUuid: UUID, today: LocalDate): LoginStreakUpdate
 
     /**
      * Recalculates and stores the login streak of [playerUuid] as of their last login. Returns
@@ -54,7 +60,7 @@ interface PlaytimeRpcService {
     /** Recalculates and stores the login streaks of all players; returns their number. */
     suspend fun recalculateAllStreaks(): Int
 
-    suspend fun loadStreakPauses(): List<PlaytimeStreakPause>
+    suspend fun findStreakPauses(): List<PlaytimeStreakPause>
 
     suspend fun createStreakPause(startDate: LocalDate, endDate: LocalDate): PlaytimeStreakPause
 

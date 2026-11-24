@@ -13,9 +13,8 @@ import dev.slne.surf.player.core.client.chat.config.aiModerationConfig
 import dev.slne.surf.player.core.client.chat.message.format.appendBotIcon
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
-import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService
-import dev.slne.surf.player.core.client.chat.redis.event.TeamMessageRedisEvent
-import dev.slne.surf.player.core.client.chat.rpc.moderationService
+import dev.slne.surf.player.core.client.chat.redis.event.TeamBroadcastRedisEvent
+import dev.slne.surf.player.core.client.chat.rpc.chatModerationRpcService
 import dev.slne.surf.player.core.client.chat.util.hasPermission
 import dev.slne.surf.player.core.client.chat.webhook.DiscordClient
 import dev.slne.surf.player.core.client.chat.webhook.DiscordMessages
@@ -86,11 +85,10 @@ object AiModerationPostChatProcessor : PostChatProcessor {
 
         val name = messageData.senderUser().lastKnownName ?: messageData.sender.toString()
 
-        ModerationRedisService.cache(messageData, classification)
         postWebhook(messageData, classification)
 
         redisApi.publishEvent(
-            TeamMessageRedisEvent(
+            TeamBroadcastRedisEvent(
                 buildText {
                     appendBotIcon()
                     info("Die Nachricht von ")
@@ -138,7 +136,8 @@ object AiModerationPostChatProcessor : PostChatProcessor {
                             })
                         }
                     }
-                }
+                },
+                ChatPermissions.PREFIX_TEAM
             )).await()
 
         when (classification.action) {
@@ -158,7 +157,7 @@ object AiModerationPostChatProcessor : PostChatProcessor {
         }
 
         runCatching {
-            moderationService.logModeration(messageData, classification)
+            chatModerationRpcService.createModerationLog(messageData, classification)
         }.onFailure { log.atWarning().withCause(it).log("Failed to log AI moderation") }
     }
 

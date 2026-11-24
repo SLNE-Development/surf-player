@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.minimap.voxelmap
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 
 /**
  * The plugin channel VoxelMap's server side sends its settings on. The world ID goes through
@@ -11,5 +11,5 @@ object VoxelMapChannels {
 
     fun isVoxelMap(channel: String) = channel == SETTINGS
 
-    fun hasVoxelMap(player: CompanionPlayer) = player.hasChannel(SETTINGS)
+    fun hasVoxelMap(player: MinimapPlayer) = player.hasChannel(SETTINGS)
 }

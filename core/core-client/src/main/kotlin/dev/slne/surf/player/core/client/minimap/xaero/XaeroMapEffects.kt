@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.minimap.xaero
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -23,7 +23,7 @@ object XaeroMapEffects {
      * Gives [player] the effects that hide each of Xaero's maps their client has while [disableMaps] is on,
      * and takes back the ones given before once it is off.
      */
-    fun sync(player: CompanionPlayer, disableMaps: Boolean) {
+    fun sync(player: MinimapPlayer, disableMaps: Boolean) {
         val effects = if (disableMaps) mapsOffEffects(player) else emptySet()
         val previous = if (effects.isEmpty()) given.remove(player.uuid) else given.put(player.uuid, effects)
 
@@ -36,7 +36,7 @@ object XaeroMapEffects {
         }
     }
 
-    private fun mapsOffEffects(player: CompanionPlayer): Set<Int> {
+    private fun mapsOffEffects(player: MinimapPlayer): Set<Int> {
         val vanillaEffects = player.vanillaEffectCount ?: return emptySet()
         val hasMinimap = player.hasChannel(XaeroChannels.MINIMAP)
 

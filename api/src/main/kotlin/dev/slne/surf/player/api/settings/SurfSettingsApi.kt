@@ -1,7 +1,6 @@
 package dev.slne.surf.player.api.settings
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.player.api.settings.setting.PlayerSetting
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.api.settings.setting.SettingKey
 import it.unimi.dsi.fastutil.objects.ObjectSet
@@ -46,36 +45,6 @@ interface SurfSettingsApi {
      * Opens the settings GUI for a player.
      */
     fun openSettingsGui(playerUuid: UUID)
-
-    @Deprecated(
-        "Use getSettingValue(playerUuid, key) instead.",
-        ReplaceWith("getSettingValue(playerUuid, key)")
-    )
-    fun getPlayerSettings(playerUuid: UUID): ObjectSet<PlayerSetting>
-
-    @Deprecated(
-        "Use getSettingValue(playerUuid, key) instead.",
-        ReplaceWith("getSettingValue(playerUuid, key)")
-    )
-    fun getPlayerSetting(playerUuid: UUID, settingName: String): PlayerSetting?
-
-    @Deprecated("Use createSetting(key) instead.", ReplaceWith("createSetting(key)"))
-    suspend fun createSetting(name: String, defaultValue: String): Setting
-
-    @Deprecated(
-        "Use saveSetting(playerUuid, key, value) instead.",
-        ReplaceWith("saveSetting(playerUuid, key, value)")
-    )
-    suspend fun saveSetting(playerUuid: UUID, playerSetting: PlayerSetting)
-
-    @Deprecated(
-        "Use saveSetting(playerUuid, key, value) instead.",
-        ReplaceWith("saveSetting(playerUuid, key, value)")
-    )
-    suspend fun saveSetting(playerUuid: UUID, settingName: String, settingValue: String)
-
-    @Deprecated("Use getSetting(key) instead.", ReplaceWith("getSetting(key)"))
-    fun getSetting(name: String): Setting?
 
     companion object : SurfSettingsApi by instance {
         val INSTANCE: SurfSettingsApi get() = instance

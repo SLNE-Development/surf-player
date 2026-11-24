@@ -4,7 +4,7 @@ import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapChannels
 import dev.slne.surf.player.core.client.minimap.service.MapSyncService
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
-import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
 import dev.slne.surf.player.paper.plugin
 
 /**
@@ -27,7 +27,7 @@ object PluginChannelListener {
         for (channel in JourneyMapChannels.ANNOUNCED) {
             messenger.registerOutgoingPluginChannel(plugin, channel)
             messenger.registerIncomingPluginChannel(plugin, channel) { _, player, _ ->
-                player.scheduler.run(plugin, { MapSyncService.answer(PaperCompanionPlayer(player), channel) }, null)
+                player.scheduler.run(plugin, { MapSyncService.answer(PaperMinimapPlayer(player), channel) }, null)
             }
         }
 

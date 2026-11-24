@@ -27,12 +27,14 @@ object ClanPlayerRepository {
     }
 
     suspend fun changeAcceptsClanInvites(
-        playerID: ULong,
+        uuid: UUID,
         acceptsClanInvites: Boolean
-    ): Boolean = suspendTransaction {
-        ClanPlayerTable.update({ ClanPlayerTable.id eq playerID }) {
+    ): Unit = suspendTransaction {
+        val player = findOrCreateByUuid(uuid)
+
+        ClanPlayerTable.update({ ClanPlayerTable.id eq player.ID }) {
             it[this.acceptsClanInvites] = acceptsClanInvites
-        } > 0
+        }
     }
 
     private suspend fun selectByUuid(uuid: UUID): ClanPlayerImpl? = ClanPlayerTable.selectAll()

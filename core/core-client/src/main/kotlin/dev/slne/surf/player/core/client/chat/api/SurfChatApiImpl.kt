@@ -14,7 +14,6 @@ import dev.slne.surf.player.core.client.chat.message.MessageRedirectorRegistry
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.player.core.client.chat.processor.ChatProcessorRegistry
 import dev.slne.surf.player.core.client.chat.processor.post.AiModerationPostChatProcessor
-import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.player.core.client.chat.redis.event.DeleteRemoteMessageRedisEvent
 import dev.slne.surf.player.core.client.chat.service.HistoryService
 import dev.slne.surf.player.core.client.chat.service.IgnoreService
@@ -28,7 +27,6 @@ import java.util.*
 class SurfChatApiImpl : SurfChatApi, Services.Fallback {
     override suspend fun logMessage(data: MessageData) {
         HistoryService.logMessage(data)
-        ModerationRedisService.cache(data)
     }
 
     override fun registerChatProcessor(processor: PreChatProcessor) {

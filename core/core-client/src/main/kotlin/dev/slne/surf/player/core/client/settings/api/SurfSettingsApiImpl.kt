@@ -50,41 +50,4 @@ class SurfSettingsApiImpl : SurfSettingsApi, Services.Fallback {
     override fun openSettingsGui(playerUuid: UUID) {
         SettingsPlatform.openSettingsGui(playerUuid)
     }
-
-    @Deprecated(
-        "Use getSettingValue(playerUuid, key) instead.",
-        ReplaceWith("getSettingValue(playerUuid, key)")
-    )
-    override fun getPlayerSettings(playerUuid: UUID): ObjectSet<PlayerSetting> =
-        SettingsService.getSettingsForPlayer(playerUuid)
-
-    @Deprecated(
-        "Use getSettingValue(playerUuid, key) instead.",
-        ReplaceWith("getSettingValue(playerUuid, key)")
-    )
-    override fun getPlayerSetting(playerUuid: UUID, settingName: String): PlayerSetting? =
-        SettingsService.getSettingForPlayerOrDefault(playerUuid, settingName)
-
-    @Deprecated("Use createSetting(key) instead.", ReplaceWith("createSetting(key)"))
-    override suspend fun createSetting(name: String, defaultValue: String): Setting =
-        SettingsService.createSetting(name, defaultValue)
-
-    @Deprecated(
-        "Use saveSetting(playerUuid, key, value) instead.",
-        ReplaceWith("saveSetting(playerUuid, key, value)")
-    )
-    override suspend fun saveSetting(playerUuid: UUID, playerSetting: PlayerSetting) {
-        SettingsService.cacheAndSavePlayerSetting(playerUuid, playerSetting)
-    }
-
-    @Deprecated(
-        "Use saveSetting(playerUuid, key, value) instead.",
-        ReplaceWith("saveSetting(playerUuid, key, value)")
-    )
-    override suspend fun saveSetting(playerUuid: UUID, settingName: String, settingValue: String) {
-        save(playerUuid, settingName, settingValue)
-    }
-
-    @Deprecated("Use getSetting(key) instead.", ReplaceWith("getSetting(key)"))
-    override fun getSetting(name: String): Setting? = SettingsService.getSettingByName(name)
 }

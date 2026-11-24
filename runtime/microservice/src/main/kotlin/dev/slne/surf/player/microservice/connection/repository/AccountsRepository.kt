@@ -12,7 +12,7 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.player.api.connection.impl.DiscordConnection
 import dev.slne.surf.player.api.connection.impl.TwitchConnection
-import dev.slne.surf.player.core.common.connection.rabbit.rpc.UnlinkResult
+import dev.slne.surf.player.core.common.connection.rpc.UnlinkResult
 import dev.slne.surf.player.microservice.connection.config.SocialConfig
 import dev.slne.surf.player.microservice.connection.table.AccountsTable
 import kotlinx.coroutines.CancellationException

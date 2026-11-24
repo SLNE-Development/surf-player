@@ -1,4 +1,4 @@
-package dev.slne.surf.player.core.common.chat.rabbit.rpc
+package dev.slne.surf.player.core.common.chat.rpc
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 import dev.slne.surf.player.api.chat.entry.HistoryEntry
@@ -9,16 +9,16 @@ import java.util.*
 /** The chat message history stored by the microservice. */
 @RpcService
 interface ChatHistoryRpcService {
-    suspend fun createHistoryEntry(entry: HistoryEntry): Boolean
+    suspend fun createHistoryEntry(entry: HistoryEntry)
 
     /** The newest entries matching [filter], newest first. */
-    suspend fun findHistories(filter: HistoryFilter): List<HistoryEntry>
+    suspend fun findHistoryEntries(filter: HistoryFilter): List<HistoryEntry>
 
-    /** @return `false` if no entry with [messageUuid] exists */
-    suspend fun markHistoryEntryDeleted(
+    /** Marks the entry of [messageUuid] as deleted; does nothing if there is no such entry. */
+    suspend fun updateHistoryEntryDeleted(
         messageUuid: UUID,
         deletedBy: UUID?,
         deletionReason: String?,
         deletedAt: OffsetDateTime
-    ): Boolean
+    )
 }

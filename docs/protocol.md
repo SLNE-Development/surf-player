@@ -1,0 +1,222 @@
+# Wire protocol
+
+surf-player talks over two connections, both named `surf-player`:
+
+- **RabbitMQ RPC** between the client plugins (Paper, Minestom, Velocity) and the single
+  microservice. Every service is an `@RpcService` interface in
+  `core.common.<feature>.rpc`, implemented by an `object` in `microservice.<feature>.rpc` and
+  registered by the feature's `<Feature>MicroserviceModule`; clients use the lazies in
+  `core.client.<feature>.rpc/RpcServices.kt`. Requests time out after the configured
+  `requestTimeoutSeconds` (default 60 s); chat history lookups additionally give up after 10 s.
+- **Redis** (surf-redis) between the client plugins: events and requests for live cross-server
+  messaging, synchronized structures and caches. The microservice does not use Redis.
+
+The whole protocol is internal and may change in any release; the network is restarted as a
+whole and Redis may be flushed. Only two formats are consumed by external systems and must stay
+stable:
+
+| Format                                                       | Consumer     |
+|--------------------------------------------------------------|--------------|
+| Redis stream `surf-discord:discord-roles:whitelisted-roles`  | surf-discord |
+| Postgres table `public.account`                              | website      |
+
+## Conventions
+
+**RPC methods** use one verb per kind of operation:
+
+| Verb       | Meaning                                                                 |
+|------------|-------------------------------------------------------------------------|
+| `find*`    | read; returns `null` / an empty collection if nothing matches           |
+| `create*`  | insert                                                                  |
+| `update*`  | change an existing row                                                  |
+| `save*`    | insert or replace                                                       |
+| `delete*`  | remove                                                                  |
+
+Domain verbs are kept where they describe a state transition (`acceptInvite`,
+`answerFriendRequest`, `revokeFriendRequest`, `calculateStreak`). Expected failures are sealed
+results; a `Boolean` is only returned where it has one documented meaning ("did it exist").
+A client never calls an RPC method in a loop; batch methods exist instead
+(`createSettings`, `updateLoginStreak`).
+
+**Redis keys** of every raw Redisson structure, cache and sync structure are
+`surf-player:<feature>:<name>` (`playerRedisKey(feature, name)` in core-common), in kebab-case
+and without version suffixes. Events and requests are `@Serializable` classes in
+`core.client.<feature>.redis`; their names are their channel identity.
+
+## chat
+
+RPC:
+
+- `ChatFunctionalityRpcService`
+  - `findFunctionalities(serverName): Functionalities` - creates the defaults for unknown servers
+  - `findAllFunctionalities(): Map<String, Functionalities>`
+  - `saveFunctionalities(serverName, functionalities)`
+- `ChatHistoryRpcService`
+  - `createHistoryEntry(entry)`
+  - `findHistoryEntries(filter): List<HistoryEntry>` - newest first
+  - `updateHistoryEntryDeleted(messageUuid, deletedBy, deletionReason, deletedAt)`
+- `ChatIgnoreRpcService`
+  - `createIgnore(playerUuid, targetUuid): Boolean` - `false` if already ignored; also deletes
+    the pending friend requests between both players
+  - `deleteIgnore(playerUuid, targetUuid): Boolean` - `false` if not ignored
+  - `findIgnoreList(playerUuid): List<IgnoreListEntry>`
+- `ChatModerationRpcService`
+  - `createModerationLog(messageData, classification)`
+
+Redis:
+
+| Kind     | Name                                                                               | Purpose                                                                                       |
+|----------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| map      | `surf-player:chat:reply-targets`                                                    | last direct message partner per player for `/reply`, 15 min TTL per entry                      |
+| event    | `TeamBroadcastRedisEvent(message, permission)`                                      | team chat messages and AI moderation notices, shown on every server to players with permission |
+| event    | `DeleteRemoteMessageRedisEvent(messageSignature)`                                   | deletes a signed chat message on every server                                                 |
+| request  | `SendDirectMessageRedisRequest` -> `SendDirectMessageHandledRedisResponse`         | delivers a direct message on the server hosting the receiver                                  |
+| request  | `SendSignedMessageRedisRequest` -> `SendSignedMessageHandledRedisResponse`         | shows a signed message on the server hosting the target                                       |
+
+The two events are handled once for all platforms by `ChatRedisListener` (core-client); the two
+requests need platform types and are handled by the Paper and Minestom chat features.
+
+## clan
+
+RPC:
+
+- `ClanRpcService` (`update*`/`delete*` return `false` if the clan does not exist)
+  - `createClan(name, tag, owner, tagForegroundColor, tagBackgroundColor, tagShadowColor, description, discordInvite): ClanCreationResult`
+  - `deleteClan(clanId): Boolean`
+  - `findClansByMemberCount(): List<ClanImpl>` - without members, biggest first
+  - `findClanById(clanId)`, `findClanByMember(memberUuid)`, `findClanByTag(tag)`,
+    `findClanByUuid(clanUuid)`: `ClanImpl?`
+  - `findClanTagsByPrefix(prefix, limit): List<String>`
+  - `updateClanDescription(clanId, description): Boolean`
+  - `updateClanDiscordInvite(clanId, discordInvite): Boolean`
+  - `updateClanTagColor(clanId, foreground, background, shadow): Boolean`
+- `ClanInviteRpcService`
+  - `acceptInvite(inviteId, invitee, invitedBy): ClanInviteAcceptance` -
+    `Accepted(clan)` / `AlreadyInClan` / `InviteNotFound`; the joined clan is returned directly
+  - `createInvite(clanId, invitee, invitedBy): ClanInviteResult`
+  - `deleteInvite(clanId, invitee): Boolean`
+  - `findPendingInvitesOfClan(clanId): Set<ClanInviteImpl>`
+  - `findPendingInvitesOfPlayer(invitee): List<ClanInviteImpl>`
+  - `findPendingInvite(invitee, clanName): ClanInviteImpl?`
+- `ClanMemberRpcService`
+  - `createMember(clanId, player, role, invitedBy): ClanMemberAddResult`
+  - `deleteMember(clanId, player): Boolean`
+  - `updateMemberRole(memberId, role): Boolean`
+  - `findMemberByUuid(uuid): ClanMemberImpl?`
+- `ClanPlayerRpcService`
+  - `findClanPlayer(uuid): ClanPlayerImpl` - created with defaults if missing
+  - `updateAcceptsClanInvites(uuid, acceptsClanInvites)` - by UUID, no prior lookup needed
+
+Redis:
+
+| Kind            | Name                        | Purpose                                                                    |
+|-----------------|-----------------------------|----------------------------------------------------------------------------|
+| set cache       | `surf-player:clan:clans`    | `ClanImpl` by id, indexed by tag, uuid and member uuids; 15 min            |
+| cache           | `surf-player:clan:players`  | `ClanPlayerImpl` by player uuid; 30 min                                    |
+
+Writes invalidate the affected cache entries; there are no clan events.
+
+## connection
+
+RPC: `ConnectionRpcService` (reads and writes `public.account`)
+
+- `findDiscordConnection(minecraftUuid): DiscordConnection?`
+- `findTwitchConnection(minecraftUuid): TwitchConnection?`
+- `deleteMinecraftLink(minecraftUuid): UnlinkResult` - `NotLinked` / `Unlinked(discordId)`
+
+Redis:
+
+| Kind   | Name                                          | Purpose                                                                                     |
+|--------|-----------------------------------------------|---------------------------------------------------------------------------------------------|
+| stream | `surf-discord:discord-roles:whitelisted-roles` | **external**, read by surf-discord: field `request`, JSON `{"action":"ADD"/"REMOVE","userId":<long>}`, max length 10 000 |
+
+## friends
+
+RPC: `FriendsRpcService`. Clients check the preconditions against the synchronized lists; the
+microservice checks ignores and cooldowns.
+
+- `findAllFriendRequests(): List<FriendRequest>`
+- `findAllFriendships(): List<Friendship>` - stored once per direction
+- `createFriendRequest(senderUuid, targetUuid): FriendRequestCreateResult`
+- `revokeFriendRequest(senderUuid, targetUuid): FriendRequestRemoveResult`
+- `answerFriendRequest(senderUuid, targetUuid, state): FriendRequestStateResult`
+- `deleteFriendship(senderUuid, targetUuid): FriendshipRemoveResult` - both directions
+
+Redis:
+
+| Kind      | Name                                          | Purpose                                                                                       |
+|-----------|-----------------------------------------------|-----------------------------------------------------------------------------------------------|
+| sync list | `surf-player:friends:requests`                | every pending `FriendRequest`                                                                 |
+| sync list | `surf-player:friends:friendships`             | every `Friendship`                                                                            |
+| lock      | `surf-player:friends:reload-lock`             | serializes the reload of both lists from the microservice that every server does on startup  |
+| event     | `FriendsRedisEvent(action, executorUuid, targetUuid)` | `REQUEST_SENT`, `REQUEST_REVOKED`, `REQUEST_ACCEPTED`, `REQUEST_DECLINED`, `FRIENDSHIP_REMOVED`; the servers hosting either player notify them |
+
+Whether the target of `REQUEST_SENT` is notified is decided by the server hosting the target,
+the only one that has the target's settings cached.
+
+## playtime
+
+RPC: `PlaytimeRpcService`. Clients track running sessions and persist them through `saveSession`.
+
+- `saveSession(session): Boolean` - sessions shorter than one minute are not stored
+- `findSessions(playerUuid): Set<PlaytimeSession>`
+- `findPlaytimeSeconds(playerUuid, server?, category?, excludedSessionId?): Long` - summed by
+  the database; the caller adds its running session and excludes its stored save
+- `findPlaytimePerPlayer(filter): Map<UUID, Long>`
+- `findStreak(playerUuid): PlaytimeStreak?`
+- `calculateStreak(playerUuid): Int` - not stored
+- `updateLoginStreak(playerUuid, today): LoginStreakUpdate` - `Created` / `Updated`; the whole
+  login streak update of a join (load, pauses, calculate, store) in one call
+- `recalculateStreak(playerUuid): PlaytimeStreak?`, `recalculateAllStreaks(): Int`
+- `findStreakPauses()`, `createStreakPause(startDate, endDate)`, `deleteStreakPause(pauseId): Boolean`
+
+Redis: none.
+
+## queue
+
+No RPC. The queues live in Redis, one set of keys per target server:
+
+| Kind              | Name                                                    | Purpose                                         |
+|-------------------|---------------------------------------------------------|-------------------------------------------------|
+| scored sorted set | `surf-player:queue:servers:<server>:entries`            | queued players by priority score                |
+| map               | `surf-player:queue:servers:<server>:meta`               | `QueueEntry` per queued player                  |
+| map               | `surf-player:queue:servers:<server>:last-seen`          | last heartbeat per queued player                |
+| map               | `surf-player:queue:servers:<server>:retry-count`        | failed transfer attempts per player             |
+| bucket            | `surf-player:queue:servers:<server>:paused`             | whether the queue is paused                     |
+| bucket            | `surf-player:queue:servers:<server>:epoch-ms`           | creation time; its existence marks a queue, discovered by key scan every 30 s |
+| semaphore         | `surf-player:queue:servers:<server>:transfer-semaphore` | one transfer at a time                          |
+| semaphore         | `surf-player:queue:servers:<server>:cleanup-semaphore`  | one cleanup at a time                           |
+| map cache         | `surf-player:queue:reconnects`                          | server a disconnected player is re-queued for, with per-entry TTL (Velocity) |
+
+## settings
+
+RPC: `SettingsRpcService`
+
+- `findAllSettings(): List<Setting>`
+- `createSettings(defaultValues: Map<String, String>): List<Setting>` - registers several
+  settings in one transaction; every platform registers its built-in settings with one call
+- `findPlayerSettings(playerUuid): Map<String, String>` - only values differing from the default
+- `savePlayerSetting(playerUuid, settingName, value)`
+
+Redis: none. Player settings are cached per server for the players online there.
+
+## tab
+
+No RPC.
+
+| Kind  | Name                                     | Purpose                                                   |
+|-------|------------------------------------------|-----------------------------------------------------------|
+| event | `TabEntryUpdateRedisEvent(toUpdateUuid)` | every server re-renders the tab entry of that player       |
+
+## vanish
+
+No RPC.
+
+| Kind     | Name                                    | Purpose                                                          |
+|----------|-----------------------------------------|------------------------------------------------------------------|
+| sync set | `surf-player:vanish:vanished-players`   | UUIDs of vanished players; kept across server switches on purpose |
+
+## Features without protocol
+
+contentcreator (uses `ConnectionRpcService` through `SurfConnectionApi`), minimap, nametag,
+profile and shrieker (tables only) have no RPC services, Redis keys or events of their own.

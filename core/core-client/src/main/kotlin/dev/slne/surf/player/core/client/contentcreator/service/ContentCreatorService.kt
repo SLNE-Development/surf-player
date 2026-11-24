@@ -4,7 +4,7 @@ import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.core.util.toObjectSet
 import dev.slne.surf.player.api.contentcreator.ContentCreator
-import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.player.api.contentcreator.StreamingPlatform
 import dev.slne.surf.player.api.contentcreator.listener.StateChangeListener
 import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
@@ -70,7 +70,7 @@ object ContentCreatorService {
         platformType: PlatformType,
         newState: PlatformState
     ): Boolean {
-        val platform = getContentCreator(playerUuid)?.getPlatform(platformType) ?: return false
+        val platform = getContentCreator(playerUuid)?.getStreamingPlatform(platformType) ?: return false
 
         platform.state = newState
         callOnStateChangeListener(playerUuid, platform, newState)
@@ -83,17 +83,17 @@ object ContentCreatorService {
     }
 
     /**
-     * Notifies every registered [StateChangeListener] that [contentCreatorPlatform] of [playerUuid]
+     * Notifies every registered [StateChangeListener] that [streamingPlatform] of [playerUuid]
      * changed to [newState]. A listener that throws does not stop the others.
      */
     fun callOnStateChangeListener(
         playerUuid: UUID,
-        contentCreatorPlatform: ContentCreatorPlatform,
+        streamingPlatform: StreamingPlatform,
         newState: PlatformState
     ) {
         for (listener in stateChangeListeners) {
             try {
-                listener.onStateChanged(playerUuid, contentCreatorPlatform, newState)
+                listener.onStateChanged(playerUuid, streamingPlatform, newState)
             } catch (e: Exception) {
                 log.atWarning()
                     .withCause(e)
@@ -126,7 +126,7 @@ object ContentCreatorService {
      */
     fun findByPlatformName(platformType: PlatformType, platformName: String): ContentCreator? {
         for (creator in coreCreators.values) {
-            val platform = creator.getPlatform(platformType) ?: continue
+            val platform = creator.getStreamingPlatform(platformType) ?: continue
             if (platform.name.equals(platformName, ignoreCase = true)) {
                 return creator
             }

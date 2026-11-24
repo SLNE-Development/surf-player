@@ -2,13 +2,13 @@ package dev.slne.surf.player.microservice.chat.rpc
 
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.core.common.chat.aimoderation.ModerationClassificationResult
-import dev.slne.surf.player.core.common.chat.rabbit.rpc.ModerationService
+import dev.slne.surf.player.core.common.chat.rpc.ChatModerationRpcService
 import dev.slne.surf.player.microservice.chat.table.ModerationsTable
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 
-object ModerationServiceImpl : ModerationService {
-    override suspend fun logModeration(
+object ChatModerationRpcServiceImpl : ChatModerationRpcService {
+    override suspend fun createModerationLog(
         messageData: MessageData,
         classification: ModerationClassificationResult
     ) = suspendTransaction {

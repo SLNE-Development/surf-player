@@ -13,7 +13,7 @@ import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
 import dev.slne.surf.player.core.client.minimap.config.ReloadResult
 import dev.slne.surf.player.core.client.minimap.permission.CompanionPermissions
 import dev.slne.surf.player.core.client.minimap.service.MapSyncService
-import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.minimap.tracker.PaperTracker
 import org.bukkit.Bukkit
@@ -34,7 +34,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
 
                     for (player in Bukkit.getOnlinePlayers()) {
                         // Reads the settings when it runs, so a later reload that overtook this one wins.
-                        player.scheduler.run(plugin, { MapSyncService.sync(PaperCompanionPlayer(player)) }, null)
+                        player.scheduler.run(plugin, { MapSyncService.sync(PaperMinimapPlayer(player)) }, null)
                     }
                 }
 
@@ -51,7 +51,7 @@ fun companionCommand() = commandTree("minimapcompanion") {
                 // The player's channels, world and tracker state are read on their own thread.
                 target.scheduler.run(plugin, {
                     val info = MapInfo.of(
-                        PaperCompanionPlayer(target),
+                        PaperMinimapPlayer(target),
                         target.name,
                         CompanionConfigs.current,
                         PaperTracker.info(target),

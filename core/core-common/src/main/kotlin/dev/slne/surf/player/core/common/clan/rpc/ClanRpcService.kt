@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 import java.util.*
 
+/** Clans, stored by the microservice. The `update*` and `delete*` methods return `false` if the clan does not exist. */
 @RpcService
 interface ClanRpcService {
 
@@ -21,19 +22,22 @@ interface ClanRpcService {
         discordInvite: String?
     ): ClanCreationResult
 
-    suspend fun deleteClan(clanID: ULong): Boolean
+    suspend fun deleteClan(clanId: ULong): Boolean
 
-    suspend fun findAllClansWithoutMembersSortByMemberCount(): Collection<ClanImpl>
-    suspend fun findClanById(clanID: ULong): ClanImpl?
+    /** Every clan without its member list, the clan with the most members first. */
+    suspend fun findClansByMemberCount(): List<ClanImpl>
+    suspend fun findClanById(clanId: ULong): ClanImpl?
     suspend fun findClanByMember(memberUuid: UUID): ClanImpl?
     suspend fun findClanByTag(tag: String): ClanImpl?
-    suspend fun findClanByClanUuid(clanUuid: UUID): ClanImpl?
+    suspend fun findClanByUuid(clanUuid: UUID): ClanImpl?
+
+    /** Up to [limit] tags starting with [prefix]. */
     suspend fun findClanTagsByPrefix(prefix: String, limit: Int): List<String>
 
-    suspend fun updateClanDescription(clanID: ULong, description: String?): Boolean
-    suspend fun updateClanDiscordInvite(clanID: ULong, discordInvite: String?): Boolean
+    suspend fun updateClanDescription(clanId: ULong, description: String?): Boolean
+    suspend fun updateClanDiscordInvite(clanId: ULong, discordInvite: String?): Boolean
     suspend fun updateClanTagColor(
-        clanID: ULong,
+        clanId: ULong,
         tagForegroundColor: TextColor?,
         tagBackgroundColor: TextColor?,
         tagShadowColor: ShadowColor?

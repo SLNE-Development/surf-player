@@ -34,7 +34,7 @@ object FunctionalityService {
         functionalities: Functionalities,
         localServer: String
     ) {
-        chatFunctionalityRpcService.upsertFunctionalities(localServer, functionalities)
+        chatFunctionalityRpcService.saveFunctionalities(localServer, functionalities)
         if (localServer == SurfCoreApi.getCurrentServerName()) {
             this.functionalities = functionalities
         }

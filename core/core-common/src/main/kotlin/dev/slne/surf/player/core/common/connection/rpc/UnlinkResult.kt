@@ -1,9 +1,9 @@
-package dev.slne.surf.player.core.common.connection.rabbit.rpc
+package dev.slne.surf.player.core.common.connection.rpc
 
 import kotlinx.serialization.Serializable
 
 /**
- * The outcome of [SocialConnectionRpc.unlinkMinecraftAccount].
+ * The outcome of [ConnectionRpcService.deleteMinecraftLink].
  */
 @Serializable
 sealed interface UnlinkResult {

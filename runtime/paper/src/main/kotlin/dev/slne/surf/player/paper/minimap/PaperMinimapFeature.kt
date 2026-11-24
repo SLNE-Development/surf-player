@@ -7,7 +7,7 @@ import dev.slne.surf.player.paper.PaperPlayerFeature
 import dev.slne.surf.player.paper.minimap.command.companionCommand
 import dev.slne.surf.player.paper.minimap.listener.CompanionListener
 import dev.slne.surf.player.paper.minimap.listener.PluginChannelListener
-import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
 import dev.slne.surf.player.paper.minimap.tracker.PaperTracker
 import dev.slne.surf.player.paper.plugin
 import org.bukkit.Bukkit
@@ -35,7 +35,7 @@ object PaperMinimapFeature : PaperPlayerFeature {
     private fun syncOnlinePlayers() {
         for (player in Bukkit.getOnlinePlayers()) {
             player.scheduler.run(plugin, {
-                MapSyncService.sync(PaperCompanionPlayer(player))
+                MapSyncService.sync(PaperMinimapPlayer(player))
                 PaperTracker.reset(player)
             }, null)
             PaperTracker.track(player)

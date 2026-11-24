@@ -3,7 +3,7 @@ package dev.slne.surf.player.core.client.minimap.journeymap
 import dev.slne.surf.player.core.client.minimap.config.JourneyMapConfig
 import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
 import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.core.client.minimap.world.WorldInfo
 
 /**
@@ -15,7 +15,7 @@ object JourneyMapSyncService {
      * Sends [player] the world ID of their current world and the permissions, if their client has JourneyMap.
      * [playerRadar] makes JourneyMap show only the players the server sends.
      */
-    fun sync(player: CompanionPlayer, config: MinimapCompanionConfig, journeyMap: JourneyMapConfig, playerRadar: Boolean) {
+    fun sync(player: MinimapPlayer, config: MinimapCompanionConfig, journeyMap: JourneyMapConfig, playerRadar: Boolean) {
         if (!JourneyMapChannels.hasJourneyMap(player)) return
 
         WorldInfo.send(player, config)
@@ -29,7 +29,7 @@ object JourneyMapSyncService {
      * requests are answered for every mod by [WorldInfo]. The version handshake is never answered, so the
      * client cannot disconnect itself over our version.
      */
-    fun answer(player: CompanionPlayer, channel: String, config: MinimapCompanionConfig, journeyMap: JourneyMapConfig, playerRadar: Boolean) {
+    fun answer(player: MinimapPlayer, channel: String, config: MinimapCompanionConfig, journeyMap: JourneyMapConfig, playerRadar: Boolean) {
         if (!JourneyMapChannels.hasJourneyMap(player)) return
 
         if (channel == JourneyMapChannels.PERMISSIONS) {

@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.minimap.journeymap
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
@@ -50,7 +50,7 @@ class JourneyMapTracker {
      * Sends [viewer] the players in their dimension that [isTracked] shows them, and the ones [isNearby] says their
      * client sees unless those are concealed. Both checks must already leave out players the viewer may not see.
      */
-    fun tick(viewer: CompanionPlayer, isTracked: (target: UUID) -> Boolean, isNearby: (target: UUID) -> Boolean) {
+    fun tick(viewer: MinimapPlayer, isTracked: (target: UUID) -> Boolean, isNearby: (target: UUID) -> Boolean) {
         if (!JourneyMapChannels.hasJourneyMap(viewer)) return
         val dimension = players[viewer.uuid]?.player?.dimension ?: return
 
@@ -87,7 +87,7 @@ class JourneyMapTracker {
         listed[viewer.uuid] = RadarListing(dimension, visible, runsSinceFullList)
     }
 
-    private fun removePlayer(viewer: CompanionPlayer, target: UUID) {
+    private fun removePlayer(viewer: MinimapPlayer, target: UUID) {
         viewer.sendPluginMessage(JourneyMapChannels.REMOVE_PLAYER, JourneyMapPackets.removePlayer(target))
     }
 

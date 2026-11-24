@@ -77,7 +77,7 @@ object ModernCoreTwitchClient : ContentClient(PlatformType.TWITCH) {
     }
 
     override suspend fun enableStreamEventListener(contentCreator: ContentCreator) {
-        val channelName = contentCreator.getPlatform(PlatformType.TWITCH)?.name ?: return
+        val channelName = contentCreator.getStreamingPlatform(PlatformType.TWITCH)?.name ?: return
 
         withContext(ioDispatcher) {
             if (!ContentCreatorService.isSessionActive(contentCreator.minecraftUuid)) {
@@ -111,7 +111,7 @@ object ModernCoreTwitchClient : ContentClient(PlatformType.TWITCH) {
 
     override suspend fun enableStreamEventListener(contentCreators: ObjectSet<out ContentCreator>) {
         val channelNames = contentCreators.mapNotNull {
-            it.getPlatform(
+            it.getStreamingPlatform(
                 PlatformType.TWITCH
             )?.name
         }
@@ -146,7 +146,7 @@ object ModernCoreTwitchClient : ContentClient(PlatformType.TWITCH) {
     }
 
     override suspend fun disableStreamEventListener(contentCreator: ContentCreator) {
-        val channelName = contentCreator.getPlatform(PlatformType.TWITCH)?.name ?: return
+        val channelName = contentCreator.getStreamingPlatform(PlatformType.TWITCH)?.name ?: return
 
         withContext(ioDispatcher) {
             disableChannel(channelName)
@@ -155,7 +155,7 @@ object ModernCoreTwitchClient : ContentClient(PlatformType.TWITCH) {
 
     override suspend fun disableStreamEventListener(contentCreators: ObjectSet<out ContentCreator>) {
         val channelNames = contentCreators.mapNotNull {
-            it.getPlatform(
+            it.getStreamingPlatform(
                 PlatformType.TWITCH
             )?.name
         }
@@ -202,7 +202,7 @@ object ModernCoreTwitchClient : ContentClient(PlatformType.TWITCH) {
     }
 
     override suspend fun lookupStreams(contentCreators: ObjectSet<out ContentCreator>): StreamLookup {
-        val allNames = contentCreators.mapNotNull { it.getPlatform(PlatformType.TWITCH)?.name }
+        val allNames = contentCreators.mapNotNull { it.getStreamingPlatform(PlatformType.TWITCH)?.name }
         val (validNames, invalidNames) = partitionTwitchNames(allNames)
 
         if (invalidNames.isNotEmpty()) {

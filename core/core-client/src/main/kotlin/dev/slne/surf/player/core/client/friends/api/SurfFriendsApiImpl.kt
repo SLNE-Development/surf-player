@@ -14,7 +14,8 @@ import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
 import dev.slne.surf.player.core.client.friends.FriendsClient
-import dev.slne.surf.player.core.client.friends.redis.event.*
+import dev.slne.surf.player.core.client.friends.redis.event.FriendsAction
+import dev.slne.surf.player.core.client.friends.redis.event.FriendsRedisEvent
 import dev.slne.surf.player.core.client.friends.rpc.friendsRpcService
 import dev.slne.surf.player.core.common.friends.rpc.FriendRequestState
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
@@ -155,11 +156,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
 
         FriendsClient.friendRequests.add(result.friendRequest)
 
-        redisApi.publishEvent(
-            FriendRequestSendRedisEvent(
-                uuid, target, friendRequestNotificationsEnabled(target)
-            )
-        ).await()
+        publish(FriendsAction.REQUEST_SENT, uuid, target)
 
         return result
     }
@@ -177,11 +174,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
 
         FriendsClient.removeFriendRequest(senderUuid = uuid, targetUuid = target)
 
-        redisApi.publishEvent(
-            FriendRequestRevokeRedisEvent(
-                uuid, target, true
-            )
-        ).await()
+        publish(FriendsAction.REQUEST_REVOKED, uuid, target)
 
         return result
     }
@@ -221,11 +214,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
             )
         )
 
-        redisApi.publishEvent(
-            FriendRequestAcceptRedisEvent(
-                uuid, sender
-            )
-        ).await()
+        publish(FriendsAction.REQUEST_ACCEPTED, uuid, sender)
 
         return result
     }
@@ -247,11 +236,7 @@ class SurfFriendsApiImpl : SurfFriendsApi {
 
         FriendsClient.removeFriendRequest(senderUuid = sender, targetUuid = uuid)
 
-        redisApi.publishEvent(
-            FriendRequestDenyRedisEvent(
-                uuid, sender
-            )
-        ).await()
+        publish(FriendsAction.REQUEST_DECLINED, uuid, sender)
 
         return result
     }
@@ -261,24 +246,24 @@ class SurfFriendsApiImpl : SurfFriendsApi {
             return FriendshipRemoveResult.NotFriends(friend)
         }
 
-        val result = friendsRpcService.removeFriendship(senderUuid = uuid, targetUuid = friend)
+        val result = friendsRpcService.deleteFriendship(senderUuid = uuid, targetUuid = friend)
 
         if (result !is FriendshipRemoveResult.Success) {
             return result
         }
-
-        redisApi.publishEvent(
-            FriendRemoveRedisEvent(
-                uuid, friend
-            )
-        ).await()
 
         FriendsClient.friendships.removeIf {
             (it.playerUuid == uuid && it.friendUuid == friend) ||
                     (it.playerUuid == friend && it.friendUuid == uuid)
         }
 
+        publish(FriendsAction.FRIENDSHIP_REMOVED, uuid, friend)
+
         return result
+    }
+
+    private suspend fun publish(action: FriendsAction, executor: UUID, target: UUID) {
+        redisApi.publishEvent(FriendsRedisEvent(action, executor, target)).await()
     }
 
     override fun friendNotificationsEnabled(uuid: UUID): Boolean =

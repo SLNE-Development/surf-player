@@ -1,6 +1,5 @@
 package dev.slne.surf.player.core.client.settings.service
 
-import dev.slne.surf.api.core.util.emptyObjectSet
 import dev.slne.surf.api.core.util.freeze
 import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
 import dev.slne.surf.api.core.util.mutableObjectSetOf
@@ -26,9 +25,6 @@ object SettingsService {
     val settings: ObjectSet<Setting> get() = registry.get().all
 
     fun getSettingByName(name: String): Setting? = registry.get().byName[name]
-
-    fun getSettingsForPlayer(playerUuid: UUID): ObjectSet<PlayerSetting> =
-        playerCache[playerUuid]?.all ?: emptyObjectSet()
 
     fun getSettingForPlayer(playerUuid: UUID, settingName: String): PlayerSetting? =
         playerCache[playerUuid]?.byName?.get(settingName)
@@ -84,7 +80,7 @@ object SettingsService {
 
     /** Loads the values of [playerUuid] from the microservice into the cache. */
     suspend fun cachePlayerSettings(playerUuid: UUID) {
-        val loaded = settingsRpcService.fetchPlayerSettings(playerUuid)
+        val loaded = settingsRpcService.findPlayerSettings(playerUuid)
 
         val byName = mutableObject2ObjectMapOf<String, PlayerSetting>(loaded.size)
         val currentSettings = registry.get().byName
@@ -113,7 +109,7 @@ object SettingsService {
     }
 
     suspend fun refreshSettings() {
-        val loaded = settingsRpcService.fetchSettings()
+        val loaded = settingsRpcService.findAllSettings()
 
         val byName = mutableObject2ObjectMapOf<String, Setting>(loaded.size)
         for (setting in loaded) {
@@ -123,21 +119,32 @@ object SettingsService {
         registry.set(SettingRegistry(byName))
     }
 
-    suspend fun createSetting(name: String, defaultValue: String): Setting {
-        getSettingByName(name)?.let { return it }
+    suspend fun createSetting(name: String, defaultValue: String): Setting =
+        createSettings(mapOf(name to defaultValue)).getValue(name)
 
-        val created = settingsRpcService.createSetting(name, defaultValue)
+    /**
+     * Registers the settings of [defaultValues] (setting name to default value) that are not
+     * registered yet, with one call to the microservice; returns every requested setting by name.
+     */
+    suspend fun createSettings(defaultValues: Map<String, String>): Map<String, Setting> {
+        val known = registry.get().byName
+        val missing = defaultValues.filterKeys { it !in known }
 
-        registry.updateAndGet { current ->
-            if (current.byName.containsKey(name)) return@updateAndGet current
+        if (missing.isNotEmpty()) {
+            val created = settingsRpcService.createSettings(missing)
 
-            val copy = mutableObject2ObjectMapOf<String, Setting>(current.byName.size + 1)
-            copy.putAll(current.byName)
-            copy[name] = created
-            SettingRegistry(copy)
+            registry.updateAndGet { current ->
+                val copy = mutableObject2ObjectMapOf<String, Setting>(current.byName.size + created.size)
+                copy.putAll(current.byName)
+                for (setting in created) {
+                    copy.putIfAbsent(setting.name, setting)
+                }
+                SettingRegistry(copy)
+            }
         }
 
-        return created
+        val byName = registry.get().byName
+        return defaultValues.keys.associateWith { byName.getValue(it) }
     }
 }
 

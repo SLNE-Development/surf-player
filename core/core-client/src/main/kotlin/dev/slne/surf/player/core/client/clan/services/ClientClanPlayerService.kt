@@ -12,7 +12,7 @@ import kotlin.time.Duration.Companion.minutes
  */
 object ClientClanPlayerService {
     private val cache = SurfPlayerClient.redisApi.createSimpleCache<UUID, ClanPlayerImpl>(
-        ClanCaches.key("clan_player_cache"),
+        ClanCaches.key("players"),
         30.minutes
     )
 
@@ -25,18 +25,15 @@ object ClientClanPlayerService {
 
     suspend fun findByUuid(uuid: UUID): ClanPlayerImpl {
         return cache.cachedOrLoad(uuid) {
-            clanPlayerRpcService.findClanPlayerByUuid(uuid)
+            clanPlayerRpcService.findClanPlayer(uuid)
         }
     }
 
+    /** Always `true`: the microservice creates the clan data of [uuid] if it is missing. */
     suspend fun changeAcceptsClanInvites(uuid: UUID, acceptsClanInvites: Boolean): Boolean {
-        val player = findByUuid(uuid)
-        val changed = clanPlayerRpcService.updateAcceptsClanInvites(player.ID, acceptsClanInvites)
+        clanPlayerRpcService.updateAcceptsClanInvites(uuid, acceptsClanInvites)
+        cache.invalidate(uuid)
 
-        if (changed) {
-            cache.invalidate(player.uuid)
-        }
-
-        return changed
+        return true
     }
 }

@@ -26,7 +26,7 @@ import kotlin.time.Duration.Companion.minutes
  */
 object ClientClanService {
     private val cache = SurfPlayerClient.redisApi.createSimpleSetRedisCache(
-        ClanCaches.key("clan_cache"),
+        ClanCaches.key("clans"),
         ClanImpl.serializer(),
         15.minutes,
         { it.clanID.toString() },
@@ -90,7 +90,7 @@ object ClientClanService {
 
     suspend fun findClanByUuid(clanUuid: UUID): Clan? {
         return cache.findCachedByIndexOrLoadNullable(ClanCacheIndexes.uuid, clanUuid) {
-            clanRpcService.findClanByClanUuid(clanUuid)
+            clanRpcService.findClanByUuid(clanUuid)
         }
     }
 
@@ -107,7 +107,7 @@ object ClientClanService {
     }
 
     suspend fun fetchAllClansWithoutMembersSortByMemberCount(): Collection<ClanImpl> {
-        return clanRpcService.findAllClansWithoutMembersSortByMemberCount()
+        return clanRpcService.findClansByMemberCount()
     }
 
     fun validateClanNameAndTag(

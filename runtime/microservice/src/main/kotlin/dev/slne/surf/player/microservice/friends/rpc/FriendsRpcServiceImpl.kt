@@ -17,7 +17,7 @@ import java.time.OffsetDateTime
 import java.util.*
 
 object FriendsRpcServiceImpl : FriendsRpcService {
-    override suspend fun fetchFriendRequests(): List<FriendRequest> =
+    override suspend fun findAllFriendRequests(): List<FriendRequest> =
         FriendRequestRepository.fetchFriendRequests()
 
     override suspend fun createFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestCreateResult {
@@ -67,10 +67,10 @@ object FriendsRpcServiceImpl : FriendsRpcService {
         return FriendRequestStateResult.Success
     }
 
-    override suspend fun fetchFriendships(): List<Friendship> =
+    override suspend fun findAllFriendships(): List<Friendship> =
         FriendshipsRepository.fetchFriendships()
 
-    override suspend fun removeFriendship(senderUuid: UUID, targetUuid: UUID): FriendshipRemoveResult {
+    override suspend fun deleteFriendship(senderUuid: UUID, targetUuid: UUID): FriendshipRemoveResult {
         FriendshipsRepository.deleteFriendship(senderUuid, targetUuid)
         return FriendshipRemoveResult.Success
     }

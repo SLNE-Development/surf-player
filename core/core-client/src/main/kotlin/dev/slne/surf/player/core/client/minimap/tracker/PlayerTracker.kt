@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.minimap.tracker
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroPackets
 import java.util.*
@@ -47,7 +47,7 @@ class PlayerTracker(
      * Sends [viewer] the [candidates] [isShown] lets them see that are new or moved, and removes the ones they no
      * longer see. `null` candidates are every tracked player.
      */
-    fun tick(viewer: CompanionPlayer, candidates: Collection<UUID>?, isShown: (target: UUID) -> Boolean) {
+    fun tick(viewer: MinimapPlayer, candidates: Collection<UUID>?, isShown: (target: UUID) -> Boolean) {
         val sent = sentPositions[viewer.uuid]
         if (candidates != null && candidates.isEmpty() && sent.isNullOrEmpty()) return
 
@@ -89,7 +89,7 @@ class PlayerTracker(
     /**
      * Clears the tracked players [viewer]'s client knows, including ones another server sent.
      */
-    fun reset(viewer: CompanionPlayer) {
+    fun reset(viewer: MinimapPlayer) {
         sentPositions.remove(viewer.uuid)
         for (channel in XaeroChannels.MAPS) {
             if (viewer.hasChannel(channel)) {
@@ -113,7 +113,7 @@ class PlayerTracker(
          * The channel the mods expect tracked players on: the minimap's when the client has it, as the world map
          * then reads them from the minimap.
          */
-        fun trackerChannel(player: CompanionPlayer) = when {
+        fun trackerChannel(player: MinimapPlayer) = when {
             player.hasChannel(XaeroChannels.MINIMAP) -> XaeroChannels.MINIMAP
             player.hasChannel(XaeroChannels.WORLD_MAP) -> XaeroChannels.WORLD_MAP
             else -> null

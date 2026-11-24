@@ -7,16 +7,15 @@ import dev.slne.surf.player.microservice.settings.repository.SettingRepository
 import java.util.*
 
 object SettingsRpcServiceImpl : SettingsRpcService {
-    override suspend fun fetchSettings(): List<Setting> = SettingRepository.loadSettings()
+    override suspend fun findAllSettings(): List<Setting> = SettingRepository.loadSettings()
 
-    override suspend fun createSetting(name: String, defaultValue: String): Setting =
-        SettingRepository.createSetting(name, defaultValue)
+    override suspend fun createSettings(defaultValues: Map<String, String>): List<Setting> =
+        SettingRepository.createSettings(defaultValues)
 
-    override suspend fun fetchPlayerSettings(playerUuid: UUID): Map<String, String> =
+    override suspend fun findPlayerSettings(playerUuid: UUID): Map<String, String> =
         PlayerSettingsRepository.loadSettingsByPlayerUuid(playerUuid)
 
-    override suspend fun savePlayerSetting(playerUuid: UUID, settingName: String, value: String): Boolean {
+    override suspend fun savePlayerSetting(playerUuid: UUID, settingName: String, value: String) {
         PlayerSettingsRepository.savePlayerSetting(playerUuid, settingName, value)
-        return true
     }
 }

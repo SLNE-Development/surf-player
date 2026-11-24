@@ -5,6 +5,7 @@ import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
 import dev.slne.surf.player.api.playtime.session.PlaytimeStreakPause
 import dev.slne.surf.player.core.client.playtime.rpc.playtimeRpcService
 import dev.slne.surf.player.core.client.playtime.streak.LoginStreak
+import dev.slne.surf.player.core.common.playtime.rpc.LoginStreakUpdate
 import java.time.LocalDate
 import java.util.*
 
@@ -19,20 +20,21 @@ object PlaytimeStreakService {
         .build<UUID, LoginStreak>()
 
     suspend fun loadPlaytimeStreak(playerUuid: UUID): PlaytimeStreak? =
-        playtimeRpcService.loadStreak(playerUuid)
-
-    suspend fun savePlaytimeStreak(playerUuid: UUID, streak: Int, localDate: LocalDate) =
-        playtimeRpcService.saveStreak(playerUuid, streak, localDate)
+        playtimeRpcService.findStreak(playerUuid)
 
     suspend fun calculatePlaytimeStreak(playerUuid: UUID): Int =
         playtimeRpcService.calculateStreak(playerUuid)
+
+    /** Advances and stores the streak of [playerUuid] for a login on [today]. */
+    suspend fun updateLoginStreak(playerUuid: UUID, today: LocalDate): LoginStreakUpdate =
+        playtimeRpcService.updateLoginStreak(playerUuid, today)
 
     suspend fun recalculatePlaytimeStreak(playerUuid: UUID): PlaytimeStreak? =
         playtimeRpcService.recalculateStreak(playerUuid)
 
     suspend fun recalculateAllPlaytimeStreaks(): Int = playtimeRpcService.recalculateAllStreaks()
 
-    suspend fun loadStreakPauses(): List<PlaytimeStreakPause> = playtimeRpcService.loadStreakPauses()
+    suspend fun loadStreakPauses(): List<PlaytimeStreakPause> = playtimeRpcService.findStreakPauses()
 
     suspend fun createStreakPause(startDate: LocalDate, endDate: LocalDate): PlaytimeStreakPause =
         playtimeRpcService.createStreakPause(startDate, endDate)

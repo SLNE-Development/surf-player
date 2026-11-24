@@ -4,7 +4,7 @@ import com.github.twitch4j.helix.domain.Stream
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.runAtFixedRate
 import dev.slne.surf.player.api.contentcreator.ContentCreator
-import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.player.api.contentcreator.StreamingPlatform
 import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
 import dev.slne.surf.player.core.client.contentcreator.config.config
@@ -41,14 +41,14 @@ abstract class ContentClient(private val platformType: PlatformType) : Closeable
     private fun changeChannelState(channelName: String, newState: PlatformState) {
         val contentCreator =
             ContentCreatorService.findByPlatformName(platformType, channelName) ?: return
-        val platform = contentCreator.getPlatform(platformType) ?: return
+        val platform = contentCreator.getStreamingPlatform(platformType) ?: return
 
         applyState(contentCreator, platform, newState)
     }
 
     protected fun applyState(
         contentCreator: ContentCreator,
-        platform: ContentCreatorPlatform,
+        platform: StreamingPlatform,
         newState: PlatformState
     ): Boolean {
         synchronized(platform) {
@@ -114,7 +114,7 @@ abstract class ContentClient(private val platformType: PlatformType) : Closeable
             val lookup = lookupStreams(contentCreators)
 
             for (creator in contentCreators) {
-                val platform = creator.getPlatform(platformType) ?: continue
+                val platform = creator.getStreamingPlatform(platformType) ?: continue
 
                 if (platform.name !in lookup.checkedNames) {
                     continue

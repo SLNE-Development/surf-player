@@ -9,31 +9,31 @@ import java.util.*
 
 object ClanMemberRpcServiceImpl : ClanMemberRpcService {
     override suspend fun createMember(
-        clanID: ULong,
+        clanId: ULong,
         player: UUID,
         role: ClanMemberRole,
         invitedBy: UUID?
     ): ClanMemberAddResult {
         return ClanMemberRepository.createMember(
-            clanID = clanID,
+            clanID = clanId,
             player = player,
             role = role,
             invitedBy = invitedBy
         )
     }
 
-    override suspend fun deleteMember(clanID: ULong, player: UUID): Boolean {
-        return ClanMemberRepository.deleteMember(clanID, player)
+    override suspend fun deleteMember(clanId: ULong, player: UUID): Boolean {
+        return ClanMemberRepository.deleteMember(clanId, player)
     }
 
-    override suspend fun changeMemberRole(
-        memberID: ULong,
+    override suspend fun updateMemberRole(
+        memberId: ULong,
         role: ClanMemberRole
     ): Boolean {
-        return ClanMemberRepository.changeRole(memberID, role)
+        return ClanMemberRepository.changeRole(memberId, role)
     }
 
-    override suspend fun findMemberByUUID(uuid: UUID): ClanMemberImpl? {
+    override suspend fun findMemberByUuid(uuid: UUID): ClanMemberImpl? {
         return ClanMemberRepository.findByUuid(uuid)
     }
 }

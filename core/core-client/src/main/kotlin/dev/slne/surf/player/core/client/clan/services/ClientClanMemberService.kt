@@ -44,7 +44,7 @@ object ClientClanMemberService {
         val member = loadedMembers.getIfPresent(uuid)
         if (member != null) return member
 
-        val loaded = clanMemberRpcService.findMemberByUUID(uuid) ?: return null
+        val loaded = clanMemberRpcService.findMemberByUuid(uuid) ?: return null
         loadedMembers.put(uuid, loaded)
 
         return loaded
@@ -79,7 +79,7 @@ object ClientClanMemberService {
         member: ClanMemberImpl,
         role: ClanMemberRole
     ): Boolean {
-        val changed = clanMemberRpcService.changeMemberRole(member.ID, role)
+        val changed = clanMemberRpcService.updateMemberRole(member.ID, role)
 
         if (changed) {
             ClientClanService.invalidateCachedClanByMember(member.uuid)

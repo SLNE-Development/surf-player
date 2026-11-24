@@ -5,7 +5,6 @@ import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.player.core.client.playtime.config.playtimeConfig
 import dev.slne.surf.player.core.client.playtime.paycheck.PayCheckPayout
 import dev.slne.surf.player.core.client.playtime.platform.PlaytimePlatform
-import dev.slne.surf.player.core.client.playtime.rpc.playtimeRpcService
 import dev.slne.surf.player.core.client.playtime.session.PlayerSessionEpochs
 import net.kyori.adventure.audience.Audience
 import java.util.*
@@ -36,9 +35,9 @@ object PayCheckService {
     suspend fun cachePlaytime(playerUuid: UUID) {
         val epoch = PlayerSessionEpochs.current(playerUuid)
 
-        val seconds = playtimeRpcService.loadPlaytimeSecondsByServer(
+        val seconds = PlaytimeService.loadPlaytimeSeconds(
             playerUuid,
-            SurfServer.current().displayName
+            server = SurfServer.current().displayName
         )
 
         PlayerSessionEpochs.ifCurrent(playerUuid, epoch) {

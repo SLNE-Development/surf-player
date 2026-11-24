@@ -3,7 +3,7 @@ package dev.slne.surf.player.core.client.minimap.voxelmap
 import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
 import dev.slne.surf.player.core.client.minimap.config.VoxelMapConfig
 import dev.slne.surf.player.core.client.minimap.global.GlobalSettings
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 
 /**
  * Sends VoxelMap clients the settings VoxelMap's server part sends. The world ID is only sent when the client
@@ -14,7 +14,7 @@ object VoxelMapSyncService {
     /**
      * Sends [player] the settings this server enforces, if their client has VoxelMap.
      */
-    fun sync(player: CompanionPlayer, config: MinimapCompanionConfig, voxelMap: VoxelMapConfig) {
+    fun sync(player: MinimapPlayer, config: MinimapCompanionConfig, voxelMap: VoxelMapConfig) {
         if (!VoxelMapChannels.hasVoxelMap(player)) return
 
         val profile = VoxelMapProfile.of(voxelMap, GlobalSettings.of(config.globalSettings))

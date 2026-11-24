@@ -4,7 +4,7 @@ import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.player.core.client.connection.service.SocialConnectionsService
-import dev.slne.surf.player.core.common.connection.rabbit.rpc.UnlinkResult
+import dev.slne.surf.player.core.common.connection.rpc.UnlinkResult
 import dev.slne.surf.player.velocity.connection.permission.SocialPermissions
 import dev.slne.surf.player.velocity.connection.redis.DiscordRoleAction
 import dev.slne.surf.player.velocity.connection.redis.DiscordRolesPublisher

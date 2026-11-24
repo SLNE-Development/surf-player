@@ -11,7 +11,7 @@ import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.world.WorldInfo
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroChannels
 import dev.slne.surf.player.core.client.minimap.xaero.XaeroMapEffects
-import dev.slne.surf.player.minestom.minimap.platform.MinestomCompanionPlayer
+import dev.slne.surf.player.minestom.minimap.platform.MinestomMinimapPlayer
 import dev.slne.surf.player.minestom.minimap.platform.RegisteredChannels
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode
@@ -37,7 +37,7 @@ object CompanionListener : EventRegistrar {
                 // JourneyMap's requests for its permissions, and the world ID JourneyMap and VoxelMap ask for.
                 if (event.identifier != WorldInfo.CHANNEL && !JourneyMapChannels.isJourneyMap(event.identifier)) return@addListener
                 val instance = player.instance ?: return@addListener
-                MapSyncService.answer(MinestomCompanionPlayer(player, instance), event.identifier)
+                MapSyncService.answer(MinestomMinimapPlayer(player, instance), event.identifier)
                 return@addListener
             }
 
@@ -49,7 +49,7 @@ object CompanionListener : EventRegistrar {
                 XaeroChannels.isXaero(it) || JourneyMapChannels.isJourneyMap(it) || VoxelMapChannels.isVoxelMap(it)
             }
             if (modChannels.isNotEmpty()) {
-                val companionPlayer = MinestomCompanionPlayer(player, instance)
+                val companionPlayer = MinestomMinimapPlayer(player, instance)
                 if (modChannels.any(XaeroChannels::isMap)) tracker.reset(companionPlayer)
                 MapSyncService.syncChannels(companionPlayer, modChannels)
             }
@@ -57,14 +57,14 @@ object CompanionListener : EventRegistrar {
 
         // Fires on the first spawn and on every instance change; the first spawn continues in onJoin.
         node.addListener<PlayerSpawnEvent> { event ->
-            MapSyncService.sync(MinestomCompanionPlayer(event.player, event.instance))
+            MapSyncService.sync(MinestomMinimapPlayer(event.player, event.instance))
         }
 
         // The client drops every effect on respawn, and a respawn in the same instance fires no spawn event.
         node.addListener<PlayerRespawnEvent> { event ->
             val player = event.player
             val instance = player.instance ?: return@addListener
-            XaeroMapEffects.sync(MinestomCompanionPlayer(player, instance), CompanionConfigs.current.config.disableMaps)
+            XaeroMapEffects.sync(MinestomMinimapPlayer(player, instance), CompanionConfigs.current.config.disableMaps)
         }
     }
 
@@ -73,12 +73,12 @@ object CompanionListener : EventRegistrar {
      */
     fun onJoin(player: Player) {
         val instance = player.instance ?: return
-        tracker.reset(MinestomCompanionPlayer(player, instance))
+        tracker.reset(MinestomMinimapPlayer(player, instance))
 
         for (delay in XaeroSyncService.JOIN_RESEND_DELAYS) {
             player.scheduler().buildTask {
                 val currentInstance = player.instance ?: return@buildTask
-                MapSyncService.sync(MinestomCompanionPlayer(player, currentInstance))
+                MapSyncService.sync(MinestomMinimapPlayer(player, currentInstance))
             }.delay(TaskSchedule.millis(delay.inWholeMilliseconds)).schedule()
         }
     }

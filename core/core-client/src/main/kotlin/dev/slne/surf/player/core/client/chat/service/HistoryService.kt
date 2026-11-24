@@ -45,7 +45,7 @@ object HistoryService {
         filter: HistoryFilter
     ): ObjectList<HistoryEntry> = withTimeout(10.seconds) {
         loadHistorySemaphore.withPermit {
-            chatHistoryRpcService.findHistories(filter).toObjectList()
+            chatHistoryRpcService.findHistoryEntries(filter).toObjectList()
         }
     }
 
@@ -65,6 +65,6 @@ object HistoryService {
         deletionReason: String? = null,
         deletedAt: OffsetDateTime = OffsetDateTime.now()
     ) {
-        chatHistoryRpcService.markHistoryEntryDeleted(messageUuid, deletedBy, deletionReason, deletedAt)
+        chatHistoryRpcService.updateHistoryEntryDeleted(messageUuid, deletedBy, deletionReason, deletedAt)
     }
 }

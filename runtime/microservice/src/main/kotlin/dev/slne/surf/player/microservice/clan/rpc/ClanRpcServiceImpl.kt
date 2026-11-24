@@ -31,16 +31,16 @@ object ClanRpcServiceImpl : ClanRpcService {
         )
     }
 
-    override suspend fun deleteClan(clanID: ULong): Boolean {
-        return ClanRepository.delete(clanID)
+    override suspend fun deleteClan(clanId: ULong): Boolean {
+        return ClanRepository.delete(clanId)
     }
 
-    override suspend fun findAllClansWithoutMembersSortByMemberCount(): Collection<ClanImpl> {
-        return ClanRepository.fetchAllClansWithoutMembersSortByMemberCount()
+    override suspend fun findClansByMemberCount(): List<ClanImpl> {
+        return ClanRepository.fetchAllClansWithoutMembersSortByMemberCount().toList()
     }
 
-    override suspend fun findClanById(clanID: ULong): ClanImpl? {
-        return ClanRepository.findClanByID(clanID)
+    override suspend fun findClanById(clanId: ULong): ClanImpl? {
+        return ClanRepository.findClanByID(clanId)
     }
 
     override suspend fun findClanByMember(memberUuid: UUID): ClanImpl? {
@@ -51,7 +51,7 @@ object ClanRpcServiceImpl : ClanRpcService {
         return ClanRepository.findClanByTag(tag)
     }
 
-    override suspend fun findClanByClanUuid(clanUuid: UUID): ClanImpl? {
+    override suspend fun findClanByUuid(clanUuid: UUID): ClanImpl? {
         return ClanRepository.findClanByUuid(clanUuid)
     }
 
@@ -62,22 +62,22 @@ object ClanRpcServiceImpl : ClanRpcService {
         return ClanRepository.suggestTagsByPrefix(prefix, limit)
     }
 
-    override suspend fun updateClanDescription(clanID: ULong, description: String?): Boolean {
-        return ClanRepository.updateDescription(clanID, description)
+    override suspend fun updateClanDescription(clanId: ULong, description: String?): Boolean {
+        return ClanRepository.updateDescription(clanId, description)
     }
 
-    override suspend fun updateClanDiscordInvite(clanID: ULong, discordInvite: String?): Boolean {
-        return ClanRepository.updateDiscordInvite(clanID, discordInvite)
+    override suspend fun updateClanDiscordInvite(clanId: ULong, discordInvite: String?): Boolean {
+        return ClanRepository.updateDiscordInvite(clanId, discordInvite)
     }
 
     override suspend fun updateClanTagColor(
-        clanID: ULong,
+        clanId: ULong,
         tagForegroundColor: TextColor?,
         tagBackgroundColor: TextColor?,
         tagShadowColor: ShadowColor?
     ): Boolean {
         return ClanRepository.updateTagColor(
-            clanID = clanID,
+            clanID = clanId,
             tagForegroundColor = tagForegroundColor,
             tagBackgroundColor = tagBackgroundColor,
             tagShadowColor = tagShadowColor

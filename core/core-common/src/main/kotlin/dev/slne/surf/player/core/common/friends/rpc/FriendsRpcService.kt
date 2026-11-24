@@ -18,7 +18,8 @@ import java.util.*
  */
 @RpcService
 interface FriendsRpcService {
-    suspend fun fetchFriendRequests(): List<FriendRequest>
+    /** Every pending friend request. */
+    suspend fun findAllFriendRequests(): List<FriendRequest>
 
     /**
      * Stores a request from [senderUuid] to [targetUuid], unless one of both ignores the other
@@ -41,8 +42,8 @@ interface FriendsRpcService {
     ): FriendRequestStateResult
 
     /** Every friendship, stored once per direction. */
-    suspend fun fetchFriendships(): List<Friendship>
+    suspend fun findAllFriendships(): List<Friendship>
 
     /** Removes the friendship between [senderUuid] and [targetUuid] in both directions. */
-    suspend fun removeFriendship(senderUuid: UUID, targetUuid: UUID): FriendshipRemoveResult
+    suspend fun deleteFriendship(senderUuid: UUID, targetUuid: UUID): FriendshipRemoveResult
 }

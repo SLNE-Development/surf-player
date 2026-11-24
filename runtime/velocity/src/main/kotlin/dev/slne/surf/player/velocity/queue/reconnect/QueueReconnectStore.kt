@@ -13,7 +13,7 @@ object QueueReconnectStore {
 
     private val reconnects by lazy {
         redisApi.redisson.getMapCache<UUID, String>(
-            queueRedisKey("reconnect:v1"),
+            queueRedisKey("reconnects"),
             CompositeCodec(
                 UUIDCodec.INSTANCE,
                 StringCodec.INSTANCE,

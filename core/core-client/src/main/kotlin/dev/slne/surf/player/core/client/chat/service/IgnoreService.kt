@@ -16,7 +16,7 @@ object IgnoreService {
         .build<UUID, List<IgnoreListEntry>>()
 
     suspend fun ignore(uuid: UUID, ignoredUUID: UUID): Boolean {
-        val ignored = chatIgnoreRpcService.ignore(uuid, ignoredUUID)
+        val ignored = chatIgnoreRpcService.createIgnore(uuid, ignoredUUID)
         if (ignored) {
             cache.asMap().compute(uuid) { _, ignoreList ->
                 if (ignoreList == null) {
@@ -34,7 +34,7 @@ object IgnoreService {
     }
 
     suspend fun unignore(uuid: UUID, ignoredUUID: UUID): Boolean {
-        val unignored = chatIgnoreRpcService.unignore(uuid, ignoredUUID)
+        val unignored = chatIgnoreRpcService.deleteIgnore(uuid, ignoredUUID)
         if (unignored) {
             cache.asMap().compute(uuid) { _, ignoreList ->
                 ignoreList?.filterNot { it.target == ignoredUUID }
@@ -61,7 +61,7 @@ object IgnoreService {
     }
 
     suspend fun loadIgnoreList(uuid: UUID): List<IgnoreListEntry> {
-        val ignoreList = chatIgnoreRpcService.findIgnoreListEntries(uuid)
+        val ignoreList = chatIgnoreRpcService.findIgnoreList(uuid)
         cache.put(uuid, ignoreList)
         return ignoreList
     }

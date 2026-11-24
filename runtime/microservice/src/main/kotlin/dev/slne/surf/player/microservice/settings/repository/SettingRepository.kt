@@ -18,12 +18,14 @@ object SettingRepository {
         }.toList()
     }
 
-    suspend fun createSetting(name: String, defaultValue: String): Setting = suspendTransaction {
-        SettingsTable.upsert(SettingsTable.name) {
-            it[SettingsTable.name] = name
-            it[SettingsTable.defaultValue] = defaultValue
-        }
+    suspend fun createSettings(defaultValues: Map<String, String>): List<Setting> = suspendTransaction {
+        defaultValues.map { (name, defaultValue) ->
+            SettingsTable.upsert(SettingsTable.name) {
+                it[SettingsTable.name] = name
+                it[SettingsTable.defaultValue] = defaultValue
+            }
 
-        Setting(name, defaultValue)
+            Setting(name, defaultValue)
+        }
     }
 }

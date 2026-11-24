@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.minimap.journeymap
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.core.client.minimap.world.WorldInfo
 
 /**
@@ -21,5 +21,5 @@ object JourneyMapChannels {
 
     fun isJourneyMap(channel: String) = channel in ANNOUNCED
 
-    fun hasJourneyMap(player: CompanionPlayer) = player.hasChannel(PERMISSIONS)
+    fun hasJourneyMap(player: MinimapPlayer) = player.hasChannel(PERMISSIONS)
 }

@@ -5,6 +5,7 @@ import dev.slne.surf.player.api.clan.invite.ClanInviteAcceptResult
 import dev.slne.surf.player.api.clan.invite.ClanInviteResult
 import dev.slne.surf.player.core.client.clan.rpc.clanInviteRpcService
 import dev.slne.surf.player.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.player.core.common.clan.rpc.ClanInviteAcceptance
 import java.util.*
 
 /**
@@ -12,18 +13,18 @@ import java.util.*
  */
 object ClientClanInviteService {
     suspend fun fetchPendingInvites(clanID: ULong): Set<ClanInviteImpl> {
-        return clanInviteRpcService.findPendingInvitesByClanId(clanID)
+        return clanInviteRpcService.findPendingInvitesOfClan(clanID)
     }
 
     suspend fun getPendingInviteByPlayerAndClanName(
         invited: UUID,
         clanName: String
     ): ClanInvite? {
-        return clanInviteRpcService.findPendingInviteByClanNameAndInvited(clanName, invited)
+        return clanInviteRpcService.findPendingInvite(invited, clanName)
     }
 
     suspend fun getPendingInvitesByPlayer(invited: UUID): List<ClanInvite> {
-        return clanInviteRpcService.findPendingInvitesByInvited(invited)
+        return clanInviteRpcService.findPendingInvitesOfPlayer(invited)
     }
 
     suspend fun createInvite(
@@ -42,16 +43,19 @@ object ClientClanInviteService {
         return deleteInvite(invite.clanID, invite.invited)
     }
 
+    /**
+     * Accepts [invite]. The API has no result for an invite that no longer exists, so that case is
+     * reported as [ClanInviteAcceptResult.AlreadyInClan], as before.
+     */
     suspend fun acceptInvite(invite: ClanInviteImpl): ClanInviteAcceptResult {
-        val accepted = clanInviteRpcService.acceptInvite(invite.id, invite.invited, invite.invitedBy)
+        return when (val acceptance = clanInviteRpcService.acceptInvite(invite.id, invite.invited, invite.invitedBy)) {
+            is ClanInviteAcceptance.Accepted -> {
+                ClientClanService.invalidateCachedClanByID(invite.clanID)
+                ClanInviteAcceptResult.Accepted(acceptance.clan)
+            }
 
-        if (!accepted) {
-            return ClanInviteAcceptResult.AlreadyInClan
-        } else {
-            ClientClanService.invalidateCachedClanByID(invite.clanID)
-
-            val clan = ClientClanService.findClanByID(invite.clanID) ?: error("Clan not found")
-            return ClanInviteAcceptResult.Accepted(clan)
+            ClanInviteAcceptance.AlreadyInClan,
+            ClanInviteAcceptance.InviteNotFound -> ClanInviteAcceptResult.AlreadyInClan
         }
     }
 }

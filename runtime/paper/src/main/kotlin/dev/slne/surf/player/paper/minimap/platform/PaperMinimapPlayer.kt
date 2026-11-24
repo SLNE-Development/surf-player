@@ -1,6 +1,6 @@
 package dev.slne.surf.player.paper.minimap.platform
 
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.paper.plugin
 import org.bukkit.World
 import org.bukkit.entity.Player
@@ -9,10 +9,10 @@ import org.bukkit.entity.Player
  * Wraps [player] in [world], which defaults to the world they are in now. A wrapper is made for one sync or tracker
  * run on the player's thread, so it reads the client's channels once.
  */
-class PaperCompanionPlayer(
+class PaperMinimapPlayer(
     private val player: Player,
     private val world: World = player.world,
-) : CompanionPlayer {
+) : MinimapPlayer {
     override val uuid get() = player.uniqueId
     override val worldKey get() = world.key
     override val worldIdentity get() = world.uid.toString()

@@ -1,6 +1,7 @@
 package dev.slne.surf.player.core.client.chat.service
 
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
+import dev.slne.surf.player.core.common.playerRedisKey
 import dev.slne.surf.redis.codec.UUIDCodec
 import dev.slne.surf.redis.libs.redisson.api.RMapCacheReactive
 import kotlinx.coroutines.reactor.awaitSingleOrNull
@@ -9,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object ReplyCache {
     private val lastMessages: RMapCacheReactive<UUID, UUID> by lazy {
-        redisApi.redissonReactive.getMapCache("surf-chat:last-reply-cache", UUIDCodec.INSTANCE)
+        redisApi.redissonReactive.getMapCache(playerRedisKey("chat", "reply-targets"), UUIDCodec.INSTANCE)
     }
 
     suspend fun getLastTarget(uuid: UUID) = lastMessages

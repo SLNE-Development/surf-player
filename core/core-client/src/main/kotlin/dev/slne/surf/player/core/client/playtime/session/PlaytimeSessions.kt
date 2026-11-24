@@ -9,7 +9,7 @@ import dev.slne.surf.player.core.client.playtime.service.PayCheckService
 import dev.slne.surf.player.core.client.playtime.service.PlaytimeService
 import dev.slne.surf.player.core.client.playtime.service.PlaytimeStreakService
 import dev.slne.surf.player.core.client.playtime.streak.LoginStreak
-import dev.slne.surf.player.core.client.playtime.streak.isGapBridgedByPauses
+import dev.slne.surf.player.core.common.playtime.rpc.LoginStreakUpdate
 import net.kyori.adventure.audience.Audience
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -45,44 +45,23 @@ suspend fun handlePlaytimeJoin(playerUuid: UUID, audience: Audience) {
 
     PayCheckService.cachePlaytime(playerUuid)
 
-    val streak = PlaytimeStreakService.loadPlaytimeStreak(playerUuid)
-    val today = LocalDate.now()
+    val update = PlaytimeStreakService.updateLoginStreak(playerUuid, LocalDate.now())
+    val streak = update.streak
 
-    if (streak == null) {
-        val calculated = PlaytimeStreakService.calculatePlaytimeStreak(playerUuid) + 1
+    cacheStreakIfStillOnServer(
+        playerUuid,
+        epoch,
+        LoginStreak(streak.currentLoginStreak, streak.longestLoginStreak)
+    )
 
-        cacheStreakIfStillOnServer(playerUuid, epoch, LoginStreak(calculated, calculated))
-        PlaytimeStreakService.savePlaytimeStreak(playerUuid, calculated, today)
-
+    if (update is LoginStreakUpdate.Created) {
         audience.sendText {
             appendInfoPrefix()
             info("Deine Login-Streak wurde neu erstellt und auf ")
-            variableValue("$calculated Tage")
+            variableValue("${streak.currentLoginStreak} Tage")
             info(" berechnet.")
         }
-
-        return
     }
-
-    val lastLogin = streak.lastLoginDate
-
-    val newStreak = when {
-        lastLogin == null -> 1
-        lastLogin.isEqual(today) -> streak.currentLoginStreak
-        lastLogin.plusDays(1).isEqual(today) -> streak.currentLoginStreak + 1
-        isGapBridgedByPauses(
-            PlaytimeStreakService.loadStreakPauses(),
-            lastLogin,
-            today
-        ) -> streak.currentLoginStreak + 1
-
-        else -> 1
-    }
-
-    val newLongest = maxOf(streak.longestLoginStreak, newStreak)
-
-    cacheStreakIfStillOnServer(playerUuid, epoch, LoginStreak(newStreak, newLongest))
-    PlaytimeStreakService.savePlaytimeStreak(playerUuid, newStreak, today)
 }
 
 /**

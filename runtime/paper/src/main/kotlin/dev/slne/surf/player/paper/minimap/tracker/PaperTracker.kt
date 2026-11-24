@@ -15,7 +15,7 @@ import dev.slne.surf.player.core.client.minimap.tracker.TrackedPosition
 import dev.slne.surf.player.core.client.minimap.tracker.TrackerRelations
 import dev.slne.surf.player.paper.minimap.hook.ClanHook
 import dev.slne.surf.player.paper.minimap.hook.FriendsHook
-import dev.slne.surf.player.paper.minimap.platform.PaperCompanionPlayer
+import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.vanish.util.isVanished
 import kotlinx.coroutines.Job
@@ -121,7 +121,7 @@ object PaperTracker {
         val world = player.world.key.asString()
         tracker.update(player.uniqueId, TrackedPosition(location.x, location.y, location.z, world))
 
-        val viewer = PaperCompanionPlayer(player)
+        val viewer = PaperMinimapPlayer(player)
         // Only the players related to the viewer, unless everyone tracks everyone.
         val candidates = if (everyoneTracksEveryone) null else relations?.relatedOf(player.uniqueId).orEmpty()
         tracker.tick(viewer, candidates) { target -> isVisibleOnMap(player, target) }
@@ -173,7 +173,7 @@ object PaperTracker {
      * Clears the tracked players [player]'s client knows, including ones another server sent.
      */
     fun reset(player: Player) {
-        tracker.reset(PaperCompanionPlayer(player))
+        tracker.reset(PaperMinimapPlayer(player))
     }
 
     fun forget(player: Player) {

@@ -80,17 +80,22 @@ object PlaytimeService {
     }
 
     suspend fun loadSessions(playerUuid: UUID): ObjectSet<PlaytimeSession> =
-        playtimeRpcService.loadSessions(playerUuid).toObjectSet()
+        playtimeRpcService.findSessions(playerUuid).toObjectSet()
 
-    suspend fun loadSessionsByServer(playerUuid: UUID, serverName: String): ObjectSet<PlaytimeSession> =
-        playtimeRpcService.loadSessionsByServer(playerUuid, serverName).toObjectSet()
-
-    suspend fun loadSessionsByCategory(playerUuid: UUID, category: String): ObjectSet<PlaytimeSession> =
-        playtimeRpcService.loadSessionsByCategory(playerUuid, category).toObjectSet()
+    /**
+     * The stored playtime of [playerUuid] in seconds, restricted to [server] and [category] where
+     * given, without the stored save of the session [excludedSessionId].
+     */
+    suspend fun loadPlaytimeSeconds(
+        playerUuid: UUID,
+        server: String? = null,
+        category: String? = null,
+        excludedSessionId: UUID? = null
+    ): Long = playtimeRpcService.findPlaytimeSeconds(playerUuid, server, category, excludedSessionId)
 
     suspend fun loadPlaytimePerPlayer(filter: PlaytimeFilter): Object2LongMap<UUID> =
         Object2LongMaps.unmodifiable(
-            Object2LongOpenHashMap(playtimeRpcService.loadPlaytimePerPlayer(filter))
+            Object2LongOpenHashMap(playtimeRpcService.findPlaytimePerPlayer(filter))
         )
 
     /**

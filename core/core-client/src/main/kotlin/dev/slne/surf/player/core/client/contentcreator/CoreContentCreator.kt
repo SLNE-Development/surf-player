@@ -1,9 +1,9 @@
 package dev.slne.surf.player.core.client.contentcreator
 
 import dev.slne.surf.player.api.contentcreator.ContentCreator
-import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.player.api.contentcreator.StreamingPlatform
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
-import dev.slne.surf.player.api.contentcreator.toPlatform
+import dev.slne.surf.player.api.contentcreator.toStreamingPlatform
 import java.util.*
 
 data class CoreContentCreator(
@@ -11,16 +11,16 @@ data class CoreContentCreator(
 ) : ContentCreator {
 
     @Volatile
-    private var twitchPlatform: ContentCreatorPlatform? = null
+    private var twitchPlatform: StreamingPlatform? = null
 
     @Volatile
     var twitchName: String? = null
         set(value) {
-            twitchPlatform = value?.let { PlatformType.TWITCH.toPlatform(it.lowercase()) }
+            twitchPlatform = value?.let { PlatformType.TWITCH.toStreamingPlatform(it.lowercase()) }
             field = value
         }
 
-    override fun getPlatform(type: PlatformType): ContentCreatorPlatform? = when (type) {
+    override fun getStreamingPlatform(type: PlatformType): StreamingPlatform? = when (type) {
         PlatformType.TWITCH -> twitchPlatform
     }
 

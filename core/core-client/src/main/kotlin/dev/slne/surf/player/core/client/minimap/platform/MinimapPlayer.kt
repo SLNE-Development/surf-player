@@ -6,7 +6,7 @@ import java.util.*
 /**
  * A player as the shared companion logic sees them, bound to the world they are in.
  */
-interface CompanionPlayer {
+interface MinimapPlayer {
     val uuid: UUID
 
     /**

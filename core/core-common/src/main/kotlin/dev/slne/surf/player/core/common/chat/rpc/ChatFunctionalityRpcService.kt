@@ -1,4 +1,4 @@
-package dev.slne.surf.player.core.common.chat.rabbit.rpc
+package dev.slne.surf.player.core.common.chat.rpc
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 import dev.slne.surf.player.api.chat.functionality.Functionalities
@@ -12,5 +12,6 @@ interface ChatFunctionalityRpcService {
     /** The functionalities of every known server, by server name. */
     suspend fun findAllFunctionalities(): Map<String, Functionalities>
 
-    suspend fun upsertFunctionalities(serverName: String, functionalities: Functionalities): Boolean
+    /** Stores [functionalities] for [serverName], replacing the previous ones. */
+    suspend fun saveFunctionalities(serverName: String, functionalities: Functionalities)
 }

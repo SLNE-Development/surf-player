@@ -9,6 +9,7 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.greater
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.inList
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.less
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.neq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.sum
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.javatime.CustomDateTimeFunction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.javatime.dateTimeParam
@@ -57,19 +58,16 @@ object PlaytimeRepository {
             .collectToSessions()
     }
 
-    suspend fun loadSessionsByServer(
+    /**
+     * The summed duration in whole seconds of the sessions of [playerUuid], restricted to
+     * [serverName] and [category] where given and without the session [excludedSessionId]. Each
+     * session counts its whole seconds, like [PlaytimeSession.durationSeconds].
+     */
+    suspend fun sumPlaytimeSeconds(
         playerUuid: UUID,
-        serverName: String
-    ): ObjectSet<PlaytimeSession> = suspendTransaction {
-        PlaytimeSessionsTable.selectAll()
-            .where { (PlaytimeSessionsTable.playerUuid eq playerUuid) and (PlaytimeSessionsTable.serverName eq serverName) }
-            .map { row -> row.toPlaytimeSession(playerUuid) }
-            .collectToSessions()
-    }
-
-    suspend fun loadPlaytimeSecondsByServer(
-        playerUuid: UUID,
-        serverName: String
+        serverName: String?,
+        category: String?,
+        excludedSessionId: UUID?
     ): Long = suspendTransaction {
         val durationSeconds = DurationSecondsExpression(
             start = PlaytimeSessionsTable.startTime,
@@ -77,26 +75,17 @@ object PlaytimeRepository {
         )
         val totalSeconds = durationSeconds.sum()
 
+        var condition: Op<Boolean> = PlaytimeSessionsTable.playerUuid eq playerUuid
+        serverName?.let { condition = condition and (PlaytimeSessionsTable.serverName eq it) }
+        category?.let { condition = condition and (PlaytimeSessionsTable.serverCategory eq it) }
+        excludedSessionId?.let { condition = condition and (PlaytimeSessionsTable.sessionUuid neq it) }
+
         PlaytimeSessionsTable
             .select(totalSeconds)
-            .where {
-                (PlaytimeSessionsTable.playerUuid eq playerUuid) and
-                        (PlaytimeSessionsTable.serverName eq serverName)
-            }
+            .where(condition)
             .firstOrNull()
             ?.get(totalSeconds)
             ?: 0L
-    }
-
-
-    suspend fun loadSessionsByCategory(
-        playerUuid: UUID,
-        category: String
-    ): ObjectSet<PlaytimeSession> = suspendTransaction {
-        PlaytimeSessionsTable.selectAll()
-            .where { (PlaytimeSessionsTable.playerUuid eq playerUuid) and (PlaytimeSessionsTable.serverCategory eq category) }
-            .map { row -> row.toPlaytimeSession(playerUuid) }
-            .collectToSessions()
     }
 
     /**

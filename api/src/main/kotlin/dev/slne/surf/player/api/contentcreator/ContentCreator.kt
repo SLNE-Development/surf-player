@@ -10,5 +10,6 @@ interface ContentCreator {
      */
     val minecraftUuid: UUID
 
-    fun getPlatform(type: PlatformType): ContentCreatorPlatform?
+    /** The account of this content creator on the streaming platform [type], if they have one. */
+    fun getStreamingPlatform(type: PlatformType): StreamingPlatform?
 }

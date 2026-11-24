@@ -1,4 +1,4 @@
-package dev.slne.surf.player.core.client.playtime.streak
+package dev.slne.surf.player.microservice.playtime.streak
 
 import dev.slne.surf.player.api.playtime.session.PlaytimeStreakPause
 import java.time.LocalDate

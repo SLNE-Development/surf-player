@@ -8,6 +8,7 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.*
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.player.api.clan.invite.ClanInviteResult
 import dev.slne.surf.player.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.player.core.common.clan.rpc.ClanInviteAcceptance
 import dev.slne.surf.player.microservice.clan.db.table.ClanInvitesTable
 import dev.slne.surf.player.microservice.clan.db.table.ClanMembersTable
 import dev.slne.surf.player.microservice.clan.db.table.ClanPlayerTable
@@ -83,20 +84,28 @@ object ClanInviteRepository {
         } > 0
     }
 
-    suspend fun acceptInvite(inviteID: ULong, invitee: UUID, invitedBy: UUID): Boolean = suspendTransaction {
-        if (ClanMemberRepository.isInAnyClan(invitee)) return@suspendTransaction false
+    suspend fun acceptInvite(
+        inviteID: ULong,
+        invitee: UUID,
+        invitedBy: UUID
+    ): ClanInviteAcceptance = suspendTransaction {
+        if (ClanMemberRepository.isInAnyClan(invitee)) {
+            return@suspendTransaction ClanInviteAcceptance.AlreadyInClan
+        }
 
         val deletedRow = ClanInvitesTable.deleteReturning {
             ClanInvitesTable.id eq inviteID and (ClanInvitesTable.invited eq invitee)
-        }.singleOrNull() ?: return@suspendTransaction false
+        }.singleOrNull() ?: return@suspendTransaction ClanInviteAcceptance.InviteNotFound
 
+        val clanId = deletedRow[ClanInvitesTable.clanId]
         ClanMembersTable.insert {
             it[uuid] = invitee
             it[addedBy] = invitedBy
-            it[clanId] = deletedRow[ClanInvitesTable.clanId]
+            it[this.clanId] = clanId
         }
 
-        true
+        val clan = ClanRepository.findClanByID(clanId.value) ?: error("Clan ${clanId.value} vanished while accepting an invite")
+        ClanInviteAcceptance.Accepted(clan)
     }
 
     private fun inviteFromRow(row: ResultRow): ClanInviteImpl = ClanInviteImpl(

@@ -9,6 +9,8 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.upsert
 import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
+import dev.slne.surf.player.core.common.playtime.rpc.LoginStreakUpdate
+import dev.slne.surf.player.microservice.playtime.streak.isGapBridgedByPauses
 import dev.slne.surf.player.microservice.playtime.db.table.PlaytimeSessionsTable
 import dev.slne.surf.player.microservice.playtime.db.table.PlaytimeStreakPausesTable
 import dev.slne.surf.player.microservice.playtime.db.table.PlaytimeStreaksTable
@@ -44,6 +46,42 @@ object PlaytimeStreakRepository {
             it[highestLoginStreak] = newHighest
             it[lastLoginDate] = date
         }
+    }
+
+    /**
+     * Advances the stored streak of [playerUuid] for a login on [today]: a first login creates it
+     * from the sessions (counting today), a login the day after the last one (or after a gap
+     * covered completely by streak pauses) extends it, a second login on the same day keeps it and
+     * every other login resets it to one day.
+     */
+    suspend fun updateLoginStreak(playerUuid: UUID, today: LocalDate): LoginStreakUpdate = suspendTransaction {
+        val stored = findStreakInformation(playerUuid)
+
+        if (stored == null) {
+            val calculated = calculateStreak(playerUuid) + 1
+            saveStreak(playerUuid, calculated, today)
+
+            return@suspendTransaction LoginStreakUpdate.Created(
+                PlaytimeStreak(playerUuid, calculated, calculated, today)
+            )
+        }
+
+        val lastLogin = stored.lastLoginDate
+        val newStreak = when {
+            lastLogin == null -> 1
+            lastLogin.isEqual(today) -> stored.currentLoginStreak
+            lastLogin.plusDays(1).isEqual(today) -> stored.currentLoginStreak + 1
+            isGapBridgedByPauses(PlaytimeStreakPauseRepository.findAllPauses(), lastLogin, today) ->
+                stored.currentLoginStreak + 1
+
+            else -> 1
+        }
+
+        saveStreak(playerUuid, newStreak, today)
+
+        LoginStreakUpdate.Updated(
+            PlaytimeStreak(playerUuid, newStreak, maxOf(stored.longestLoginStreak, newStreak), today)
+        )
     }
 
     suspend fun calculateStreak(playerUuid: UUID) = suspendTransaction {

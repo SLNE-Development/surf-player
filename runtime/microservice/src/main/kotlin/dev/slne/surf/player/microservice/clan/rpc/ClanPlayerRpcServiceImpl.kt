@@ -7,14 +7,11 @@ import java.util.*
 
 object ClanPlayerRpcServiceImpl : ClanPlayerRpcService {
 
-    override suspend fun findClanPlayerByUuid(uuid: UUID): ClanPlayerImpl {
+    override suspend fun findClanPlayer(uuid: UUID): ClanPlayerImpl {
         return ClanPlayerRepository.findOrCreateByUuid(uuid)
     }
 
-    override suspend fun updateAcceptsClanInvites(
-        playerID: ULong,
-        acceptsClanInvites: Boolean
-    ): Boolean {
-        return ClanPlayerRepository.changeAcceptsClanInvites(playerID, acceptsClanInvites)
+    override suspend fun updateAcceptsClanInvites(uuid: UUID, acceptsClanInvites: Boolean) {
+        ClanPlayerRepository.changeAcceptsClanInvites(uuid, acceptsClanInvites)
     }
 }

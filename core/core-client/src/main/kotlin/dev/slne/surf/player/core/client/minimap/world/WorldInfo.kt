@@ -1,7 +1,7 @@
 package dev.slne.surf.player.core.client.minimap.world
 
 import dev.slne.surf.player.core.client.minimap.config.MinimapCompanionConfig
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import net.kyori.adventure.key.Key
 
 /**
@@ -41,7 +41,7 @@ object WorldInfo {
      * Sends [player] the name of their current world. The level ID is resolved like Xaero's,
      * so server-id and world-ids apply here too.
      */
-    fun send(player: CompanionPlayer, config: MinimapCompanionConfig) {
+    fun send(player: MinimapPlayer, config: MinimapCompanionConfig) {
         val levelId = LevelIds.resolve(player.worldKey, player.worldIdentity, config)
         player.sendPluginMessage(CHANNEL, payload(name(player.worldKey, levelId)))
     }

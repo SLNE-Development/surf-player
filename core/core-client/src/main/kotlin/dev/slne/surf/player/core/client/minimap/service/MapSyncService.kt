@@ -4,7 +4,7 @@ import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
 import dev.slne.surf.player.core.client.minimap.config.CompanionSettings
 import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapChannels
 import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapSyncService
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlayer
 import dev.slne.surf.player.core.client.minimap.platform.MinimapPlatform
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapSyncService
@@ -25,7 +25,7 @@ object MapSyncService {
      * server sends while a tracker switch is on and the platform [tracksPlayers].
      */
     fun sync(
-        player: CompanionPlayer,
+        player: MinimapPlayer,
         settings: CompanionSettings = CompanionConfigs.current,
         tracksPlayers: Boolean = MinimapPlatform.tracksPlayers,
     ) {
@@ -38,7 +38,7 @@ object MapSyncService {
      * Syncs the mods whose [channels] the client just registered.
      */
     fun syncChannels(
-        player: CompanionPlayer,
+        player: MinimapPlayer,
         channels: Collection<String>,
         settings: CompanionSettings = CompanionConfigs.current,
         tracksPlayers: Boolean = MinimapPlatform.tracksPlayers,
@@ -60,7 +60,7 @@ object MapSyncService {
      * whichever mod sent them.
      */
     fun answer(
-        player: CompanionPlayer,
+        player: MinimapPlayer,
         channel: String,
         settings: CompanionSettings = CompanionConfigs.current,
         tracksPlayers: Boolean = MinimapPlatform.tracksPlayers,

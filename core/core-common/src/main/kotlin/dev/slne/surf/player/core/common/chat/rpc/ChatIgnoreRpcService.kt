@@ -1,4 +1,4 @@
-package dev.slne.surf.player.core.common.chat.rabbit.rpc
+package dev.slne.surf.player.core.common.chat.rpc
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 import dev.slne.surf.player.api.chat.entry.IgnoreListEntry
@@ -8,15 +8,17 @@ import java.util.*
 @RpcService
 interface ChatIgnoreRpcService {
     /**
-     * Also deletes the pending friend requests between both players, in both directions; the
-     * caller removes them from the synchronized friend request list.
+     * Stores that [playerUuid] ignores [targetUuid]. Also deletes the pending friend requests
+     * between both players, in both directions; the caller removes them from the synchronized
+     * friend request list.
      *
      * @return `false` if [playerUuid] already ignores [targetUuid]
      */
-    suspend fun ignore(playerUuid: UUID, targetUuid: UUID): Boolean
+    suspend fun createIgnore(playerUuid: UUID, targetUuid: UUID): Boolean
 
     /** @return `false` if [playerUuid] did not ignore [targetUuid] */
-    suspend fun unignore(playerUuid: UUID, targetUuid: UUID): Boolean
+    suspend fun deleteIgnore(playerUuid: UUID, targetUuid: UUID): Boolean
 
-    suspend fun findIgnoreListEntries(playerUuid: UUID): List<IgnoreListEntry>
+    /** The players [playerUuid] ignores. */
+    suspend fun findIgnoreList(playerUuid: UUID): List<IgnoreListEntry>
 }
