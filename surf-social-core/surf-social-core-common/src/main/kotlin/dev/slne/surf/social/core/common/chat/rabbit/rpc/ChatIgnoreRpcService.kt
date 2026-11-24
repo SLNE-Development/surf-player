@@ -7,7 +7,12 @@ import java.util.*
 /** The players each player ignores in chat, stored by the microservice. */
 @RpcService
 interface ChatIgnoreRpcService {
-    /** @return `false` if [playerUuid] already ignores [targetUuid] */
+    /**
+     * Also deletes the pending friend requests between both players, in both directions; the
+     * caller removes them from the synchronized friend request list.
+     *
+     * @return `false` if [playerUuid] already ignores [targetUuid]
+     */
     suspend fun ignore(playerUuid: UUID, targetUuid: UUID): Boolean
 
     /** @return `false` if [playerUuid] did not ignore [targetUuid] */

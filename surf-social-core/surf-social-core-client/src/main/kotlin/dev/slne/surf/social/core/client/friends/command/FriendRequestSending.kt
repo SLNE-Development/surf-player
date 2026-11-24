@@ -5,9 +5,13 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.clickRunsCommand
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.social.api.friends.player.FriendsPlayer
+import dev.slne.surf.social.api.friends.result.FriendRequestCreateResult
 import dev.slne.surf.social.api.friends.utils.displayName
+import dev.slne.surf.social.core.client.friends.util.formatRemainingComponent
+import dev.slne.surf.social.core.client.util.undeliverableMessage
 import net.kyori.adventure.text.Component
 import java.util.*
+import kotlin.time.Duration
 
 /**
  * Sends a friend request from [sender] to [target].
@@ -29,43 +33,53 @@ suspend fun sendFriendRequest(sender: UUID, target: SurfPlayer?): Component? {
         }
     }
 
-    val playerFriendsPlayer = FriendsPlayer[sender]
-    val targetFriendsPlayer = FriendsPlayer[target.uuid]
+    val result = FriendsPlayer[sender].sendFriendRequest(FriendsPlayer[target.uuid])
 
-    if (playerFriendsPlayer.hasFriendship(targetFriendsPlayer)) {
-        return buildText {
-            appendErrorPrefix()
-            error("Du bist bereits mit ")
-            append(target.displayName())
-            error(" befreundet.")
-        }
+    return failureMessage(result, target)
+}
+
+/** The message explaining why [result] sent no request to [target], or `null` on success. */
+private fun failureMessage(result: FriendRequestCreateResult, target: SurfPlayer): Component? = when (result) {
+    is FriendRequestCreateResult.Success -> null
+    is FriendRequestCreateResult.AlreadyFriends -> alreadyFriendsMessage(target)
+    is FriendRequestCreateResult.AlreadySentFriendRequest -> alreadySentMessage(target)
+    is FriendRequestCreateResult.AlreadyReceivedFriendRequest -> alreadyReceivedMessage(target)
+    is FriendRequestCreateResult.OnCooldown -> onCooldownMessage(target, result.remaining)
+    is FriendRequestCreateResult.Blocked -> undeliverableMessage()
+}
+
+private fun alreadyFriendsMessage(target: SurfPlayer) = buildText {
+    appendErrorPrefix()
+    error("Du bist bereits mit ")
+    append(target.displayName())
+    error(" befreundet.")
+}
+
+private fun alreadySentMessage(target: SurfPlayer) = buildText {
+    appendErrorPrefix()
+    error("Du hast bereits eine Freundschaftsanfrage an ")
+    append(target.displayName())
+    error(" gesendet.")
+}
+
+private fun alreadyReceivedMessage(target: SurfPlayer) = buildText {
+    appendErrorPrefix()
+    error("Du hast bereits eine Freundschaftsanfrage von ")
+    append(target.displayName())
+    error(" erhalten. Möchtest du diese annehmen?")
+    append {
+        clickRunsCommand("/friend accept ${target.username}")
+        spacer(" [")
+        info("Akzeptieren".toSmallCaps())
+        spacer("]")
     }
+}
 
-    if (playerFriendsPlayer.hasSentFriendRequest(targetFriendsPlayer)) {
-        return buildText {
-            appendErrorPrefix()
-            error("Du hast bereits eine Freundschaftsanfrage an ")
-            append(target.displayName())
-            error(" gesendet.")
-        }
-    }
-
-    if (playerFriendsPlayer.hasReceivedFriendRequest(targetFriendsPlayer)) {
-        return buildText {
-            appendErrorPrefix()
-            error("Du hast bereits eine Freundschaftsanfrage von ")
-            append(target.displayName())
-            error(" erhalten. Möchtest du diese annehmen?")
-            append {
-                clickRunsCommand("/friend accept ${target.username}")
-                spacer(" [")
-                info("Akzeptieren".toSmallCaps())
-                spacer("]")
-            }
-        }
-    }
-
-    playerFriendsPlayer.sendFriendRequest(targetFriendsPlayer)
-
-    return null
+private fun onCooldownMessage(target: SurfPlayer, remaining: Duration) = buildText {
+    appendErrorPrefix()
+    error("Du kannst ")
+    append(target.displayName())
+    error(" erst in ")
+    append(remaining.formatRemainingComponent())
+    error(" wieder eine Freundschaftsanfrage senden.")
 }

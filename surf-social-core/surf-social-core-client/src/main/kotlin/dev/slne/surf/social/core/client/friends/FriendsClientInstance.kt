@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import java.nio.file.Path
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -78,6 +79,19 @@ abstract class FriendsClientInstance {
         friendRequests.clear()
         fetched.forEach(friendRequests::add)
     }
+
+    /** Removes the pending request from [senderUuid] to [targetUuid] from the synchronized list. */
+    fun removeFriendRequest(senderUuid: UUID, targetUuid: UUID) {
+        friendRequests.removeIf { it.isFrom(senderUuid, targetUuid) }
+    }
+
+    /** Removes the pending requests between [playerA] and [playerB] in both directions. */
+    fun removeFriendRequestsBetween(playerA: UUID, playerB: UUID) {
+        friendRequests.removeIf { it.isFrom(playerA, playerB) || it.isFrom(playerB, playerA) }
+    }
+
+    private fun FriendRequest.isFrom(sender: UUID, target: UUID) =
+        senderUuid == sender && targetUuid == target
 
     suspend fun fetchFriendships() {
         val fetched = friendsRpcService.fetchFriendships()

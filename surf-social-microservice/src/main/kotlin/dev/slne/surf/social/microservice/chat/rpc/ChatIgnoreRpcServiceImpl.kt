@@ -1,13 +1,22 @@
 package dev.slne.surf.social.microservice.chat.rpc
 
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
 import dev.slne.surf.social.core.common.chat.rabbit.rpc.ChatIgnoreRpcService
 import dev.slne.surf.social.microservice.chat.repository.ignore.IgnoreRepository
+import dev.slne.surf.social.microservice.friends.db.repository.FriendRequestRepository
 import java.util.*
 
 object ChatIgnoreRpcServiceImpl : ChatIgnoreRpcService {
-    override suspend fun ignore(playerUuid: UUID, targetUuid: UUID): Boolean =
-        IgnoreRepository.ignore(playerUuid, targetUuid)
+    override suspend fun ignore(playerUuid: UUID, targetUuid: UUID): Boolean = suspendTransaction {
+        val ignored = IgnoreRepository.ignore(playerUuid, targetUuid)
+
+        if (ignored) {
+            FriendRequestRepository.deleteFriendRequestsBetween(playerUuid, targetUuid)
+        }
+
+        ignored
+    }
 
     override suspend fun unignore(playerUuid: UUID, targetUuid: UUID): Boolean =
         IgnoreRepository.unignore(playerUuid, targetUuid)

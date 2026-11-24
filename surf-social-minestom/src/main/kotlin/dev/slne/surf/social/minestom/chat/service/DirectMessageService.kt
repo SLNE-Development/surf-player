@@ -1,6 +1,5 @@
 package dev.slne.surf.social.minestom.chat.service
 
-import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.adventure.text
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.mutableObjectSetOf
@@ -22,6 +21,7 @@ import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageRedisReq
 import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
 import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.client.chat.service.ReplyCache
+import dev.slne.surf.social.core.client.util.undeliverableMessage
 import dev.slne.surf.social.minestom.chat.player.boundDisplayName
 import dev.slne.surf.social.minestom.chat.redis.rpc.chatSession
 import dev.slne.surf.social.minestom.chat.redis.rpc.toRemote
@@ -56,10 +56,7 @@ object DirectMessageService {
         messageData = result.messageData
 
         if (result.isCancelled) {
-            sender.sendText {
-                appendErrorPrefix()
-                error("Deine Nachricht konnte nicht zugestellt werden.")
-            }
+            sender.sendMessage(undeliverableMessage())
         } else {
             sender.sendSignedMessage(
                 message,

@@ -1,7 +1,9 @@
 package dev.slne.surf.social.microservice.friends.db.repository
 
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Op
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.or
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insert
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -35,15 +37,24 @@ object FriendRequestRepository {
         Unit
     }
 
+    /** @return whether there was a request from [senderUuid] to [targetUuid] */
     suspend fun deleteFriendRequest(
         senderUuid: UUID,
         targetUuid: UUID
+    ): Boolean = suspendTransaction {
+        FriendRequestsTable.deleteWhere { isRequest(senderUuid, targetUuid) } > 0
+    }
+
+    /** Deletes the requests between [playerA] and [playerB] in both directions. */
+    suspend fun deleteFriendRequestsBetween(
+        playerA: UUID,
+        playerB: UUID
     ) = suspendTransaction {
-        FriendRequestsTable.deleteWhere {
-            (FriendRequestsTable.senderUuid eq senderUuid) and
-                    (FriendRequestsTable.targetUuid eq targetUuid)
-        }
+        FriendRequestsTable.deleteWhere { isRequest(playerA, playerB) or isRequest(playerB, playerA) }
 
         Unit
     }
+
+    private fun isRequest(senderUuid: UUID, targetUuid: UUID): Op<Boolean> =
+        (FriendRequestsTable.senderUuid eq senderUuid) and (FriendRequestsTable.targetUuid eq targetUuid)
 }

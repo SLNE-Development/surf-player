@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
 import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
 import dev.slne.surf.social.core.client.chat.rpc.chatIgnoreRpcService
+import dev.slne.surf.social.core.client.friends.FriendsClientInstance
 import dev.slne.surf.social.core.common.chat.service.IgnoreService
 import java.time.OffsetDateTime
 import java.util.*
@@ -24,6 +25,9 @@ class IgnoreServiceImpl : IgnoreService {
                     ignoreList + IgnoreListEntry(uuid, ignoredUUID, OffsetDateTime.now())
                 }
             }
+
+            // The microservice already deleted these requests while storing the ignore.
+            FriendsClientInstance.INSTANCE.removeFriendRequestsBetween(uuid, ignoredUUID)
         }
 
         return ignored

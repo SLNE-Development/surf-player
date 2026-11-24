@@ -8,6 +8,9 @@ import dev.slne.surf.social.api.friends.result.FriendRequestStateResult
 import dev.slne.surf.social.api.friends.result.FriendshipRemoveResult
 import dev.slne.surf.social.core.common.friends.rpc.FriendRequestState
 import dev.slne.surf.social.core.common.friends.rpc.FriendsRpcService
+import dev.slne.surf.social.microservice.chat.repository.ignore.IgnoreRepository
+import dev.slne.surf.social.microservice.friends.cooldown.FriendRequestCooldownKind
+import dev.slne.surf.social.microservice.friends.cooldown.FriendRequestCooldowns
 import dev.slne.surf.social.microservice.friends.db.repository.FriendRequestRepository
 import dev.slne.surf.social.microservice.friends.db.repository.FriendshipsRepository
 import java.time.OffsetDateTime
@@ -18,6 +21,15 @@ object FriendsRpcServiceImpl : FriendsRpcService {
         FriendRequestRepository.fetchFriendRequests()
 
     override suspend fun createFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestCreateResult {
+        if (IgnoreRepository.isEitherIgnoring(senderUuid, targetUuid)) {
+            return FriendRequestCreateResult.Blocked(targetUuid)
+        }
+
+        val remainingCooldown = FriendRequestCooldowns.remaining(senderUuid, targetUuid)
+        if (remainingCooldown != null) {
+            return FriendRequestCreateResult.OnCooldown(targetUuid, remainingCooldown)
+        }
+
         val friendRequest = FriendRequest(
             senderUuid = senderUuid,
             targetUuid = targetUuid,
@@ -29,7 +41,10 @@ object FriendsRpcServiceImpl : FriendsRpcService {
     }
 
     override suspend fun revokeFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestRemoveResult {
-        FriendRequestRepository.deleteFriendRequest(senderUuid, targetUuid)
+        if (FriendRequestRepository.deleteFriendRequest(senderUuid, targetUuid)) {
+            FriendRequestCooldowns.record(senderUuid, targetUuid, FriendRequestCooldownKind.WITHDRAW)
+        }
+
         return FriendRequestRemoveResult.Success
     }
 
@@ -38,10 +53,15 @@ object FriendsRpcServiceImpl : FriendsRpcService {
         targetUuid: UUID,
         state: FriendRequestState
     ): FriendRequestStateResult {
-        FriendRequestRepository.deleteFriendRequest(senderUuid, targetUuid)
+        val existed = FriendRequestRepository.deleteFriendRequest(senderUuid, targetUuid)
 
-        if (state == FriendRequestState.ACCEPT) {
-            FriendshipsRepository.createFriendship(senderUuid, targetUuid, OffsetDateTime.now())
+        when (state) {
+            FriendRequestState.ACCEPT ->
+                FriendshipsRepository.createFriendship(senderUuid, targetUuid, OffsetDateTime.now())
+
+            FriendRequestState.DECLINE -> if (existed) {
+                FriendRequestCooldowns.record(senderUuid, targetUuid, FriendRequestCooldownKind.DECLINE)
+            }
         }
 
         return FriendRequestStateResult.Success

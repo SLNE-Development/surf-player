@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 class TimeUtilsTest {
 
@@ -19,5 +22,20 @@ class TimeUtilsTest {
         val moment = OffsetDateTime.of(2024, 12, 31, 23, 30, 0, 0, ZoneOffset.ofHours(2))
 
         assertEquals("31.12.2024 23:30", moment.format())
+    }
+
+    @Test
+    fun `rounds a started minute up`() {
+        assertEquals(23.minutes, (22.minutes + 1.seconds).roundUpToMinutes())
+    }
+
+    @Test
+    fun `keeps whole minutes`() {
+        assertEquals(2.hours, 2.hours.roundUpToMinutes())
+    }
+
+    @Test
+    fun `rounds less than a minute up to one minute`() {
+        assertEquals(1.minutes, 5.seconds.roundUpToMinutes())
     }
 }

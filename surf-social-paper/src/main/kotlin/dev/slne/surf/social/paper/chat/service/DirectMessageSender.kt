@@ -1,6 +1,5 @@
 package dev.slne.surf.social.paper.chat.service
 
-import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.adventure.text
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.paper.nms.NmsUseWithCaution
@@ -19,6 +18,7 @@ import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageRedisReq
 import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
 import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.core.client.chat.service.ReplyCache
+import dev.slne.surf.social.core.client.util.undeliverableMessage
 import dev.slne.surf.social.paper.chat.util.schedulePingSound
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -40,10 +40,7 @@ object DirectMessageSender {
         val messageData = preProcessed.messageData
 
         if (preProcessed.isCancelled) {
-            sender.sendText {
-                appendErrorPrefix()
-                error("Deine Nachricht konnte nicht zugestellt werden.")
-            }
+            sender.sendMessage(undeliverableMessage())
         } else {
             deliver(sender, message, messageData, targetUuid)
         }

@@ -191,9 +191,7 @@ class CoreFriendsPlayer(
             return result
         }
 
-        FriendsClientInstance.INSTANCE.friendRequests.removeIf {
-            it.senderUuid == uuid && it.targetUuid == targetUuid
-        }
+        FriendsClientInstance.INSTANCE.removeFriendRequest(senderUuid = uuid, targetUuid = targetUuid)
 
         redisApi.publishEvent(
             FriendRequestRevokeRedisEvent(
@@ -221,9 +219,7 @@ class CoreFriendsPlayer(
             return result
         }
 
-        FriendsClientInstance.INSTANCE.friendRequests.removeIf {
-            it.senderUuid == targetUuid && it.targetUuid == uuid
-        }
+        FriendsClientInstance.INSTANCE.removeFriendRequest(senderUuid = targetUuid, targetUuid = uuid)
 
         val now = OffsetDateTime.now()
 
@@ -269,9 +265,7 @@ class CoreFriendsPlayer(
             return result
         }
 
-        FriendsClientInstance.INSTANCE.friendRequests.removeIf {
-            it.senderUuid == targetUuid && it.targetUuid == uuid
-        }
+        FriendsClientInstance.INSTANCE.removeFriendRequest(senderUuid = targetUuid, targetUuid = uuid)
 
         redisApi.publishEvent(
             FriendRequestDenyRedisEvent(
