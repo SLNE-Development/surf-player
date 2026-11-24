@@ -3,7 +3,6 @@ package dev.slne.surf.player.microservice.clan
 import dev.slne.surf.rabbitmq.api.ServerRabbitMQApi
 import dev.slne.surf.player.core.common.clan.rpc.ClanInviteRpcService
 import dev.slne.surf.player.core.common.clan.rpc.ClanMemberRpcService
-import dev.slne.surf.player.core.common.clan.rpc.ClanPlayerRpcService
 import dev.slne.surf.player.core.common.clan.rpc.ClanRpcService
 import dev.slne.surf.player.microservice.PlayerMicroserviceModule
 import dev.slne.surf.player.microservice.PlayerSchemas
@@ -14,7 +13,6 @@ import dev.slne.surf.player.microservice.clan.db.table.ClanPlayerTable
 import dev.slne.surf.player.microservice.clan.db.table.ClansTable
 import dev.slne.surf.player.microservice.clan.rpc.ClanInviteRpcServiceImpl
 import dev.slne.surf.player.microservice.clan.rpc.ClanMemberRpcServiceImpl
-import dev.slne.surf.player.microservice.clan.rpc.ClanPlayerRpcServiceImpl
 import dev.slne.surf.player.microservice.clan.rpc.ClanRpcServiceImpl
 import dev.slne.surf.player.microservice.createSchemaWithTables
 
@@ -34,6 +32,5 @@ object ClanMicroserviceModule : PlayerMicroserviceModule {
         rabbit.registerRpcService<ClanRpcService>(ClanRpcServiceImpl)
         rabbit.registerRpcService<ClanInviteRpcService>(ClanInviteRpcServiceImpl)
         rabbit.registerRpcService<ClanMemberRpcService>(ClanMemberRpcServiceImpl)
-        rabbit.registerRpcService<ClanPlayerRpcService>(ClanPlayerRpcServiceImpl)
     }
 }

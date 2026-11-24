@@ -12,6 +12,7 @@ import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.player.core.client.chat.platform.receivesSignedMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.kyori.adventure.chat.SignedMessage
@@ -72,7 +73,8 @@ class MinestomChatPlatform : ChatPlatform {
         senderUuid: UUID,
         targetUuid: UUID,
         signedMessage: SignedMessage,
-        contentComponent: Component
+        contentComponent: Component,
+        requiredSetting: String?
     ) {
         val sender = ConnectionManager.getOnlinePlayerByUuid(senderUuid)
 
@@ -85,6 +87,7 @@ class MinestomChatPlatform : ChatPlatform {
         val target = ConnectionManager.getOnlinePlayerByUuid(targetUuid)
 
         if (target != null) {
+            if (!receivesSignedMessage(targetUuid, requiredSetting)) return
             target.sendSignedMessage(signedMessage, sender.boundDisplayName(), contentComponent)
             return
         }
@@ -99,7 +102,8 @@ class MinestomChatPlatform : ChatPlatform {
             sender,
             targetUuid,
             contentComponent,
-            signedMessage
+            signedMessage,
+            requiredSetting
         )
     }
 

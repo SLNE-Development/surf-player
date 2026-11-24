@@ -21,9 +21,8 @@ object PrivateMessageSpyPostChatProcessor : PostChatProcessor {
             return
         }
 
-        val message = formatPmSpy(messageData)
-
         for (spy in spies) {
+            val message = formatPmSpy(messageData, spy)
             spy.sendText { append(message) }
         }
     }

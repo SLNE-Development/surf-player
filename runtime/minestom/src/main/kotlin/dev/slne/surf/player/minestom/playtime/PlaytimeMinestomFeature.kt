@@ -9,7 +9,7 @@ import dev.slne.surf.player.core.client.playtime.session.invalidatePlaytimeCache
 import dev.slne.surf.player.core.client.playtime.session.startPlaytimeSession
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
 import dev.slne.surf.player.minestom.PlayerMinestomPlugin
-import dev.slne.surf.player.minestom.playtime.command.playtimeAdminCommand
+import dev.slne.surf.player.minestom.playtime.command.playtimeAdminActions
 import dev.slne.surf.player.minestom.playtime.command.playtimeCommand
 import dev.slne.surf.player.minestom.playtime.listener.PlayerAfkListener
 import kotlinx.coroutines.launch
@@ -25,7 +25,6 @@ object PlaytimeMinestomFeature : MinestomPlayerFeature {
 
     override suspend fun onEnable() {
         playtimeCommand()
-        playtimeAdminCommand()
 
         PlayerAfkListener.register(PlayerMinestomPlugin.eventNode)
     }
@@ -33,6 +32,8 @@ object PlaytimeMinestomFeature : MinestomPlayerFeature {
     override suspend fun onDisable() {
         PlaytimeTasks.stop()
     }
+
+    override fun adminActions() = playtimeAdminActions()
 
     override fun onPlayerJoin(player: Player) {
         startPlaytimeSession(player.uuid)

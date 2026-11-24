@@ -1,30 +1,17 @@
 package dev.slne.surf.player.paper.friends.listener
 
-import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
-import dev.slne.surf.player.paper.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerQuitEvent
 
+/**
+ * Friends are notified network-wide from the proxy's join and quit (see
+ * [FriendConnectionNotifier]); this server only reports joins for the greeting.
+ */
 object FriendConnectionListener : Listener {
     @EventHandler
     fun onConnect(event: PlayerJoinEvent) {
-        val uuid = event.player.uniqueId
-        val onlineFriends = FriendConnectionNotifier.greet(uuid)
-
-        plugin.launch {
-            FriendConnectionNotifier.announceOnline(uuid, onlineFriends)
-        }
-    }
-
-    @EventHandler
-    fun onDisconnect(event: PlayerQuitEvent) {
-        val uuid = event.player.uniqueId
-
-        plugin.launch {
-            FriendConnectionNotifier.announceOffline(uuid)
-        }
+        FriendConnectionNotifier.onJoinedThisServer(event.player.uniqueId)
     }
 }

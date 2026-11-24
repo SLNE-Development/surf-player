@@ -7,9 +7,25 @@ import dev.slne.surf.player.core.client.clan.components.ClanComponents
 import net.kyori.adventure.text.event.ClickEvent
 
 const val NO_TAG_COLOR_PERMISSION = "Du hast keine Berechtigung, die Farbe des Clan-Tags zu ändern."
-const val INVALID_HEX_COLOR = "Invalid hex color: "
 
-const val NOTHING_CHANGED = "Nothing changed."
+const val NOTHING_CHANGED = "Es hat sich nichts geändert."
+
+/**
+ * The error shown when [input] is no hex color of [length] digits, with an example of a valid one.
+ */
+fun invalidHexColorMessage(input: String, length: Int): String {
+    val example = if (length == CLAN_TAG_SHADOW_COLOR_LENGTH) "#FF6B6BCC" else "#FF6B6B"
+    return "'$input' ist keine gültige Farbe. Gib einen Hex-Farbcode mit $length Stellen an, z. B. $example."
+}
+
+/**
+ * The hex digits of [input] when it is a hex color of exactly [length] digits, written with or
+ * without a leading number sign; `null` otherwise.
+ */
+fun normalizeHexColor(input: String, length: Int): String? {
+    val digits = input.trim().removePrefix("#")
+    return digits.takeIf { isHexColor(it, length) }
+}
 
 /** How many hex digits the foreground and background of a clan tag are written with. */
 const val CLAN_TAG_COLOR_LENGTH = 6
@@ -31,7 +47,10 @@ fun isHexColor(input: String, length: Int): Boolean {
     return true
 }
 
-/** The hex colors offered for the foreground and background of a clan tag. */
+/**
+ * The hex colors offered for the foreground and background of a clan tag. They are written with a
+ * number sign; input is accepted with or without one (see [normalizeHexColor]).
+ */
 val CLAN_TAG_COLOR_SUGGESTIONS = listOf(
     "#FF6B6B",
     "#4ECDC4",
@@ -110,12 +129,12 @@ fun clanConfigReloadedMessage() = buildText {
 
 fun invalidatingCachesMessage() = buildText {
     appendInfoPrefix()
-    info("Invalidated all caches...")
+    info("Die Clan-Caches werden geleert...")
 }
 
 fun invalidatedCachesMessage() = buildText {
     appendSuccessPrefix()
-    success("Caches invalidated.")
+    success("Die Clan-Caches wurden geleert.")
 }
 
 suspend fun clanDeletedMessage(clan: ClanImpl, deleted: Boolean) = buildText {

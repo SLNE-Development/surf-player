@@ -13,7 +13,7 @@ import dev.slne.surf.player.core.client.chat.config.aiModerationConfig
 import dev.slne.surf.player.core.client.chat.message.format.appendBotIcon
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
-import dev.slne.surf.player.core.client.chat.redis.event.TeamBroadcastRedisEvent
+import dev.slne.surf.player.core.client.chat.redis.event.AiModerationNoticeRedisEvent
 import dev.slne.surf.player.core.client.chat.rpc.chatModerationRpcService
 import dev.slne.surf.player.core.client.chat.util.hasPermission
 import dev.slne.surf.player.core.client.chat.webhook.DiscordClient
@@ -83,62 +83,10 @@ object AiModerationPostChatProcessor : PostChatProcessor {
             return
         }
 
-        val name = messageData.senderUser().lastKnownName ?: messageData.sender.toString()
-
         postWebhook(messageData, classification)
 
-        redisApi.publishEvent(
-            TeamBroadcastRedisEvent(
-                buildText {
-                    appendBotIcon()
-                    info("Die Nachricht von ")
-                    variableValue(name)
-                    info(" wurde von der KI-Moderation markiert: ")
-                    spacer("(${messageData.type.value}) ")
-
-                    append {
-                        text(plain.take(20), Colors.WHITE)
-                        if (plain.length > 20) {
-                            text("...", Colors.GRAY)
-                        }
-
-                        hoverEvent(buildText {
-                            text(plain, Colors.WHITE)
-                        })
-                    }
-
-                    if (classification.action == ModerationClassificationAction.SILENT_FLAG) {
-                        append {
-                            spacer(" [")
-                            text("LÖSCHEN", Colors.RED)
-                            spacer("]")
-                            hoverEvent(
-                                buildText {
-                                    text("Klicke hier, um die Nachricht zu löschen", Colors.RED)
-                                }
-                            )
-                            clickEvent(ClickEvent.callback { clicked ->
-                                ChatPlatform.launchAsync {
-                                    val deleted = DeletionService.deleteMessage(
-                                        messageData,
-                                        deleter = clicked,
-                                        deletionReason = "AI classification: ${classification.action.name}",
-                                        notifyTeam = false
-                                    )
-
-                                    if (!deleted) {
-                                        clicked.sendText {
-                                            appendErrorPrefix()
-                                            error("Die Nachricht konnte nicht gelöscht werden!")
-                                        }
-                                    }
-                                }
-                            })
-                        }
-                    }
-                },
-                ChatPermissions.PREFIX_TEAM
-            )).await()
+        // Every server renders the notice itself, see AiModerationNoticeRedisEvent.
+        redisApi.publishEvent(AiModerationNoticeRedisEvent(messageData, classification.action)).await()
 
         when (classification.action) {
             ModerationClassificationAction.DELETE -> {
@@ -159,6 +107,67 @@ object AiModerationPostChatProcessor : PostChatProcessor {
         runCatching {
             chatModerationRpcService.createModerationLog(messageData, classification)
         }.onFailure { log.atWarning().withCause(it).log("Failed to log AI moderation") }
+    }
+
+    /**
+     * Shows the moderation notice for [messageData], flagged with [action], to the team members on
+     * this server. The delete button of a [ModerationClassificationAction.SILENT_FLAG] deletes the
+     * message on every server.
+     */
+    suspend fun showModerationNotice(messageData: MessageData, action: ModerationClassificationAction) {
+        val plain = messageData.plainMessage
+        val name = messageData.senderUser().lastKnownName ?: messageData.sender.toString()
+
+        val notice = buildText {
+            appendBotIcon()
+            info("Die Nachricht von ")
+            variableValue(name)
+            info(" wurde von der KI-Moderation markiert: ")
+            spacer("(${messageData.type.value}) ")
+
+            append {
+                text(plain.take(20), Colors.WHITE)
+                if (plain.length > 20) {
+                    text("...", Colors.GRAY)
+                }
+
+                hoverEvent(buildText {
+                    text(plain, Colors.WHITE)
+                })
+            }
+
+            if (action == ModerationClassificationAction.SILENT_FLAG) {
+                append {
+                    spacer(" [")
+                    text("LÖSCHEN", Colors.RED)
+                    spacer("]")
+                    hoverEvent(
+                        buildText {
+                            text("Klicke hier, um die Nachricht zu löschen", Colors.RED)
+                        }
+                    )
+                    clickEvent(ClickEvent.callback { clicked ->
+                        ChatPlatform.launchAsync {
+                            val deleted = DeletionService.deleteMessage(
+                                messageData,
+                                deleter = clicked,
+                                deletionReason = "AI classification: ${action.name}",
+                                notifyTeam = false
+                            )
+
+                            if (!deleted) {
+                                clicked.sendText {
+                                    appendErrorPrefix()
+                                    error("Die Nachricht konnte nicht gelöscht werden!")
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        }
+
+        ChatPlatform.broadcast(notice, ChatPermissions.TEAM_NOTIFY_MODERATION)
     }
 
     private suspend fun deleteMessage(

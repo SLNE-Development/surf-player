@@ -4,8 +4,9 @@ import dev.slne.surf.player.api.friends.model.FriendRequest
 import dev.slne.surf.player.api.friends.model.Friendship
 import dev.slne.surf.player.api.friends.result.FriendRequestCreateResult
 import dev.slne.surf.player.api.friends.result.FriendRequestRemoveResult
-import dev.slne.surf.player.api.friends.result.FriendRequestStateResult
 import dev.slne.surf.player.api.friends.result.FriendshipRemoveResult
+import dev.slne.surf.player.api.settings.setting.SettingKeys
+import dev.slne.surf.player.core.common.friends.rpc.FriendRequestAnswer
 import dev.slne.surf.player.core.common.friends.rpc.FriendRequestState
 import dev.slne.surf.player.core.common.friends.rpc.FriendsRpcService
 import dev.slne.surf.player.microservice.chat.repository.ignore.IgnoreRepository
@@ -13,6 +14,7 @@ import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldownK
 import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldowns
 import dev.slne.surf.player.microservice.friends.db.repository.FriendRequestRepository
 import dev.slne.surf.player.microservice.friends.db.repository.FriendshipsRepository
+import dev.slne.surf.player.microservice.settings.repository.PlayerSettingsRepository
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -23,6 +25,10 @@ object FriendsRpcServiceImpl : FriendsRpcService {
     override suspend fun createFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestCreateResult {
         if (IgnoreRepository.isEitherIgnoring(senderUuid, targetUuid)) {
             return FriendRequestCreateResult.Blocked(targetUuid)
+        }
+
+        if (!acceptsFriendRequests(targetUuid)) {
+            return FriendRequestCreateResult.RequestsDisabled(targetUuid)
         }
 
         val remainingCooldown = FriendRequestCooldowns.remaining(senderUuid, targetUuid)
@@ -52,19 +58,30 @@ object FriendsRpcServiceImpl : FriendsRpcService {
         senderUuid: UUID,
         targetUuid: UUID,
         state: FriendRequestState
-    ): FriendRequestStateResult {
+    ): FriendRequestAnswer {
         val existed = FriendRequestRepository.deleteFriendRequest(senderUuid, targetUuid)
 
-        when (state) {
-            FriendRequestState.ACCEPT ->
+        return when (state) {
+            FriendRequestState.ACCEPT -> FriendRequestAnswer.Accepted(
                 FriendshipsRepository.createFriendship(senderUuid, targetUuid, OffsetDateTime.now())
+            )
 
-            FriendRequestState.DECLINE -> if (existed) {
-                FriendRequestCooldowns.record(senderUuid, targetUuid, FriendRequestCooldownKind.DECLINE)
+            FriendRequestState.DECLINE -> {
+                if (existed) {
+                    FriendRequestCooldowns.record(senderUuid, targetUuid, FriendRequestCooldownKind.DECLINE)
+                }
+                FriendRequestAnswer.Declined
             }
         }
+    }
 
-        return FriendRequestStateResult.Success
+    /** Whether [targetUuid] accepts friend requests (setting [SettingKeys.FRIEND_REQUESTS]). */
+    private suspend fun acceptsFriendRequests(targetUuid: UUID): Boolean {
+        val key = SettingKeys.FRIEND_REQUESTS
+        val value = PlayerSettingsRepository.findSettingValueOrDefault(targetUuid, key.name)
+            ?: return key.defaultValue
+
+        return runCatching { key.deserialize(value) }.getOrDefault(key.defaultValue)
     }
 
     override suspend fun findAllFriendships(): List<Friendship> =

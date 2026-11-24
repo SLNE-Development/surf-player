@@ -17,7 +17,6 @@ import dev.slne.surf.player.api.clan.member.ClanMemberRole
 import dev.slne.surf.player.api.clan.member.listener.ClanMemberListener
 import dev.slne.surf.player.core.client.clan.services.ClientClanInviteService
 import dev.slne.surf.player.core.client.clan.services.ClientClanMemberService
-import dev.slne.surf.player.core.client.clan.services.ClientClanPlayerService
 import dev.slne.surf.player.core.client.clan.services.ClientClanService
 import dev.slne.surf.player.core.common.clan.CoreClanApi
 import dev.slne.surf.player.core.common.clan.clan.AbstractClanView
@@ -75,12 +74,6 @@ class SurfClanApiImpl : CoreClanApi {
 
     override suspend fun findClanInvite(uuid: UUID, clanName: String): ClanInvite? =
         ClientClanInviteService.getPendingInviteByPlayerAndClanName(uuid, clanName)
-
-    override suspend fun acceptsClanInvites(uuid: UUID): Boolean =
-        ClientClanPlayerService.findByUuid(uuid).acceptsClanInvites
-
-    override suspend fun setAcceptsClanInvites(uuid: UUID, acceptsClanInvites: Boolean): Boolean =
-        ClientClanPlayerService.changeAcceptsClanInvites(uuid, acceptsClanInvites)
 
     override suspend fun findClanByID(id: ULong): ClanImpl? =
         ClientClanService.findClanByID(id)

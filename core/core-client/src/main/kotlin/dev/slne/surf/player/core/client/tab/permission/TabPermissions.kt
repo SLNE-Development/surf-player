@@ -1,10 +1,9 @@
 package dev.slne.surf.player.core.client.tab.permission
 
 /**
- * Platform-neutral registry of all permission node strings used by surf-tab.
+ * Every permission node of the tab feature, the same on every platform.
  */
 object TabPermissions {
-    private const val PREFIX = "surf.tab"
-
-    const val COMMAND_SURFTAB = "$PREFIX.command.surftab"
+    // Admin actions (/surfplayer tab ...)
+    const val ADMIN_RELOAD = "surf.player.admin.tab.reload"
 }

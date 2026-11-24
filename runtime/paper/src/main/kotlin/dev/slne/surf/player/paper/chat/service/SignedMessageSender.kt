@@ -12,6 +12,7 @@ import dev.slne.surf.player.core.client.chat.redis.rpc.SendSignedMessageHandledR
 import dev.slne.surf.player.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
 import dev.slne.surf.player.core.client.chat.redis.rpc.SignedChatMessage
 import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.chat.platform.receivesSignedMessage
 import dev.slne.surf.player.paper.chat.redis.rpc.chatSession
 import dev.slne.surf.player.paper.chat.redis.rpc.toMirror
 import dev.slne.surf.player.paper.chat.redis.rpc.toWire
@@ -48,6 +49,7 @@ object SignedMessageSender {
         targetUuid: UUID,
         component: Component,
         signedMessage: SignedMessage,
+        requiredSetting: String? = null,
     ) {
         if (SurfCoreApi.getPlayer(targetUuid) == null) {
             return
@@ -59,7 +61,8 @@ object SignedMessageSender {
                     sender.uniqueId,
                     sender.name,
                     targetUuid,
-                    wireMessage
+                    wireMessage,
+                    requiredSetting
                 ),
             )
         }
@@ -96,9 +99,13 @@ object SignedMessageSender {
         sender: UUID,
         senderName: String,
         target: UUID,
-        signedChatMessage: SignedChatMessage
+        signedChatMessage: SignedChatMessage,
+        requiredSetting: String? = null
     ): Boolean {
         val targetPlayer = Bukkit.getPlayer(target) ?: return false
+
+        // Handled, but not shown: the target turned the required setting off.
+        if (!receivesSignedMessage(target, requiredSetting)) return true
 
         showRemoteSignedMessage(targetPlayer, sender, senderName, signedChatMessage)
 

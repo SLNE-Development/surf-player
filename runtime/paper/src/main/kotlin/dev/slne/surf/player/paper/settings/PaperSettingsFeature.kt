@@ -5,7 +5,7 @@ import dev.slne.surf.api.paper.inventory.framework.register
 import dev.slne.surf.player.core.client.settings.loadSettings
 import dev.slne.surf.player.paper.PaperPlayerFeature
 import dev.slne.surf.player.paper.settings.command.settingsCommand
-import dev.slne.surf.player.paper.settings.command.surfSettingsCommand
+import dev.slne.surf.player.paper.settings.command.settingsAdminActions
 import dev.slne.surf.player.paper.settings.listener.PlayerConnectionListener
 import dev.slne.surf.player.paper.settings.menu.settingsCategoryView
 import dev.slne.surf.player.paper.settings.menu.settingsView
@@ -26,7 +26,8 @@ object PaperSettingsFeature : PaperPlayerFeature {
         loadSettings()
 
         PlayerConnectionListener.register()
-        surfSettingsCommand()
         settingsCommand()
     }
+
+    override fun adminActions() = settingsAdminActions()
 }

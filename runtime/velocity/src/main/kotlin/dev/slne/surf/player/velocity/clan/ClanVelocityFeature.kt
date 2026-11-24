@@ -4,6 +4,7 @@ import dev.slne.surf.player.core.client.clan.ClanClient
 import dev.slne.surf.player.velocity.PlayerVelocityPlugin
 import dev.slne.surf.player.velocity.VelocityPlayerFeature
 import dev.slne.surf.player.velocity.clan.listener.JoinInviteListener
+import dev.slne.surf.player.velocity.command.clanAdminActions
 import dev.slne.surf.player.velocity.plugin
 
 /**
@@ -19,4 +20,6 @@ object ClanVelocityFeature : VelocityPlayerFeature {
     override suspend fun onEnable() {
         plugin.eventManager.register(plugin, JoinInviteListener)
     }
+
+    override fun adminActions() = clanAdminActions()
 }

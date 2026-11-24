@@ -5,7 +5,6 @@ import dev.slne.surf.player.api.friends.model.FriendRequest
 import dev.slne.surf.player.api.friends.model.Friendship
 import dev.slne.surf.player.api.friends.result.FriendRequestCreateResult
 import dev.slne.surf.player.api.friends.result.FriendRequestRemoveResult
-import dev.slne.surf.player.api.friends.result.FriendRequestStateResult
 import dev.slne.surf.player.api.friends.result.FriendshipRemoveResult
 import java.util.*
 
@@ -23,8 +22,9 @@ interface FriendsRpcService {
 
     /**
      * Stores a request from [senderUuid] to [targetUuid], unless one of both ignores the other
-     * ([FriendRequestCreateResult.Blocked]) or [senderUuid] is on cooldown for [targetUuid]
-     * ([FriendRequestCreateResult.OnCooldown]).
+     * ([FriendRequestCreateResult.Blocked]), [targetUuid] turned off the setting `friend:requests`
+     * ([FriendRequestCreateResult.RequestsDisabled]) or [senderUuid] is on cooldown for
+     * [targetUuid] ([FriendRequestCreateResult.OnCooldown]), checked in this order.
      */
     suspend fun createFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestCreateResult
 
@@ -33,13 +33,14 @@ interface FriendsRpcService {
 
     /**
      * Removes the request from [senderUuid] to [targetUuid]; [FriendRequestState.ACCEPT] also creates
-     * the friendship, [FriendRequestState.DECLINE] puts [senderUuid] on the decline cooldown.
+     * the friendship and returns both stored directions ([FriendRequestAnswer.Accepted]),
+     * [FriendRequestState.DECLINE] puts [senderUuid] on the decline cooldown.
      */
     suspend fun answerFriendRequest(
         senderUuid: UUID,
         targetUuid: UUID,
         state: FriendRequestState
-    ): FriendRequestStateResult
+    ): FriendRequestAnswer
 
     /** Every friendship, stored once per direction. */
     suspend fun findAllFriendships(): List<Friendship>

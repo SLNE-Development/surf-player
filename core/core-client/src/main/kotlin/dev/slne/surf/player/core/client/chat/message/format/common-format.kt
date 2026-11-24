@@ -185,7 +185,11 @@ suspend fun formatTeamchat(messageData: MessageData) = buildText {
     clickSuggestsCommand("/teamchat ")
 }
 
-suspend fun formatPmSpy(messageData: MessageData) = buildText {
+/**
+ * Formats the direct message in [messageData] for the spy [spy]; the teleport button is only shown
+ * when [spy] may teleport.
+ */
+suspend fun formatPmSpy(messageData: MessageData, spy: UUID) = buildText {
     val receiver = messageData.receiver ?: return Component.empty()
     val receiverUser = messageData.receiverUser()
     val receiverName = receiverUser?.lastKnownName ?: return Component.empty()
@@ -194,7 +198,7 @@ suspend fun formatPmSpy(messageData: MessageData) = buildText {
     appendSpyIcon()
     appendSpace()
 
-    if (ChatPlatform.hasPermission(receiver, ChatPermissions.COMMAND_SURFCHAT_TELEPORT)) {
+    if (ChatPlatform.hasPermission(spy, ChatPermissions.TELEPORT)) {
         appendTeleport(receiverName, receiver)
     }
 

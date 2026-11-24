@@ -54,7 +54,7 @@ object MinestomMessageFormatter {
 
         val viewerPlayer = ConnectionManager.getOnlinePlayerByUuid(viewer)
 
-        if (viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.COMMAND_SURFCHAT_DELETE)) {
+        if (viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.DELETE_MESSAGE)) {
             appendDelete(messageData)
         }
 
@@ -62,7 +62,7 @@ object MinestomMessageFormatter {
             senderPlayer.username,
             senderPlayer.uuid,
             luckPermsPrefix(senderPlayer.uuid),
-            allowTeleport = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.COMMAND_SURFCHAT_TELEPORT)
+            allowTeleport = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.TELEPORT)
         )
         darkSpacer(":")
         appendSpace()

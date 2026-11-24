@@ -14,7 +14,7 @@ import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.appendDelete
 import dev.slne.surf.player.core.client.chat.util.formatTime
 import dev.slne.surf.player.core.client.chat.util.updateLinks
-import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.paper.chat.util.appendName
 import dev.slne.surf.player.paper.chat.util.playPingSound
 import dev.slne.surf.core.api.paper.CorePlayerStatusAccess
@@ -59,13 +59,13 @@ object MessageFormatter {
         val senderPlayer = server.getPlayer(messageData.sender) ?: return Component.empty()
         val viewerPlayer = server.getPlayer(viewer)
 
-        if (viewerPlayer != null && viewerPlayer.hasPermission(PermissionRegistry.COMMAND_SURFCHAT_DELETE)) {
+        if (viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.DELETE_MESSAGE)) {
             appendDelete(messageData)
         }
 
         appendName(
             senderPlayer,
-            allowTeleport = viewerPlayer != null && viewerPlayer.hasPermission(PermissionRegistry.COMMAND_SURFCHAT_TELEPORT)
+            allowTeleport = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.TELEPORT)
         )
         darkSpacer(":")
         appendSpace()

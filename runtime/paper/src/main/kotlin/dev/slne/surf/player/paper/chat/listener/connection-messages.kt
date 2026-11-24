@@ -6,7 +6,7 @@ import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
-import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
@@ -21,7 +21,7 @@ fun createQuitMessage(player: Player) =
  * or to everyone if the player's connection messages must always be shown.
  */
 fun broadcastConnectionMessage(player: Player, message: Component) {
-    if (player.hasPermission(PermissionRegistry.CONNECTION_MESSAGE_ALWAYS_SHOW)) {
+    if (player.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW)) {
         server.broadcast(message)
         return
     }

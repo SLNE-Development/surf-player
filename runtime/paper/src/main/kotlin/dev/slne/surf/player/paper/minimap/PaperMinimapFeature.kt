@@ -4,7 +4,7 @@ import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.player.core.client.minimap.config.CompanionConfigs
 import dev.slne.surf.player.core.client.minimap.service.MapSyncService
 import dev.slne.surf.player.paper.PaperPlayerFeature
-import dev.slne.surf.player.paper.minimap.command.companionCommand
+import dev.slne.surf.player.paper.minimap.command.minimapAdminActions
 import dev.slne.surf.player.paper.minimap.listener.CompanionListener
 import dev.slne.surf.player.paper.minimap.listener.PluginChannelListener
 import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
@@ -23,13 +23,14 @@ object PaperMinimapFeature : PaperPlayerFeature {
         PluginChannelListener.register()
         CompanionListener.register()
         PaperTracker.configure()
-        companionCommand()
         syncOnlinePlayers()
     }
 
     override suspend fun onDisable() {
         PluginChannelListener.unregister()
     }
+
+    override fun adminActions() = minimapAdminActions()
 
     // Players already online when the plugin loads late, such as after a plugin reload.
     private fun syncOnlinePlayers() {

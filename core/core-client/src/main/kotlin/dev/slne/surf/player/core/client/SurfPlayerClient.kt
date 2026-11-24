@@ -4,6 +4,8 @@ import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
 import dev.slne.surf.redis.RedisApi
 import dev.slne.surf.player.core.common.PLAYER_CONNECTION_NAME
 import dev.slne.surf.player.core.common.PlayerSerializerModule
+import dev.slne.surf.player.core.client.settings.redis.SettingsRedisListener
+import dev.slne.surf.player.core.client.vanish.VanishedPlayers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.nio.file.Path
@@ -13,7 +15,8 @@ import java.nio.file.Path
  * platform (Paper, Minestom, Velocity) shares.
  *
  * Lifecycle, driven by the platform plugin:
- * 1. [load] once, before any feature is loaded (creates both APIs).
+ * 1. [load] once, before any feature is loaded (creates both APIs and registers the Redis state
+ *    every platform shares: the settings cache sync and [VanishedPlayers]).
  * 2. [connectRabbit] once, right after [load]. Clients register nothing on RabbitMQ before
  *    freezing, so features may send requests from their own load phase onwards.
  * 3. Features load and register everything Redis needs before freezing (event listeners,
@@ -49,7 +52,13 @@ object SurfPlayerClient {
             dataPath,
             PlayerSerializerModule.module
         )
-        redis = RedisApi.create(PLAYER_CONNECTION_NAME)
+        val redisApi = RedisApi.create(PLAYER_CONNECTION_NAME)
+        redis = redisApi
+
+        // State every platform reads, independent of which features it hosts: the proxy caches
+        // settings too, and Minestom and Velocity have no vanish feature of their own.
+        redisApi.subscribeToEvents(SettingsRedisListener)
+        VanishedPlayers.register(redisApi)
     }
 
     suspend fun connectRabbit() {

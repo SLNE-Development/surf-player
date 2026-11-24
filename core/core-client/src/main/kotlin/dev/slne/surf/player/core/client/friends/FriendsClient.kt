@@ -3,6 +3,7 @@ package dev.slne.surf.player.core.client.friends
 import dev.slne.surf.player.api.friends.model.FriendRequest
 import dev.slne.surf.player.api.friends.model.Friendship
 import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
 import dev.slne.surf.player.core.client.friends.redis.listener.FriendsRedisListener
 import dev.slne.surf.player.core.client.friends.rpc.friendsRpcService
 import dev.slne.surf.player.core.common.playerRedisKey
@@ -41,6 +42,7 @@ object FriendsClient {
         val redisApi = SurfPlayerClient.redisApi
 
         redisApi.subscribeToEvents(FriendsRedisListener)
+        redisApi.subscribeToEvents(FriendConnectionNotifier)
 
         friendRequests = redisApi.createSyncList<FriendRequest>(playerRedisKey("friends", "requests"))
         friendships = redisApi.createSyncList<Friendship>(playerRedisKey("friends", "friendships"))

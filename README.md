@@ -136,7 +136,8 @@ when (val result = player.createClan(name = "Warriors", tag = "WAR")) {
 }
 
 player.clanInvites()
-player.setAcceptsClanInvites(false)
+// Whether a player accepts clan invites is the setting `clan:invites`.
+player.saveSetting(SettingKeys.CLAN_INVITES, false)
 
 SurfClanApi.registerListener(ClanCreatedListener { clan -> logger.info("${clan.name} was created") })
 ```
@@ -153,6 +154,7 @@ when (val result = player.sendFriendRequest(targetUuid)) {
     is FriendRequestCreateResult.AlreadyReceivedFriendRequest -> {}
     is FriendRequestCreateResult.OnCooldown -> println("retry in ${result.remaining}")
     is FriendRequestCreateResult.Blocked -> {}
+    is FriendRequestCreateResult.RequestsDisabled -> {}
 }
 
 player.friendships.forEach { println(it.friend.uuid) }

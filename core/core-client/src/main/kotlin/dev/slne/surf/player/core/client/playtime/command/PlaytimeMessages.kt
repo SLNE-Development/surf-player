@@ -81,5 +81,5 @@ fun Audience.sendPlaytimeOverview(
  */
 fun Audience.sendPlayerNotFound() = sendText {
     appendErrorPrefix()
-    error("Spieler wurde nicht gefunden.")
+    error(dev.slne.surf.player.core.client.command.CommandMessages.PLAYER_NOT_FOUND)
 }

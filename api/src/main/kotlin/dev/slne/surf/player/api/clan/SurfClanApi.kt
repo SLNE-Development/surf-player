@@ -72,16 +72,6 @@ interface SurfClanApi {
     /** The pending invite of the clan called [clanName] to the player identified by [uuid]. */
     suspend fun findClanInvite(uuid: UUID, clanName: String): ClanInvite?
 
-    /** Whether the player identified by [uuid] accepts clan invites. */
-    suspend fun acceptsClanInvites(uuid: UUID): Boolean
-
-    /**
-     * Changes whether the player identified by [uuid] accepts clan invites.
-     *
-     * @return `true` if the preference was changed
-     */
-    suspend fun setAcceptsClanInvites(uuid: UUID, acceptsClanInvites: Boolean): Boolean
-
     companion object : SurfClanApi by instance {
         val INSTANCE: SurfClanApi get() = instance
     }

@@ -4,7 +4,7 @@ import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.player.core.client.queue.ClientQueueSystem
 import dev.slne.surf.player.core.common.queue.QueueSystem
 import dev.slne.surf.player.paper.PaperPlayerFeature
-import dev.slne.surf.player.paper.queue.commands.queueCommand
+import dev.slne.surf.player.paper.queue.command.queueAdminActions
 import dev.slne.surf.player.paper.queue.listener.PlayerKickedDueToFullServerListener
 import dev.slne.surf.player.paper.queue.startup.PolarQueueStartHook
 import org.bukkit.Bukkit
@@ -38,10 +38,11 @@ object PaperQueueFeature : PaperPlayerFeature {
         }
 
         PlayerKickedDueToFullServerListener.register()
-        queueCommand()
     }
 
     override suspend fun onDisable() {
         ClientQueueSystem.disable()
     }
+
+    override fun adminActions() = queueAdminActions()
 }

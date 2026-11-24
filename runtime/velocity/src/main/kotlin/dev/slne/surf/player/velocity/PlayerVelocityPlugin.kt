@@ -11,7 +11,9 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.velocity.clan.ClanVelocityFeature
+import dev.slne.surf.player.velocity.command.VelocityAdminCommand
 import dev.slne.surf.player.velocity.connection.ConnectionVelocityFeature
+import dev.slne.surf.player.velocity.friends.FriendsVelocityFeature
 import dev.slne.surf.player.velocity.queue.QueueVelocityFeature
 import dev.slne.surf.player.velocity.settings.SettingsVelocityFeature
 import kotlinx.coroutines.CancellationException
@@ -35,6 +37,7 @@ class PlayerVelocityPlugin @Inject constructor(
     private val features: List<VelocityPlayerFeature> = listOf(
         SettingsVelocityFeature,
         ClanVelocityFeature,
+        FriendsVelocityFeature,
         ConnectionVelocityFeature,
         QueueVelocityFeature,
     )
@@ -60,6 +63,8 @@ class PlayerVelocityPlugin @Inject constructor(
         for (feature in features) {
             feature.onEnable()
         }
+
+        VelocityAdminCommand.register(features)
     }
 
     @Subscribe

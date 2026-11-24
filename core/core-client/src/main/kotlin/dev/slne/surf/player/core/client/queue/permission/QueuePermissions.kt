@@ -1,20 +1,25 @@
 package dev.slne.surf.player.core.client.queue.permission
 
 /**
- * Platform-neutral registry of all permission node strings used by surf-queue.
+ * Every permission node of the queue feature, the same on every platform (Paper, Minestom and
+ * Velocity).
+ *
+ * See docs/command-conventions.md for the scheme.
  */
 object QueuePermissions {
-    private const val PREFIX = "surf.queue."
-    private const val COMMAND_PREFIX = PREFIX + "command"
+    private const val ADMIN = "surf.player.admin.queue"
 
-    const val COMMAND_QUEUE = "$COMMAND_PREFIX.queue"
-    const val COMMAND_CLEANUP = "$COMMAND_QUEUE.cleanup"
-    const val COMMAND_CLEAR = "$COMMAND_QUEUE.clear"
-    const val COMMAND_DEQUEUE = "$COMMAND_QUEUE.dequeue"
-    const val COMMAND_ENQUEUE = "$COMMAND_QUEUE.enqueue"
-    const val COMMAND_FIX = "$COMMAND_QUEUE.fix"
-    const val COMMAND_INFO = "$COMMAND_QUEUE.info"
-    const val COMMAND_LIST = "$COMMAND_QUEUE.list"
-    const val COMMAND_PAUSE = "$COMMAND_QUEUE.pause"
-    const val COMMAND_METRICS = "$COMMAND_PREFIX.metrics"
+    // Admin actions (/surfplayer queue ..., /surfplayervelocity queue ...)
+    const val ADMIN_RELOAD = "$ADMIN.reload"
+    const val ADMIN_LIST = "$ADMIN.list"
+    const val ADMIN_INFO = "$ADMIN.info"
+    const val ADMIN_ENQUEUE = "$ADMIN.enqueue"
+    const val ADMIN_DEQUEUE = "$ADMIN.dequeue"
+    const val ADMIN_CLEAR = "$ADMIN.clear"
+    const val ADMIN_CLEANUP = "$ADMIN.cleanup"
+    const val ADMIN_FIX = "$ADMIN.fix"
+    const val ADMIN_PAUSE = "$ADMIN.pause"
+    const val ADMIN_RESUME = "$ADMIN.resume"
+    const val ADMIN_STATUS = "$ADMIN.status"
+    const val ADMIN_METRICS = "$ADMIN.metrics"
 }

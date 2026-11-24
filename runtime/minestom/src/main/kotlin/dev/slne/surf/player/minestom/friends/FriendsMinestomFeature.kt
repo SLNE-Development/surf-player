@@ -1,13 +1,9 @@
 package dev.slne.surf.player.minestom.friends
 
-import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
-import dev.slne.surf.player.minestom.friends.command.friendCommand
-import dev.slne.surf.player.minestom.friends.command.subcommand.friend.friendListCommand
-import dev.slne.surf.player.minestom.friends.command.subcommand.request.friendRequestSendCommand
-import kotlinx.coroutines.launch
+import dev.slne.surf.player.minestom.friends.command.registerFriendCommands
 import net.minestom.server.entity.Player
 
 object FriendsMinestomFeature : MinestomPlayerFeature {
@@ -19,26 +15,11 @@ object FriendsMinestomFeature : MinestomPlayerFeature {
 
     override suspend fun onEnable() {
         FriendsClient.enable()
-        friendCommand()
-
-        friendRequestSendCommand("fa").register()
-        friendListCommand("fl").register()
+        registerFriendCommands()
     }
 
+    /** Friends are notified network-wide from the proxy's join and quit, see FriendConnectionNotifier. */
     override fun onPlayerJoin(player: Player) {
-        val uuid = player.uuid
-        val onlineFriends = FriendConnectionNotifier.greet(uuid)
-
-        minestomAsyncScope.launch {
-            FriendConnectionNotifier.announceOnline(uuid, onlineFriends)
-        }
-    }
-
-    override fun onPlayerQuit(player: Player) {
-        val uuid = player.uuid
-
-        minestomAsyncScope.launch {
-            FriendConnectionNotifier.announceOffline(uuid)
-        }
+        FriendConnectionNotifier.onJoinedThisServer(player.uuid)
     }
 }

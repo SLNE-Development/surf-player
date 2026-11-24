@@ -10,7 +10,7 @@ import net.kyori.adventure.text.event.ClickEvent
  */
 internal data class ClanInviteRenderData(
     private val clanInformationHover: Component,
-    private val clanName: String
+    private val clanTag: String
 ) : ComponentLike {
     override fun asComponent(): Component = buildText {
         append(clanInformationHover)
@@ -20,7 +20,7 @@ internal data class ClanInviteRenderData(
             hoverEvent(buildText {
                 info("Klicke hier, um die Einladung anzunehmen.")
             })
-            clickEvent(ClickEvent.runCommand("/clan accept $clanName"))
+            clickEvent(ClickEvent.runCommand("/clan accept $clanTag"))
         }
         appendSpace()
         append {
@@ -28,7 +28,7 @@ internal data class ClanInviteRenderData(
             hoverEvent(buildText {
                 info("Klicke hier, um die Einladung abzulehnen.")
             })
-            clickEvent(ClickEvent.runCommand("/clan deny $clanName"))
+            clickEvent(ClickEvent.runCommand("/clan deny $clanTag"))
         }
     }
 }

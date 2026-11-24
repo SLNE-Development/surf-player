@@ -7,7 +7,11 @@ private val DISCORD_LINK_REGEX =
     """^(?:https?://)?(?:www\.)?(?:discord\.gg|discord(?:app)?\.com/invite)/[A-Za-z0-9-]+/?$""".toRegex()
 
 /** The literal a player passes to remove their clan's Discord link. */
-const val REMOVE_DISCORD_LINK = "NULL"
+const val REMOVE_DISCORD_LINK = "remove"
+
+/** Whether [input] asks to remove the Discord link (`remove`, or the former `NULL`). */
+fun isRemoveDiscordLink(input: String) =
+    input.equals(REMOVE_DISCORD_LINK, ignoreCase = true) || input.equals("NULL", ignoreCase = true)
 
 val DISCORD_LINK_SUGGESTIONS = listOf(
     "https://discord.gg/castcrafter",

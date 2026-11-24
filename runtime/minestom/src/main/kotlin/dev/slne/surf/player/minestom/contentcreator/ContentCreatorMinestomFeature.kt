@@ -6,7 +6,7 @@ import dev.slne.surf.player.core.client.contentcreator.client.ContentClientManag
 import dev.slne.surf.player.core.client.contentcreator.config.loadContentCreatorConfig
 import dev.slne.surf.player.core.client.contentcreator.service.ContentCreatorService
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
-import dev.slne.surf.player.minestom.contentcreator.command.contentCreatorCommand
+import dev.slne.surf.player.minestom.command.contentCreatorAdminActions
 import kotlinx.coroutines.launch
 import net.minestom.server.entity.Player
 
@@ -22,9 +22,7 @@ object ContentCreatorMinestomFeature : MinestomPlayerFeature {
         ContentCreatorLifecycle.enable()
     }
 
-    override suspend fun onEnable() {
-        contentCreatorCommand()
-    }
+    override fun adminActions() = contentCreatorAdminActions()
 
     override suspend fun onDisable() {
         ContentCreatorLifecycle.disable()

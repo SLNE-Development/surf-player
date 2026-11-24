@@ -168,5 +168,6 @@ suspend fun Map<String, String>.parseFilters(): HistoryFilter {
         deleted = deleted,
         deletedBy = deletedBy,
         limit = this["--limit"]?.toIntOrNull() ?: 50,
+        message = this["--message"]?.trim()?.removeSurrounding("\"")?.takeIf { it.isNotEmpty() },
     )
 }

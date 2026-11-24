@@ -23,5 +23,10 @@ data class SurfQueueConfig(
         }
 
         fun getConfig(): SurfQueueConfig = configManager.config
+
+        /** Reads the `config.yml` again; used by `/surfplayer queue reload`. */
+        fun reload() {
+            configManager.reloadFromFile()
+        }
     }
 }

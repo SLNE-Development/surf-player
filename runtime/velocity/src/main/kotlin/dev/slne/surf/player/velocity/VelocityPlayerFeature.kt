@@ -1,5 +1,6 @@
 package dev.slne.surf.player.velocity
 
+import dev.slne.surf.player.velocity.command.VelocityAdminAction
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 
@@ -28,4 +29,10 @@ interface VelocityPlayerFeature {
     suspend fun onEnable() = Unit
 
     suspend fun onDisable() = Unit
+
+    /**
+     * The actions this feature adds below `/surfplayervelocity <id>`. Read once, after every
+     * feature was enabled.
+     */
+    fun adminActions(): List<VelocityAdminAction> = emptyList()
 }

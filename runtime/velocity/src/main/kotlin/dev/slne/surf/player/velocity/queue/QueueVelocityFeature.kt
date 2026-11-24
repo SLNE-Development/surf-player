@@ -5,7 +5,7 @@ import dev.slne.surf.player.core.common.queue.QueueSystem
 import dev.slne.surf.player.core.common.queue.queue.tick.QueueScheduler
 import dev.slne.surf.player.velocity.VelocityPlayerFeature
 import dev.slne.surf.player.velocity.plugin
-import dev.slne.surf.player.velocity.queue.command.queueCommand
+import dev.slne.surf.player.velocity.command.queueAdminActions
 import dev.slne.surf.player.velocity.queue.config.VelocityQueueConfig
 import dev.slne.surf.player.velocity.queue.listener.QueuePlayerListener
 import dev.slne.surf.player.velocity.queue.listener.QueuePriorityListener
@@ -37,8 +37,9 @@ object QueueVelocityFeature : VelocityPlayerFeature {
 
         plugin.eventManager.register(plugin, QueuePlayerListener)
         QueuePriorityListener.register()
-        queueCommand()
     }
+
+    override fun adminActions() = queueAdminActions()
 
     override suspend fun onDisable() {
         QueuePriorityListener.unregister()

@@ -11,13 +11,14 @@ import dev.slne.surf.player.core.client.chat.util.hasPermission
 import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import java.util.UUID
 
+/** Whether [message] has more than [maxInRow] upper case characters in a row; exactly [maxInRow] is allowed. */
 fun hasTooManyCapsInARow(message: String, maxInRow: Int): Boolean {
     var consecutiveCaps = 0
 
     for (char in message) {
         if (char.isUpperCase()) {
             consecutiveCaps++
-            if (consecutiveCaps >= maxInRow) {
+            if (consecutiveCaps > maxInRow) {
                 return true
             }
         } else {

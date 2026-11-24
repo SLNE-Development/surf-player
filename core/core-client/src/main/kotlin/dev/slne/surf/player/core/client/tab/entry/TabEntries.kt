@@ -22,6 +22,12 @@ import kotlin.time.Duration.Companion.seconds
 
 private val log = logger()
 
+/**
+ * Added to the order of every player who is not vanished, so vanished players (shown only to
+ * viewers allowed to see them) are listed below everyone else. Must exceed every LuckPerms weight.
+ */
+private const val VISIBLE_ORDER_OFFSET = 1_000_000
+
 private val entryUpdateTimeout = 5.seconds
 private val clanLookupTimeout = 2.seconds
 
@@ -135,13 +141,15 @@ class TabEntries {
             } else {
                 player.baseNameSnapshot()
             },
+            // Higher orders are listed first and Paper only accepts non-negative orders, so visible
+            // players are lifted above every vanished player instead of pushing vanished ones down.
             order = part("order", uuid, 0) {
-                val lpWeight = LuckPermsHook.getWeight(uuid)
+                val lpWeight = LuckPermsHook.getWeight(uuid).coerceAtLeast(0)
 
                 if (vanished) {
-                    lpWeight + 1000000
-                } else {
                     lpWeight
+                } else {
+                    lpWeight + VISIBLE_ORDER_OFFSET
                 }
             }
         )

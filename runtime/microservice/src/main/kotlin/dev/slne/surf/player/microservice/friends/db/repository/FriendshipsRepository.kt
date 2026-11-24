@@ -27,11 +27,15 @@ object FriendshipsRepository {
             .toList()
     }
 
+    /**
+     * Stores the friendship between [playerA] and [playerB] in both directions and returns both rows
+     * as read back from the database, so callers see the timestamp exactly as it was stored.
+     */
     suspend fun createFriendship(
         playerA: UUID,
         playerB: UUID,
         createdAt: OffsetDateTime
-    ) = suspendTransaction {
+    ): List<Friendship> = suspendTransaction {
         FriendshipsTable.insert {
             it[playerUuid] = playerA
             it[friendUuid] = playerB
@@ -44,7 +48,19 @@ object FriendshipsRepository {
             it[this.createdAt] = createdAt
         }
 
-        Unit
+        FriendshipsTable.selectAll()
+            .where {
+                ((FriendshipsTable.playerUuid eq playerA) and (FriendshipsTable.friendUuid eq playerB)) or
+                        ((FriendshipsTable.playerUuid eq playerB) and (FriendshipsTable.friendUuid eq playerA))
+            }
+            .map {
+                Friendship(
+                    playerUuid = it[FriendshipsTable.playerUuid],
+                    friendUuid = it[FriendshipsTable.friendUuid],
+                    createdAt = it[FriendshipsTable.createdAt],
+                )
+            }
+            .toList()
     }
 
     suspend fun deleteFriendship(

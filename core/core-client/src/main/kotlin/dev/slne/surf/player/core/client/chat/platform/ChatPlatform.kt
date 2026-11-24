@@ -26,12 +26,16 @@ interface ChatPlatform {
     /**
      * Sends [signedMessage] from the player identified by [senderUuid], who must be on this
      * server, to the player identified by [targetUuid], on this or another server.
+     *
+     * With [requiredSetting] (the name of a boolean setting), the server hosting the target only
+     * shows the message if the target has that setting enabled, see [receivesSignedMessage].
      */
     suspend fun sendSignedMessage(
         senderUuid: UUID,
         targetUuid: UUID,
         signedMessage: SignedMessage,
-        contentComponent: Component
+        contentComponent: Component,
+        requiredSetting: String? = null
     )
 
     companion object : ChatPlatform by platform

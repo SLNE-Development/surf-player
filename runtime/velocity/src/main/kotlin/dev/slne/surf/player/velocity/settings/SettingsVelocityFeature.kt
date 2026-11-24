@@ -2,6 +2,7 @@ package dev.slne.surf.player.velocity.settings
 
 import dev.slne.surf.player.core.client.settings.loadSettings
 import dev.slne.surf.player.velocity.VelocityPlayerFeature
+import dev.slne.surf.player.velocity.command.settingsAdminActions
 import dev.slne.surf.player.velocity.plugin
 import dev.slne.surf.player.velocity.settings.listener.PlayerConnectionListener
 
@@ -17,4 +18,6 @@ object SettingsVelocityFeature : VelocityPlayerFeature {
 
         plugin.eventManager.register(plugin, PlayerConnectionListener)
     }
+
+    override fun adminActions() = settingsAdminActions()
 }

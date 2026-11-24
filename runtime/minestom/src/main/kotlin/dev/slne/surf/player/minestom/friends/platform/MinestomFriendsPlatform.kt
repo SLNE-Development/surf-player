@@ -8,6 +8,7 @@ import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
 import java.util.*
 
@@ -17,6 +18,10 @@ class MinestomFriendsPlatform : FriendsPlatform {
 
     override fun sendMessage(uuid: UUID, message: Component) {
         ConnectionManager.getOnlinePlayerByUuid(uuid)?.sendMessage(message)
+    }
+
+    override fun playSound(uuid: UUID, sound: Sound) {
+        ConnectionManager.getOnlinePlayerByUuid(uuid)?.playSound(sound)
     }
 
     override fun launch(block: suspend CoroutineScope.() -> Unit): Job =

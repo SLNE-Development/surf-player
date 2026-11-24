@@ -3,9 +3,7 @@ package dev.slne.surf.player.paper.friends
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.paper.PaperPlayerFeature
-import dev.slne.surf.player.paper.friends.command.friendCommand
-import dev.slne.surf.player.paper.friends.command.subcommand.friend.FriendListCommand
-import dev.slne.surf.player.paper.friends.command.subcommand.request.FriendRequestSendCommand
+import dev.slne.surf.player.paper.friends.command.registerFriendCommands
 import dev.slne.surf.player.paper.friends.listener.FriendConnectionListener
 
 object PaperFriendsFeature : PaperPlayerFeature {
@@ -20,8 +18,6 @@ object PaperFriendsFeature : PaperPlayerFeature {
 
         FriendConnectionListener.register()
 
-        friendCommand()
-        FriendRequestSendCommand("fa").register()
-        FriendListCommand("fl").register()
+        registerFriendCommands()
     }
 }

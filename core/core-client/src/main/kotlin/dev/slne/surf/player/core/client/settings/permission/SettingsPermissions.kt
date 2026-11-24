@@ -1,11 +1,20 @@
 package dev.slne.surf.player.core.client.settings.permission
 
+/**
+ * Every permission node of the settings feature, the same on every platform.
+ *
+ * See docs/command-conventions.md for the scheme.
+ */
 object SettingsPermissions {
-    const val BASE = "surf.settings"
-    const val BASE_COMMAND = "$BASE.command"
+    private const val COMMAND = "surf.player.command.settings"
+    private const val ADMIN = "surf.player.admin.settings"
 
-    const val COMMAND_SETTINGS = "$BASE_COMMAND.settings"
-    const val COMMAND_SURF_SETTINGS = "$BASE_COMMAND.surfsettings"
-    const val COMMAND_SURF_SETTINGS_REFRESH = "$BASE_COMMAND.surfsettings.refresh"
-    const val COMMAND_SURF_SETTINGS_LIST = "$BASE_COMMAND.surfsettings.list"
+    // Player commands (/settings ...)
+    const val COMMAND_SETTINGS = COMMAND
+    const val COMMAND_TOGGLE = "$COMMAND.toggle"
+    const val COMMAND_INFO = "$COMMAND.info"
+
+    // Admin actions (/surfplayer settings ...)
+    const val ADMIN_REFRESH = "$ADMIN.refresh"
+    const val ADMIN_LIST = "$ADMIN.list"
 }

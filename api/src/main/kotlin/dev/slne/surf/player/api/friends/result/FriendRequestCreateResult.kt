@@ -45,4 +45,14 @@ sealed class FriendRequestCreateResult {
     data class Blocked(
         val targetUuid: SerializableUUID
     ) : FriendRequestCreateResult()
+
+    /**
+     * The target turned off the setting
+     * [SettingKeys.FRIEND_REQUESTS][dev.slne.surf.player.api.settings.setting.SettingKeys.FRIEND_REQUESTS]
+     * and accepts no friend requests.
+     */
+    @Serializable
+    data class RequestsDisabled(
+        val targetUuid: SerializableUUID
+    ) : FriendRequestCreateResult()
 }

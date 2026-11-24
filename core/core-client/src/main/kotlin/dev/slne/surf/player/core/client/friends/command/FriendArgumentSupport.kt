@@ -49,11 +49,11 @@ suspend fun friendNames(player: UUID): List<String> =
     }
 
 /**
- * The player named [input] who has sent [player] a friend request.
+ * The player named [input] who has sent [player] a friend request, matched regardless of case.
  */
 suspend fun findReceivedFriendRequestSender(player: UUID, input: String): SurfCommunityPlayer? {
     val request = SurfCommunityPlayer(player).receivedFriendRequests.firstOrNull { request ->
-        resolveUsername(request.senderUuid) == input
+        resolveUsername(request.senderUuid).equals(input, ignoreCase = true)
     } ?: return null
 
     return SurfCommunityPlayer(request.senderUuid)
@@ -68,11 +68,11 @@ suspend fun receivedFriendRequestNames(player: UUID): List<String> =
     }
 
 /**
- * The player named [input] whom [player] has sent a friend request to.
+ * The player named [input] whom [player] has sent a friend request to, matched regardless of case.
  */
 suspend fun findSentFriendRequestTarget(player: UUID, input: String): SurfCommunityPlayer? {
     val request = SurfCommunityPlayer(player).sentFriendRequests.firstOrNull { request ->
-        resolveUsername(request.targetUuid) == input
+        resolveUsername(request.targetUuid).equals(input, ignoreCase = true)
     } ?: return null
 
     return SurfCommunityPlayer(request.targetUuid)

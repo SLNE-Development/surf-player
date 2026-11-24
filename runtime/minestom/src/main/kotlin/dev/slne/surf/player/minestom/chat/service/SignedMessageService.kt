@@ -12,6 +12,7 @@ import dev.slne.surf.player.core.client.chat.redis.rpc.SendSignedMessageHandledR
 import dev.slne.surf.player.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
 import dev.slne.surf.player.core.client.chat.redis.rpc.SignedChatMessage
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
+import dev.slne.surf.player.core.client.chat.platform.receivesSignedMessage
 import dev.slne.surf.player.minestom.chat.redis.rpc.chatSession
 import dev.slne.surf.player.minestom.chat.redis.rpc.toRemote
 import dev.slne.surf.player.minestom.chat.redis.rpc.toWire
@@ -34,12 +35,14 @@ object SignedMessageService {
         targetUuid: UUID,
         component: Component,
         signedMessage: SignedMessage,
+        requiredSetting: String? = null,
     ) {
         val request = SendSignedMessageRedisRequest(
             sender.uuid,
             sender.username,
             targetUuid,
-            captureForRemoteDelivery(sender, signedMessage, component)
+            captureForRemoteDelivery(sender, signedMessage, component),
+            requiredSetting
         )
 
         try {
@@ -74,9 +77,13 @@ object SignedMessageService {
         sender: UUID,
         senderName: String,
         target: UUID,
-        message: SignedChatMessage
+        message: SignedChatMessage,
+        requiredSetting: String? = null
     ): Boolean {
         val targetPlayer = ConnectionManager.getOnlinePlayerByUuid(target) ?: return false
+
+        // Handled, but not shown: the target turned the required setting off.
+        if (!receivesSignedMessage(target, requiredSetting)) return true
 
         targetPlayer.sendRemoteSignedMessage(
             RemoteChatSender(sender, senderName, message.chatSession()),

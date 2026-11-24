@@ -4,6 +4,9 @@ import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.player.api.nametag.nametag.Nametag
 import dev.slne.surf.player.api.nametag.nametag.NametagVisibility
 import dev.slne.surf.player.api.nametag.nametag.nametag
+import dev.slne.surf.player.api.settings.SurfSettingsApi
+import dev.slne.surf.player.api.settings.setting.SettingKeys
+import dev.slne.surf.player.core.client.settings.service.SettingsService
 import dev.slne.surf.player.core.client.contentcreator.LiveTagRenderer
 import dev.slne.surf.player.core.client.nametag.config.NametagConfig
 import dev.slne.surf.player.core.client.nametag.hook.ClanHook
@@ -45,6 +48,12 @@ object NametagService {
         if (visibilityOverrides.remove(uuid) != null) refresh(uuid)
     }
 
+    init {
+        SettingsService.onPlayerSettingsChanged { viewerUuid, settingNames ->
+            if (SettingKeys.SHOW_NAMETAGS.name in settingNames) refreshViewer(viewerUuid)
+        }
+    }
+
     /**
      * The config the nametag of [uuid] is rendered with: [config] with the visibility override applied.
      */
@@ -52,9 +61,47 @@ object NametagService {
         return visibilityOverrides[uuid]?.let { config.copy(nameTagVisibility = it) } ?: config
     }
 
+    /**
+     * The config [viewerUuid] sees the nametag of [uuid] with: [configFor], hidden entirely if the
+     * viewer turned off [SettingKeys.SHOW_NAMETAGS]. Every viewer sees each nametag through a team
+     * of their own, so this only affects that viewer. Their own nametag is never hidden.
+     */
+    fun configFor(uuid: UUID, viewerUuid: UUID, config: NametagConfig): NametagConfig {
+        val playerConfig = configFor(uuid, config)
+        if (viewerUuid == uuid || showsNametags(viewerUuid)) return playerConfig
+
+        return playerConfig.copy(nameTagVisibility = NametagVisibility.NEVER)
+    }
+
+    private fun showsNametags(viewerUuid: UUID) =
+        SurfSettingsApi.getSettingValue(viewerUuid, SettingKeys.SHOW_NAMETAGS)
+
     private fun refresh(uuid: UUID) {
         val player = NametagPlatform.player(uuid) ?: return
         NametagPlatform.launch { handleDataUpdate(player) }
+    }
+
+    /** Re-renders every nametag [viewerUuid] sees, after their [SettingKeys.SHOW_NAMETAGS] changed. */
+    private fun refreshViewer(viewerUuid: UUID) {
+        val viewer = NametagPlatform.player(viewerUuid) ?: return
+
+        NametagPlatform.launch {
+            if (isPrevented(viewer)) return@launch
+            val config = NametagConfig.getConfig()
+
+            for (player in NametagPlatform.onlinePlayers()) {
+                if (player.uuid == viewerUuid || isPrevented(player)) continue
+
+                val nametag = createNameTag(player, clanTag(player))
+                if (!viewer.isOnline) return@launch
+
+                viewer.updateNametag(
+                    teamName(player.name, viewer.name),
+                    nametag,
+                    configFor(player.uuid, viewerUuid, config)
+                )
+            }
+        }
     }
 
     private suspend fun clanTag(player: NametagPlayer) = ClanHook.getClanTag(player.uuid)
@@ -102,13 +149,21 @@ object NametagService {
             }
 
             val viewerName = viewer.name
-            viewer.showNametag(teamName(playerName, viewerName), playerNametag, configFor(playerUuid, config))
+            viewer.showNametag(
+                teamName(playerName, viewerName),
+                playerNametag,
+                configFor(playerUuid, viewer.uuid, config)
+            )
 
             if (viewer.uuid != playerUuid) {
                 val viewerNametag = createNameTag(viewer, clanTag(viewer))
 
                 if (viewer.isOnline) {
-                    player.showNametag(teamName(viewerName, playerName), viewerNametag, configFor(viewer.uuid, config))
+                    player.showNametag(
+                        teamName(viewerName, playerName),
+                        viewerNametag,
+                        configFor(viewer.uuid, playerUuid, config)
+                    )
                 }
             }
         }
@@ -128,7 +183,7 @@ object NametagService {
         viewer.showNametag(
             teamName(player.name, viewer.name),
             nameTag,
-            configFor(player.uuid, NametagConfig.getConfig())
+            configFor(player.uuid, viewer.uuid, NametagConfig.getConfig())
         )
     }
 
@@ -143,7 +198,7 @@ object NametagService {
             return
         }
 
-        val config = configFor(player.uuid, NametagConfig.getConfig())
+        val config = NametagConfig.getConfig()
         val playerName = player.name
 
         for (viewer in NametagPlatform.onlinePlayers()) {
@@ -151,7 +206,11 @@ object NametagService {
                 continue
             }
 
-            viewer.updateNametag(teamName(playerName, viewer.name), nameTag, config)
+            viewer.updateNametag(
+                teamName(playerName, viewer.name),
+                nameTag,
+                configFor(player.uuid, viewer.uuid, config)
+            )
         }
     }
 

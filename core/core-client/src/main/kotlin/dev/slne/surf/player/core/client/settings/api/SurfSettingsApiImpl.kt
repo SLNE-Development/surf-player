@@ -19,12 +19,19 @@ class SurfSettingsApiImpl : SurfSettingsApi, Services.Fallback {
         return key.deserialize(value)
     }
 
+    /**
+     * Players whose settings are cached here (online on this server) are answered from the cache.
+     * Everyone else is loaded from the microservice without caching, so the value is never stale:
+     * a player on another server may change it there at any time.
+     */
     override suspend fun <T : Any> getCachedValueOrLoad(playerUuid: UUID, key: SettingKey<T>): T {
-        if (SettingsService.getSettingForPlayer(playerUuid, key.name) == null) {
-            SettingsService.cachePlayerSettings(playerUuid)
+        if (SettingsService.isCached(playerUuid)) {
+            return getSettingValue(playerUuid, key)
         }
 
-        return getSettingValue(playerUuid, key)
+        val value = SettingsService.loadSettingValueOrDefault(playerUuid, key.name)
+            ?: return key.defaultValue
+        return key.deserialize(value)
     }
 
     override suspend fun <T : Any> saveSetting(playerUuid: UUID, key: SettingKey<T>, value: T) {

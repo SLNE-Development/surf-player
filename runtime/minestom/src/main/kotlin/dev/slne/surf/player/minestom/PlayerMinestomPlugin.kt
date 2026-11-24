@@ -5,6 +5,7 @@ import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.minestom.chat.ChatMinestomFeature
 import dev.slne.surf.player.minestom.clan.ClanMinestomFeature
+import dev.slne.surf.player.minestom.command.MinestomAdminCommand
 import dev.slne.surf.player.minestom.contentcreator.ContentCreatorMinestomFeature
 import dev.slne.surf.player.minestom.friends.FriendsMinestomFeature
 import dev.slne.surf.player.minestom.minimap.MinimapMinestomFeature
@@ -56,6 +57,7 @@ object PlayerMinestomPlugin : SurfMinestomPlugin() {
             feature.onEnable()
         }
 
+        MinestomAdminCommand.register(features)
         registerPlayerConnectionListeners()
     }
 

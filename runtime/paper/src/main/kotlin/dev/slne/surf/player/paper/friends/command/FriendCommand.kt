@@ -1,26 +1,133 @@
 package dev.slne.surf.player.paper.friends.command
 
+import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.player.paper.friends.command.subcommand.friend.FriendListCommand
-import dev.slne.surf.player.paper.friends.command.subcommand.friend.friendInfoCommand
-import dev.slne.surf.player.paper.friends.command.subcommand.friend.friendRemoveCommand
-import dev.slne.surf.player.paper.friends.command.subcommand.request.*
+import dev.slne.surf.api.core.command.args.awaiting
+import dev.slne.surf.api.core.command.args.awaitingOrNull
+import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
+import dev.slne.surf.core.api.common.player.SurfPlayer
+import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
+import dev.slne.surf.player.api.SurfCommunityPlayer
+import dev.slne.surf.player.core.client.friends.command.*
 import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.player.core.client.vanish.permission.VanishPermissions
+import dev.slne.surf.player.paper.command.CONFIRMATION_LIFETIME
+import dev.slne.surf.player.paper.command.helpExecutor
+import dev.slne.surf.player.paper.command.page
+import dev.slne.surf.player.paper.command.pageArgument
+import dev.slne.surf.player.paper.command.playerClickEvent
+import dev.slne.surf.player.paper.friends.command.argument.FriendsPlayerArgument
 
-fun friendCommand() = commandAPICommand("friend") {
-    withPermission(FriendPermissions.COMMAND_FRIEND)
-    withAliases("f")
+private const val PLAYER = "spieler"
+private const val FRIEND = "freund"
 
-    friendRemoveCommand()
-    friendInfoCommand()
+/**
+ * `/friend` with every subcommand, plus the shortcuts `/fa` and `/fl`.
+ */
+fun registerFriendCommands() {
+    commandAPICommand("friend") {
+        withPermission(FriendPermissions.COMMAND_FRIEND)
+        helpExecutor(friendCommandHelp)
 
-    friendRequestAcceptCommand()
-    friendRequestDeclineCommand()
-    friendRequestRevokeCommand()
-    friendRequestListCommand()
+        subcommand(friendAddCommand("add"))
+        subcommand(friendListCommand("list"))
 
-    subcommand(FriendListCommand("list"))
-    subcommand(FriendRequestSendCommand("add"))
+        subcommand("info") {
+            withPermission(FriendPermissions.COMMAND_INFO)
+            withArguments(friendArgument())
+            playerExecutorSuspend { player, args ->
+                val friend = args.awaiting<SurfCommunityPlayer>(FRIEND)
+                player.sendMessage(friendInfoComponent(player.uniqueId, friend.uuid))
+            }
+        }
+
+        subcommand("remove") {
+            withPermission(FriendPermissions.COMMAND_REMOVE)
+            withArguments(friendArgument())
+            playerExecutorSuspend { player, args ->
+                val friend = args.awaiting<SurfCommunityPlayer>(FRIEND).uuid
+                val click = playerClickEvent(CONFIRMATION_LIFETIME) { clicked ->
+                    handleFriendRemoveClick(clicked, clicked.uniqueId, friend)
+                }
+
+                player.sendMessage(friendRemoveConfirmation(friend, click))
+            }
+        }
+
+        subcommand("requests") {
+            withPermission(FriendPermissions.COMMAND_REQUESTS)
+            pageArgument()
+            playerExecutorSuspend { player, args ->
+                player.sendMessage(friendRequestListComponent(player.uniqueId, args.page))
+            }
+        }
+
+        subcommand("accept") {
+            withPermission(FriendPermissions.COMMAND_ACCEPT)
+            withArguments(receivedRequestArgument())
+            playerExecutorSuspend { player, args ->
+                val sender = args.awaiting<SurfCommunityPlayer>(PLAYER)
+                SurfCommunityPlayer(player.uniqueId).acceptFriendRequest(sender.uuid)
+            }
+        }
+
+        subcommand("deny") {
+            withPermission(FriendPermissions.COMMAND_DENY)
+            withArguments(receivedRequestArgument())
+            playerExecutorSuspend { player, args ->
+                val sender = args.awaiting<SurfCommunityPlayer>(PLAYER)
+                SurfCommunityPlayer(player.uniqueId).declineFriendRequest(sender.uuid)
+            }
+        }
+
+        subcommand("revoke") {
+            withPermission(FriendPermissions.COMMAND_REVOKE)
+            withArguments(
+                FriendsPlayerArgument(
+                    PLAYER,
+                    ::findSentFriendRequestTarget,
+                    ::sentFriendRequestNames,
+                    NO_SENT_FRIEND_REQUEST_MESSAGE
+                )
+            )
+            playerExecutorSuspend { player, args ->
+                val target = args.awaiting<SurfCommunityPlayer>(PLAYER)
+                SurfCommunityPlayer(player.uniqueId).revokeFriendRequest(target.uuid)
+            }
+        }
+    }
+
+    friendAddCommand("fa").register()
+    friendListCommand("fl").register()
 }
 
+/** `/friend add <spieler>`, also registered as `/fa <spieler>`. */
+private fun friendAddCommand(name: String) = CommandAPICommand(name).apply {
+    withPermission(FriendPermissions.COMMAND_ADD)
+    surfOfflinePlayerArgument(PLAYER)
+    playerExecutorSuspend { player, args ->
+        val target = args.awaitingOrNull<SurfPlayer?>(PLAYER)
+        sendFriendRequest(player.uniqueId, target)?.let(player::sendMessage)
+    }
+}
+
+/** `/friend list [seite]`, also registered as `/fl [seite]`. */
+private fun friendListCommand(name: String) = CommandAPICommand(name).apply {
+    withPermission(FriendPermissions.COMMAND_LIST)
+    pageArgument()
+    playerExecutorSuspend { player, args ->
+        val seesVanished = player.hasPermission(VanishPermissions.VANISH_BYPASS)
+        player.sendMessage(friendListComponent(player.uniqueId, args.page, seesVanished))
+    }
+}
+
+private fun friendArgument() =
+    FriendsPlayerArgument(FRIEND, ::findFriend, ::friendNames, NOT_FRIENDS_MESSAGE)
+
+private fun receivedRequestArgument() = FriendsPlayerArgument(
+    PLAYER,
+    ::findReceivedFriendRequestSender,
+    ::receivedFriendRequestNames,
+    NO_RECEIVED_FRIEND_REQUEST_MESSAGE
+)

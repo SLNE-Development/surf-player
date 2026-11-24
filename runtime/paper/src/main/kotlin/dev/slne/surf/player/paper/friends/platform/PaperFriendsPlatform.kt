@@ -7,6 +7,7 @@ import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import java.util.*
@@ -17,6 +18,10 @@ class PaperFriendsPlatform : FriendsPlatform {
 
     override fun sendMessage(uuid: UUID, message: Component) {
         Bukkit.getPlayer(uuid)?.sendMessage(message)
+    }
+
+    override fun playSound(uuid: UUID, sound: Sound) {
+        Bukkit.getPlayer(uuid)?.playSound(sound)
     }
 
     override fun launch(block: suspend CoroutineScope.() -> Unit): Job =

@@ -13,11 +13,11 @@ private val builtinSettings: List<SettingKey<*>> = listOf(
     SettingKeys.LOBBY_SCROLL_SOUND,
     SettingKeys.CLAN_INVITES,
     SettingKeys.CLAN_CHAT_MESSAGES,
+    SettingKeys.FRIEND_REQUESTS,
     SettingKeys.FRIEND_REQUEST_NOTIFICATIONS,
     SettingKeys.FRIEND_NOTIFICATIONS,
     SettingKeys.FRIEND_SOUNDS,
     SettingKeys.SHOW_NAMETAGS,
-    SettingKeys.SHOW_SCOREBOARD,
     SettingKeys.AUTO_QUEUE_AFTER_RECONNECT,
 )
 

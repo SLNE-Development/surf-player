@@ -11,7 +11,6 @@ import dev.slne.surf.player.core.common.clan.invite.ClanInviteImpl
 import dev.slne.surf.player.core.common.clan.rpc.ClanInviteAcceptance
 import dev.slne.surf.player.microservice.clan.db.table.ClanInvitesTable
 import dev.slne.surf.player.microservice.clan.db.table.ClanMembersTable
-import dev.slne.surf.player.microservice.clan.db.table.ClanPlayerTable
 import dev.slne.surf.player.microservice.clan.db.table.ClansTable
 import kotlinx.coroutines.flow.*
 import java.util.*
@@ -53,17 +52,8 @@ object ClanInviteRepository {
         invitee: UUID,
         invitedBy: UUID
     ): ClanInviteResult = suspendTransaction {
+        // Whether the invitee accepts invites (setting `clan:invites`) is checked by the client.
         if (ClanMemberRepository.isInAnyClan(invitee)) return@suspendTransaction ClanInviteResult.AlreadyInClan
-
-        val invitesEnabled = ClanPlayerTable
-            .select(ClanPlayerTable.acceptsClanInvites)
-            .where { ClanPlayerTable.uuid eq invitee }
-            .limit(1)
-            .singleOrNull()
-            ?.get(ClanPlayerTable.acceptsClanInvites)
-            ?: true
-
-        if (!invitesEnabled) return@suspendTransaction ClanInviteResult.InvitationsDisabled
 
         // ON CONFLICT DO NOTHING rather than catching the constraint violation: PostgreSQL aborts the
         // whole transaction on a failed statement, so catching one and returning normally makes the

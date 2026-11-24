@@ -15,11 +15,9 @@ import kotlin.time.Duration.Companion.minutes
 object ClanTagColorEnforcer {
     private val log = logger()
 
-    private val FOREGROUND_NODE =
-        ClanPermissions.CLAN_OPTIONS_TAG_COLOR_FOREGROUND_COMMAND.lowercase()
-    private val BACKGROUND_NODE =
-        ClanPermissions.CLAN_OPTIONS_TAG_COLOR_BACKGROUND_COMMAND.lowercase()
-    private val SHADOW_NODE = ClanPermissions.CLAN_OPTIONS_TAG_COLOR_SHADOW_COMMAND.lowercase()
+    private val FOREGROUND_NODE = ClanPermissions.TAG_COLOR_FOREGROUND.lowercase()
+    private val BACKGROUND_NODE = ClanPermissions.TAG_COLOR_BACKGROUND.lowercase()
+    private val SHADOW_NODE = ClanPermissions.TAG_COLOR_SHADOW.lowercase()
 
     private val recentlyChecked = Caffeine.newBuilder()
         .expireAfterWrite(15.minutes)

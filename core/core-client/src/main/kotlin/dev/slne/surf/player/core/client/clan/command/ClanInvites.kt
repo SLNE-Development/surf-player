@@ -10,6 +10,17 @@ const val INVITEE_ALREADY_IN_CLAN = "Der Spieler ist bereits in einem Clan."
 const val INVITEE_ALREADY_INVITED = "Der Spieler wurde bereits eingeladen."
 const val INVITEE_DISABLED_INVITATIONS = "Der Spieler nimmt keine Einladungen an."
 const val INVITE_ALREADY_DENIED = "Diese Einladung wurde bereits abgelehnt."
+const val INVITE_REVOKE_FAILED = "Die Einladung konnte nicht zurückgezogen werden."
+
+/**
+ * Confirms to the clan member that the invitation of [inviteeName] was taken back.
+ */
+fun inviteRevokedMessage(inviteeName: String) = buildText {
+    appendSuccessPrefix()
+    success("Die Einladung an ")
+    variableValue(inviteeName)
+    success(" wurde zurückgezogen.")
+}
 
 /**
  * Confirms to the inviter that [inviteeName] was invited into [clan].
@@ -26,7 +37,7 @@ suspend fun inviteSentMessage(inviteeName: String, clan: ClanImpl) = buildText {
 /**
  * Offers the invitee the invitation into [clanName], with buttons to accept or deny it.
  */
-fun inviteReceivedMessage(inviterName: String, clanName: String) = buildText {
+fun inviteReceivedMessage(inviterName: String, clanName: String, clanTag: String) = buildText {
     appendInfoPrefix()
     info("Du wurdest von ")
     variableValue(inviterName)
@@ -39,7 +50,7 @@ fun inviteReceivedMessage(inviterName: String, clanName: String) = buildText {
         hoverEvent(buildText {
             info("Klicke hier, um die Einladung anzunehmen.")
         })
-        clickEvent(ClickEvent.runCommand("/clan accept $clanName"))
+        clickEvent(ClickEvent.runCommand("/clan accept $clanTag"))
     }
 
     appendSpace()
@@ -49,7 +60,7 @@ fun inviteReceivedMessage(inviterName: String, clanName: String) = buildText {
         hoverEvent(buildText {
             info("Klicke hier, um die Einladung abzulehnen.")
         })
-        clickEvent(ClickEvent.runCommand("/clan deny $clanName"))
+        clickEvent(ClickEvent.runCommand("/clan deny $clanTag"))
     }
 }
 

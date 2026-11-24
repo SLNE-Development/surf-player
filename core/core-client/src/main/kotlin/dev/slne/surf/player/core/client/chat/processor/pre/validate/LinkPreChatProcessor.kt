@@ -52,7 +52,7 @@ object LinkPreChatProcessor : PreChatProcessor {
         if (findDisallowedLink(messageData.plainMessage, chatConfig.allowedDomains) != null) {
             messageData.sender.sendText {
                 appendWarningPrefix()
-                error("Dein Nachricht enthält einen unerlaubten Link!")
+                error("Deine Nachricht enthält einen unerlaubten Link!")
             }
             context.cancel()
         }

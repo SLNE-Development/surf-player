@@ -68,12 +68,13 @@ Redis:
 | Kind     | Name                                                                               | Purpose                                                                                       |
 |----------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
 | map      | `surf-player:chat:reply-targets`                                                    | last direct message partner per player for `/reply`, 15 min TTL per entry                      |
-| event    | `TeamBroadcastRedisEvent(message, permission)`                                      | team chat messages and AI moderation notices, shown on every server to players with permission |
-| event    | `DeleteRemoteMessageRedisEvent(messageSignature)`                                   | deletes a signed chat message on every server                                                 |
+| event    | `TeamBroadcastRedisEvent(message, permission)`                                      | team chat messages and message deletion notices, shown on every server to players with permission |
+| event    | `AiModerationNoticeRedisEvent(messageData, action)`                                 | AI moderation flag; every server renders the notice for its team itself, so the delete button's click callback is registered where it is clicked |
+| event    | `DeleteRemoteMessageRedisEvent(messageSignature)`                                   | deletes a signed chat message on every server; every chat deletion goes through it            |
 | request  | `SendDirectMessageRedisRequest` -> `SendDirectMessageHandledRedisResponse`         | delivers a direct message on the server hosting the receiver                                  |
-| request  | `SendSignedMessageRedisRequest` -> `SendSignedMessageHandledRedisResponse`         | shows a signed message on the server hosting the target                                       |
+| request  | `SendSignedMessageRedisRequest(sender, senderName, target, message, requiredSetting?)` -> `SendSignedMessageHandledRedisResponse` | shows a signed message on the server hosting the target; with `requiredSetting` (a boolean setting name, e.g. `clan:chat-messages` for clan chat) that server answers but does not show it if the target turned the setting off |
 
-The two events are handled once for all platforms by `ChatRedisListener` (core-client); the two
+The three events are handled once for all platforms by `ChatRedisListener` (core-client); the two
 requests need platform types and are handled by the Paper and Minestom chat features.
 
 ## clan
@@ -93,7 +94,8 @@ RPC:
 - `ClanInviteRpcService`
   - `acceptInvite(inviteId, invitee, invitedBy): ClanInviteAcceptance` -
     `Accepted(clan)` / `AlreadyInClan` / `InviteNotFound`; the joined clan is returned directly
-  - `createInvite(clanId, invitee, invitedBy): ClanInviteResult`
+  - `createInvite(clanId, invitee, invitedBy): ClanInviteResult` - the client checks the
+    invitee's setting `clan:invites` (`InvitationsDisabled`) before calling
   - `deleteInvite(clanId, invitee): Boolean`
   - `findPendingInvitesOfClan(clanId): Set<ClanInviteImpl>`
   - `findPendingInvitesOfPlayer(invitee): List<ClanInviteImpl>`
@@ -102,19 +104,17 @@ RPC:
   - `createMember(clanId, player, role, invitedBy): ClanMemberAddResult`
   - `deleteMember(clanId, player): Boolean`
   - `updateMemberRole(memberId, role): Boolean`
-  - `findMemberByUuid(uuid): ClanMemberImpl?`
-- `ClanPlayerRpcService`
-  - `findClanPlayer(uuid): ClanPlayerImpl` - created with defaults if missing
-  - `updateAcceptsClanInvites(uuid, acceptsClanInvites)` - by UUID, no prior lookup needed
 
 Redis:
 
 | Kind            | Name                        | Purpose                                                                    |
 |-----------------|-----------------------------|----------------------------------------------------------------------------|
 | set cache       | `surf-player:clan:clans`    | `ClanImpl` by id, indexed by tag, uuid and member uuids; 15 min            |
-| cache           | `surf-player:clan:players`  | `ClanPlayerImpl` by player uuid; 30 min                                    |
 
-Writes invalidate the affected cache entries; there are no clan events.
+Writes invalidate the affected cache entries; there are no clan events. Memberships
+(`findClanMember`) are read from the clan in this cache, so every server sees joins, leaves,
+kicks, role changes and deletions at once. The table `clan.clan_players` (column
+`accepts_clan_invites`) is no longer used; it is kept only so existing databases need no migration.
 
 ## connection
 
@@ -133,13 +133,17 @@ Redis:
 ## friends
 
 RPC: `FriendsRpcService`. Clients check the preconditions against the synchronized lists; the
-microservice checks ignores and cooldowns.
+microservice checks ignores, the target's setting `friend:requests` (read in-process from the
+settings tables) and cooldowns.
 
 - `findAllFriendRequests(): List<FriendRequest>`
 - `findAllFriendships(): List<Friendship>` - stored once per direction
-- `createFriendRequest(senderUuid, targetUuid): FriendRequestCreateResult`
+- `createFriendRequest(senderUuid, targetUuid): FriendRequestCreateResult` - checked in the order
+  `Blocked` (ignore), `RequestsDisabled` (`friend:requests` off), `OnCooldown`
 - `revokeFriendRequest(senderUuid, targetUuid): FriendRequestRemoveResult`
-- `answerFriendRequest(senderUuid, targetUuid, state): FriendRequestStateResult`
+- `answerFriendRequest(senderUuid, targetUuid, state): FriendRequestAnswer` - `Accepted(friendships)`
+  with both stored directions (clients add exactly these to the sync list, timestamps included) /
+  `Declined`
 - `deleteFriendship(senderUuid, targetUuid): FriendshipRemoveResult` - both directions
 
 Redis:
@@ -150,9 +154,11 @@ Redis:
 | sync list | `surf-player:friends:friendships`             | every `Friendship`                                                                            |
 | lock      | `surf-player:friends:reload-lock`             | serializes the reload of both lists from the microservice that every server does on startup  |
 | event     | `FriendsRedisEvent(action, executorUuid, targetUuid)` | `REQUEST_SENT`, `REQUEST_REVOKED`, `REQUEST_ACCEPTED`, `REQUEST_DECLINED`, `FRIENDSHIP_REMOVED`; the servers hosting either player notify them |
+| event     | `FriendConnectionRedisEvent(playerUuid, online, serverName?)` | published by Velocity on a network join (first server connection, `serverName` = that server) and a network quit; server switches publish nothing. Every server notifies the friends it hosts; the server named `serverName` also greets the player |
 
 Whether the target of `REQUEST_SENT` is notified is decided by the server hosting the target,
-the only one that has the target's settings cached.
+the only one that has the target's settings cached. Likewise every server applies the friend
+notification and sound settings (`friend:notifications`, `friend:sounds`) of the friends it hosts.
 
 ## playtime
 
@@ -198,7 +204,15 @@ RPC: `SettingsRpcService`
 - `findPlayerSettings(playerUuid): Map<String, String>` - only values differing from the default
 - `savePlayerSetting(playerUuid, settingName, value)`
 
-Redis: none. Player settings are cached per server for the players online there.
+Player settings are cached per server (and on the proxy) for the players online there; values of
+players not cached on a server (`getCachedValueOrLoad`) are loaded with `findPlayerSettings`
+without being cached. The microservice reads `friend:requests` directly from its tables.
+
+| Kind  | Name                                                         | Purpose                                                                                     |
+|-------|--------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| event | `PlayerSettingChangedRedisEvent(playerUuid, settingName, value)` | published after every `savePlayerSetting`; every server and proxy that has the player's settings cached updates its cache |
+
+The listener (`SettingsRedisListener`) is subscribed by `SurfPlayerClient.load` on every platform.
 
 ## tab
 
@@ -215,6 +229,10 @@ No RPC.
 | Kind     | Name                                    | Purpose                                                          |
 |----------|-----------------------------------------|------------------------------------------------------------------|
 | sync set | `surf-player:vanish:vanished-players`   | UUIDs of vanished players; kept across server switches on purpose |
+
+The set is created on every platform by `SurfPlayerClient.load` (`VanishedPlayers` in
+core-client) and only changed by the Paper vanish feature. Friend online/offline notices skip
+vanished players, and vanished friends are not counted in the join greeting.
 
 ## Features without protocol
 

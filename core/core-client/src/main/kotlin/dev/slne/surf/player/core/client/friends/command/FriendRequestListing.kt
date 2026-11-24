@@ -41,7 +41,7 @@ private data class LocalFriendRequest(
 /**
  * The open friend requests of [player] as they are shown to them.
  */
-suspend fun friendRequestListComponent(player: UUID): Component {
+suspend fun friendRequestListComponent(player: UUID, page: Int = 1): Component {
     val friendRequests = SurfFriendsApi.receivedFriendRequests(player)
         .sortedByDescending { it.createdAt }
 
@@ -62,6 +62,6 @@ suspend fun friendRequestListComponent(player: UUID): Component {
 
     return buildText {
         appendNewline()
-        append(pagination.renderComponent(requesterEntries))
+        append(pagination.renderComponent(requesterEntries, page))
     }
 }

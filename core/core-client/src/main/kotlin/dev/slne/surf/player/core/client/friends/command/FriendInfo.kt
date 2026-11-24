@@ -19,22 +19,16 @@ suspend fun friendInfoComponent(player: UUID, target: UUID): Component {
     val targetSurfPlayer = target.toSurfPlayer()
 
     return buildText {
-        appendNewline()
-        info("Freundschaftsinformationen".toSmallCaps())
+        appendInfoPrefix()
+        primary("Freundschaftsinformationen".toSmallCaps(), TextDecoration.BOLD)
         appendNewline()
 
-        append {
-            info("| ")
-            decorate(TextDecoration.BOLD)
-        }
+        appendInfoPrefix()
         variableKey("Freund: ".toSmallCaps())
         append(targetSurfPlayer.displayName())
         appendNewline()
 
-        append {
-            info("| ")
-            decorate(TextDecoration.BOLD)
-        }
+        appendInfoPrefix()
         variableKey("Befreundet seit: ".toSmallCaps())
         append(friendShip.createdAt.formatComponent())
     }

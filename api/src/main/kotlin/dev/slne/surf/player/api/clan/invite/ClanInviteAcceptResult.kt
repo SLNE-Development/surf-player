@@ -5,9 +5,6 @@ import dev.slne.surf.player.api.clan.clan.Clan
 /**
  * Represents the result of attempting to accept a clan invitation.
  *
- * This sealed interface provides two possible outcomes when a player tries to accept
- * a clan invitation.
- *
  * @see ClanInvite.accept
  */
 sealed interface ClanInviteAcceptResult {
@@ -16,6 +13,12 @@ sealed interface ClanInviteAcceptResult {
      * is already a member of a clan.
      */
     data object AlreadyInClan : ClanInviteAcceptResult
+
+    /**
+     * Indicates that the invitation no longer exists: it was revoked, already accepted or its clan
+     * was deleted.
+     */
+    data object InviteNotFound : ClanInviteAcceptResult
 
     /**
      * Indicates that the invitation was successfully accepted and the player

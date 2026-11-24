@@ -1,8 +1,8 @@
 package dev.slne.surf.player.velocity.connection
 
 import dev.slne.surf.player.velocity.VelocityPlayerFeature
+import dev.slne.surf.player.velocity.connection.command.connectionAdminActions
 import dev.slne.surf.player.velocity.connection.command.linkCommand
-import dev.slne.surf.player.velocity.connection.command.surfSocialCommand
 import dev.slne.surf.player.velocity.connection.command.unlinkCommand
 import dev.slne.surf.player.velocity.connection.config.SocialConfigManager
 import io.ktor.client.*
@@ -24,10 +24,11 @@ object ConnectionVelocityFeature : VelocityPlayerFeature {
     }
 
     override suspend fun onEnable() {
-        surfSocialCommand()
         linkCommand()
         unlinkCommand()
     }
+
+    override fun adminActions() = connectionAdminActions()
 
     override suspend fun onDisable() {
         httpClient.close()

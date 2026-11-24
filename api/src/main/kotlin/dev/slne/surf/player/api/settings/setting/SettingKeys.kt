@@ -27,6 +27,8 @@ object SettingKeys {
         SettingKey.ofBoolean(key("clan", "chat-messages"), defaultValue = true)
 
     // Friends
+    /** Whether the player accepts friend requests at all; enforced by the microservice. */
+    val FRIEND_REQUESTS = SettingKey.ofBoolean(key("friend", "requests"), defaultValue = true)
     val FRIEND_REQUEST_NOTIFICATIONS = SettingKey.ofBoolean(
         key("friend", "request-notifications"),
         defaultValue = true
@@ -42,9 +44,6 @@ object SettingKeys {
     // Nametag
 
     val SHOW_NAMETAGS = SettingKey.ofBoolean(key("nametag", "show-nametags"), defaultValue = true)
-
-    val SHOW_SCOREBOARD =
-        SettingKey.ofBoolean(key("scoreboard", "show-scoreboard"), defaultValue = true)
 
     // Queue
     val AUTO_QUEUE_AFTER_RECONNECT = SettingKey.ofBoolean(key("queue", "auto-queue-after-reconnect"), defaultValue = true)

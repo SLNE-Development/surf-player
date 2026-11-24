@@ -41,6 +41,10 @@ mojang_uuid() {
     echo "${id:0:8}-${id:8:4}-${id:12:4}-${id:16:4}-${id:20:12}"
 }
 
+# Player commands need explicit permissions (Bukkit's default for unknown nodes is op-only), so the
+# default group gets every player command of surf-player; see docs/command-migration.md.
+rcon "lp group default permission set surf.player.command.* true"
+
 rcon "lp creategroup admin"
 rcon "lp group admin setweight 100"
 rcon "lp group admin permission set * true"

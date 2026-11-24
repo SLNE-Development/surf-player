@@ -8,16 +8,6 @@ import dev.slne.surf.player.core.client.settings.service.SettingsService
 import net.kyori.adventure.text.Component
 import java.util.*
 
-object NiceToggle {
-    val suggestions = listOf("enable", "disable", "on", "off", "an", "aus")
-
-    fun parse(input: String): Boolean? = when (input) {
-        "enable", "on", "an" -> true
-        "disable", "off", "aus" -> false
-        else -> null
-    }
-}
-
 object SettingsCommandActions {
     fun toggle(playerUuid: UUID, setting: Setting): String {
         val playerSetting = getPlayerSetting(playerUuid, setting).copy()
@@ -53,12 +43,6 @@ object SettingsCommandMessages {
         get() = buildText {
             appendErrorPrefix()
             error("Nur Boolean Einstellungen können über den Befehl geändert werden.")
-        }
-
-    val invalidToggle: Component
-        get() = buildText {
-            appendErrorPrefix()
-            error("Bitte gebe entweder 'enable', 'disable', 'on' oder 'off' an.")
         }
 
     val settingNotFound: Component

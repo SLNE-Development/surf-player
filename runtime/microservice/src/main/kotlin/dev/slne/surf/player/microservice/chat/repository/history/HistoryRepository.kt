@@ -51,6 +51,9 @@ object HistoryRepository {
         }
         filter.server?.let { query.andWhere { HistoryTable.server eq it } }
         filter.messageUuid?.let { query.andWhere { HistoryTable.messageUuid eq it } }
+        filter.message?.let { text ->
+            query.andWhere { HistoryTable.message.lowerCase() like containsPattern(text.lowercase()) }
+        }
 
         query
             .orderBy(HistoryTable.sentAt, SortOrder.DESC)
@@ -70,6 +73,23 @@ object HistoryRepository {
             it[this.deletedAt] = deletedAt
         } > 0
     }
+
+    /**
+     * A LIKE pattern matching every text that contains [text] literally; `%`, `_` and the escape
+     * character in [text] match themselves. Combined with lowercasing both sides this is an ILIKE.
+     */
+    internal fun containsPattern(text: String): LikePattern {
+        val escaped = buildString {
+            for (char in text) {
+                if (char == LIKE_ESCAPE || char == '%' || char == '_') append(LIKE_ESCAPE)
+                append(char)
+            }
+        }
+
+        return LikePattern("%$escaped%", LIKE_ESCAPE)
+    }
+
+    private const val LIKE_ESCAPE = '\\'
 
     private fun historyEntryFromRow(row: ResultRow) = HistoryEntry(
         messageUuid = row[HistoryTable.messageUuid],

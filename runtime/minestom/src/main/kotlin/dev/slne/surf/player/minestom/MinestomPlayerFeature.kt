@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom
 
+import dev.slne.surf.player.minestom.command.MinestomAdminAction
 import net.minestom.server.entity.Player
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
@@ -40,4 +41,10 @@ interface MinestomPlayerFeature {
      * Called when [player] disconnects from this server.
      */
     fun onPlayerQuit(player: Player) = Unit
+
+    /**
+     * The actions this feature adds below `/surfplayer <id>`. Read once, after every feature was
+     * enabled.
+     */
+    fun adminActions(): List<MinestomAdminAction> = emptyList()
 }

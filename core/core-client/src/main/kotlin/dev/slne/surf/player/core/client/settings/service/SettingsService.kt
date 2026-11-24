@@ -5,11 +5,14 @@ import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.player.api.settings.setting.PlayerSetting
 import dev.slne.surf.player.api.settings.setting.Setting
+import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.settings.redis.PlayerSettingChangedRedisEvent
 import dev.slne.surf.player.core.client.settings.rpc.settingsRpcService
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -21,6 +24,23 @@ import java.util.concurrent.atomic.AtomicReference
 object SettingsService {
     private val registry = AtomicReference(SettingRegistry.EMPTY)
     private val playerCache = ConcurrentHashMap<UUID, PlayerSettings>()
+    private val changeListeners = CopyOnWriteArrayList<(playerUuid: UUID, settingNames: Set<String>) -> Unit>()
+
+    /**
+     * Calls [listener] whenever cached values of a player on this server change: with the changed
+     * setting's name when one is changed, and with every non-default setting once their values are
+     * loaded on join (their values were the defaults until then).
+     */
+    fun onPlayerSettingsChanged(listener: (playerUuid: UUID, settingNames: Set<String>) -> Unit) {
+        changeListeners.add(listener)
+    }
+
+    private fun notifyChanged(playerUuid: UUID, settingNames: Set<String>) {
+        if (settingNames.isEmpty()) return
+        for (listener in changeListeners) {
+            listener(playerUuid, settingNames)
+        }
+    }
 
     val settings: ObjectSet<Setting> get() = registry.get().all
 
@@ -59,17 +79,45 @@ object SettingsService {
         return result.freeze()
     }
 
-    /** Updates the cached value of [playerUuid], if their settings are cached. */
+    /**
+     * Updates the cached value of [playerUuid], if their settings are cached and the value differs,
+     * and notifies the [onPlayerSettingsChanged] listeners.
+     */
     fun cachePlayerSetting(playerUuid: UUID, playerSetting: PlayerSetting) {
-        playerCache.computeIfPresent(playerUuid) { _, existing -> existing.with(playerSetting) }
+        val name = playerSetting.setting.name
+        var changed = false
+
+        playerCache.computeIfPresent(playerUuid) { _, existing ->
+            if (existing.byName[name]?.settingValue == playerSetting.settingValue) {
+                existing
+            } else {
+                changed = true
+                existing.with(playerSetting)
+            }
+        }
+
+        if (changed) notifyChanged(playerUuid, setOf(name))
     }
 
+    /**
+     * Applies a value of [playerUuid] that was saved on any server (see
+     * [PlayerSettingChangedRedisEvent]) to this server's cache, if their settings are cached here.
+     */
+    fun applySavedSetting(playerUuid: UUID, settingName: String, value: String) {
+        val setting = getSettingByName(settingName) ?: return
+        cachePlayerSetting(playerUuid, PlayerSetting(setting = setting, settingValue = value))
+    }
+
+    /**
+     * Stores the value and tells every server, so the caches of the servers (and the proxy) that
+     * have the settings of [playerUuid] cached are updated too.
+     */
     suspend fun savePlayerSetting(playerUuid: UUID, playerSetting: PlayerSetting) {
-        settingsRpcService.savePlayerSetting(
-            playerUuid,
-            playerSetting.setting.name,
-            playerSetting.settingValue
-        )
+        val name = playerSetting.setting.name
+        val value = playerSetting.settingValue
+
+        settingsRpcService.savePlayerSetting(playerUuid, name, value)
+        SurfPlayerClient.redisApi.publishEvent(PlayerSettingChangedRedisEvent(playerUuid, name, value)).await()
     }
 
     /** [cachePlayerSetting] followed by [savePlayerSetting]. */
@@ -77,6 +125,17 @@ object SettingsService {
         cachePlayerSetting(playerUuid, playerSetting)
         savePlayerSetting(playerUuid, playerSetting)
     }
+
+    /** Whether the values of [playerUuid] are cached on this server. */
+    fun isCached(playerUuid: UUID): Boolean = playerCache.containsKey(playerUuid)
+
+    /**
+     * The value of [settingName] for [playerUuid], loaded from the microservice without caching it,
+     * or the setting's default value; `null` if the setting is not registered.
+     */
+    suspend fun loadSettingValueOrDefault(playerUuid: UUID, settingName: String): String? =
+        settingsRpcService.findPlayerSettings(playerUuid)[settingName]
+            ?: getSettingByName(settingName)?.defaultValue
 
     /** Loads the values of [playerUuid] from the microservice into the cache. */
     suspend fun cachePlayerSettings(playerUuid: UUID) {
@@ -90,6 +149,7 @@ object SettingsService {
         }
 
         playerCache[playerUuid] = PlayerSettings(byName)
+        notifyChanged(playerUuid, byName.keys.toSet())
     }
 
     /**

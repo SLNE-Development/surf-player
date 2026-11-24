@@ -9,7 +9,7 @@ import dev.slne.surf.player.core.client.tab.redis.TabRedisLoader
 import dev.slne.surf.player.core.client.tab.service.TablistService
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
 import dev.slne.surf.player.minestom.hook.subscribeToLuckPermsUserChanges
-import dev.slne.surf.player.minestom.tab.command.surfTabCommand
+import dev.slne.surf.player.minestom.command.tabAdminActions
 import dev.slne.surf.player.minestom.tab.platform.MinestomTabPlayer
 import net.minestom.server.entity.Player
 
@@ -27,10 +27,10 @@ object TabMinestomFeature : MinestomPlayerFeature {
     }
 
     override suspend fun onEnable() {
-        surfTabCommand()
-
         SurfEventBus.registerListeners(AfkListener)
     }
+
+    override fun adminActions() = tabAdminActions()
 
     override suspend fun onDisable() {
         SurfEventBus.unregisterListeners(AfkListener)

@@ -5,7 +5,7 @@ import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.player.core.client.playtime.PlaytimeTasks
 import dev.slne.surf.player.core.client.playtime.config.PlaytimeConfigManager
 import dev.slne.surf.player.paper.PaperPlayerFeature
-import dev.slne.surf.player.paper.playtime.command.playtimeAdminCommand
+import dev.slne.surf.player.paper.playtime.command.playtimeAdminActions
 import dev.slne.surf.player.paper.playtime.command.playtimeCommand
 import dev.slne.surf.player.paper.playtime.listener.PlaytimeListener
 import dev.slne.surf.player.paper.plugin
@@ -22,10 +22,11 @@ object PaperPlaytimeFeature : PaperPlayerFeature {
         PlaytimeTasks.start(plugin.scope)
 
         playtimeCommand()
-        playtimeAdminCommand()
     }
 
     override suspend fun onDisable() {
         PlaytimeTasks.stop()
     }
+
+    override fun adminActions() = playtimeAdminActions()
 }

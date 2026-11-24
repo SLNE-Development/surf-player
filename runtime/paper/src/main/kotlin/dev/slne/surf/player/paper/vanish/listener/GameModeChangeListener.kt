@@ -1,7 +1,7 @@
 package dev.slne.surf.player.paper.vanish.listener
 
 import dev.slne.surf.player.paper.vanish.service.VanishService
-import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
+import dev.slne.surf.player.core.client.vanish.permission.VanishPermissions
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -11,7 +11,7 @@ object GameModeChangeListener : Listener {
     @EventHandler
     fun onGameModeChange(event: PlayerGameModeChangeEvent) {
         if (event.newGameMode == GameMode.SURVIVAL || event.newGameMode == GameMode.ADVENTURE) {
-            if (!event.player.hasPermission(VanishPermissionRegistry.VANISH_SAVE_FLY_STATE)) {
+            if (!event.player.hasPermission(VanishPermissions.VANISH_SAVE_FLY_STATE)) {
                 return
             }
 
@@ -20,7 +20,7 @@ object GameModeChangeListener : Listener {
                 event.player.isFlying = true
             }
         } else {
-            if (!event.player.hasPermission(VanishPermissionRegistry.VANISH_SAVE_FLY_STATE)) {
+            if (!event.player.hasPermission(VanishPermissions.VANISH_SAVE_FLY_STATE)) {
                 return
             }
 

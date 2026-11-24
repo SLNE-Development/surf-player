@@ -10,7 +10,7 @@ import dev.slne.surf.player.core.client.tab.redis.TabRedisLoader
 import dev.slne.surf.player.core.client.tab.service.TablistService
 import dev.slne.surf.player.paper.PaperPlayerFeature
 import dev.slne.surf.player.paper.hook.subscribeToLuckPermsUserChanges
-import dev.slne.surf.player.paper.tab.command.surfTabCommand
+import dev.slne.surf.player.paper.tab.command.tabAdminActions
 import dev.slne.surf.player.paper.tab.listener.PlayerListener
 import dev.slne.surf.player.paper.tab.listener.VanishListener
 
@@ -22,8 +22,6 @@ object PaperTabFeature : PaperPlayerFeature {
     }
 
     override suspend fun onEnable() {
-        surfTabCommand()
-
         TablistService.start()
         subscribeToLuckPermsUserChanges(LuckPermsHook::updatePlayerInTablist)
         PlayerListener.register()
@@ -42,4 +40,6 @@ object PaperTabFeature : PaperPlayerFeature {
         SurfEventBus.unregisterListeners(AfkListener)
         TablistService.stop()
     }
+
+    override fun adminActions() = tabAdminActions()
 }

@@ -24,17 +24,6 @@ interface ClanCapability {
     suspend fun clanInvite(clanName: String): ClanInvite? =
         SurfClanApi.findClanInvite(uuid, clanName)
 
-    /** Whether this player accepts clan invites. */
-    suspend fun acceptsClanInvites(): Boolean = SurfClanApi.acceptsClanInvites(uuid)
-
-    /**
-     * Changes whether this player accepts clan invites.
-     *
-     * @return `true` if the preference was changed
-     */
-    suspend fun setAcceptsClanInvites(acceptsClanInvites: Boolean): Boolean =
-        SurfClanApi.setAcceptsClanInvites(uuid, acceptsClanInvites)
-
     /** Creates a clan called [name] with the tag [tag], owned by this player. */
     suspend fun createClan(
         name: String,

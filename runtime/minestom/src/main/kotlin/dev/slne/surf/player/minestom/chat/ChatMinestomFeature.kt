@@ -7,13 +7,8 @@ import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
 import dev.slne.surf.player.core.client.chat.redis.ChatRedisListener
 import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
-import dev.slne.surf.player.minestom.chat.command.direct.directMessageCommand
-import dev.slne.surf.player.minestom.chat.command.direct.replyCommand
-import dev.slne.surf.player.minestom.chat.command.ignore.ignoreCommand
-import dev.slne.surf.player.minestom.chat.command.slowChatCommand
-import dev.slne.surf.player.minestom.chat.command.spy.directMessageSpyCommand
-import dev.slne.surf.player.minestom.chat.command.surfchat.surfChatCommand
-import dev.slne.surf.player.minestom.chat.command.teamchatCommand
+import dev.slne.surf.player.minestom.chat.command.chatAdminActions
+import dev.slne.surf.player.minestom.chat.command.registerChatCommands
 import dev.slne.surf.player.minestom.chat.listener.ChatConnectionHandler
 import dev.slne.surf.player.minestom.chat.listener.ChatEventListener
 import dev.slne.surf.player.minestom.chat.redis.listener.MinestomRedisEventListener
@@ -37,14 +32,10 @@ object ChatMinestomFeature : MinestomPlayerFeature {
     }
 
     override suspend fun onEnable() {
-        surfChatCommand()
-        teamchatCommand()
-        ignoreCommand()
-        directMessageSpyCommand()
-        slowChatCommand()
-        directMessageCommand()
-        replyCommand()
+        registerChatCommands()
     }
+
+    override fun adminActions() = chatAdminActions()
 
     override fun onPlayerJoin(player: Player) = ChatConnectionHandler.onJoin(player)
 

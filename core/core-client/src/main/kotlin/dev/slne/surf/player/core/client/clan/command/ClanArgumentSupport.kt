@@ -1,8 +1,12 @@
 package dev.slne.surf.player.core.client.clan.command
 
 import dev.slne.surf.player.api.clan.SurfClanApi
+import dev.slne.surf.player.api.clan.invite.ClanInvite
 import dev.slne.surf.player.api.clan.member.ClanMember
 import dev.slne.surf.player.core.client.util.usernameOrUuid
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
@@ -12,33 +16,43 @@ import java.util.concurrent.ConcurrentHashMap
 
 private const val LOOKUP_CONCURRENCY = 64
 
-const val CLAN_INVITE_ARGUMENT_NEEDS_PLAYER =
-    "Cannot parse clan invite argument without player sender."
-
 /**
- * The names of the clans [player] currently has a pending invitation to.
+ * The tags of the clans [player] currently has a pending invitation to.
  */
-suspend fun invitedClanNames(player: UUID): Set<String> {
+suspend fun invitedClanTags(player: UUID): Set<String> {
     val invites = SurfClanApi.findClanInvites(player)
 
     if (invites.isEmpty()) return emptySet()
 
-    val clanNames = ConcurrentHashMap.newKeySet<String>()
+    val clanTags = ConcurrentHashMap.newKeySet<String>()
     val semaphore = Semaphore(LOOKUP_CONCURRENCY)
     supervisorScope {
         for (invite in invites) {
             launch {
                 semaphore.withPermit {
-                    val clan = invite.getClan()
-                    if (clan != null) {
-                        clanNames.add(clan.name)
-                    }
+                    invite.getClan()?.let { clanTags.add(it.tag) }
                 }
             }
         }
     }
 
-    return clanNames
+    return clanTags
+}
+
+/**
+ * The pending invitation of [player] to the clan whose tag or name is [input], ignoring case.
+ */
+suspend fun findClanInviteByTagOrName(player: UUID, input: String): ClanInvite? {
+    val invites = SurfClanApi.findClanInvites(player)
+
+    return coroutineScope {
+        invites.map { invite -> async { invite to invite.getClan() } }
+            .awaitAll()
+            .firstOrNull { (_, clan) ->
+                clan != null && (clan.tag.equals(input, ignoreCase = true) || clan.name.equals(input, ignoreCase = true))
+            }
+            ?.first
+    }
 }
 
 /**
@@ -64,14 +78,45 @@ suspend fun clanMemberNames(player: UUID): Set<String> {
 }
 
 /**
- * Resolves a clan member from either their uuid or their name.
+ * The member of [player]'s clan named [nameOrUuid] (name ignoring case, or uuid).
  */
-suspend fun findClanMember(nameOrUuid: String): ClanMember? {
+suspend fun findClanMember(player: UUID, nameOrUuid: String): ClanMember? {
+    val clan = SurfClanApi.findClanByPlayer(player) ?: return null
     val uuid = runCatching { UUID.fromString(nameOrUuid) }.getOrNull()
 
-    return if (uuid != null) {
-        SurfClanApi.findClanMember(uuid)
-    } else {
-        SurfClanApi.findClanMemberByName(nameOrUuid)
+    if (uuid != null) {
+        return clan.getMember(uuid)
+    }
+
+    return coroutineScope {
+        clan.members.map { member -> async { member to usernameOrUuid(member.uuid) } }
+            .awaitAll()
+            .firstOrNull { (_, name) -> name.equals(nameOrUuid, ignoreCase = true) }
+            ?.first
+    }
+}
+
+/**
+ * The names of the players [player]'s clan has invited and who have not answered yet.
+ */
+suspend fun pendingInviteeNames(player: UUID): Set<String> {
+    val clan = SurfClanApi.findClanByPlayer(player) ?: return emptySet()
+
+    return coroutineScope {
+        clan.getPendingInvites().map { invite -> async { usernameOrUuid(invite.invited) } }.awaitAll().toSet()
+    }
+}
+
+/**
+ * The pending invitation of [player]'s clan for the player named [input] (ignoring case).
+ */
+suspend fun findPendingInvite(player: UUID, input: String): ClanInvite? {
+    val clan = SurfClanApi.findClanByPlayer(player) ?: return null
+
+    return coroutineScope {
+        clan.getPendingInvites().map { invite -> async { invite to usernameOrUuid(invite.invited) } }
+            .awaitAll()
+            .firstOrNull { (_, name) -> name.equals(input, ignoreCase = true) }
+            ?.first
     }
 }

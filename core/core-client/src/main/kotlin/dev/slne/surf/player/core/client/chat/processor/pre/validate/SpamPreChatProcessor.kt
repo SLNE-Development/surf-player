@@ -16,6 +16,12 @@ import kotlin.time.Duration.Companion.minutes
 
 fun isRepeatOf(last: String?, current: String) = last != null && last.equals(current, ignoreCase = true)
 
+/**
+ * Whether the [messagesSent]-th message within one interval exceeds the limit of [amount]
+ * messages per interval; exactly [amount] messages are allowed.
+ */
+fun exceedsRateLimit(messagesSent: Int, amount: Int) = messagesSent > amount
+
 object SpamPreChatProcessor : PreChatProcessor {
     override val order = ProcessorOrder.VALIDATE
 
@@ -38,7 +44,7 @@ object SpamPreChatProcessor : PreChatProcessor {
 
         val messagesSent = messageRateLimit.asMap().compute(sender) { _, value -> (value ?: 0) + 1 }!!
 
-        if (messagesSent >= chatConfig.spamConfig.amount) {
+        if (exceedsRateLimit(messagesSent, chatConfig.spamConfig.amount)) {
             sender.sendText {
                 appendErrorPrefix()
                 error("Du sendest Nachrichten zu schnell. Bitte warte einen Moment.")

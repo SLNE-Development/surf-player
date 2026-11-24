@@ -17,12 +17,12 @@ import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsAction
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsRedisEvent
 import dev.slne.surf.player.core.client.friends.rpc.friendsRpcService
+import dev.slne.surf.player.core.common.friends.rpc.FriendRequestAnswer
 import dev.slne.surf.player.core.common.friends.rpc.FriendRequestState
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import org.jetbrains.annotations.UnmodifiableView
-import java.time.OffsetDateTime
 import java.util.*
 
 @AutoService(SurfFriendsApi::class)
@@ -184,39 +184,24 @@ class SurfFriendsApiImpl : SurfFriendsApi {
             return FriendRequestStateResult.NoFriendRequest(sender)
         }
 
-        val result = friendsRpcService.answerFriendRequest(
+        val answer = friendsRpcService.answerFriendRequest(
             senderUuid = sender,
             targetUuid = uuid,
             state = FriendRequestState.ACCEPT
         )
 
-        if (result !is FriendRequestStateResult.Success) {
-            return result
-        }
-
         FriendsClient.removeFriendRequest(senderUuid = sender, targetUuid = uuid)
 
-        val now = OffsetDateTime.now()
-
-        FriendsClient.friendships.add(
-            Friendship(
-                playerUuid = uuid,
-                friendUuid = sender,
-                createdAt = now
-            )
-        )
-
-        FriendsClient.friendships.add(
-            Friendship(
-                playerUuid = sender,
-                friendUuid = uuid,
-                createdAt = now
-            )
-        )
+        // The friendships exactly as the microservice stored them, timestamps included.
+        if (answer is FriendRequestAnswer.Accepted) {
+            for (friendship in answer.friendships) {
+                FriendsClient.friendships.add(friendship)
+            }
+        }
 
         publish(FriendsAction.REQUEST_ACCEPTED, uuid, sender)
 
-        return result
+        return FriendRequestStateResult.Success
     }
 
     override suspend fun declineFriendRequest(uuid: UUID, sender: UUID): FriendRequestStateResult {
@@ -224,21 +209,17 @@ class SurfFriendsApiImpl : SurfFriendsApi {
             return FriendRequestStateResult.NoFriendRequest(sender)
         }
 
-        val result = friendsRpcService.answerFriendRequest(
+        friendsRpcService.answerFriendRequest(
             senderUuid = sender,
             targetUuid = uuid,
             state = FriendRequestState.DECLINE
         )
 
-        if (result !is FriendRequestStateResult.Success) {
-            return result
-        }
-
         FriendsClient.removeFriendRequest(senderUuid = sender, targetUuid = uuid)
 
         publish(FriendsAction.REQUEST_DECLINED, uuid, sender)
 
-        return result
+        return FriendRequestStateResult.Success
     }
 
     override suspend fun removeFriendship(uuid: UUID, friend: UUID): FriendshipRemoveResult {

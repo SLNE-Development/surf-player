@@ -7,6 +7,7 @@ import dev.slne.surf.player.core.client.nametag.hook.ContentCreatorHook
 import dev.slne.surf.player.core.client.nametag.hook.LuckPermsHook
 import dev.slne.surf.player.core.client.nametag.service.NametagService
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
+import dev.slne.surf.player.minestom.command.nametagAdminActions
 import dev.slne.surf.player.minestom.hook.subscribeToLuckPermsUserChanges
 import dev.slne.surf.player.minestom.nametag.platform.MinestomNametagPlayer
 import kotlinx.coroutines.launch
@@ -18,6 +19,8 @@ import net.minestom.server.entity.Player
  */
 object NametagMinestomFeature : MinestomPlayerFeature {
     override val id = "nametag"
+
+    override fun adminActions() = nametagAdminActions()
 
     override suspend fun onLoad() {
         NametagConfig.init()

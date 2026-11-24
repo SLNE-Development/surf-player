@@ -69,7 +69,7 @@ object JoinInviteListener {
                             clanInformationHover = ClanComponents.renderClanInformationHover(
                                 clan as ClanImpl
                             ),
-                            clanName = clan.name
+                            clanTag = clan.tag
                         )
                     }
                 }

@@ -49,8 +49,14 @@ val settingKeyMappings = mapOf(
         Key.key("heart_of_the_sea"),
         SettingCategory.FRIENDS,
     ),
+    SettingKeys.FRIEND_REQUESTS to SettingKeyDisplay(
+        "Freundschaftsanfragen annehmen",
+        "Erlaubt anderen Spielern, dir Freundschaftsanfragen zu senden",
+        Key.key("emerald"),
+        SettingCategory.FRIENDS,
+    ),
     SettingKeys.FRIEND_REQUEST_NOTIFICATIONS to SettingKeyDisplay(
-        "Freundschaftsanfragen",
+        "Freundschaftsanfrage-Benachrichtigungen",
         "Benachrichtigungen für neue Freundschaftsanfragen",
         Key.key("player_head"),
         SettingCategory.FRIENDS,
@@ -77,12 +83,6 @@ val settingKeyMappings = mapOf(
         "Automatische Rückkehr",
         "Bringt dich nach einem kurzen Verbindungsabbruch automatisch zurück auf deinen vorherigen Server",
         Key.key("recovery_compass"),
-        SettingCategory.GENERAL,
-    ),
-    SettingKeys.SHOW_SCOREBOARD to SettingKeyDisplay(
-        "Scoreboard anzeigen",
-        "Zeigt das Scoreboard auf der rechten Seite an",
-        Key.key("slime_block"),
         SettingCategory.GENERAL,
     ),
 ).mapKeys { it.key.name }

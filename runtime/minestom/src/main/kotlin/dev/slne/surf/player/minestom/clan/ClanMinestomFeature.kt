@@ -4,8 +4,8 @@ import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.player.core.client.clan.ClanClient
 import dev.slne.surf.player.core.client.clan.tagcolor.ClanTagColorEnforcer
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
-import dev.slne.surf.player.minestom.clan.command.clanChatCommand
-import dev.slne.surf.player.minestom.clan.command.clanCommand
+import dev.slne.surf.player.minestom.clan.command.clanAdminActions
+import dev.slne.surf.player.minestom.clan.command.registerClanCommands
 import kotlinx.coroutines.launch
 import net.minestom.server.entity.Player
 
@@ -17,11 +17,10 @@ object ClanMinestomFeature : MinestomPlayerFeature {
     }
 
     override suspend fun onEnable() {
-        clanCommand()
-
-        clanChatCommand("clanchat").register()
-        clanChatCommand("cc").register()
+        registerClanCommands()
     }
+
+    override fun adminActions() = clanAdminActions()
 
     /**
      * Checks the clan tag color of the joining player's clan against its owner's permissions.

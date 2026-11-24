@@ -7,6 +7,7 @@ import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.result.FriendRequestCreateResult
 import dev.slne.surf.player.api.friends.utils.displayName
+import dev.slne.surf.player.core.client.friends.friendRequestsDisabledMessage
 import dev.slne.surf.player.core.client.friends.util.formatRemainingComponent
 import dev.slne.surf.player.core.client.util.undeliverableMessage
 import net.kyori.adventure.text.Component
@@ -46,6 +47,7 @@ private fun failureMessage(result: FriendRequestCreateResult, target: SurfPlayer
     is FriendRequestCreateResult.AlreadyReceivedFriendRequest -> alreadyReceivedMessage(target)
     is FriendRequestCreateResult.OnCooldown -> onCooldownMessage(target, result.remaining)
     is FriendRequestCreateResult.Blocked -> undeliverableMessage()
+    is FriendRequestCreateResult.RequestsDisabled -> friendRequestsDisabledMessage(target)
 }
 
 private fun alreadyFriendsMessage(target: SurfPlayer) = buildText {

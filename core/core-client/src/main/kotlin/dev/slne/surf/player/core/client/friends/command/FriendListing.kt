@@ -8,6 +8,8 @@ import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
+import dev.slne.surf.player.core.client.vanish.VanishedPlayers
+import dev.slne.surf.player.core.client.vanish.permission.VanishPermissions
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
@@ -43,9 +45,10 @@ private data class LocalFriendEntry(
 )
 
 /**
- * The friend list of [player] as it is shown to them.
+ * The friend list of [player] as it is shown to them. Vanished friends are listed as offline
+ * unless [seesVanished] (the viewer holds [VanishPermissions.VANISH_BYPASS]).
  */
-suspend fun friendListComponent(player: UUID): Component {
+suspend fun friendListComponent(player: UUID, page: Int = 1, seesVanished: Boolean = false): Component {
     val friendList = SurfFriendsApi.friendships(player)
 
     if (friendList.isEmpty()) {
@@ -60,6 +63,7 @@ suspend fun friendListComponent(player: UUID): Component {
 
     for ((_, friendUuid) in friendList) {
         val onlinePlayer = SurfCoreApi.getPlayer(friendUuid)
+            ?.takeIf { seesVanished || !VanishedPlayers.isVanished(friendUuid) }
         val surfPlayer = onlinePlayer ?: SurfCoreApi.getOfflinePlayer(friendUuid)
         val friendName = PlayerLookupService.getUsername(friendUuid) ?: continue
 
@@ -87,7 +91,6 @@ suspend fun friendListComponent(player: UUID): Component {
     online.addAll(offline)
 
     return buildText {
-        appendNewline()
-        append(pagination.renderComponent(online))
+        append(pagination.renderComponent(online, page))
     }
 }

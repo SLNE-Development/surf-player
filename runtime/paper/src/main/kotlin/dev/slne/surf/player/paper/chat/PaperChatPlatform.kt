@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.player.core.client.chat.platform.receivesSignedMessage
 import dev.slne.surf.player.paper.chat.service.SignedMessageSender
 import dev.slne.surf.player.paper.chat.util.schedulePingSound
 import dev.slne.surf.player.paper.plugin
@@ -57,7 +58,8 @@ class PaperChatPlatform : ChatPlatform {
         senderUuid: UUID,
         targetUuid: UUID,
         signedMessage: SignedMessage,
-        contentComponent: Component
+        contentComponent: Component,
+        requiredSetting: String?
     ) {
         val sender = Bukkit.getPlayer(senderUuid)
 
@@ -68,9 +70,16 @@ class PaperChatPlatform : ChatPlatform {
 
         val target = Bukkit.getPlayer(targetUuid)
         if (target != null) {
+            if (!receivesSignedMessage(targetUuid, requiredSetting)) return
             SignedMessageSender.sendLocalSignedMessage(sender, target, contentComponent, signedMessage)
         } else {
-            SignedMessageSender.sendRemoteSignedMessage(sender, targetUuid, contentComponent, signedMessage)
+            SignedMessageSender.sendRemoteSignedMessage(
+                sender,
+                targetUuid,
+                contentComponent,
+                signedMessage,
+                requiredSetting
+            )
         }
     }
 }

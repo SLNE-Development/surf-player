@@ -33,12 +33,17 @@ object MinestomRedisEventListener {
 
     @HandleRedisRequest
     fun handleSendSignedMessageRedisRequest(context: RequestContext<SendSignedMessageRedisRequest>) {
-        val (sender, senderName, target, message) = context.request
+        val (sender, senderName, target, message, requiredSetting) = context.request
         if (ConnectionManager.getOnlinePlayerByUuid(target) == null) return
 
         context.launch {
-            val handled =
-                SignedMessageService.handleRemoteSignedMessage(sender, senderName, target, message)
+            val handled = SignedMessageService.handleRemoteSignedMessage(
+                sender,
+                senderName,
+                target,
+                message,
+                requiredSetting
+            )
 
             if (handled) {
                 context.respond(SendSignedMessageHandledRedisResponse()).await()

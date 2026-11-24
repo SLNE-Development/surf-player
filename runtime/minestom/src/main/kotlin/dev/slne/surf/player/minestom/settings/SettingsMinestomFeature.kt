@@ -6,7 +6,7 @@ import dev.slne.surf.player.core.client.settings.loadSettings
 import dev.slne.surf.player.core.client.settings.service.SettingsService
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
 import dev.slne.surf.player.minestom.settings.command.settingsCommand
-import dev.slne.surf.player.minestom.settings.command.surfSettingsCommand
+import dev.slne.surf.player.minestom.settings.command.settingsAdminActions
 import dev.slne.surf.player.minestom.settings.menu.settingsCategoryView
 import dev.slne.surf.player.minestom.settings.menu.settingsView
 import kotlinx.coroutines.launch
@@ -28,8 +28,9 @@ object SettingsMinestomFeature : MinestomPlayerFeature {
         loadSettings()
 
         settingsCommand()
-        surfSettingsCommand()
     }
+
+    override fun adminActions() = settingsAdminActions()
 
     override fun onPlayerJoin(player: Player) {
         minestomAsyncScope.launch {

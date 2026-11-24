@@ -7,12 +7,12 @@ import dev.slne.surf.player.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.player.core.client.chat.config.initChatConfig
 import dev.slne.surf.player.core.client.chat.redis.ChatRedisListener
 import dev.slne.surf.player.core.client.chat.service.FunctionalityService
-import dev.slne.surf.player.paper.chat.command.direct.directMessageCommand
-import dev.slne.surf.player.paper.chat.command.direct.replyCommand
-import dev.slne.surf.player.paper.chat.command.ignore.ignoreCommand
-import dev.slne.surf.player.paper.chat.command.slowchat.slowChatCommand
-import dev.slne.surf.player.paper.chat.command.spy.directMessageSpyCommand
-import dev.slne.surf.player.paper.chat.command.surfchat.surfChatCommand
+import dev.slne.surf.player.paper.chat.command.chatAdminActions
+import dev.slne.surf.player.paper.chat.command.directMessageCommand
+import dev.slne.surf.player.paper.chat.command.ignoreCommand
+import dev.slne.surf.player.paper.chat.command.replyCommand
+import dev.slne.surf.player.paper.chat.command.slowChatCommand
+import dev.slne.surf.player.paper.chat.command.spyCommand
 import dev.slne.surf.player.paper.chat.command.teamchatCommand
 import dev.slne.surf.player.paper.chat.listener.AsyncChatListener
 import dev.slne.surf.player.paper.chat.listener.ConnectListener
@@ -57,10 +57,9 @@ object PaperChatFeature : PaperPlayerFeature {
     }
 
     override suspend fun onEnable() {
-        surfChatCommand()
         teamchatCommand()
         ignoreCommand()
-        directMessageSpyCommand()
+        spyCommand()
         directMessageCommand()
         replyCommand()
         slowChatCommand()
@@ -71,4 +70,6 @@ object PaperChatFeature : PaperPlayerFeature {
 
         FunctionalityService.fetch(SurfCoreApi.getCurrentServerName())
     }
+
+    override fun adminActions() = chatAdminActions()
 }

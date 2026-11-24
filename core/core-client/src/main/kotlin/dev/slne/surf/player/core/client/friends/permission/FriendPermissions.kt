@@ -1,19 +1,21 @@
 package dev.slne.surf.player.core.client.friends.permission
 
 /**
- * Platform-neutral registry of all permission node strings used by surf-friends.
+ * Every permission node of the friends feature, the same on every platform.
+ *
+ * See docs/command-conventions.md for the scheme.
  */
 object FriendPermissions {
-    const val COMMAND_FRIEND = "surf.friends.command"
+    private const val COMMAND = "surf.player.command.friend"
 
-    const val COMMAND_FRIEND_REQUEST_SEND = "surf.friends.command.request.send"
-    const val COMMAND_FRIEND_REQUEST_ACCEPT = "surf.friends.command.request.accept"
-    const val COMMAND_FRIEND_REQUEST_DECLINE = "surf.friends.command.request.decline"
-    const val COMMAND_FRIEND_REQUEST_REVOKE = "surf.friends.command.request.revoke"
-    const val COMMAND_FRIEND_REQUEST_LIST = "surf.friends.command.request.list"
-
-    const val COMMAND_FRIEND_INFO = "surf.friends.command.info"
-    const val COMMAND_FRIEND_JUMP = "surf.friends.command.jump"
-    const val COMMAND_FRIEND_REMOVE = "surf.friends.command.remove"
-    const val COMMAND_FRIEND_LIST = "surf.friends.command.list"
+    // Player commands (/friend ..., /fa, /fl)
+    const val COMMAND_FRIEND = COMMAND
+    const val COMMAND_ADD = "$COMMAND.add"
+    const val COMMAND_REMOVE = "$COMMAND.remove"
+    const val COMMAND_LIST = "$COMMAND.list"
+    const val COMMAND_INFO = "$COMMAND.info"
+    const val COMMAND_REQUESTS = "$COMMAND.requests"
+    const val COMMAND_ACCEPT = "$COMMAND.accept"
+    const val COMMAND_DENY = "$COMMAND.deny"
+    const val COMMAND_REVOKE = "$COMMAND.revoke"
 }

@@ -36,7 +36,8 @@ object RedisEventListener {
             context.request.sender,
             context.request.senderName,
             context.request.target,
-            context.request.message
+            context.request.message,
+            context.request.requiredSetting
         )
 
         if (handled) {

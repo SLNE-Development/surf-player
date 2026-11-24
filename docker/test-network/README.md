@@ -52,8 +52,8 @@ through the proxy. Players land on `lobby` (Minestom); `/server paper` switches 
 Paper (LuckPerms-Bukkit), Velocity (LuckPerms-Velocity) and Minestom (the surf-api LuckPerms
 feature) share one storage, the PostgreSQL database `luckperms`, and propagate changes through
 Redis messaging. On the first start `luckperms-init` (`luckperms/init.sh`) creates group `admin`
-(weight 100, `*`), adds **NotAmmo** to it and leaves **FPNS** in `default` only, addressing both by
-their Mojang UUID. It runs once per volume; rerun with
+(weight 100, `*`), grants `default` every player command (`surf.player.command.*`), adds
+**NotAmmo** to `admin` and leaves **FPNS** in `default` only, addressing both by their Mojang UUID. It runs once per volume; rerun with
 `docker compose run --rm -e FORCE=1 luckperms-init`.
 
 ## Console commands

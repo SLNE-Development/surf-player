@@ -1,5 +1,6 @@
 package dev.slne.surf.player.paper
 
+import dev.slne.surf.player.paper.command.PaperAdminAction
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 
@@ -20,4 +21,10 @@ interface PaperPlayerFeature {
     suspend fun onLoad() {}
     suspend fun onEnable() {}
     suspend fun onDisable() {}
+
+    /**
+     * The actions this feature adds below `/surfplayer <name>`. Read once, after every feature was
+     * enabled.
+     */
+    fun adminActions(): List<PaperAdminAction> = emptyList()
 }

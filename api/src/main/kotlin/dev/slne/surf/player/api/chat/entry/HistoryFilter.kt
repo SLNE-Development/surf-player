@@ -16,7 +16,9 @@ data class HistoryFilter(
     val server: String?,
     val deleted: Boolean?,
     val deletedBy: SerializableUUID?,
-    val limit: Int = 100
+    val limit: Int = 100,
+    /** Only messages whose text contains this, ignoring case. */
+    val message: String? = null,
 ) {
     companion object {
         fun empty() = HistoryFilter(

@@ -9,6 +9,7 @@ import dev.slne.surf.core.api.common.util.sendText
 import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
 import dev.slne.surf.player.api.friends.utils.toSurfPlayer
+import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsAction
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsRedisEvent
@@ -42,6 +43,10 @@ object FriendsRedisListener {
 
             append(displayNameOf(event.executorUuid))
             info(" hat deine Freundschaftsanfrage angenommen.")
+        }
+
+        if (target != null && SurfFriendsApi.friendSoundsEnabled(target.uuid)) {
+            FriendsPlatform.INSTANCE.playSound(target.uuid, FriendConnectionNotifier.ONLINE_SOUND)
         }
 
         executor?.sendText {
@@ -98,6 +103,10 @@ object FriendsRedisListener {
 
         if (target != null && SurfFriendsApi.friendRequestNotificationsEnabled(targetUuid)) {
             val executorName = displayNameOf(executorUuid)
+
+            if (SurfFriendsApi.friendSoundsEnabled(targetUuid)) {
+                FriendsPlatform.INSTANCE.playSound(targetUuid, FriendConnectionNotifier.REQUEST_SOUND)
+            }
 
             target.sendText {
                 appendInfoPrefix()

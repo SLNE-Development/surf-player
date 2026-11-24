@@ -15,7 +15,7 @@ import dev.slne.surf.player.api.vanish.event.PlayerReappearEvent
 import dev.slne.surf.player.api.vanish.event.PlayerVanishEvent
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
-import dev.slne.surf.player.core.common.playerRedisKey
+import dev.slne.surf.player.core.client.vanish.VanishedPlayers
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.vanish.config.vanishConfig
 import dev.slne.surf.player.paper.vanish.util.*
@@ -49,7 +49,8 @@ object VanishService {
      * [SurfPlayerClient.connectRedis].
      */
     fun registerRedis() {
-        vanishedPlayers = SurfPlayerClient.redisApi.createSyncSet<UUID>(playerRedisKey("vanish", "vanished-players"))
+        // Created by SurfPlayerClient.load on every platform; this feature is the only writer.
+        vanishedPlayers = VanishedPlayers.syncSet
     }
 
     fun vanish(player: Player) {

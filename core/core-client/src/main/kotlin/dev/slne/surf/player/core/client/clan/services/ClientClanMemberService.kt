@@ -1,6 +1,5 @@
 package dev.slne.surf.player.core.client.clan.services
 
-import com.github.benmanes.caffeine.cache.Caffeine
 import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.player.api.clan.member.ClanMember
 import dev.slne.surf.player.api.clan.member.ClanMemberAddResult
@@ -16,11 +15,6 @@ import java.util.*
  * Clan members as seen by a client, loaded from the microservice.
  */
 object ClientClanMemberService {
-    private val loadedMembers = Caffeine.newBuilder()
-        .weakValues()
-        .maximumSize(10_000)
-        .build<UUID, ClanMemberImpl>()
-
     private val listeners = ListenerRegistry<ClanMemberListener>()
 
     fun registerListener(listener: ClanMemberListener) {
@@ -40,15 +34,13 @@ object ClientClanMemberService {
         return findMemberByUuid(uuid)
     }
 
-    suspend fun findMemberByUuid(uuid: UUID): ClanMember? {
-        val member = loadedMembers.getIfPresent(uuid)
-        if (member != null) return member
-
-        val loaded = clanMemberRpcService.findMemberByUuid(uuid) ?: return null
-        loadedMembers.put(uuid, loaded)
-
-        return loaded
-    }
+    /**
+     * The membership of [uuid], read from their clan in the clan cache. That cache is shared through
+     * Redis and invalidated by every membership change (join, leave, kick, role change, deletion),
+     * so no server keeps a stale membership around.
+     */
+    suspend fun findMemberByUuid(uuid: UUID): ClanMember? =
+        ClientClanService.findClanByPlayer(uuid)?.getMember(uuid)
 
     suspend fun addMember(
         clanID: ULong,
@@ -70,6 +62,7 @@ object ClientClanMemberService {
 
         if (result) {
             ClientClanService.invalidateCachedClanByID(clanID)
+            ClientClanService.invalidateCachedClanByMember(player)
         }
 
         return result
@@ -84,9 +77,6 @@ object ClientClanMemberService {
         if (changed) {
             ClientClanService.invalidateCachedClanByMember(member.uuid)
             member.role = role
-            loadedMembers.getIfPresent(member.uuid)?.let {
-                it.role = role
-            }
 
             callClanMemberChangedRoleListeners(member, role)
         }

@@ -1,6 +1,7 @@
 package dev.slne.surf.player.paper.vanish.util
 
 import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.core.client.vanish.permission.VanishPermissions
 import dev.slne.surf.player.paper.vanish.service.VanishService
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
@@ -16,9 +17,9 @@ fun Player.getVanishPriority(): Int {
         .asSequence()
         .filter { it.value }
         .map { it.permission }
-        .filter { it.startsWith(VanishPermissionRegistry.VANISH_PRIORITY) }
+        .filter { it.startsWith(VanishPermissions.VANISH_PRIORITY) }
         .mapNotNull {
-            it.removePrefix("${VanishPermissionRegistry.VANISH_PRIORITY}.")
+            it.removePrefix("${VanishPermissions.VANISH_PRIORITY}.")
                 .toIntOrNull()
         }
         .maxOrNull() ?: 0
@@ -27,7 +28,7 @@ fun Player.getVanishPriority(): Int {
 fun Player.canVanishSee(target: Player): Boolean {
     if (this.uniqueId == target.uniqueId) return true
 
-    if (this.hasPermission(VanishPermissionRegistry.VANISH_BYPASS)) return true
+    if (this.hasPermission(VanishPermissions.VANISH_BYPASS)) return true
 
     val ownPriority = this.getVanishPriority()
     val targetPriority = target.getVanishPriority()

@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.paper.chat.PaperChatFeature
 import dev.slne.surf.player.paper.clan.PaperClanFeature
+import dev.slne.surf.player.paper.command.PaperAdminCommand
 import dev.slne.surf.player.paper.contentcreator.PaperContentCreatorFeature
 import dev.slne.surf.player.paper.friends.PaperFriendsFeature
 import dev.slne.surf.player.paper.minimap.PaperMinimapFeature
@@ -59,6 +60,8 @@ class PlayerPaperPlugin : SuspendingJavaPlugin() {
         for (feature in features) {
             feature.onEnable()
         }
+
+        PaperAdminCommand.register(features)
     }
 
     override suspend fun onDisableAsync() {

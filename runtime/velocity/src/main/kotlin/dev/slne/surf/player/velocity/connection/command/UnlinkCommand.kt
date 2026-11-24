@@ -5,26 +5,20 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.player.core.client.connection.service.SocialConnectionsService
 import dev.slne.surf.player.core.common.connection.rpc.UnlinkResult
-import dev.slne.surf.player.velocity.connection.permission.SocialPermissions
+import dev.slne.surf.player.core.client.connection.permission.ConnectionPermissions
+import dev.slne.surf.player.velocity.command.failCommand
 import dev.slne.surf.player.velocity.connection.redis.DiscordRoleAction
 import dev.slne.surf.player.velocity.connection.redis.DiscordRolesPublisher
 import dev.slne.surf.player.velocity.plugin
 import kotlinx.coroutines.CancellationException
 
 fun unlinkCommand() = commandTree("unlink") {
-    withPermission(SocialPermissions.COMMAND_UNLINK)
+    withPermission(ConnectionPermissions.COMMAND_UNLINK)
 
     playerExecutorSuspend { player, _ ->
         val result = SocialConnectionsService.unlinkMinecraftAccount(player.uniqueId)
 
-        if (result == UnlinkResult.NotLinked) {
-            player.sendText {
-                appendErrorPrefix()
-                error("Du hast keinen verknüpften Account.")
-            }
-
-            return@playerExecutorSuspend
-        }
+        if (result == UnlinkResult.NotLinked) failCommand("Du hast keinen verknüpften Account.")
 
         require(result is UnlinkResult.Unlinked) {
             "Unexpected result type: ${result::class.java.name}"

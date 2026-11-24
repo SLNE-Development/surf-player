@@ -4,7 +4,7 @@ import com.github.retrooper.packetevents.PacketEvents
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.core.api.paper.CorePlayerStatusAccess
 import dev.slne.surf.player.paper.PaperPlayerFeature
-import dev.slne.surf.player.paper.vanish.command.nickCommand
+import dev.slne.surf.player.paper.vanish.command.vanishAdminActions
 import dev.slne.surf.player.paper.vanish.command.vanishCommand
 import dev.slne.surf.player.paper.vanish.config.initVanishConfig
 import dev.slne.surf.player.paper.vanish.listener.*
@@ -32,7 +32,6 @@ object PaperVanishFeature : PaperPlayerFeature {
         PacketEvents.getAPI().eventManager.registerListener(HotkeyListener)
 
         vanishCommand()
-        nickCommand()
 
         CorePlayerStatusAccess.registerHandler { viewer, player ->
             if (!VanishService.isVanished(player.uuid)) {
@@ -52,4 +51,6 @@ object PaperVanishFeature : PaperPlayerFeature {
         VanishService.stopActionbarTask()
         PacketEvents.getAPI().eventManager.unregisterListener(HotkeyListener)
     }
+
+    override fun adminActions() = vanishAdminActions()
 }

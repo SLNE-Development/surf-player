@@ -7,7 +7,7 @@ import dev.slne.surf.api.paper.util.forEachPlayerInRegion
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.vanish.service.VANISH_GLOW_COLOR
 import dev.slne.surf.player.paper.vanish.service.VanishService
-import dev.slne.surf.player.paper.vanish.util.VanishPermissionRegistry
+import dev.slne.surf.player.core.client.vanish.permission.VanishPermissions
 import dev.slne.surf.player.paper.vanish.util.canVanishSee
 import dev.slne.surf.player.paper.vanish.util.isVanished
 import io.papermc.paper.event.player.PlayerClientLoadedWorldEvent
@@ -76,7 +76,7 @@ object ConnectionListener : Listener {
             return
         }
 
-        if (player.hasPermission(VanishPermissionRegistry.VANISH_SAVE_FLY_STATE)) {
+        if (player.hasPermission(VanishPermissions.VANISH_SAVE_FLY_STATE)) {
             if (VanishService.getFlyState(player.uniqueId)) {
                 player.allowFlight = true
                 player.isFlying = true

@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.queue.command
 
+import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.player.core.client.queue.metrics.QueueMetricsSnapshot
@@ -9,6 +10,7 @@ import dev.slne.surf.player.core.common.queue.queue.entry.QueueEntry
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectList
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextDecoration
 import java.time.Duration
 import java.time.Instant
 import java.util.*
@@ -20,74 +22,62 @@ import kotlin.time.Duration.Companion.seconds
  */
 object QueueMessages {
 
-    val queueListPagination = Pagination<UUID> {
-        title { primary("Queue list") }
-        rowRenderer { uuid, i ->
+    fun queueListPagination(serverName: String) = Pagination<Pair<UUID, String>> {
+        title { primary("Warteschlange $serverName".toSmallCaps(), TextDecoration.BOLD) }
+        rowRenderer { (uuid, name), i ->
             listOf(buildText {
-                val position = i + 1
-                variableKey(position)
-                info("—")
-                variableValue(uuid.toString())
+                variableKey(i + 1)
+                spacer(" — ")
+                variableValue(name)
+                hoverEvent(buildText { spacer(uuid.toString()) })
             })
         }
     }
 
     fun cleanupDone(serverName: String, sizeBefore: Int, sizeAfter: Int) = buildText {
-        val removed = sizeBefore - sizeAfter
-
         appendSuccessPrefix()
-        success("Forced cleanup of queue '")
+        success("Die Warteschlange ")
         variableValue(serverName)
-        success("' complete. Removed ")
-        variableValue("$removed")
-        success(" expired entries (")
+        success(" wurde bereinigt: ")
+        variableValue("${sizeBefore - sizeAfter}")
+        success(" abgelaufene Einträge entfernt (")
         variableValue("$sizeBefore")
-        success(" —> ")
+        spacer(" → ")
         variableValue("$sizeAfter")
         success(").")
     }
 
     fun queueCleared(serverName: String, size: Int) = buildText {
         appendSuccessPrefix()
-        success("Cleared queue for server ")
+        success("Die Warteschlange ")
         variableValue(serverName)
-        success(". Removed ")
+        success(" wurde geleert: ")
         variableValue("$size")
-        success(" entries.")
+        success(" Einträge entfernt.")
     }
 
     fun playerDequeued(playerName: String, serverName: String) = buildText {
         appendSuccessPrefix()
-        success("Removed ")
         variableValue(playerName)
-        success(" from the queue ")
+        success(" wurde aus der Warteschlange ")
         variableValue(serverName)
-        success(".")
+        success(" entfernt.")
     }
 
-    fun playerNotQueued(playerName: String) = buildText {
-        appendErrorPrefix()
-        error("Player ")
-        variableValue(playerName)
-        error(" is not in the queue.")
-    }
+    fun playerNotQueued(playerName: String) = "$playerName ist nicht in der Warteschlange."
 
-    fun playerAlreadyQueued(playerName: String) = buildText {
-        appendErrorPrefix()
-        error("Player ")
-        variableValue(playerName)
-        error(" is already in the queue.")
-    }
+    fun playerAlreadyQueued(playerName: String) = "$playerName ist bereits in der Warteschlange."
 
     fun playerEnqueued(playerName: String, serverName: String, priority: Int?) = buildText {
         appendSuccessPrefix()
-        success("Enqueued ")
         variableValue(playerName)
-        success(" to the queue ")
+        success(" wurde in die Warteschlange ")
         variableValue(serverName)
+        success(" eingereiht")
         priority?.let {
-            success(" with priority ")
+            success(" (Priorität ")
             variableValue(it)
+            success(")")
         }
         success(".")
     }
@@ -96,34 +86,34 @@ object QueueMessages {
         val locks = result.lockReset
 
         appendSuccessPrefix()
-        success("Fix attempted for queue ")
+        success("Die Warteschlange ")
         variableValue(serverName)
-        success(".")
+        success(" wurde repariert.")
         appendNewline {
             appendSuccessPrefix()
-            variableKey("Entries: ")
+            variableKey("Einträge: ")
             variableValue("${result.sizeBefore}")
-            spacer(" -> ")
+            spacer(" → ")
             variableValue("${result.sizeAfter}")
-            spacer(" (removed ")
+            spacer(" (")
             variableValue("${result.removedEntries}")
-            spacer(")")
+            spacer(" entfernt)")
         }
         appendNewline {
             appendSuccessPrefix()
-            variableKey("Was paused: ")
-            variableValue("${result.wasPaused}")
-            spacer(" (queue resumed)")
+            variableKey("War pausiert: ")
+            variableValue(if (result.wasPaused) "ja" else "nein")
+            spacer(" (läuft wieder)")
         }
         appendNewline {
             appendSuccessPrefix()
-            variableKey("Transfer semaphore: ")
-            variableValue("deleted=${locks.transferDeleted}, initialized=${locks.transferInitialized}")
+            variableKey("Transfer-Semaphore: ")
+            variableValue("gelöscht=${locks.transferDeleted}, neu angelegt=${locks.transferInitialized}")
         }
         appendNewline {
             appendSuccessPrefix()
-            variableKey("Cleanup semaphore: ")
-            variableValue("deleted=${locks.cleanupDeleted}, initialized=${locks.cleanupInitialized}")
+            variableKey("Cleanup-Semaphore: ")
+            variableValue("gelöscht=${locks.cleanupDeleted}, neu angelegt=${locks.cleanupInitialized}")
         }
     }
 
@@ -137,19 +127,16 @@ object QueueMessages {
         lastSeen: Long?,
         retryCount: Int?
     ) = buildText {
-        append {
-            appendSuccessPrefix()
-            success("=== Player Info: ")
-            variableValue(playerName)
-            success(" ===")
-        }
+        appendInfoPrefix()
+        primary("Warteschlange: ".toSmallCaps(), TextDecoration.BOLD)
+        variableValue(playerName)
         appendNewline {
-            appendSuccessPrefix()
+            appendInfoPrefix()
             variableKey("UUID: ")
             variableValue("$uuid")
         }
         appendNewline {
-            appendSuccessPrefix()
+            appendInfoPrefix()
             variableKey("Position: ")
             variableValue("${(position ?: -1) + 1}")
             spacer(" / ")
@@ -157,24 +144,24 @@ object QueueMessages {
         }
         if (meta != null) {
             appendNewline {
-                appendSuccessPrefix()
-                variableKey("Priority: ")
+                appendInfoPrefix()
+                variableKey("Priorität: ")
                 variableValue("${meta.priority}")
             }
             appendNewline {
                 val addedAt = Instant.ofEpochMilli(meta.addedAt)
                 val timeInQueue = Duration.between(addedAt, Instant.now()).toSeconds().seconds
-                appendSuccessPrefix()
-                variableKey("Added at: ")
+                appendInfoPrefix()
+                variableKey("Eingereiht: ")
                 variableValue(addedAt.toString())
-                spacer(" (")
+                spacer(" (vor ")
                 variableValue(timeInQueue.toString())
-                success(" ago)")
+                spacer(")")
             }
         }
         if (score != null) {
             appendNewline {
-                appendSuccessPrefix()
+                appendInfoPrefix()
                 variableKey("Score: ")
                 variableValue(String.format("%.0f", score.packed))
                 spacer(" (")
@@ -193,47 +180,39 @@ object QueueMessages {
             }
         }
 
-        if (lastSeen != null) {
-            appendNewline {
+        appendNewline {
+            appendInfoPrefix()
+            variableKey("Zuletzt gesehen: ")
+            if (lastSeen != null) {
                 val lastSeenAt = Instant.ofEpochMilli(lastSeen)
-                val timeSinceLastSeen =
-                    Duration.between(lastSeenAt, Instant.now()).toSeconds().seconds
-
-                appendSuccessPrefix()
-                variableKey("Last seen: ")
+                val sinceLastSeen = Duration.between(lastSeenAt, Instant.now()).toSeconds().seconds
                 variableValue(lastSeenAt.toString())
-                spacer(" (")
-                variableValue(timeSinceLastSeen.toString())
-                success(" ago)")
-            }
-        } else {
-            appendNewline {
-                appendSuccessPrefix()
-                variableKey("Last seen: ")
-                variableValue("n/a (online or no data)")
+                spacer(" (vor ")
+                variableValue(sinceLastSeen.toString())
+                spacer(")")
+            } else {
+                variableValue("-")
+                spacer(" (online oder keine Daten)")
             }
         }
 
         appendNewline {
-            appendSuccessPrefix()
-            variableKey("Retry count: ")
+            appendInfoPrefix()
+            variableKey("Wiederholungen: ")
             variableValue("${retryCount ?: 0}")
         }
     }
 
-    fun queueEmpty() = buildText {
-        appendInfoPrefix()
-        info("The queue is empty.")
-    }
+    fun queueEmpty(serverName: String) = "Die Warteschlange $serverName ist leer."
 
     fun startedLoggingMetrics() = buildText {
         appendSuccessPrefix()
-        success("Started logging metrics")
+        success("Die Metriken werden nun protokolliert.")
     }
 
     fun stoppedLoggingMetrics() = buildText {
         appendSuccessPrefix()
-        success("Stopped logging metrics")
+        success("Die Metriken werden nicht mehr protokolliert.")
     }
 
     /**
@@ -246,65 +225,72 @@ object QueueMessages {
         val lines = ObjectArrayList<Component>()
 
         lines += buildText {
-            appendSuccessPrefix()
-            success("=== Queue Metrics ===")
+            appendInfoPrefix()
+            primary("Warteschlangen-Metriken".toSmallCaps(), TextDecoration.BOLD)
         }
         lines += buildText {
-            success("Transfers: ")
+            appendInfoPrefix()
+            info("Transfers: ")
             variableValue("${snapshot.totalTransfers}")
-            success(" successful, ")
+            info(" erfolgreich, ")
             variableValue("${snapshot.totalFailedTransfers}")
-            success(" failed (")
+            info(" fehlgeschlagen (")
             variableValue(String.format("%.1f%%", snapshot.transferSuccessRate * 100))
-            success(")")
+            info(")")
         }
         lines += buildText {
-            success("Enqueues: ")
+            appendInfoPrefix()
+            info("Eingereiht: ")
             variableValue("${snapshot.totalEnqueues}")
-            success(" | Dequeues: ")
+            info(" | Entfernt: ")
             variableValue("${snapshot.totalDequeues}")
         }
         lines += buildText {
-            success("Grace Expiries: ")
+            appendInfoPrefix()
+            info("Kulanzzeit abgelaufen: ")
             variableValue("${snapshot.totalGraceExpiries}")
-            success(" | Retry Exhausted: ")
+            info(" | Wiederholungen erschöpft: ")
             variableValue("${snapshot.totalRetryExhausted}")
         }
         lines += buildText {
-            success("Lock: ")
+            appendInfoPrefix()
+            info("Lock: ")
             variableValue("${snapshot.totalLockAcquired}/${snapshot.totalLockAttempts}")
-            success(" (")
+            info(" (")
             variableValue(String.format("%.1f%%", snapshot.lockAcquisitionRate * 100))
-            success(")")
+            info(")")
         }
         lines += buildText {
-            success("Cleanup: ")
+            appendInfoPrefix()
+            info("Bereinigung: ")
             variableValue("${snapshot.totalCleanupCycles}")
-            success(" cycles, ")
+            info(" Durchläufe, ")
             variableValue("${snapshot.totalCleanupRemovals}")
-            success(" removals")
+            info(" entfernt")
         }
         lines += buildText {
-            success("Ticks: ")
+            appendInfoPrefix()
+            info("Ticks: ")
             variableValue("${snapshot.totalTicks}")
         }
 
         if (queueSizes.isNotEmpty()) {
             lines += buildText {
-                appendSuccessPrefix()
-                success("--- Per Queue ---")
+                appendInfoPrefix()
+                info("Pro Warteschlange:")
             }
             for ((name, size) in queueSizes) {
                 val perQueue = snapshot.perQueue[name]
                 lines += buildText {
+                    appendInfoPrefix()
                     variableValue(name)
-                    success(": size=")
+                    info(": Größe=")
                     variableValue("$size")
-                    success(", transfers=")
+                    info(", Transfers=")
                     variableValue("${perQueue?.transfers ?: 0}")
-                    success(", failed=")
+                    info(", fehlgeschlagen=")
                     variableValue("${perQueue?.failedTransfers ?: 0}")
-                    success(", skips=")
+                    info(", übersprungen=")
                     variableValue("${perQueue?.skips ?: 0}")
                 }
             }
@@ -313,22 +299,24 @@ object QueueMessages {
         return lines
     }
 
-    fun queuePaused() = buildText {
+    fun queuePaused(serverName: String) = buildText {
         appendSuccessPrefix()
-        success("Paused queue")
+        success("Die Warteschlange ")
+        variableValue(serverName)
+        success(" wurde pausiert.")
     }
 
-    fun queueResumed() = buildText {
+    fun queueResumed(serverName: String) = buildText {
         appendSuccessPrefix()
-        success("Resumed queue")
+        success("Die Warteschlange ")
+        variableValue(serverName)
+        success(" läuft wieder.")
     }
 
-    fun queuePauseStatus(paused: Boolean) = buildText {
-        appendSuccessPrefix()
-        if (paused) {
-            info("The queue is currently paused")
-        } else {
-            info("The queue is currently running")
-        }
+    fun queuePauseStatus(serverName: String, paused: Boolean) = buildText {
+        appendInfoPrefix()
+        info("Die Warteschlange ")
+        variableValue(serverName)
+        info(if (paused) " ist pausiert." else " läuft.")
     }
 }
