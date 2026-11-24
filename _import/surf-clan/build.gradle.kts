@@ -1,0 +1,27 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        maven("https://reposilite.slne.dev/releases")
+    }
+    dependencies {
+        classpath("dev.slne.surf.api:surf-api-gradle-plugin:+")
+        classpath("dev.slne.surf.microservice:surf-microservice-gradle-plugin:2.+")
+    }
+}
+
+allprojects {
+    group = "dev.slne.surf.clan"
+    version = findProperty("version") as String
+}
+
+subprojects {
+    afterEvaluate {
+        extensions.findByType<KotlinJvmExtension>()?.apply {
+            compilerOptions {
+                optIn.add("dev.slne.clan.api.util.InternalClanApi")
+            }
+        }
+    }
+}
