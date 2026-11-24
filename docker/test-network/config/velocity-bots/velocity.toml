@@ -1,0 +1,47 @@
+# Velocity config of the BOT proxy (service velocity-bots, host port 25566), synced into /server
+# on every start. Same backends and forwarding secret as the main proxy, but OFFLINE mode so the
+# headless test bots (docker/test-network/bots) can join as DevAdmin, DevPlayer1 and DevPlayer2.
+# Offline UUIDs: UUID.nameUUIDFromBytes("OfflinePlayer:<name>").
+config-version = "2.9"
+bind = "0.0.0.0:25565"
+motd = "<#09add3>surf-player test network (bots, offline mode)"
+show-max-players = 100
+online-mode = false
+force-key-authentication = false
+prevent-client-proxy-connections = false
+player-info-forwarding-mode = "MODERN"
+forwarding-secret-file = "forwarding.secret"
+announce-forge = false
+kick-existing-players = false
+enable-player-address-logging = true
+
+# The names must match server-name in the surf-core configs of the backends.
+[servers]
+	lobby = "minestom:25565"
+	paper = "paper:25565"
+	try = ["lobby", "paper"]
+
+[forced-hosts]
+
+[advanced]
+	compression-threshold = 256
+	compression-level = -1
+	# all bots connect from the same address in parallel groups
+	login-ratelimit = 0
+	connection-timeout = 5000
+	read-timeout = 30000
+	haproxy-protocol = false
+	tcp-fast-open = false
+	bungee-plugin-message-channel = true
+	show-ping-requests = false
+	failover-on-unexpected-server-disconnect = true
+	announce-proxy-commands = true
+	log-command-executions = true
+	log-player-connections = true
+	accepts-transfers = false
+
+[query]
+	enabled = false
+	port = 25565
+	map = "Velocity"
+	show-plugins = false

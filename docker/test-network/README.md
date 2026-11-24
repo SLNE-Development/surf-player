@@ -7,6 +7,7 @@ every credential is a generated test value in `.env`.
 | Service               | Image / version                                    | Host port                |
 |-----------------------|----------------------------------------------------|--------------------------|
 | `velocity`            | itzg/mc-proxy, Velocity 4.3.1                      | `25565` (all interfaces) |
+| `velocity-bots`       | second Velocity 4.3.1, **offline mode**, for the test bots | `127.0.0.1:25566` |
 | `paper`               | itzg/minecraft-server, Paper 26.3 build 259        | none (behind the proxy)  |
 | `minestom`            | surf-minestom-lobby 2.1.0 (MC 26.3), temurin 25    | none (behind the proxy)  |
 | `player-microservice` | local `surf-player-microservice` jar               | none                     |
@@ -56,6 +57,18 @@ Redis messaging. On the first start `luckperms-init` (`luckperms/init.sh`) creat
 **NotAmmo** to `admin` and leaves **FPNS** in `default` only, addressing both by their Mojang UUID. It runs once per volume; rerun with
 `docker compose run --rm -e FORCE=1 luckperms-init`.
 
+The test bots get the same treatment by their **offline UUIDs** (`UUID.nameUUIDFromBytes("OfflinePlayer:<name>")`):
+**DevAdmin** (`32dda56d-a3bd-33be-9a61-fbbfbb352812`) → `admin`, **DevPlayer1**
+(`d27f8523-eccb-35a2-817a-fa0c37318758`) and **DevPlayer2** (`edaa3910-4f11-3832-a30a-820752953bb9`) →
+`default` only. On a network provisioned before the bots existed, add them without touching the
+real accounts:
+
+```sh
+docker compose exec velocity rcon-cli lpv user 32dda56d-a3bd-33be-9a61-fbbfbb352812 parent add admin
+docker compose exec velocity rcon-cli lpv user d27f8523-eccb-35a2-817a-fa0c37318758 parent set default
+docker compose exec velocity rcon-cli lpv user edaa3910-4f11-3832-a30a-820752953bb9 parent set default
+```
+
 ## Console commands
 
 ```sh
@@ -77,6 +90,57 @@ applies changes but prints nothing (use `lpv` on Velocity or the Minestom consol
 made on any server reach the others through the shared storage and Redis. LuckPerms only knows a
 name after the player has joined once; before that use the UUID instead of the name.
 
+## Bots
+
+Headless test clients for the automated player tests live in [`test/player-tests`](../../test/player-tests)
+(see its README and the Claude Code skill `.claude/skills/automated-player-tests`). They connect
+to `velocity-bots`, a second proxy in **offline mode** on `127.0.0.1:25566` with the same
+backends, forwarding secret and plugins as `velocity` (its surf-core identity is
+`velocity-bots`, `config/velocity-bots/`). The real proxy on 25565 stays in online mode.
+
+- Accounts: **DevAdmin** (admin, all permissions, stands in for NotAmmo), **DevPlayer1** (normal
+  player, stands in for FPNS), **DevPlayer2** (normal player, the third account).
+- Paper runs with `enforce-secure-profile=false` (`ENFORCE_SECURE_PROFILE`): offline bots have no
+  Mojang chat-signing key and could not chat otherwise. Real clients still sign their messages.
+  It also sets `allow-flight=true` (bots hover without physics and would be kicked for flying) and
+  `max-players=100` (six parallel bot groups plus testers). `velocity-bots` has
+  `login-ratelimit = 0` because all bots connect from one address.
+- Parallel bot groups 2..6 are `DevA<n>` (admin) and `DevP<n>a`/`DevP<n>b`; the runner and
+  `luckperms/init.sh` provision them by offline UUID.
+- Run all tests: `test/player-tests/run.sh`; one feature: `test/player-tests/run.sh --feature chat`.
+
+## Editing plugin configs
+
+The surf-player data folders are bind-mounted to the host, so configs can be edited without
+container access and reloaded in game or on the console with `/surfplayer <feature> reload`:
+
+| Host folder (gitignored)                           | Container path                                   |
+|----------------------------------------------------|--------------------------------------------------|
+| `data/paper/surf-player-paper/`                    | `paper:/data/plugins/surf-player-paper`          |
+| `data/minestom/surf-player-minestom/`              | `minestom:/server/plugins/surf-player-minestom`  |
+| `data/velocity/surf-player-velocity/`              | `velocity` and `velocity-bots`: `/server/plugins/surf-player-velocity` |
+| `data/player-microservice/config/`                 | `player-microservice:/app/config`                |
+
+Missing folders are created by Docker and filled with the default configs on the next start
+(`rm -rf data/paper` and `docker compose restart paper` regenerates Paper's). On Velocity use
+`/surfplayervelocity <feature> reload`; the microservice reads its config only at start
+(`docker compose restart player-microservice`).
+
+## Friend request cooldowns
+
+The player microservice runs with short cooldowns so the escalation can be tested in minutes
+(`compose.yml`, service `player-microservice`; production defaults in parentheses):
+
+| Variable                                               | Test network | Default |
+|--------------------------------------------------------|--------------|---------|
+| `SURF_PLAYER_FRIEND_REQUEST_DECLINE_COOLDOWN`           | `2m`         | `24h`   |
+| `SURF_PLAYER_FRIEND_REQUEST_WITHDRAW_COOLDOWN`          | `1m`         | `30m`   |
+| `SURF_PLAYER_FRIEND_REQUEST_COOLDOWN_ESCALATION_WINDOW` | `10m`        | `30d`   |
+| `SURF_PLAYER_FRIEND_REQUEST_MAX_COOLDOWN`               | `8m`         | `7d`    |
+
+Each repeated decline/withdrawal inside the window doubles the cooldown up to the maximum.
+Change a value and run `docker compose up -d player-microservice`.
+
 ## Where the configuration lives
 
 | Path                                   | What                                                                       |
@@ -85,6 +149,8 @@ name after the player has joined once; before that use the UUID instead of the n
 | `.env` / `.env.example`                | passwords, ports, Paper/Velocity versions                                  |
 | `fetch-plugins.sh`                     | pinned versions and sources of every downloaded jar                        |
 | `config/velocity/`                     | synced into the proxy's `/server`: `velocity.toml`, surf-core server name  |
+| `config/velocity-bots/`                | same for the offline bot proxy (`online-mode = false`, server name `velocity-bots`) |
+| `data/`                                | bind-mounted surf-player data folders (gitignored), see "Editing plugin configs" |
 | `config/paper/`                        | synced into Paper's `/data`: `config/paper-global.yml` (Velocity secret), surf-core server name |
 | `minestom/config.yml`                  | lobby config template (port, Velocity secret, PostgreSQL)                  |
 | `minestom/plugin-config/`              | copied over the lobby's `plugins/` (surf-core server name)                 |

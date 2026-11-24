@@ -133,11 +133,17 @@ services:
       <<: [*surf-env, *database-env]
       SURF_DATABASE_SCHEMA: public
       # Defaults of surf-player; listed so they are easy to change for a test.
-      SURF_PLAYER_FRIEND_REQUEST_DECLINE_COOLDOWN: 24h
-      SURF_PLAYER_FRIEND_REQUEST_WITHDRAW_COOLDOWN: 30m
+      # Shortened for the test network (defaults: 24h / 30m / 30d / 7d) so the cooldown
+      # escalation can be tested within minutes.
+      SURF_PLAYER_FRIEND_REQUEST_DECLINE_COOLDOWN: 2m
+      SURF_PLAYER_FRIEND_REQUEST_WITHDRAW_COOLDOWN: 1m
+      SURF_PLAYER_FRIEND_REQUEST_COOLDOWN_ESCALATION_WINDOW: 10m
+      SURF_PLAYER_FRIEND_REQUEST_MAX_COOLDOWN: 8m
     volumes:
       - ./plugins/microservice/surf-player-microservice.jar:/opt/app.jar:ro
       - player-microservice-data:/app
+      # Editable on the host (gitignored), see README "Editing plugin configs".
+      - ./data/player-microservice/config:/app/config
     depends_on: *infra-ready
     restart: unless-stopped
 
@@ -162,8 +168,39 @@ services:
       - ./plugins/velocity:/plugins:ro
       - ./config/velocity:/config:ro
       - velocity-data:/server
+      - ./data/velocity/surf-player-velocity:/server/plugins/surf-player-velocity
     ports:
       - "${PROXY_PORT:-25565}:25565"
+    depends_on:
+      paper:
+        condition: service_started
+      minestom:
+        condition: service_started
+    restart: unless-stopped
+
+  # Second proxy for the headless test bots (docker/test-network/bots): OFFLINE mode on host port
+  # 25566, same backends, same forwarding secret and plugins as `velocity`. Only bound to
+  # 127.0.0.1 so no one else can join with an arbitrary name. Shares the surf-player-velocity
+  # config folder with the main proxy; its surf-core identity is `velocity-bots`.
+  velocity-bots:
+    image: itzg/mc-proxy:2026.11.2-java25
+    environment:
+      <<: [*surf-env, *luckperms-env]
+      LUCKPERMS_SERVER: velocity
+      TYPE: VELOCITY
+      VELOCITY_VERSION: ${VELOCITY_VERSION:-4.3.1}
+      MEMORY: 1G
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: ${RCON_PASSWORD:?set in .env}
+      REPLACE_ENV_VARIABLES: "true"
+      VELOCITY_FORWARDING_SECRET: ${VELOCITY_FORWARDING_SECRET:?set in .env}
+    volumes:
+      - ./plugins/velocity:/plugins:ro
+      - ./config/velocity-bots:/config:ro
+      - velocity-bots-data:/server
+      - ./data/velocity/surf-player-velocity:/server/plugins/surf-player-velocity
+    ports:
+      - "127.0.0.1:${BOT_PROXY_PORT:-25566}:25565"
     depends_on:
       paper:
         condition: service_started
@@ -184,6 +221,15 @@ services:
       PAPER_BUILD: ${PAPER_BUILD:-259}
       MEMORY: 3G
       ONLINE_MODE: "FALSE"
+      # The headless test bots (offline proxy velocity-bots) have no Mojang chat-signing key;
+      # with enforce-secure-profile Paper rejects their chat ("chat.disabled.missingProfileKey").
+      # Real clients still sign their messages.
+      ENFORCE_SECURE_PROFILE: "FALSE"
+      # Bots have no physics and hover where they spawn; without this Paper kicks them with
+      # multiplayer.disconnect.flying after a few seconds in the air.
+      ALLOW_FLIGHT: "TRUE"
+      # Room for six parallel bot groups (18 bots) plus human testers.
+      MAX_PLAYERS: "100"
       MOTD: surf-player test (paper)
       VIEW_DISTANCE: "6"
       # /config is synced into /data (not /data/config) so it can hold plugins/ and config/.
@@ -194,6 +240,7 @@ services:
       - ./plugins/paper:/plugins:ro
       - ./config/paper:/config:ro
       - paper-data:/data
+      - ./data/paper/surf-player-paper:/data/plugins/surf-player-paper
     depends_on:
       <<: *infra-ready
       core-microservice:
@@ -220,6 +267,7 @@ services:
       - ./plugins/minestom-server/lobby.jar:/opt/lobby/lobby.jar:ro
       - ./plugins/minestom:/opt/plugins:ro
       - minestom-data:/server
+      - ./data/minestom/surf-player-minestom:/server/plugins/surf-player-minestom
     depends_on:
       <<: *infra-ready
       core-microservice:
@@ -251,5 +299,6 @@ volumes:
   core-microservice-data:
   player-microservice-data:
   velocity-data:
+  velocity-bots-data:
   paper-data:
   minestom-data:

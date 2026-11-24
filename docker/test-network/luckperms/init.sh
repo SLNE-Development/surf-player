@@ -62,5 +62,34 @@ for name in "${DEFAULT_ONLY[@]}"; do
     rcon "lp user $uuid permission clear"
 done
 
+# Test bots (docker/test-network/bots) join through the offline-mode proxy velocity-bots, so they
+# have offline UUIDs: UUID.nameUUIDFromBytes("OfflinePlayer:<name>") (MD5, version 3).
+offline_uuid() {
+    local h
+    h=$(printf 'OfflinePlayer:%s' "$1" | md5sum | cut -c1-32)
+    # set version 3 and the IETF variant
+    local v=$(( (0x${h:12:2} & 0x0f) | 0x30 ))
+    local r=$(( (0x${h:16:2} & 0x3f) | 0x80 ))
+    h="${h:0:12}$(printf '%02x' "$v")${h:14:2}$(printf '%02x' "$r")${h:18:14}"
+    echo "${h:0:8}-${h:8:4}-${h:12:4}-${h:16:4}-${h:20:12}"
+}
+
+# Group 1 plus the parallel bot groups 2..6 of test/player-tests (DevA<n>, DevP<n>a, DevP<n>b).
+BOT_ADMINS=(DevAdmin DevA2 DevA3 DevA4 DevA5 DevA6)
+BOT_DEFAULT_ONLY=(DevPlayer1 DevPlayer2 DevP2a DevP2b DevP3a DevP3b DevP4a DevP4b DevP5a DevP5b DevP6a DevP6b)
+
+for name in "${BOT_ADMINS[@]}"; do
+    uuid=$(offline_uuid "$name")
+    echo "$name (offline) = $uuid"
+    rcon "lp user $uuid parent add admin"
+done
+
+for name in "${BOT_DEFAULT_ONLY[@]}"; do
+    uuid=$(offline_uuid "$name")
+    echo "$name (offline) = $uuid"
+    rcon "lp user $uuid parent set default"
+    rcon "lp user $uuid permission clear"
+done
+
 date -u +%FT%TZ >"$MARKER"
 echo "LuckPerms provisioned."

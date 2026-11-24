@@ -1,0 +1,2 @@
+# Plugin configs bind-mounted from the containers (edited on the host, regenerated when missing)
+/data/

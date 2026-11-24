@@ -38,6 +38,7 @@ GITHUB="https://github.com"
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$HERE/../.." && pwd)"
+PLAYER_VERSION="$(sed -n 's/^version=//p' "$REPO_ROOT/gradle.properties" | tr -d '\r')"
 OUT="$HERE/plugins"
 
 if [[ "${1:-}" == "--clean" ]]; then
@@ -125,10 +126,10 @@ copy_local() {
     cp -f "$source" "$target"
     echo "  copied  ${target#"$HERE/"}"
 }
-copy_local runtime/paper/build/libs/surf-player-paper-1.0.0-all.jar paper/surf-player-paper.jar
-copy_local runtime/velocity/build/libs/surf-player-velocity-1.0.0-all.jar velocity/surf-player-velocity.jar
-copy_local runtime/minestom/build/libs/surf-player-minestom-1.0.0-all.jar minestom/surf-player-minestom.jar
-copy_local runtime/placeholder-expansion/build/libs/surf-player-placeholder-expansion-1.0.0-all.jar velocity/miniplaceholders/expansions/surf-player-placeholder-expansion.jar
-copy_local runtime/microservice/build/libs/surf-player-microservice-1.0.0-all.jar microservice/surf-player-microservice.jar
+copy_local runtime/paper/build/libs/surf-player-paper-$PLAYER_VERSION-all.jar paper/surf-player-paper.jar
+copy_local runtime/velocity/build/libs/surf-player-velocity-$PLAYER_VERSION-all.jar velocity/surf-player-velocity.jar
+copy_local runtime/minestom/build/libs/surf-player-minestom-$PLAYER_VERSION-all.jar minestom/surf-player-minestom.jar
+copy_local runtime/placeholder-expansion/build/libs/surf-player-placeholder-expansion-$PLAYER_VERSION-all.jar velocity/miniplaceholders/expansions/surf-player-placeholder-expansion.jar
+copy_local runtime/microservice/build/libs/surf-player-microservice-$PLAYER_VERSION-all.jar microservice/surf-player-microservice.jar
 
 echo "Done."

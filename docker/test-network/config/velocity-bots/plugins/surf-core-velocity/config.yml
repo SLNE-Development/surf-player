@@ -1,0 +1,7 @@
+# surf-core server identity of the bot proxy (service velocity-bots). Must differ from the main
+# proxy (server-name velocity), surf-core keys servers by name and UUID.
+server-name: velocity-bots
+server-display-name: Velocity (Bots)
+server-category: proxy
+server-uuid: 0b5c9c8e-3c43-4c38-9d0a-6d2f0f7a0004
+_config_version: 1
