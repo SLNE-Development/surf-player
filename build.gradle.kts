@@ -16,6 +16,9 @@ allprojects {
     version = findProperty("version") as String
 }
 
+/** Only the public API is published to reposilite; plugins and the microservice ship as jars/images. */
+val publishedProjects = setOf(":surf-player-api")
+
 subprojects {
     afterEvaluate {
         plugins.withType<PublishingPlugin> {
@@ -23,6 +26,12 @@ subprojects {
                 repositories {
                     slneReleases()
                 }
+            }
+        }
+
+        if (path !in publishedProjects) {
+            tasks.withType<PublishToMavenRepository>().configureEach {
+                enabled = false
             }
         }
     }
