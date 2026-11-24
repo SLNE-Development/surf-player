@@ -13,6 +13,7 @@ import dev.slne.surf.player.api.queue.SurfQueue
 import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.tab.SurfTabApi
 import dev.slne.surf.player.api.vanish.SurfVanishApi
+import java.util.*
 
 /**
  * Single entry point to every feature of surf-player.
@@ -25,6 +26,9 @@ import dev.slne.surf.player.api.vanish.SurfVanishApi
  * the same instances.
  */
 object SurfPlayerApi {
+
+    /** The player with the given [uuid], with access to every feature. See [SurfCommunityPlayer]. */
+    fun player(uuid: UUID): SurfCommunityPlayer = SurfCommunityPlayer(uuid)
 
     /** Per-player settings such as chat pings or direct messages (Paper, Minestom and Velocity). */
     val settings: SurfSettingsApi get() = SurfSettingsApi
