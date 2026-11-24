@@ -55,3 +55,6 @@ bin/
 # Local docker test network: downloaded jars and generated credentials
 /docker/test-network/plugins/
 /docker/test-network/.env
+
+# Git worktrees of Claude Code agents
+/.claude/worktrees/
