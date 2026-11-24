@@ -1,0 +1,37 @@
+package dev.slne.surf.queue.paper.commands.sub
+
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.arguments.AsyncPlayerProfileArgument
+import dev.jorel.commandapi.kotlindsl.argument
+import dev.jorel.commandapi.kotlindsl.getValue
+import dev.jorel.commandapi.kotlindsl.subcommand
+import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
+import dev.slne.surf.api.paper.command.util.awaitAsyncPlayerProfile
+import dev.slne.surf.api.paper.command.util.idOrThrow
+import dev.slne.surf.core.api.common.server.SurfServer
+import dev.slne.surf.core.api.paper.command.argument.surfBackendServerArgument
+import dev.slne.surf.queue.client.command.QueueMessages
+import dev.slne.surf.queue.common.queue.RedisQueueService
+import dev.slne.surf.queue.paper.permission.PaperQueuePermissions
+
+fun CommandAPICommand.queueDequeue() = subcommand("dequeue") {
+    withPermission(PaperQueuePermissions.COMMAND_DEQUEUE)
+    argument(AsyncPlayerProfileArgument("player"))
+    surfBackendServerArgument("server", optional = true)
+
+    anyExecutorSuspend { sender, arguments ->
+        val profile = arguments.awaitAsyncPlayerProfile("player")
+        val uuid = profile.idOrThrow()
+        val server: SurfServer? by arguments
+        val serverName = server?.name ?: SurfServer.current().name
+        val queue = RedisQueueService.get().getQueueByName(serverName)
+        val playerName = profile.name ?: uuid.toString()
+
+        val dequeued = queue.dequeue(uuid)
+        if (dequeued) {
+            sender.sendMessage(QueueMessages.playerDequeued(playerName, serverName))
+        } else {
+            sender.sendMessage(QueueMessages.playerNotQueued(playerName))
+        }
+    }
+}
