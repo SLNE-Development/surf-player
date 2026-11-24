@@ -4,6 +4,8 @@ import dev.slne.surf.api.paper.util.forEachPlayer
 import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.config.chatConfig
+import dev.slne.surf.player.core.client.chat.message.ConnectionMessageHandling
+import dev.slne.surf.player.core.client.chat.message.ConnectionMessageMode
 import dev.slne.surf.player.core.client.chat.message.ConnectionMessageRecipients
 import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
@@ -19,6 +21,17 @@ fun createJoinMessage(player: Player) =
 
 fun createQuitMessage(player: Player) =
     buildConnectionMessage(player.name, luckPermsPrefix(player.uniqueId), joined = false)
+
+/**
+ * How the join/quit listener treats [player]'s vanilla message [vanillaMessage], see
+ * [ConnectionMessageHandling.mode].
+ */
+fun connectionMessageMode(player: Player, vanillaMessage: Component?): ConnectionMessageMode =
+    ConnectionMessageHandling.mode(
+        vanillaMessagePresent = vanillaMessage != null,
+        configEnabled = chatConfig.connectionMessageConfig.enabled,
+        playerVanished = VanishedPlayers.isVanished(player.uniqueId),
+    )
 
 /**
  * Sends the join/quit [message] of [player] to every player on this server who sees it, see

@@ -3,6 +3,7 @@ package dev.slne.surf.player.core.client.friends.command
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.command.failure
+import dev.slne.surf.player.core.client.command.notice
 import dev.slne.surf.player.core.client.command.reply
 import dev.slne.surf.player.core.client.friends.rpc.friendsRpcService
 import java.util.*
@@ -32,7 +33,7 @@ object FriendAdminCommands {
     fun cooldownsCleared(deleted: Int, playerName: String, targetName: String?): CommandOutcome {
         val towards = targetName?.let { " gegenüber $it" } ?: ""
 
-        if (deleted == 0) return failure("$playerName hat keine Freundschaftsanfrage-Cooldowns$towards.")
+        if (deleted == 0) return notice("$playerName hat keine Freundschaftsanfrage-Cooldowns$towards.")
 
         return reply(buildText {
             appendSuccessPrefix()

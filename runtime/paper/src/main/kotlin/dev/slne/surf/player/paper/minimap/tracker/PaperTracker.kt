@@ -161,7 +161,7 @@ object PaperTracker {
     }
 
     /**
-     * The tracker as it is for [player], for `/minimapcompanion info`. Read it on the player's own thread.
+     * The tracker as it is for [player], for `/surfplayer minimap info`. Read it on the player's own thread.
      */
     fun info(player: Player) = MapTrackerInfo(
         mode = when {

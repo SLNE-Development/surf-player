@@ -7,22 +7,29 @@ import org.junit.jupiter.api.Test
 class DeclaredSettingsTest {
 
     @Test
-    fun `stored settings that no longer exist in the code are left out`() {
+    fun `settings from other servers are kept and listed separately`() {
         val chatPings = Setting("chat:pings", "true")
         val directMessages = Setting("chat:direct-messages", "true")
-        val removed = Setting("scoreboard:show-scoreboard", "true")
+        val otherServer = Setting("lobby:jump-pads", "true")
 
         assertEquals(
-            listOf(chatPings, directMessages),
-            declaredOnly(
-                listOf(chatPings, removed, directMessages),
+            DeclaredSettings(
+                declared = listOf(directMessages, chatPings),
+                others = listOf(otherServer),
+            ),
+            partitionByDeclaration(
+                listOf(chatPings, otherServer, directMessages),
                 setOf("chat:pings", "chat:direct-messages", "friends:sounds"),
             )
         )
     }
 
     @Test
-    fun `nothing is shown before a setting is declared`() {
-        assertEquals(emptyList<Setting>(), declaredOnly(listOf(Setting("chat:pings", "true")), emptySet()))
+    fun `without declarations every setting is an other one`() {
+        val chatPings = Setting("chat:pings", "true")
+        assertEquals(
+            DeclaredSettings(emptyList(), listOf(chatPings)),
+            partitionByDeclaration(listOf(chatPings), emptySet()),
+        )
     }
 }

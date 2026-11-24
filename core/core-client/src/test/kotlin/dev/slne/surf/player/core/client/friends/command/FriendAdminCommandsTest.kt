@@ -2,7 +2,7 @@ package dev.slne.surf.player.core.client.friends.command
 
 import dev.slne.surf.api.core.messages.adventure.plain
 import dev.slne.surf.player.core.client.command.CommandOutcome
-import dev.slne.surf.player.core.client.command.failure
+import dev.slne.surf.player.core.client.command.notice
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -12,13 +12,13 @@ import java.util.*
 class FriendAdminCommandsTest {
 
     @Test
-    fun `nothing deleted is a failure naming the player and target`() {
+    fun `nothing deleted is a neutral notice naming the player and target`() {
         assertEquals(
-            failure("NotAmmo hat keine Freundschaftsanfrage-Cooldowns."),
+            notice("NotAmmo hat keine Freundschaftsanfrage-Cooldowns."),
             FriendAdminCommands.cooldownsCleared(0, "NotAmmo", null)
         )
         assertEquals(
-            failure("NotAmmo hat keine Freundschaftsanfrage-Cooldowns gegenüber FPNS."),
+            notice("NotAmmo hat keine Freundschaftsanfrage-Cooldowns gegenüber FPNS."),
             FriendAdminCommands.cooldownsCleared(0, "NotAmmo", "FPNS")
         )
     }

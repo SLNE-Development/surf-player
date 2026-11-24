@@ -3,6 +3,7 @@ package dev.slne.surf.player.paper.chat.listener
 import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.paper.event.common.connection.PlayerQuitMessageEvent
+import dev.slne.surf.player.core.client.chat.message.ConnectionMessageMode
 import dev.slne.surf.player.core.client.chat.service.IgnoreService
 import dev.slne.surf.player.paper.chat.message.MessageFormatter
 import dev.slne.surf.player.paper.plugin
@@ -16,17 +17,28 @@ object DisconnectListener : Listener {
     fun onDisconnect(event: PlayerQuitEvent) {
         MessageFormatter.invalidateMentionCache()
 
-        // Replaced by our own message, see ConnectListener.
-        event.quitMessage(null)
-
         val player = event.player
-        val messageEvent = PlayerQuitMessageEvent(player, createQuitMessage(player))
 
-        if (!messageEvent.call()) {
-            return
+        // Same rules as on join, see ConnectListener.
+        when (connectionMessageMode(player, event.quitMessage())) {
+            ConnectionMessageMode.LEAVE_UNTOUCHED -> return
+            ConnectionMessageMode.RECIPIENTS_ONLY -> {
+                event.quitMessage(null)
+                broadcastConnectionMessage(player, createQuitMessage(player))
+            }
+
+            ConnectionMessageMode.ANNOUNCE -> {
+                event.quitMessage(null)
+
+                val messageEvent = PlayerQuitMessageEvent(player, createQuitMessage(player))
+
+                if (!messageEvent.call()) {
+                    return
+                }
+
+                broadcastConnectionMessage(player, messageEvent.message)
+            }
         }
-
-        broadcastConnectionMessage(player, messageEvent.message)
     }
 
     @EventHandler

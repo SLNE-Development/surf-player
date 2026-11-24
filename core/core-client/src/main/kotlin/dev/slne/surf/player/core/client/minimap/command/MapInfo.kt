@@ -31,7 +31,7 @@ enum class MapTrackerMode(val displayName: String) {
 data class MapTrackerInfo(val mode: MapTrackerMode, val xaeroPlayers: Int)
 
 /**
- * What the companion knows and sends about one player, for `/minimapcompanion info`. Read it on the player's
+ * What the companion knows and sends about one player, for `/surfplayer minimap info`. Read it on the player's
  * own thread.
  */
 data class MapInfo(

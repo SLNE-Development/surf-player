@@ -21,7 +21,10 @@ import java.util.*
  *
  * @property playerUuid the UUID of the player whose tab list entry is being rendered
  * @property name the component used as the player's displayed tab list name
- * @property order the ordering value used to position the player's entry
+ * @property order the ordering value used to position the player's entry; a higher order is listed
+ * first. Initially the player's LuckPerms weight (negative weights unchanged), plus 1,000,000 for a
+ * vanished player, so viewers allowed to see vanished players find them at the top. Paper only
+ * accepts non-negative orders and lists a negative order as 0.
  */
 class TabEntryRenderEvent(
     val playerUuid: UUID,

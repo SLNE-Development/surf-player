@@ -23,10 +23,22 @@ import kotlin.time.Duration.Companion.seconds
 private val log = logger()
 
 /**
- * Added to the order of every player who is not vanished, so vanished players (shown only to
- * viewers allowed to see them) are listed below everyone else. Must exceed every LuckPerms weight.
+ * The tab list order of a player, as surf-tab computed it.
  */
-private const val VISIBLE_ORDER_OFFSET = 1_000_000
+object TabOrder {
+    /**
+     * Added to the order of vanished players, so viewers allowed to see them find them at the top
+     * of the tab list (a higher order is listed first). Must exceed every LuckPerms weight.
+     */
+    const val VANISHED_ORDER_OFFSET = 1_000_000
+
+    /**
+     * The order passed to [TabEntryRenderEvent]: the LuckPerms weight [lpWeight] (negative weights
+     * unchanged), plus [VANISHED_ORDER_OFFSET] if the player is [vanished].
+     */
+    fun of(lpWeight: Int, vanished: Boolean): Int =
+        if (vanished) lpWeight + VANISHED_ORDER_OFFSET else lpWeight
+}
 
 private val entryUpdateTimeout = 5.seconds
 private val clanLookupTimeout = 2.seconds
@@ -141,16 +153,10 @@ class TabEntries {
             } else {
                 player.baseNameSnapshot()
             },
-            // Higher orders are listed first and Paper only accepts non-negative orders, so visible
-            // players are lifted above every vanished player instead of pushing vanished ones down.
+            // Higher orders are listed first: vanished players at the top, as in surf-tab. Paper
+            // only accepts non-negative orders; PaperTabPlayer clamps when applying the order.
             order = part("order", uuid, 0) {
-                val lpWeight = LuckPermsHook.getWeight(uuid).coerceAtLeast(0)
-
-                if (vanished) {
-                    lpWeight
-                } else {
-                    lpWeight + VISIBLE_ORDER_OFFSET
-                }
+                TabOrder.of(LuckPermsHook.getWeight(uuid), vanished)
             }
         )
 

@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.command
 
+import dev.slne.surf.api.core.messages.adventure.buildText
 import net.kyori.adventure.text.Component
 
 /**
@@ -15,3 +16,15 @@ sealed interface CommandOutcome {
 fun reply(message: Component): CommandOutcome = CommandOutcome.Reply(message)
 
 fun failure(message: String): CommandOutcome = CommandOutcome.Failure(message)
+
+/**
+ * A neutral reply with the info prefix (command conventions §4), for results that are not an
+ * error, such as "nothing found" or an empty list.
+ */
+fun notice(message: String): CommandOutcome = reply(noticeMessage(message))
+
+/** The message of [notice]. */
+fun noticeMessage(message: String): Component = buildText {
+    appendInfoPrefix()
+    info(message)
+}

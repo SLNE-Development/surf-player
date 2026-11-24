@@ -183,23 +183,24 @@ object SettingsService {
     }
 
     /**
-     * The names of the settings this build registers (the built-in ones and those created through
-     * the API since startup). Rows of the settings table with other names are settings that were
-     * removed from the code; they are ignored, not deleted (see docs/deployment-checklist.md).
+     * The names of the settings this server declares (the built-in ones and those created through
+     * the API on this server since startup). Only used to tell them apart in
+     * `/surfplayer settings list`: every setting stored in the database is known on every server,
+     * because plugins may create settings on other servers.
      */
     private val declaredNames: MutableSet<String> = ConcurrentHashMap.newKeySet()
 
-    /** Marks [names] as settings this build registers, see [declaredNames]. */
+    /** Marks [names] as settings this server declares, see [declaredNames]. */
     fun declareSettings(names: Collection<String>) {
         declaredNames.addAll(names)
     }
 
-    /**
-     * Reloads the registered settings from the microservice, keeping only those this build
-     * declares.
-     */
+    /** The known settings split into those this server declares and the others, see [declaredNames]. */
+    fun settingsByDeclaration(): DeclaredSettings = partitionByDeclaration(settings, declaredNames)
+
+    /** Reloads every setting stored in the database from the microservice. */
     suspend fun refreshSettings() {
-        val loaded = declaredOnly(settingsRpcService.findAllSettings(), declaredNames)
+        val loaded = settingsRpcService.findAllSettings()
 
         val byName = mutableObject2ObjectMapOf<String, Setting>(loaded.size)
         for (setting in loaded) {
@@ -240,11 +241,19 @@ object SettingsService {
 }
 
 /**
- * The settings of [loaded] whose name is in [declared]: stored settings that no longer exist in
- * the code are left out.
+ * Known settings, split by whether this server declares them.
+ *
+ * @property declared settings this server declares, sorted by name
+ * @property others settings stored in the database by other servers (or removed from the code),
+ * sorted by name
  */
-internal fun declaredOnly(loaded: Collection<Setting>, declared: Set<String>): List<Setting> =
-    loaded.filter { it.name in declared }
+data class DeclaredSettings(val declared: List<Setting>, val others: List<Setting>)
+
+/** Splits [settings] by whether their name is in [declaredNames]. */
+internal fun partitionByDeclaration(settings: Collection<Setting>, declaredNames: Set<String>): DeclaredSettings {
+    val (declared, others) = settings.sortedBy { it.name }.partition { it.name in declaredNames }
+    return DeclaredSettings(declared, others)
+}
 
 /** An immutable snapshot of the registered settings. */
 private class SettingRegistry(val byName: Object2ObjectOpenHashMap<String, Setting>) {

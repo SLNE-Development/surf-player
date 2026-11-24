@@ -4,7 +4,7 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import net.kyori.adventure.audience.Audience
 
 /**
- * Tells whoever ran `/minimapcompanion info` what the companion knows and sends about the player in [info].
+ * Tells whoever ran `/surfplayer minimap info` what the companion knows and sends about the player in [info].
  */
 fun Audience.sendMapInfo(info: MapInfo) = sendText {
     appendInfoPrefix()

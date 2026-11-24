@@ -111,7 +111,8 @@ fun registerTab() {
         note("listOrder ${A}=$a > ${P1}=$b")
     }
     scenario("tab-11", "LP-Änderung live") {
-        on(PAPER, admin, p1); sleep(500)
+        // Minestom: the Paper tab shows the display name (as surf-tab did), without the LP prefix.
+        on(LOBBY, admin, p1); sleep(500)
         lp("user ${p1.uuid} meta setprefix 100 <red>[Test]")
         try {
             val d = eventually(8000, "Prefix [Test] im Tab") { tabDisplay(admin, p1).takeIf { it.contains("[Test]") } }
@@ -183,7 +184,7 @@ fun registerTab() {
                 val vanishedOrder = p2.tab[admin.uuid]?.listOrder ?: 0
                 val visibleOrders = listOf(p1, p2).mapNotNull { p2.tab[it.uuid]?.listOrder }
                 note("${P1}: kein Eintrag; ${P2} (Bypass): „$forP2“, listOrder vanished $vanishedOrder, sichtbare $visibleOrders")
-                if (visibleOrders.any { it <= vanishedOrder }) bad("Vanished Spieler steht nicht unter allen sichtbaren; ${notes.last()}")
+                if (visibleOrders.any { it >= vanishedOrder }) bad("Vanished Spieler steht nicht über allen sichtbaren; ${notes.last()}")
             } finally {
                 vanish(admin, false)
             }

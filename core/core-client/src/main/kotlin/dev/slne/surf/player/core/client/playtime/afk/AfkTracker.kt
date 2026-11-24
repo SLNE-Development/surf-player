@@ -69,7 +69,8 @@ object AfkTracker {
                 continue
             }
 
-            applyState(uuid, true)
+            // This check runs on the asynchronous scope; apply on the player's own thread.
+            PlaytimePlatform.runForPlayer(uuid) { applyState(uuid, true) }
         }
     }
 
@@ -136,7 +137,7 @@ object AfkTracker {
         AfkService.changeState(playerUuid, isAfk)
         updatePlaytimeSession(playerUuid, isAfk)
 
-        AfkStateChangeEvent(playerUuid, isAfk).call()
+        PlaytimePlatform.callAfkStateChangeEvent(AfkStateChangeEvent(playerUuid, isAfk))
 
         PlaytimePlatform.onlinePlayer(playerUuid)?.sendText {
             appendInfoPrefix()

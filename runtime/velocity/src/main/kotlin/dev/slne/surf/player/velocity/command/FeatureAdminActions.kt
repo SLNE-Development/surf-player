@@ -38,7 +38,7 @@ fun settingsAdminActions() = listOf(
             if (SettingsService.settings.isEmpty()) {
                 sender.sendMessage(SettingsCommandMessages.noSettings)
             } else {
-                sender.sendMessage(SettingsCommandMessages.list(SettingsService.settings))
+                sender.sendMessage(SettingsCommandMessages.list(SettingsService.settingsByDeclaration()))
             }
         }
     },

@@ -16,13 +16,6 @@ fun Audience.sendRecalculateAllFinished(count: Int) = sendText {
     success(" wurden neu berechnet.")
 }
 
-fun Audience.sendNoSessionsFound(playerName: String) = sendText {
-    appendErrorPrefix()
-    error("Für ")
-    variableValue(playerName)
-    error(" wurden keine Sessions gefunden.")
-}
-
 fun Audience.sendStreakRecalculated(
     playerName: String,
     currentLoginStreak: Int,

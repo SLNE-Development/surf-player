@@ -30,6 +30,7 @@ import dev.slne.surf.player.core.client.chat.util.formatTime
 import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.command.failure
+import dev.slne.surf.player.core.client.command.notice
 import dev.slne.surf.player.core.client.command.reply
 import kotlinx.coroutines.TimeoutCancellationException
 import net.kyori.adventure.text.Component
@@ -92,7 +93,7 @@ object ChatCommands {
             IgnoreListEntry(nameOf(it.target), it.createdAt)
         }
 
-        if (entries.isEmpty()) return failure("Du ignorierst aktuell niemanden.")
+        if (entries.isEmpty()) return notice("Du ignorierst aktuell niemanden.")
 
         return reply(ignoreListPagination.renderComponent(entries, page))
     }
@@ -324,7 +325,7 @@ object ChatCommands {
             return failure("Die Suche hat zu lange gedauert und wurde abgebrochen.")
         }
 
-        if (history.isEmpty()) return failure("Es wurden keine Ergebnisse gefunden.")
+        if (history.isEmpty()) return notice("Es wurden keine Ergebnisse gefunden.")
 
         val senderNames = resolveSenderNames(history)
         val renderData = history.map { RenderData(senderNames, it) }

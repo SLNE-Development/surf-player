@@ -3,6 +3,7 @@ package dev.slne.surf.player.core.client.queue.command
 import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.command.failure
+import dev.slne.surf.player.core.client.command.notice
 import dev.slne.surf.player.core.client.command.reply
 import dev.slne.surf.player.core.client.queue.config.SurfQueueConfig
 import dev.slne.surf.player.core.client.queue.metrics.QueueMetrics
@@ -30,7 +31,7 @@ object QueueCommands {
 
     suspend fun list(serverName: String, page: Int): CommandOutcome {
         val entries = queue(serverName).getAllUuidsOrderedByPosition()
-        if (entries.isEmpty()) return failure(QueueMessages.queueEmpty(serverName))
+        if (entries.isEmpty()) return notice(QueueMessages.queueEmpty(serverName))
 
         val named = entries.mapAsync { it to usernameOrUuid(it) }
         return reply(QueueMessages.queueListPagination(serverName).renderComponent(named, page))

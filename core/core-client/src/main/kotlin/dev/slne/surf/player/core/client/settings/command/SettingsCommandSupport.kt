@@ -4,6 +4,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.player.api.settings.setting.PlayerSetting
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.core.client.settings.platform.SettingsPlatform
+import dev.slne.surf.player.core.client.settings.service.DeclaredSettings
 import dev.slne.surf.player.core.client.settings.service.SettingsService
 import dev.slne.surf.player.core.client.command.runServiceAction
 import net.kyori.adventure.audience.Audience
@@ -59,8 +60,8 @@ object SettingsCommandMessages {
 
     val noSettings: Component
         get() = buildText {
-            appendErrorPrefix()
-            error("Es sind keine Einstellungen verfügbar.")
+            appendInfoPrefix()
+            info("Es sind keine Einstellungen verfügbar.")
         }
 
     fun changed(settingName: String, value: String): Component = buildText {
@@ -86,9 +87,17 @@ object SettingsCommandMessages {
         success("Es wurden alle Einstellungen neu geladen ($settingCount in ${elapsedMillis}ms)!")
     }
 
-    fun list(settings: Collection<Setting>): Component = buildText {
+    /**
+     * Every known setting: first those this server declares, then those only stored in the
+     * database (created on other servers).
+     */
+    fun list(settings: DeclaredSettings): Component = buildText {
         appendInfoPrefix()
-        info("Verfügbare Einstellungen: ")
-        variableValue(settings.joinToString { it.name })
+        info("Von diesem Server deklariert: ")
+        variableValue(settings.declared.joinToString { it.name }.ifEmpty { "-" })
+        appendNewline()
+        appendInfoPrefix()
+        info("Von anderen Servern: ")
+        variableValue(settings.others.joinToString { it.name }.ifEmpty { "-" })
     }
 }

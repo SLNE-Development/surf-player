@@ -6,6 +6,7 @@ import dev.slne.surf.player.core.common.clan.rpc.ClanMemberRpcService
 import dev.slne.surf.player.core.common.clan.rpc.ClanRpcService
 import dev.slne.surf.player.microservice.PlayerMicroserviceModule
 import dev.slne.surf.player.microservice.PlayerSchemas
+import dev.slne.surf.player.microservice.clan.db.migration.migrateClanInviteOptOuts
 import dev.slne.surf.player.microservice.clan.db.migration.migrateLegacyClanUuidColumns
 import dev.slne.surf.player.microservice.clan.db.table.ClanInvitesTable
 import dev.slne.surf.player.microservice.clan.db.table.ClanMembersTable
@@ -26,6 +27,8 @@ object ClanMicroserviceModule : PlayerMicroserviceModule {
             ClanInvitesTable
         )
         migrateLegacyClanUuidColumns()
+        // The settings tables already exist: SettingsMicroserviceModule creates them first.
+        migrateClanInviteOptOuts()
     }
 
     override fun registerRpcServices(rabbit: ServerRabbitMQApi) {

@@ -4,6 +4,7 @@ import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.command.failure
+import dev.slne.surf.player.core.client.command.notice
 import dev.slne.surf.player.core.client.playtime.config.PlaytimeConfigManager
 import dev.slne.surf.player.core.client.playtime.service.PlaytimeService
 import dev.slne.surf.player.core.client.playtime.service.PlaytimeStreakService
@@ -52,7 +53,7 @@ object PlaytimeCommands {
         val name = target.lastKnownName ?: UNKNOWN_NAME
 
         val streak = PlaytimeStreakService.recalculatePlaytimeStreak(target.uuid)
-            ?: return failure("Für $name wurden keine Sessions gefunden.")
+            ?: return notice("Für $name wurden keine Sessions gefunden.")
 
         PlaytimeStreakService.invalidateCache(target.uuid)
         audience.sendStreakRecalculated(
@@ -87,7 +88,7 @@ object PlaytimeCommands {
 
     suspend fun listPauses(audience: Audience): CommandOutcome {
         val pauses = PlaytimeStreakService.loadStreakPauses()
-        if (pauses.isEmpty()) return failure("Es sind keine Streak-Pausen eingetragen.")
+        if (pauses.isEmpty()) return notice("Es sind keine Streak-Pausen eingetragen.")
 
         audience.sendStreakPauseList(pauses)
         return CommandOutcome.Silent

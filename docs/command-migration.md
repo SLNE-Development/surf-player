@@ -280,3 +280,299 @@ Paper and Minestom: `/surfplayer`; Velocity: `/surfplayervelocity`.
 | `surf.social.command.unlink` | `surf.player.command.unlink` |
 | `surf.social.command.link.lookup` | `surf.player.admin.connection.lookup` |
 | `surf.social.command.surfsocial` | `surf.player.admin.connection.reload` |
+
+## Behaviour changes
+
+Deliberate differences from the 14 original plugins that are kept (from the parity audit). One
+line each; everything not listed behaves as before.
+
+### Chat
+
+- Caps filter: `spamConfig.maxUppercaseCharsInRow` is the maximum *allowed* run of capitals. With
+  the default 5, "HALLO" is allowed and 6 capitals in a row are blocked (surf-chat blocked 5).
+- Spam filter: `spamConfig.amount` messages are allowed per `interval`; the next one is blocked.
+  Blocked messages no longer count towards the limit, and the repeat check runs before the rate check.
+- AI moderation only runs with `enabled: true` **and** a non-blank API key; `passAutoMod` honours
+  `enabled` as well.
+- `/surfplayer chat lookup` with an unknown `--sender`, `--receiver` or `--deletedBy` name aborts
+  with "player not found" instead of silently dropping that filter.
+- The chat-disabled rejection reads "Der Chat ist auf diesem Server derzeit deaktiviert." (was
+  "Der Chat ist vorübergehend deaktiviert.").
+- Paper join/quit messages: as in surf-chat, a message another plugin removed (set to `null`) is
+  left alone, and `PlayerJoinMessageEvent`/`PlayerQuitMessageEvent` and the chat MOTD only follow a
+  public announcement (connection messages enabled, player not vanished, event not cancelled). New:
+  holders of `surf.player.chat.connection.always-show` still get our message when connection
+  messages are disabled or the player is vanished (vanished only if they may see them); no event is
+  fired for it. Minestom sends the MOTD on every join, as before.
+- MiniPlaceholders is required on Paper (surf-chat had a plain-MiniMessage fallback); see the
+  deployment checklist.
+
+### Clan
+
+- Clicking a clan in `/clan list` runs `/clan info <tag>`, so it needs
+  `surf.player.command.clan.info` (surf-clan rendered the info through a callback).
+- Clan invite opt-outs live in the setting `clan:invites`; the microservice copies the old
+  `accepts_clan_invites = false` values once on startup (see the deployment checklist).
+
+### Friends
+
+- The join greeting counts friends online anywhere in the network (minus vanished friends the
+  player may not see), not only on the same server.
+
+### Settings
+
+- The settings menu marks the selected value with "»" (was a "▪" marker with the value in bold).
+- The menu label of `friend:request-notifications` is "Freundschaftsanfrage-Benachrichtigungen"
+  (was "Freundschaftsanfragen"), to tell it apart from the new `friend:requests` setting.
+- `deleteSetting` / `DeleteSettingRequestPacket` are gone; settings are deleted with SQL (see the
+  deployment checklist).
+- `/surfplayer settings list` shows the settings this server declares and, separately, those
+  only known from the database (created by plugins on other servers). Every server knows every
+  stored setting, as surf-settings did.
+
+### Nametag
+
+- The setting `nametag:show-nametags` now works: with `false` the viewer sees no nametags of other
+  players. surf-nametag never read it, so players who switched it off earlier see no nametags after
+  the switch; the stored values are kept (see the deployment checklist).
+
+### Vanish
+
+- Spectate hotkeys: "Zurück" needs the sneak key held while pressing swap-offhand; a double sneak
+  counts only key presses (surf-vanish used swap-offhand within 1 s after a sneak packet).
+- A vanished player who joins no longer gets the "hat den Server unsichtbar betreten" notice about
+  themself.
+
+### Playtime
+
+- Your own `/playtime` loads the streak from the microservice (10 s timeout) instead of reading
+  only the cache.
+- `AfkStateChangeEvent` is fired on the global region thread on Paper, as surf-playtime did.
+
+### Queue
+
+- `/surfplayer queue clear` removes the entries but keeps a paused queue paused; resume it with
+  `/surfplayer queue resume` (surf-queue's clear also resumed it).
+- surf-queue's bStats integration was dead code (never started) and was removed.
+
+### Messages
+
+- Replies for "nothing found" or an empty list use the info prefix instead of the error prefix
+  (command conventions §4): empty ignore list, chat lookup without results, no streak pauses,
+  no sessions found, empty queue, no settings, no friend request cooldowns to delete.
+
+### Other
+
+- Permission nodes are no longer registered with Bukkit through surf-api `PermissionRegistry`;
+  grant them explicitly (see "What to do on the live network").
+- surf-social's unused `encryptUuid` helper was removed; `encryptionSecret` in the Velocity
+  `SocialConfig` is no longer read.
+
+## API changes for dependent plugins
+
+The 14 plugin APIs are now one module, `dev.slne.surf.player:surf-player-api`, under
+`dev.slne.surf.player.api.<feature>`. Most code only needs new imports, following the package table
+and the general rules below. The tables after that list every public member that has no 1:1
+counterpart with the same simple name in its new package. surf-shrieker only changed its package,
+so it has no table. There are no deprecated aliases or typealiases in the new API, so everything
+below is a hard break.
+
+### Package mapping
+
+| Repo | Old package | New package |
+|---|---|---|
+| surf-chat | `dev.slne.surf.chat.api.*` | `dev.slne.surf.player.api.chat.*` |
+| surf-clan | `dev.slne.clan.api.*` | `dev.slne.surf.player.api.clan.*` (e.g. `clan.api.clan.Clan` → `player.api.clan.clan.Clan`) |
+| surf-content-creator | `dev.slne.surf.content.creator.api.*` | `dev.slne.surf.player.api.contentcreator.*` |
+| surf-friends | `dev.slne.surf.friends.api.*` | `dev.slne.surf.player.api.friends.*` |
+| surf-minimap-companion | `dev.slne.surf.minimapcompanion.api` | `dev.slne.surf.player.api.minimap` |
+| surf-nametag | `dev.slne.surf.nametag.api.*` | `dev.slne.surf.player.api.nametag.*` |
+| surf-playtime | `dev.slne.surf.playtime.api.common.*` | `dev.slne.surf.player.api.playtime.*` |
+| surf-playtime (events) | `dev.slne.surf.playtime.api.paper.event` / `.api.minestom.event` | `dev.slne.surf.player.api.playtime.event` |
+| surf-profile | `dev.slne.surf.profile.api` | `dev.slne.surf.player.api.profile` |
+| surf-queue | `dev.slne.surf.queue.api.*` | `dev.slne.surf.player.api.queue.*` |
+| surf-settings | `dev.slne.surf.settings.api.*` | `dev.slne.surf.player.api.settings.*` |
+| surf-shrieker | `dev.slne.surf.shrieker.api.*` | `dev.slne.surf.player.api.shrieker.*` |
+| surf-social | `dev.slne.surf.social.api.*` | `dev.slne.surf.player.api.connection.*` |
+| surf-tab | `dev.slne.surf.tab.api.*` | `dev.slne.surf.player.api.tab.*` |
+| surf-vanish | `dev.slne.surf.vanish.api.*` | `dev.slne.surf.player.api.vanish.*` |
+
+### General rules
+
+See [api-conventions.md](api-conventions.md) for the full rules.
+
+1. **One entry point per feature:** `Surf<Feature>Api`, used as `SurfXApi.member(...)` (and
+   `SurfXApi.INSTANCE` to pass it around). Gone: top-level instance vals (`surfVanishApi`,
+   `surfProfileApi`, `surfPlaytimeApi`, `chatProcessorRegistry`), extra services (`ClanService`,
+   `ClanMemberService`, `ClanInviteService`, `ClanPlayerService`, `FriendsPlayerManager`,
+   `SurfQueueService`), static helpers on domain types (`Clan.byTag`, `SurfQueue.byServer`, …) and
+   the opt-in annotations `@InternalClanApi`, `@InternalSurfQueueApi`.
+2. **One capability per feature:** per-player types (`FriendsPlayer`, `ClanPlayer`) are removed;
+   their members are on `<Feature>Capability`, implemented by `SurfCommunityPlayer`
+   (`SurfPlayerApi.player(uuid)` or `SurfCommunityPlayer(uuid)`). Player-specific entry-point
+   functions take the player's `UUID` as first parameter.
+3. **No platform types:** the API takes and returns UUIDs only, never Bukkit or Minestom
+   `Player`/`OfflinePlayer`.
+4. **Events are surf-api events** (`SurfSyncEvent`/`SurfAsyncEvent`): listen with
+   `@SurfEventHandler` (`dev.slne.surf.api.core.event.SurfEventHandler`), not Bukkit
+   `@EventHandler` or a Minestom event node. `handlerList`/`getHandlers()` and the `player` getters
+   are gone; use `playerUuid`.
+5. **Sealed results gained variants** (listed per repo): an exhaustive `when` needs a new branch.
+
+### surf-chat
+
+| Old API | Replacement |
+|---|---|
+| `SurfChatApi.getCachedIgnoreList(uuid)` | `SurfChatApi.cachedIgnoreList(uuid)` / `ChatCapability.cachedIgnoreList` |
+| `SurfChatApi.getIgnoreList(uuid)` | `SurfChatApi.ignoreList(uuid)` / `ChatCapability.ignoreList()` |
+| `SurfChatApi.sendSignedMessage(signedMessage, senderUuid, targetUuid, content)` | `SurfChatApi.sendSignedMessage(senderUuid, targetUuid, signedMessage, content)` (parameter order changed) / `ChatCapability.sendSignedMessage(targetUuid, signedMessage, content)` |
+| `MessageRedirectorRegistry` (`register`, `clear`, `redirectors`) | `SurfChatApi.registerMessageRedirector(redirector)`; the registry is internal |
+| `ChatProcessorRegistry` class + top-level `chatProcessorRegistry` | `SurfChatApi.registerChatProcessor(PreChatProcessor / PostChatProcessor)`; the registry is internal |
+| `MessageValidationResult.MessageValidationError` (nested) | top-level `chat.message.MessageValidationError` |
+| `MessageValidationError.DenylistedWord`, `.BadLink`, `.BadCharacters`, `.TooOften` | removed — these checks no longer exist (remaining: `EmptyContent`, `TooManyCaps`, `AutoDisabled`, `ChatDisabled`) |
+| `MessageValidationResult.isSuccess()` | `!isFailure()` or `is MessageValidationResult.Success` |
+| `MessageValidationResult.getErrorOrNull()` | `(result as? MessageValidationResult.Failure)?.error` |
+| package `api.denylist` (`DenylistEntry`, `DenylistAction`, `DenylistActionType`) | removed — the denylist feature was dropped |
+
+### surf-clan
+
+| Old API | Replacement |
+|---|---|
+| `Clan.registerListener(l)` / `Clan.unregisterListener(l)` | `SurfClanApi.registerListener(l)` / `SurfClanApi.unregisterListener(l)` |
+| `Clan.byPlayer(uuid)`, `UUID.findClanByPlayer()` | `SurfClanApi.findClanByPlayer(uuid)` / `ClanCapability.clan()` |
+| `Clan.byUuid(uuid)`, `UUID.findClanByUuid()` | `SurfClanApi.findClanByUuid(clanUuid)` |
+| `Clan.byTag(tag)` | `SurfClanApi.findClanByTag(tag)` |
+| `Clan.validateClanNameAndTag(name, tag)` | `SurfClanApi.validateClanNameAndTag(name, tag)` |
+| `Clan.createClan(name, tag, owner) { }` | `SurfClanApi.createClan(owner, name, tag) { }` (parameter order changed) / `ClanCapability.createClan(name, tag) { }` |
+| `Clan.changeClanTagColor(update: ClanTagColor.Update)` | `Clan.changeClanTagColor(update: ClanTagColorUpdate)`; the lambda overload is unchanged except for the receiver type |
+| `ClanTagColor.Update` | top-level `ClanTagColorUpdate` (still built with `ClanTagColor.update { }`) |
+| `ClanTagColor.Update.Builder` | top-level `ClanTagColorUpdateBuilder` |
+| `ClanTagColor.withDefaultsAsFallback(fg, bg, shadow)` | `ClanTagColor(fg ?: Clan.DEFAULT_CLAN_TAG_FOREGROUND_COLOR, bg ?: Clan.DEFAULT_CLAN_TAG_BACKGROUND_COLOR, shadow ?: Clan.DEFAULT_CLAN_TAG_SHADOW_COLOR)` |
+| `ClanTagColor?.update { ... }` (lambda overload) | `colorOrNull.update(ClanTagColor.update { ... })` |
+| `ClanService`, `ClanInviteService`, `ClanMemberService` (internal) | `SurfClanApi` |
+| `ClanInvite.pendingInvitesByPlayer(uuid)` | `SurfClanApi.findClanInvites(uuid)` / `ClanCapability.clanInvites()` |
+| `ClanInvite.pendingInviteByPlayerAndClanName(uuid, clanName)` | `SurfClanApi.findClanInvite(uuid, clanName)` / `ClanCapability.clanInvite(clanName)` |
+| `ClanInviteAcceptResult` (exhaustive `when`) | new variant `ClanInviteAcceptResult.InviteNotFound` |
+| `ClanMember.registerListener(l)` / `unregisterListener(l)` | `SurfClanApi.registerListener(l: ClanMemberListener)` / `unregisterListener(l)` |
+| `ClanMember.byUuid(uuid)` | `SurfClanApi.findClanMember(uuid)` / `ClanCapability.clanMember()` |
+| `ClanMember.byName(name)` | `SurfClanApi.findClanMemberByName(name)` |
+| `ClanPlayer` / `ClanPlayer.byUuid(uuid)` | removed — use `SurfCommunityPlayer(uuid)` |
+| `ClanPlayer.acceptsClanInvites` | `SettingsCapability.setting(SettingKeys.CLAN_INVITES)` |
+| `ClanPlayer.setAcceptsClanInvites(value)` | `SettingsCapability.saveSetting(SettingKeys.CLAN_INVITES, value)` (returns `Unit`, not `Boolean`) |
+| `ClanPlayerService` (internal) | removed — see `ClanPlayer` |
+| `@InternalClanApi` (`api.util`) | removed — the internal services it marked no longer exist |
+
+### surf-content-creator
+
+| Old API | Replacement |
+|---|---|
+| `ContentCreatorApi` (incl. `INSTANCE`) | `SurfContentCreatorApi` |
+| `ContentCreatorApi.renderLiveTag(uuid, space)` | `SurfContentCreatorApi.liveTag(uuid, space)` / `ContentCreatorCapability.liveTag(space)` |
+| `ContentCreatorPlatform` | `StreamingPlatform` |
+| `ContentCreatorPlatform.plattform` | `StreamingPlatform.type` |
+| `PlatformType.toPlattform(name, state)` | `PlatformType.toStreamingPlatform(name, state)` |
+| `ContentCreator.getPlatform(type)` | `ContentCreator.getStreamingPlatform(type)` |
+| `StateChangeListener.onStateChanged(uuid, contentCreatorPlatform: ContentCreatorPlatform, newState)` | `onStateChanged(uuid, streamingPlatform: StreamingPlatform, newState)` (now a `fun interface`) |
+
+### surf-friends
+
+| Old API | Replacement |
+|---|---|
+| `FriendsPlayer` / `FriendsPlayer[uuid]` | `FriendsCapability` / `SurfCommunityPlayer(uuid)`, or `SurfFriendsApi.<member>(uuid, ...)` |
+| `FriendsPlayer.surfPlayer()` | `uuid.toSurfPlayer()` (`api.friends.utils`) |
+| `FriendsPlayer.sendFriendRequest(target: FriendsPlayer)` (and `revokeFriendRequest`, `acceptFriendRequest`, `declineFriendRequest`, `hasSentFriendRequest`, `hasReceivedFriendRequest`, `findFriendship`, `hasFriendship`, `removeFriendship`) | same names on `FriendsCapability`/`SurfFriendsApi`, taking a `UUID` instead of a `FriendsPlayer` |
+| `FriendsPlayer.notificationsEnabled` | `FriendsCapability.friendNotificationsEnabled` / `SurfFriendsApi.friendNotificationsEnabled(uuid)` |
+| `FriendsPlayer.soundsEnabled` | `FriendsCapability.friendSoundsEnabled` / `SurfFriendsApi.friendSoundsEnabled(uuid)` |
+| `FriendsPlayerManager.findPlayer(uuid)` | `SurfCommunityPlayer(uuid)` |
+| `FriendsPlayerManager.players` | removed — no per-player cache; use `SurfCommunityPlayer(uuid)` |
+| `FriendsPlayerManager.invalidatePlayer(uuid)` | removed — internal cache handling |
+| `SurfPlayer.friendPlayer()` | `SurfCommunityPlayer(surfPlayer.uuid)` |
+| `FriendRequest.sender` / `.target`, `Friendship.player` / `.friend` | still there; type changed from `FriendsPlayer` to `SurfCommunityPlayer` |
+| `FriendRequestCreateResult` (exhaustive `when`) | new variants `OnCooldown(targetUuid, remaining)`, `Blocked(targetUuid)`, `RequestsDisabled(targetUuid)` |
+
+### surf-minimap-companion
+
+| Old API | Replacement |
+|---|---|
+| `SurfMinimapCompanionApi` | `SurfMinimapApi` |
+| `SurfMinimapCompanionApi.levelId(playerUuid: UUID)` | `SurfMinimapApi.minimapLevelId(playerUuid)` / `MinimapCapability.minimapLevelId()` |
+
+### surf-nametag
+
+| Old API | Replacement |
+|---|---|
+| `SurfNametagApi.preventNametagUpdate(uuid): Boolean` | `SurfNametagApi.preventNametagUpdates(uuid)` (returns `Unit`) / `NametagCapability.preventNametagUpdates()` |
+| `SurfNametagApi.allowNametagUpdate(uuid): Boolean` | `SurfNametagApi.allowNametagUpdates(uuid)` (returns `Unit`) / `NametagCapability.allowNametagUpdates()` |
+
+### surf-playtime
+
+| Old API | Replacement |
+|---|---|
+| top-level `surfPlaytimeApi` | `SurfPlaytimeApi` (companion) / `SurfPlaytimeApi.INSTANCE` |
+| `SurfPlaytimeApi.getTotalPlaytime(uuid): Long?` | now returns `Long` (non-null) / `PlaytimeCapability.totalPlaytime()` |
+| `PlaytimeStreak.SimpleStreak` | removed — use `PlaytimeStreak` (`SurfPlaytimeApi.getLoginStreak(uuid)` / `PlaytimeCapability.loginStreak()`) |
+| `playtime.api.paper.event.AfkStateChangeEvent` (Bukkit `Event`, `handlerList`) | `playtime.event.AfkStateChangeEvent(playerUuid, isAfk)`, a `SurfSyncEvent` fired on the global region thread; listen with `@SurfEventHandler` |
+| `playtime.api.minestom.event.AfkStateChangeEvent(player: Player, isAfk)` (Minestom `PlayerEvent`) | the same `playtime.event.AfkStateChangeEvent`, UUID-based (`playerUuid`); listen with `@SurfEventHandler` |
+
+### surf-profile
+
+| Old API | Replacement |
+|---|---|
+| top-level `surfProfileApi` | `SurfProfileApi` (companion) / `SurfProfileApi.INSTANCE`; `openOwnProfileMenu(uuid)` unchanged, also `ProfileCapability.openProfileMenu()` |
+
+### surf-queue
+
+| Old API | Replacement |
+|---|---|
+| `SurfQueue.byServer(serverName)` / `SurfQueue.byServer(server)` | `SurfQueueApi.queue(serverName)` / `SurfQueueApi.queue(server)` |
+| `SurfServer.queue()` (extension) | `SurfQueueApi.queue(server)` |
+| `SurfQueueAvailableSlotsProvider.set(provider)` / `.get()` | `SurfQueueApi.availableSlotsProvider = provider` / `SurfQueueApi.availableSlotsProvider` |
+| `SurfQueueService` (`api.service`, internal) | `SurfQueueApi` |
+| `@InternalSurfQueueApi` | removed — the internal service it marked no longer exists |
+
+### surf-settings
+
+| Old API | Replacement |
+|---|---|
+| `SurfSettingsApi.getPlayerSettings(uuid)` (deprecated) | removed — read each value with `getSettingValue(uuid, key)` / `SettingsCapability.setting(key)` |
+| `SurfSettingsApi.getPlayerSetting(uuid, name)` (deprecated) | `getSettingValue(uuid, key: SettingKey<T>)` / `SettingsCapability.setting(key)` |
+| `SurfSettingsApi.createSetting(name, defaultValue)` (deprecated) | `createSetting(SettingKey.ofBoolean/ofInt/ofDouble/ofString(key, default))` |
+| `SurfSettingsApi.saveSetting(uuid, playerSetting: PlayerSetting)` (deprecated) | `saveSetting(uuid, key, value)` / `SettingsCapability.saveSetting(key, value)` |
+| `SurfSettingsApi.saveSetting(uuid, settingName, settingValue: String)` (deprecated) | `saveSetting(uuid, key, value)` (typed value) |
+| `SurfSettingsApi.getSetting(name: String)` (deprecated) | `getSetting(key: SettingKey<T>)` or `getSettings().find { it.name == name }` |
+| `SettingKeys.SHOW_SCOREBOARD` (`scoreboard:show-scoreboard`) | removed — the setting was dropped |
+
+`PlayerSetting` still exists in the API, but no public member returns or accepts it any more. A
+setting created by a plugin on another server is known on every server (lookups, `/settings`, the
+menu), as in surf-settings.
+
+### surf-social → connection
+
+| Old API | Replacement |
+|---|---|
+| `SurfSocialApi` | `SurfConnectionApi` |
+| `SurfSocialApi.findConnection(connectionClass, minecraftUuid)` | `SurfConnectionApi.findConnection(uuid, connectionClass)` (parameter order swapped) / `ConnectionCapability.socialConnection(connectionClass)` |
+| `SurfSocialApi.findConnection<T>(minecraftUuid)` (reified extension) | `SurfCommunityPlayer(uuid).socialConnection<T>()`, or `SurfConnectionApi.findDiscordConnection(uuid)` / `findTwitchConnection(uuid)` |
+
+### surf-tab
+
+| Old API | Replacement |
+|---|---|
+| `SurfTabApi.instance` (lowercase) | `SurfTabApi.INSTANCE` |
+| `SurfTabApi.updateEntry(uuid)` | `SurfTabApi.updateTabEntry(playerUuid)` / `TabCapability.updateTabEntry()` |
+| `SurfTabApi.broadcastEntryUpdate(uuid)` | `SurfTabApi.broadcastTabEntryUpdate(playerUuid)` / `TabCapability.broadcastTabEntryUpdate()` |
+| `api.redis.TabEntryUpdateRedisEvent` | removed from the API (internal now) — call `SurfTabApi.broadcastTabEntryUpdate(uuid)` |
+
+`TabEntryRenderEvent.order` keeps surf-tab's meaning: the LuckPerms weight, plus 1,000,000 for a
+vanished player (higher is listed first).
+
+### surf-vanish
+
+| Old API | Replacement |
+|---|---|
+| top-level `surfVanishApi` (deprecated) | `SurfVanishApi` / `SurfVanishApi.INSTANCE` |
+| `SurfVanishApi.isVanished(player: OfflinePlayer)` | `SurfVanishApi.isVanished(uuid)` / `VanishCapability.isVanished` |
+| `SurfVanishApi.vanishedPlayers(): ObjectSet<OfflinePlayer>` | `SurfVanishApi.vanishedPlayers(): ObjectSet<UUID>` |
+| `SurfVanishApi.onlineVanishedPlayersUuid()` | `SurfVanishApi.onlineVanishedPlayers()` |
+| `PlayerVanishEvent` / `PlayerReappearEvent` (Bukkit `Event`, `player`, `handlerList`) | same names in `api.vanish.event`, now `SurfSyncEvent(playerUuid)`; listen with `@SurfEventHandler`; use `Bukkit.getPlayer(event.playerUuid)` instead of `event.player` |
+| `PlayerNickEvent`, `PlayerUnNickEvent` | removed — the nick feature was dropped |
