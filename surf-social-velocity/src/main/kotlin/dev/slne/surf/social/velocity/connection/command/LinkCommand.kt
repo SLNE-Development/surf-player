@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.command
+package dev.slne.surf.social.velocity.connection.command
 
 import dev.jorel.commandapi.kotlindsl.*
 import dev.slne.surf.api.core.command.args.awaiting
@@ -7,13 +7,13 @@ import dev.slne.surf.api.velocity.command.executors.anyExecutorSuspend
 import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.velocity.command.argument.surfOfflinePlayerArgument
-import dev.slne.surf.social.api.SurfSocialApi
+import dev.slne.surf.social.api.connection.SurfConnectionApi
 import dev.slne.surf.social.api.connection.impl.DiscordConnection
 import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.api.findConnection
-import dev.slne.surf.social.velocity.client
-import dev.slne.surf.social.velocity.config
-import dev.slne.surf.social.velocity.permission.SocialPermissions
+import dev.slne.surf.social.api.connection.findConnection
+import dev.slne.surf.social.velocity.connection.client
+import dev.slne.surf.social.velocity.connection.config
+import dev.slne.surf.social.velocity.connection.permission.SocialPermissions
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.async
@@ -76,8 +76,8 @@ fun linkCommand() = commandTree("link") {
                 val start = System.currentTimeMillis()
 
                 val (discordConnection, twitchConnection) = coroutineScope {
-                    val discord = async { SurfSocialApi.findConnection<DiscordConnection>(target.uuid) }
-                    val twitch = async { SurfSocialApi.findConnection<TwitchConnection>(target.uuid) }
+                    val discord = async { SurfConnectionApi.findConnection<DiscordConnection>(target.uuid) }
+                    val twitch = async { SurfConnectionApi.findConnection<TwitchConnection>(target.uuid) }
 
                     discord.await() to twitch.await()
                 }

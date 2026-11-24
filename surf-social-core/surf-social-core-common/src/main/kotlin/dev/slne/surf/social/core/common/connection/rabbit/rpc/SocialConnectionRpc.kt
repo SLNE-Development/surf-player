@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.rabbit.rpc
+package dev.slne.surf.social.core.common.connection.rabbit.rpc
 
 import dev.slne.surf.rabbitmq.api.rpc.RpcService
 import kotlinx.serialization.Serializable

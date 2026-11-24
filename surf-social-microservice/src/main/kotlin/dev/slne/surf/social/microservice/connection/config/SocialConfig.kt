@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.config
+package dev.slne.surf.social.microservice.connection.config
 
 import org.slf4j.LoggerFactory
 import java.nio.file.Path

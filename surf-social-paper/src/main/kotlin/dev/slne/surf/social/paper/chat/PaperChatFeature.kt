@@ -40,7 +40,8 @@ object PaperChatFeature : PaperFeature {
         initChatConfig(dataPath)
         AiModerationConfig.init(dataPath)
 
-        ClientChatInstance.chatClientLoader.onLoad()
+        ClientChatInstance.redisApi.subscribeToEvents(RedisEventListener)
+        ClientChatInstance.redisApi.registerRequestHandler(RedisEventListener)
 
         chatProcessorRegistry.register(CharPreChatProcessor)
         chatProcessorRegistry.register(LinkPreChatProcessor)
@@ -57,10 +58,6 @@ object PaperChatFeature : PaperFeature {
     }
 
     override suspend fun onEnable() {
-        ClientChatInstance.redisApi.subscribeToEvents(RedisEventListener)
-        ClientChatInstance.redisApi.registerRequestHandler(RedisEventListener)
-        ClientChatInstance.chatClientLoader.onEnable()
-
         surfChatCommand()
         teamchatCommand()
         ignoreCommand()
@@ -74,10 +71,6 @@ object PaperChatFeature : PaperFeature {
         ConnectListener.register()
 
         FunctionalityService.fetch(SurfCoreApi.getCurrentServerName())
-    }
-
-    override suspend fun onDisable() {
-        ClientChatInstance.chatClientLoader.onDisable()
     }
 
     fun checkMiniPlaceholdersHook() = pluginManager.isPluginEnabled("MiniPlaceholders")

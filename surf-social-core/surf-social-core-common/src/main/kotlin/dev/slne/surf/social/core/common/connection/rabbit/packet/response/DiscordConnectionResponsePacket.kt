@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.rabbit.packet.response
+package dev.slne.surf.social.core.common.connection.rabbit.packet.response
 
 import dev.slne.surf.rabbitmq.api.packet.RabbitResponsePacket
 import dev.slne.surf.social.api.connection.impl.DiscordConnection

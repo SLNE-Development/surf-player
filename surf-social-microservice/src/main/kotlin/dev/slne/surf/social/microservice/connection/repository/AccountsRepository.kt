@@ -1,4 +1,4 @@
-package dev.slne.surf.social.microservice.repository
+package dev.slne.surf.social.microservice.connection.repository
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.asLoadingCache
@@ -12,9 +12,9 @@ import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.social.api.connection.impl.DiscordConnection
 import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.core.common.rabbit.rpc.SocialConnectionRpc
-import dev.slne.surf.social.microservice.config.SocialConfig
-import dev.slne.surf.social.microservice.table.AccountsTable
+import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
+import dev.slne.surf.social.microservice.connection.config.SocialConfig
+import dev.slne.surf.social.microservice.connection.table.AccountsTable
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.future.await

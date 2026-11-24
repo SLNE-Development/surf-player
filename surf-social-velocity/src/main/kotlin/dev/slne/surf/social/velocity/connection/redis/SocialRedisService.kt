@@ -1,40 +1,14 @@
-package dev.slne.surf.social.velocity.redis
+package dev.slne.surf.social.velocity.connection.redis
 
 import dev.slne.surf.redis.RedisApi
-import java.util.concurrent.atomic.AtomicReference
+import dev.slne.surf.social.core.client.SocialClient
 
+/**
+ * Redis access of the connection feature. Uses the shared surf-social Redis connection owned by
+ * [SocialClient]; the publisher is created on first use, after the connection is established.
+ */
 object SocialRedisService {
+    val redisApi: RedisApi get() = SocialClient.redisApi
 
-    /**
-     * The api and its publisher are held together in one immutable value so that a reader can
-     * never observe a connected [RedisApi] with a publisher that is still missing.
-     */
-    private class Connection(
-        val redisApi: RedisApi,
-        val discordRolesPublisher: DiscordRolesPublisher
-    )
-
-    private val connection = AtomicReference<Connection?>()
-
-    private val current
-        get() = connection.get() ?: error("SocialRedisService has not been connected yet")
-
-    val redisApi: RedisApi get() = current.redisApi
-
-    val discordRolesPublisher: DiscordRolesPublisher get() = current.discordRolesPublisher
-
-    fun connect() {
-        val redisApi = RedisApi.create()
-        redisApi.freezeAndConnect()
-
-        connection.set(Connection(redisApi, DiscordRolesPublisher(redisApi)))
-    }
-
-    fun disconnect() {
-        val active = connection.getAndSet(null) ?: return
-
-        if (active.redisApi.isConnected()) {
-            active.redisApi.disconnect()
-        }
-    }
+    val discordRolesPublisher by lazy { DiscordRolesPublisher(redisApi) }
 }

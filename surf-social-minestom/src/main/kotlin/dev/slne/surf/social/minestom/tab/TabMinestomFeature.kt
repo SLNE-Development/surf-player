@@ -18,7 +18,7 @@ object TabMinestomFeature : MinestomSocialFeature {
     val dataDirectory get() = SocialMinestomPlugin.featureDataDirectory(this)
 
     override suspend fun onLoad() {
-        redisLoader.connect()
+        redisLoader.register()
 
         TablistService.start(MinestomTabPlatform())
 
@@ -36,6 +36,5 @@ object TabMinestomFeature : MinestomSocialFeature {
 
     override suspend fun onDisable() {
         TablistService.stop()
-        redisLoader.disconnect()
     }
 }

@@ -1,4 +1,4 @@
-package dev.slne.surf.social.core.common.rabbit.packet.request
+package dev.slne.surf.social.core.common.connection.rabbit.packet.request
 
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
 import dev.slne.surf.rabbitmq.api.packet.RabbitRequestPacket

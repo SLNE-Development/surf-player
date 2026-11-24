@@ -1,6 +1,7 @@
 package dev.slne.surf.social.minestom
 
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.minestom.chat.ChatMinestomFeature
 import dev.slne.surf.social.minestom.clan.ClanMinestomFeature
 import dev.slne.surf.social.minestom.friends.FriendsMinestomFeature
@@ -29,12 +30,19 @@ object SocialMinestomPlugin : SurfMinestomPlugin() {
         dataDirectory.resolve(feature.id).createDirectories()
 
     override suspend fun onLoad() {
+        // One shared RabbitMQ/Redis connection for every feature, see SocialClient.
+        SocialClient.load(dataDirectory)
+        SocialClient.connectRabbit()
+
+        // Features register everything Redis needs here, before Redis is frozen.
         for (feature in features) {
             feature.onLoad()
         }
     }
 
     override suspend fun onEnable() {
+        SocialClient.connectRedis()
+
         for (feature in features) {
             feature.onEnable()
         }
@@ -50,5 +58,7 @@ object SocialMinestomPlugin : SurfMinestomPlugin() {
                 logger.error("Failed to disable feature '${feature.id}'", e)
             }
         }
+
+        SocialClient.disable()
     }
 }

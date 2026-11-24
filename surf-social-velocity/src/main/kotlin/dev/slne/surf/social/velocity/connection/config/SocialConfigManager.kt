@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.config
+package dev.slne.surf.social.velocity.connection.config
 
 import dev.slne.surf.api.core.config.manager.SpongeConfigManager
 import dev.slne.surf.api.core.config.surfConfigApi

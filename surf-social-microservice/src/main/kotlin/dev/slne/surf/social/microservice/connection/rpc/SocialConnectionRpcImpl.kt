@@ -1,7 +1,7 @@
-package dev.slne.surf.social.microservice.rpc
+package dev.slne.surf.social.microservice.connection.rpc
 
-import dev.slne.surf.social.core.common.rabbit.rpc.SocialConnectionRpc
-import dev.slne.surf.social.microservice.repository.AccountsRepository
+import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
+import dev.slne.surf.social.microservice.connection.repository.AccountsRepository
 import java.util.*
 
 class SocialConnectionRpcImpl : SocialConnectionRpc {

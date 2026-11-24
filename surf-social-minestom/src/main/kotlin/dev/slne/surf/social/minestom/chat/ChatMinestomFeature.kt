@@ -27,12 +27,8 @@ object ChatMinestomFeature : MinestomSocialFeature {
 
         registerProcessors()
 
-        MinestomChatInstance.chatClientLoader.onLoad()
-
         MinestomChatInstance.redisApi.subscribeToEvents(MinestomRedisEventListener)
         MinestomChatInstance.redisApi.registerRequestHandler(MinestomRedisEventListener)
-
-        MinestomChatInstance.chatClientLoader.onEnable()
 
         registerChatListener()
 
@@ -49,9 +45,5 @@ object ChatMinestomFeature : MinestomSocialFeature {
         replyCommand()
 
         ConnectionListener.register(SocialMinestomPlugin.eventNode)
-    }
-
-    override suspend fun onDisable() {
-        MinestomChatInstance.chatClientLoader.onDisable()
     }
 }

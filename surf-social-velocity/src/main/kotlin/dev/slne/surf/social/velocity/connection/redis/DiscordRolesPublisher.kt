@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.redis
+package dev.slne.surf.social.velocity.connection.redis
 
 import dev.slne.surf.redis.RedisApi
 import dev.slne.surf.redis.libs.redisson.api.stream.StreamAddArgs

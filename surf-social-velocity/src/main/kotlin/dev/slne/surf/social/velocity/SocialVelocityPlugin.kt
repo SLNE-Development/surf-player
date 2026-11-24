@@ -9,7 +9,9 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.velocity.clan.ClanVelocityFeature
+import dev.slne.surf.social.velocity.connection.ConnectionVelocityFeature
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
@@ -32,6 +34,7 @@ class SocialVelocityPlugin @Inject constructor(
 ) {
     private val features: List<VelocitySocialFeature> = listOf(
         ClanVelocityFeature,
+        ConnectionVelocityFeature,
     )
 
     init {
@@ -39,6 +42,9 @@ class SocialVelocityPlugin @Inject constructor(
         suspendingPluginContainer.initialize(this)
 
         runBlocking {
+            SocialClient.load(dataPath)
+            SocialClient.connectRabbit()
+
             for (feature in features) {
                 feature.onLoad()
             }
@@ -53,6 +59,8 @@ class SocialVelocityPlugin @Inject constructor(
 
     @Subscribe
     suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
+        SocialClient.connectRedis()
+
         for (feature in features) {
             feature.onEnable()
         }
@@ -69,6 +77,8 @@ class SocialVelocityPlugin @Inject constructor(
                 logger.error("Failed to disable feature '${feature.id}'", e)
             }
         }
+
+        SocialClient.disable()
     }
 
     companion object {

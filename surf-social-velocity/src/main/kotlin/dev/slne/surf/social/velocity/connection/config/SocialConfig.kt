@@ -1,4 +1,4 @@
-package dev.slne.surf.social.velocity.config
+package dev.slne.surf.social.velocity.connection.config
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 

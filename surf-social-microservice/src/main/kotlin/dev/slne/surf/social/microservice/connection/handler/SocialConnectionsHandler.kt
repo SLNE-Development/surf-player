@@ -1,13 +1,13 @@
-package dev.slne.surf.social.microservice.handler
+package dev.slne.surf.social.microservice.connection.handler
 
 import dev.slne.surf.rabbitmq.api.handler.RabbitHandler
 import dev.slne.surf.rabbitmq.api.packet.standard.response.primitive.PrimitiveResponse
-import dev.slne.surf.social.core.common.rabbit.packet.request.FindDiscordConnectionRequestPacket
-import dev.slne.surf.social.core.common.rabbit.packet.request.FindTwitchConnectionRequestPacket
-import dev.slne.surf.social.core.common.rabbit.packet.request.UnlinkMinecraftConnectionRequest
-import dev.slne.surf.social.core.common.rabbit.packet.response.DiscordConnectionResponsePacket
-import dev.slne.surf.social.core.common.rabbit.packet.response.TwitchConnectionResponsePacket
-import dev.slne.surf.social.microservice.repository.AccountsRepository
+import dev.slne.surf.social.core.common.connection.rabbit.packet.request.FindDiscordConnectionRequestPacket
+import dev.slne.surf.social.core.common.connection.rabbit.packet.request.FindTwitchConnectionRequestPacket
+import dev.slne.surf.social.core.common.connection.rabbit.packet.request.UnlinkMinecraftConnectionRequest
+import dev.slne.surf.social.core.common.connection.rabbit.packet.response.DiscordConnectionResponsePacket
+import dev.slne.surf.social.core.common.connection.rabbit.packet.response.TwitchConnectionResponsePacket
+import dev.slne.surf.social.microservice.connection.repository.AccountsRepository
 import kotlinx.coroutines.launch
 
 object SocialConnectionsHandler {

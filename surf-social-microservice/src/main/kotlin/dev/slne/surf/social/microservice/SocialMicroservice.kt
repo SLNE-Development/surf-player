@@ -10,13 +10,15 @@ import dev.slne.surf.social.core.common.SocialSerializerModule
 import dev.slne.surf.social.microservice.chat.ChatMicroserviceModule
 import dev.slne.surf.social.microservice.clan.ClanMicroserviceModule
 import dev.slne.surf.social.microservice.clan.clanMicroservice
+import dev.slne.surf.social.microservice.connection.ConnectionMicroserviceModule
 import dev.slne.surf.social.microservice.friends.FriendsMicroserviceModule
 import dev.slne.surf.social.microservice.shrieker.ShriekerMicroserviceModule
 import java.nio.file.Path
 import kotlin.io.path.Path
 
 /**
- * The single surf-social microservice. Hosts chat, clan, friends and shrieker on one database
+ * The single surf-social microservice. Hosts chat, clan, friends, shrieker and social connections
+ * on one database
  * connection and one RabbitMQ connection named [SOCIAL_CONNECTION_NAME].
  */
 @AutoService(Microservice::class)
@@ -34,11 +36,14 @@ class SocialMicroservice : Microservice() {
     }
 
     override suspend fun onBootstrap(args: List<String>) {
+        ConnectionMicroserviceModule.load(dataPath)
+
         suspendTransaction {
             ChatMicroserviceModule.createTables()
             ClanMicroserviceModule.createTables()
             FriendsMicroserviceModule.createTables()
             ShriekerMicroserviceModule.createTables()
+            ConnectionMicroserviceModule.createTables()
         }
 
         ClanMicroserviceModule.load()
@@ -47,6 +52,7 @@ class SocialMicroservice : Microservice() {
         ClanMicroserviceModule.registerHandlers(rabbitApi)
         FriendsMicroserviceModule.registerHandlers(rabbitApi)
         ShriekerMicroserviceModule.registerHandlers(rabbitApi)
+        ConnectionMicroserviceModule.registerHandlers(rabbitApi)
 
         rabbitApi.freezeAndConnect()
     }

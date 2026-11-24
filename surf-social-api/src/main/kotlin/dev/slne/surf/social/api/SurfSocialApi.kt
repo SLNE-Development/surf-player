@@ -5,6 +5,7 @@ import dev.slne.surf.social.api.clan.clan.ClanService
 import dev.slne.surf.social.api.clan.invite.ClanInviteService
 import dev.slne.surf.social.api.clan.member.ClanMemberService
 import dev.slne.surf.social.api.clan.player.ClanPlayerService
+import dev.slne.surf.social.api.connection.SurfConnectionApi
 import dev.slne.surf.social.api.friends.player.FriendsPlayerManager
 import dev.slne.surf.social.api.tab.SurfTabApi
 
@@ -28,6 +29,9 @@ object SurfSocialApi {
 
     /** Friendships and friend requests, resolved per player. */
     val friends: FriendsPlayerManager get() = FriendsPlayerManager.INSTANCE
+
+    /** Linked Discord/Twitch accounts of players. */
+    val connections: SurfConnectionApi get() = SurfConnectionApi
 
     /** Access to clans and their members, invites and players. */
     val clans: Clans get() = Clans

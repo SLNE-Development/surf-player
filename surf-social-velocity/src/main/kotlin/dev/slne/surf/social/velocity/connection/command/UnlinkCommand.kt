@@ -1,14 +1,14 @@
-package dev.slne.surf.social.velocity.command
+package dev.slne.surf.social.velocity.connection.command
 
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.core.client.service.SocialConnectionsService
-import dev.slne.surf.social.core.common.rabbit.rpc.SocialConnectionRpc
-import dev.slne.surf.social.velocity.permission.SocialPermissions
+import dev.slne.surf.social.core.client.connection.service.SocialConnectionsService
+import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
+import dev.slne.surf.social.velocity.connection.permission.SocialPermissions
 import dev.slne.surf.social.velocity.plugin
-import dev.slne.surf.social.velocity.redis.DiscordRolesPublisher
-import dev.slne.surf.social.velocity.redis.SocialRedisService
+import dev.slne.surf.social.velocity.connection.redis.DiscordRolesPublisher
+import dev.slne.surf.social.velocity.connection.redis.SocialRedisService
 import kotlinx.coroutines.CancellationException
 
 fun unlinkCommand() = commandTree("unlink") {

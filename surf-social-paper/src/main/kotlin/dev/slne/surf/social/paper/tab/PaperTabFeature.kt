@@ -17,8 +17,11 @@ import dev.slne.surf.social.paper.tab.platform.PaperTabPlatform
 object PaperTabFeature : PaperFeature {
     override val name = "tab"
 
+    override suspend fun onLoad() {
+        redisLoader.register()
+    }
+
     override suspend fun onEnable() {
-        redisLoader.connect()
         surfTabCommand()
 
         TablistService.start(PaperTabPlatform())
@@ -42,7 +45,6 @@ object PaperTabFeature : PaperFeature {
 
     override suspend fun onDisable() {
         TablistService.stop()
-        redisLoader.disconnect()
     }
 }
 

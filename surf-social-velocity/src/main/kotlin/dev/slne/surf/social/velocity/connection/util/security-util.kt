@@ -1,7 +1,7 @@
-package dev.slne.surf.social.velocity.util
+package dev.slne.surf.social.velocity.connection.util
 
 import dev.slne.surf.api.core.util.random
-import dev.slne.surf.social.velocity.config
+import dev.slne.surf.social.velocity.connection.config
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec

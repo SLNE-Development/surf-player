@@ -1,6 +1,7 @@
 package dev.slne.surf.social.paper
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.paper.chat.PaperChatFeature
 import dev.slne.surf.social.paper.clan.PaperClanFeature
 import dev.slne.surf.social.paper.friends.PaperFriendsFeature
@@ -26,12 +27,19 @@ class SocialPaperPlugin : SuspendingJavaPlugin() {
     )
 
     override suspend fun onLoadAsync() {
+        // One shared RabbitMQ/Redis connection for every feature, see SocialClient.
+        SocialClient.load(dataPath)
+        SocialClient.connectRabbit()
+
+        // Features register everything Redis needs here, before Redis is frozen.
         for (feature in features) {
             feature.onLoad()
         }
     }
 
     override suspend fun onEnableAsync() {
+        SocialClient.connectRedis()
+
         for (feature in features) {
             feature.onEnable()
         }
@@ -45,5 +53,7 @@ class SocialPaperPlugin : SuspendingJavaPlugin() {
                 logger.log(Level.SEVERE, "Failed to disable feature ${feature.name}", e)
             }
         }
+
+        SocialClient.disable()
     }
 }
