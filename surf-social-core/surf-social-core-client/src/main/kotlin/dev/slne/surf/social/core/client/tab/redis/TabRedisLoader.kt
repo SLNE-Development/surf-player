@@ -1,34 +1,21 @@
 package dev.slne.surf.social.core.client.tab.redis
 
 import dev.slne.surf.redis.RedisApi
+import dev.slne.surf.social.core.client.SocialClient
 
 val redisLoader = TabRedisLoader()
 val redisApi get() = redisLoader.redisApi
 
+/**
+ * Tab's view on the shared surf-social Redis connection owned by [SocialClient].
+ */
 class TabRedisLoader {
-    @Volatile
-    lateinit var redisApi: RedisApi
-        private set
+    val redisApi: RedisApi get() = SocialClient.redisApi
 
-    fun onLoad() {
-        redisApi = RedisApi.create()
-    }
-
-    fun subscribeToEvents() {
+    /**
+     * Registers the tab Redis listeners. Must run before [SocialClient.connectRedis].
+     */
+    fun register() {
         redisApi.subscribeToEvents(TabRedisEventListener)
-    }
-
-    fun onEnable() {
-        redisApi.freezeAndConnect()
-    }
-
-    fun connect() {
-        onLoad()
-        subscribeToEvents()
-        onEnable()
-    }
-
-    fun disconnect() {
-        redisApi.disconnect()
     }
 }

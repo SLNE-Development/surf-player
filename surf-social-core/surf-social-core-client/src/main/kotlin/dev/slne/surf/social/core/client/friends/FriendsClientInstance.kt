@@ -1,6 +1,7 @@
 package dev.slne.surf.social.core.client.friends
 
 import dev.slne.surf.api.core.util.requiredService
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.api.friends.model.FriendRequest
 import dev.slne.surf.social.api.friends.model.Friendship
 import dev.slne.surf.social.core.client.friends.redis.listener.FriendRequestRedisListener
@@ -19,8 +20,11 @@ import kotlin.coroutines.CoroutineContext
 abstract class FriendsClientInstance {
     abstract val dataPath: Path
 
-    val redisApi = RedisApi.create("surf-friends")
-    val rabbitApi = ClientRabbitMQApi.create("surf-friends", dataPath)
+    /** Shared surf-social Redis connection, owned by [SocialClient]. */
+    val redisApi: RedisApi get() = SocialClient.redisApi
+
+    /** Shared surf-social RabbitMQ connection, owned by [SocialClient]. */
+    val rabbitApi: ClientRabbitMQApi get() = SocialClient.rabbitApi
 
     @Volatile
     lateinit var friendRequests: SyncList<FriendRequest>
@@ -30,9 +34,10 @@ abstract class FriendsClientInstance {
 
     private var subscribeToEvents: Boolean = false
 
+    /**
+     * Registers the friends Redis components. Must run before [SocialClient.connectRedis].
+     */
     suspend fun onLoad() {
-        rabbitApi.freezeAndConnect()
-
         if (subscribeToEvents) {
             redisApi.subscribeToEvents(FriendshipRedisListener)
             redisApi.subscribeToEvents(FriendRequestRedisListener)
@@ -40,16 +45,17 @@ abstract class FriendsClientInstance {
 
         friendRequests = redisApi.createSyncList<FriendRequest>("friend-requests")
         friendships = redisApi.createSyncList<Friendship>("friendships")
-        redisApi.freezeAndConnect()
     }
 
+    /**
+     * Fetches the initial state. Requires the shared connections to be connected.
+     */
     suspend fun onEnable() {
         fetch()
     }
 
+    /** The shared connections are closed by [SocialClient.disable]. */
     suspend fun onDisable() {
-        redisApi.disconnect()
-        rabbitApi.disconnect()
     }
 
     fun withEvents() {

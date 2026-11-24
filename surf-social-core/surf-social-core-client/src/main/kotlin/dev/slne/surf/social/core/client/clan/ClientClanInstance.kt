@@ -1,21 +1,16 @@
 package dev.slne.surf.social.core.client.clan
 
 import dev.slne.surf.social.core.common.clan.ClanInstance
-import dev.slne.surf.social.core.client.clan.rabbit.RabbitService
 import dev.slne.surf.social.core.client.clan.redis.RedisService
 
+/**
+ * Connections are shared and owned by [dev.slne.surf.social.core.client.SocialClient];
+ * clan only registers its Redis components here, before the shared Redis connection is frozen.
+ */
 abstract class ClientClanInstance : ClanInstance {
 
     override suspend fun load() {
         super.load()
-        RabbitService.connect()
-        RedisService.get().connect()
-    }
-
-    override suspend fun disable() {
-        super.disable()
-
-        RedisService.get().disconnect()
-        RabbitService.disconnect()
+        RedisService.get().register()
     }
 }

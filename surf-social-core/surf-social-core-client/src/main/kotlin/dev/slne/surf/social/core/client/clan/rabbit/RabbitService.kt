@@ -1,23 +1,11 @@
 package dev.slne.surf.social.core.client.clan.rabbit
 
-import dev.slne.surf.social.core.common.clan.ClanCoreSerializerModule
-import dev.slne.surf.social.core.common.clan.ClanInstance
 import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
+import dev.slne.surf.social.core.client.SocialClient
 
+/** Clan uses the shared surf-social RabbitMQ connection owned by [SocialClient]. */
 object RabbitService {
-    val rabbitApi = ClientRabbitMQApi.create(
-        "surf-clan",
-        ClanInstance.dataPath,
-        ClanCoreSerializerModule.module
-    )
-
-    suspend fun connect() {
-        rabbitApi.freezeAndConnect()
-    }
-
-    suspend fun disconnect() {
-        rabbitApi.disconnect()
-    }
+    val rabbitApi: ClientRabbitMQApi get() = SocialClient.rabbitApi
 }
 
 val rabbitApi get() = RabbitService.rabbitApi
