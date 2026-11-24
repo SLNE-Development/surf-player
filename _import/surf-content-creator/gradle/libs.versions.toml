@@ -1,0 +1,5 @@
+[versions]
+twitch4j = "1.26.0"
+
+[libraries]
+twitch4j = { module = "com.github.twitch4j:twitch4j", version.ref = "twitch4j" }
