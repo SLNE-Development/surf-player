@@ -1,6 +1,8 @@
 package dev.slne.surf.player.paper.vanish.util
 
 import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.core.client.vanish.VanishSight
+import dev.slne.surf.player.core.client.vanish.VanishedPlayers
 import dev.slne.surf.player.core.client.vanish.permission.VanishPermissions
 import dev.slne.surf.player.paper.vanish.service.VanishService
 import org.bukkit.OfflinePlayer
@@ -12,29 +14,26 @@ val OfflinePlayer.isVanished: Boolean get() = VanishService.isVanished(uniqueId)
 
 val Player.currentTarget get() = VanishService.current(this)
 
-fun Player.getVanishPriority(): Int {
-    return effectivePermissions
-        .asSequence()
-        .filter { it.value }
-        .map { it.permission }
-        .filter { it.startsWith(VanishPermissions.VANISH_PRIORITY) }
-        .mapNotNull {
-            it.removePrefix("${VanishPermissions.VANISH_PRIORITY}.")
-                .toIntOrNull()
-        }
-        .maxOrNull() ?: 0
-}
+/** The permission nodes this player holds with value `true`. */
+fun Player.grantedPermissions(): Sequence<String> =
+    effectivePermissions.asSequence().filter { it.value }.map { it.permission }
 
-fun Player.canVanishSee(target: Player): Boolean {
-    if (this.uniqueId == target.uniqueId) return true
+/** This player's vanish priority as a viewer, see [VanishSight.viewerPriority]. */
+fun Player.viewerVanishPriority(): Int? = VanishSight.viewerPriority(grantedPermissions(), ::hasPermission)
 
-    if (this.hasPermission(VanishPermissions.VANISH_BYPASS)) return true
+/** The priority this player is hidden with when vanishing, see [VanishSight.targetPriority]. */
+fun Player.targetVanishPriority(): Int = VanishSight.targetPriority(grantedPermissions())
 
-    val ownPriority = this.getVanishPriority()
-    val targetPriority = target.getVanishPriority()
-
-    return ownPriority >= targetPriority
-}
+/**
+ * Whether this player sees the vanished [target], see [VanishSight.canSee]. The target's priority
+ * is the one stored network-wide in [VanishedPlayers] while they are vanished.
+ */
+fun Player.canVanishSee(target: Player): Boolean = VanishSight.canSee(
+    viewerIsTarget = uniqueId == target.uniqueId,
+    viewerHasBypass = hasPermission(VanishPermissions.VANISH_BYPASS),
+    viewerPriority = viewerVanishPriority(),
+    targetPriority = VanishedPlayers.vanishPriority(target.uniqueId) ?: target.targetVanishPriority(),
+)
 
 @Suppress("DEPRECATION")
 fun Player.setMetaVanished(vanished: Boolean) {

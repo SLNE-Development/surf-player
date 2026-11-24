@@ -19,7 +19,7 @@ object ValidatorPreChatProcessor : PreChatProcessor {
             val error = validationResult.getErrorOrThrow()
 
             senderUuid.sendText {
-                appendWarningPrefix()
+                appendErrorPrefix()
                 append(error.errorMessage.colorIfAbsent(Colors.ERROR))
             }
 

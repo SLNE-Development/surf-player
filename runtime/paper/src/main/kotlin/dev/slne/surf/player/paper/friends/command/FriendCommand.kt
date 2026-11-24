@@ -7,23 +7,23 @@ import dev.slne.surf.api.core.command.args.awaiting
 import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.player.api.SurfCommunityPlayer
 import dev.slne.surf.player.core.client.friends.command.*
 import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
-import dev.slne.surf.player.core.client.vanish.permission.VanishPermissions
+import dev.slne.surf.player.paper.command.asViewer
 import dev.slne.surf.player.paper.command.CONFIRMATION_LIFETIME
 import dev.slne.surf.player.paper.command.helpExecutor
 import dev.slne.surf.player.paper.command.page
 import dev.slne.surf.player.paper.command.pageArgument
 import dev.slne.surf.player.paper.command.playerClickEvent
+import dev.slne.surf.player.paper.command.visibleOfflinePlayerArgument
 import dev.slne.surf.player.paper.friends.command.argument.FriendsPlayerArgument
 
 private const val PLAYER = "spieler"
 private const val FRIEND = "freund"
 
 /**
- * `/friend` with every subcommand, plus the shortcuts `/fa` and `/fl`.
+ * `/friend` with every subcommand; there are no short forms.
  */
 fun registerFriendCommands() {
     commandAPICommand("friend") {
@@ -97,28 +97,24 @@ fun registerFriendCommands() {
             }
         }
     }
-
-    friendAddCommand("fa").register()
-    friendListCommand("fl").register()
 }
 
-/** `/friend add <spieler>`, also registered as `/fa <spieler>`. */
+/** `/friend add <spieler>`. */
 private fun friendAddCommand(name: String) = CommandAPICommand(name).apply {
     withPermission(FriendPermissions.COMMAND_ADD)
-    surfOfflinePlayerArgument(PLAYER)
+    visibleOfflinePlayerArgument(PLAYER)
     playerExecutorSuspend { player, args ->
         val target = args.awaitingOrNull<SurfPlayer?>(PLAYER)
         sendFriendRequest(player.uniqueId, target)?.let(player::sendMessage)
     }
 }
 
-/** `/friend list [seite]`, also registered as `/fl [seite]`. */
+/** `/friend list [seite]`. */
 private fun friendListCommand(name: String) = CommandAPICommand(name).apply {
     withPermission(FriendPermissions.COMMAND_LIST)
     pageArgument()
     playerExecutorSuspend { player, args ->
-        val seesVanished = player.hasPermission(VanishPermissions.VANISH_BYPASS)
-        player.sendMessage(friendListComponent(player.uniqueId, args.page, seesVanished))
+        player.sendMessage(friendListComponent(player.uniqueId, args.page, player.asViewer()))
     }
 }
 

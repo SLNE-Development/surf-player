@@ -1,7 +1,14 @@
 package dev.slne.surf.player.paper.chat.command
 
-import dev.jorel.commandapi.arguments.MapArgumentBuilder
+import com.github.shynixn.mccoroutine.folia.scope
+import dev.jorel.commandapi.arguments.ArgumentSuggestions
+import dev.jorel.commandapi.arguments.GreedyStringArgument
 import dev.jorel.commandapi.kotlindsl.anyExecutor
+import dev.slne.surf.player.core.client.vanish.PlayerVisibility
+import dev.slne.surf.player.paper.command.asViewer
+import dev.slne.surf.player.paper.plugin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.future.future
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.optionalArgument
 import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
@@ -30,19 +37,23 @@ fun chatAdminActions() = listOf(
         "[--filter wert ...]"
     ) {
         optionalArgument(
-            MapArgumentBuilder<String, String>("filter", ' ')
-                .withKeyMapper { it }
-                .withValueMapper { it }
-                .withKeyList(ChatCommands.lookupFilterKeys)
-                .withoutValueList()
-                .build()
+            GreedyStringArgument("filter").replaceSuggestions(ArgumentSuggestions.stringCollectionAsync { info ->
+                val viewer = info.sender.asViewer()
+                val input = info.currentArg.orEmpty()
+
+                plugin.scope.future(Dispatchers.IO) {
+                    ChatCommands.lookupSuggestions(input) { prefix ->
+                        PlayerVisibility.network.offlinePlayerNames(viewer, prefix)
+                    }
+                }
+            })
         )
 
         anyExecutorSuspend { sender, args ->
-            val filter: Map<String, String>? by args
+            val filter: String? by args
 
             sender.sendMessage(ChatCommands.lookupSearching)
-            sender.reply(ChatCommands.lookup(filter))
+            sender.reply(ChatCommands.lookup(filter?.let(ChatCommands::parseLookupQuery)))
         }
     },
 

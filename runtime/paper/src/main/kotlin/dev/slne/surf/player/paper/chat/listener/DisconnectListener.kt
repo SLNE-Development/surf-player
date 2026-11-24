@@ -3,9 +3,7 @@ package dev.slne.surf.player.paper.chat.listener
 import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.paper.event.common.connection.PlayerQuitMessageEvent
-import dev.slne.surf.player.core.client.chat.config.chatConfig
 import dev.slne.surf.player.core.client.chat.service.IgnoreService
-import dev.slne.surf.player.core.client.chat.service.SpyService
 import dev.slne.surf.player.paper.chat.message.MessageFormatter
 import dev.slne.surf.player.paper.plugin
 import org.bukkit.event.EventHandler
@@ -18,15 +16,8 @@ object DisconnectListener : Listener {
     fun onDisconnect(event: PlayerQuitEvent) {
         MessageFormatter.invalidateMentionCache()
 
-        if (event.quitMessage() == null) {
-            return
-        }
-
+        // Replaced by our own message, see ConnectListener.
         event.quitMessage(null)
-
-        if (!chatConfig.connectionMessageConfig.enabled) {
-            return
-        }
 
         val player = event.player
         val messageEvent = PlayerQuitMessageEvent(player, createQuitMessage(player))
@@ -43,7 +34,7 @@ object DisconnectListener : Listener {
         plugin.launch {
             val uuid = event.playerUniqueId
             IgnoreService.cleanup(uuid)
-            SpyService.cleanup(uuid)
+            // Spying is network-wide and ends on a network quit, see ChatRedisListener.
         }
     }
 }

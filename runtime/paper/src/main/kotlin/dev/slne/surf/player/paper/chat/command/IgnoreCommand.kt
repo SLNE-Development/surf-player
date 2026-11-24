@@ -9,7 +9,6 @@ import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.player.core.client.chat.command.ChatCommands
 import dev.slne.surf.player.core.client.chat.command.ignoreCommandHelp
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
@@ -19,6 +18,7 @@ import dev.slne.surf.player.paper.command.helpExecutor
 import dev.slne.surf.player.paper.command.page
 import dev.slne.surf.player.paper.command.pageArgument
 import dev.slne.surf.player.paper.command.reply
+import dev.slne.surf.player.paper.command.visibleOfflinePlayerArgument
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.future.future
 import org.bukkit.entity.Player
@@ -32,7 +32,7 @@ fun ignoreCommand() = commandAPICommand("ignore") {
 
     subcommand("add") {
         withPermission(ChatPermissions.COMMAND_IGNORE_ADD)
-        surfOfflinePlayerArgument("spieler")
+        visibleOfflinePlayerArgument("spieler")
 
         playerExecutorSuspend { player, args ->
             val target = args.awaitingOrNull<SurfPlayer?>("spieler") ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)

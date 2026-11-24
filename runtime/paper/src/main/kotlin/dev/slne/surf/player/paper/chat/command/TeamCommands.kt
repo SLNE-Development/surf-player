@@ -2,7 +2,6 @@ package dev.slne.surf.player.paper.chat.command
 
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
-import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.greedyStringArgument
 import dev.jorel.commandapi.kotlindsl.playerExecutor
@@ -23,9 +22,14 @@ import dev.slne.surf.player.paper.chat.util.realName
 import dev.slne.surf.player.paper.command.helpExecutor
 import dev.slne.surf.player.paper.command.reply
 import dev.slne.surf.player.paper.command.toggleArgument
+import dev.slne.surf.api.core.command.args.awaitingOrNull
+import dev.slne.surf.core.api.common.player.SurfPlayer
+import dev.slne.surf.player.core.client.command.CommandMessages
+import dev.slne.surf.player.paper.command.failCommand
+import dev.slne.surf.player.paper.command.visibleOfflinePlayerArgument
+import dev.slne.surf.player.paper.command.visiblePlayerArgument
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import java.time.OffsetDateTime
 import java.util.*
 
@@ -59,28 +63,28 @@ fun teamchatCommand() = commandAPICommand("teamchat") {
 }
 
 /**
- * `/spy add|remove|clear`: reading the private messages of players on this server.
+ * `/spy add|remove|clear`: reading the private messages of players anywhere in the network.
  */
 fun spyCommand() = commandAPICommand("spy") {
     withPermission(ChatPermissions.TEAM_SPY)
     helpExecutor(spyCommandHelp)
 
     subcommand("add") {
-        entitySelectorArgumentOnePlayer("spieler")
-        playerExecutor { player, args ->
-            val spieler: Player by args
-            val isTeam = spieler.hasPermission(ChatPermissions.BYPASS_SPY)
+        visiblePlayerArgument("spieler")
+        playerExecutorSuspend { player, args ->
+            val spieler: SurfPlayer by args
 
-            player.reply(ChatCommands.spyAdd(player.uniqueId, spieler.uniqueId, spieler.name, isTeam))
+            player.reply(ChatCommands.spyAdd(player.uniqueId, spieler.uuid, spieler.username))
         }
     }
 
     subcommand("remove") {
-        entitySelectorArgumentOnePlayer("spieler")
-        playerExecutor { player, args ->
-            val spieler: Player by args
+        // Also offline players: spying on a player who left the network continues when they return.
+        visibleOfflinePlayerArgument("spieler")
+        playerExecutorSuspend { player, args ->
+            val spieler = args.awaitingOrNull<SurfPlayer?>("spieler") ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)
 
-            player.reply(ChatCommands.spyRemove(player.uniqueId, spieler.uniqueId, spieler.name))
+            player.reply(ChatCommands.spyRemove(player.uniqueId, spieler.uuid, spieler.username))
         }
     }
 

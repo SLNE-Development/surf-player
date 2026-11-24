@@ -19,7 +19,7 @@ import dev.slne.surf.player.core.client.vanish.VanishedPlayers
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.vanish.config.vanishConfig
 import dev.slne.surf.player.paper.vanish.util.*
-import dev.slne.surf.redis.sync.set.SyncSet
+import dev.slne.surf.redis.sync.map.SyncMap
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import net.kyori.adventure.text.Component
@@ -36,7 +36,8 @@ import java.util.concurrent.TimeUnit
 val VANISH_GLOW_COLOR: NamedTextColor = NamedTextColor.GREEN
 
 object VanishService {
-    private lateinit var vanishedPlayers: SyncSet<UUID>
+    /** Vanished players and the priority each one is hidden with, see [VanishedPlayers]. */
+    private lateinit var vanishedPlayers: SyncMap<UUID, Int>
     private var actionbarTask: ScheduledTask? = null
 
     private val playerQueues = ConcurrentHashMap<UUID, AuditableQueue>()
@@ -45,16 +46,16 @@ object VanishService {
     private val playerFlyStates = ConcurrentHashMap<UUID, Boolean>()
 
     /**
-     * Creates the network wide set of vanished players. Must run before
+     * Binds the network wide map of vanished players. Must run before
      * [SurfPlayerClient.connectRedis].
      */
     fun registerRedis() {
         // Created by SurfPlayerClient.load on every platform; this feature is the only writer.
-        vanishedPlayers = VanishedPlayers.syncSet
+        vanishedPlayers = VanishedPlayers.syncMap
     }
 
     fun vanish(player: Player) {
-        if (vanishedPlayers.add(player.uniqueId).not()) {
+        if (vanishedPlayers.put(player.uniqueId, player.targetVanishPriority()) != null) {
             return
         }
 
@@ -96,7 +97,7 @@ object VanishService {
     }
 
     fun reappear(player: Player) {
-        if (vanishedPlayers.remove(player.uniqueId).not()) {
+        if (vanishedPlayers.remove(player.uniqueId) == null) {
             return
         }
 
@@ -150,12 +151,25 @@ object VanishService {
         )
     }
 
-    fun isVanished(playerUuid: UUID) = vanishedPlayers.contains(playerUuid)
+    fun isVanished(playerUuid: UUID) = vanishedPlayers.containsKey(playerUuid)
 
-    fun all(): ObjectSet<UUID> = vanishedPlayers.snapshot().toObjectSet()
+    /**
+     * Stores the current priority of the vanished [player] again, e.g. when they join a server, so
+     * permission changes since they vanished take effect. Does nothing if they are not vanished.
+     */
+    fun refreshPriority(player: Player) {
+        val priority = player.targetVanishPriority()
+        val stored = vanishedPlayers[player.uniqueId] ?: return
+
+        if (stored != priority) {
+            vanishedPlayers[player.uniqueId] = priority
+        }
+    }
+
+    fun all(): ObjectSet<UUID> = vanishedPlayers.snapshot().keys.toObjectSet()
 
     fun allOnline(): ObjectSet<Player> =
-        vanishedPlayers.snapshot().mapNotNull { Bukkit.getPlayer(it) }.toObjectSet()
+        vanishedPlayers.snapshot().keys.mapNotNull { Bukkit.getPlayer(it) }.toObjectSet()
 
     fun previous(player: Player): OfflinePlayer? {
         return playerQueues[player.uniqueId]?.back()?.let {

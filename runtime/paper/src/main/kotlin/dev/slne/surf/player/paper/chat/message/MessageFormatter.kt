@@ -65,7 +65,7 @@ object MessageFormatter {
 
         appendName(
             senderPlayer,
-            allowTeleport = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.TELEPORT)
+            showTeleportButton = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.TELEPORT)
         )
         darkSpacer(":")
         appendSpace()

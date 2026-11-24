@@ -5,7 +5,6 @@ import dev.slne.surf.api.minestom.command.dsl.anyExecutor
 import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.commandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.greedyStringArgument
-import dev.slne.surf.api.minestom.command.dsl.playerArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.signedMessageArgument
@@ -14,8 +13,6 @@ import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
 import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument
-import dev.slne.surf.core.api.minestom.command.argument.surfPlayerArgument
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
@@ -38,7 +35,14 @@ import dev.slne.surf.player.minestom.command.page
 import dev.slne.surf.player.minestom.command.pageArgument
 import dev.slne.surf.player.minestom.command.reply
 import dev.slne.surf.player.minestom.command.toggleArgument
+import dev.slne.surf.player.minestom.command.asViewer
+import dev.slne.surf.player.minestom.command.visibleLocalPlayerArgument
+import dev.slne.surf.player.minestom.command.visibleOfflinePlayerArgument
+import dev.slne.surf.player.minestom.command.visiblePlayerArgument
+import dev.slne.surf.player.core.client.vanish.PlayerVisibility
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component
 import net.minestom.server.command.CommandSender
@@ -67,7 +71,7 @@ fun registerChatCommands() {
 private fun directMessageCommand() = commandAPICommand("msg") {
     withPermission(ChatPermissions.COMMAND_MSG)
     withAliases("dm", "w", "whisper", "tell", "pm")
-    surfPlayerArgument(PLAYER)
+    visiblePlayerArgument(PLAYER)
     signedMessageArgument("nachricht")
 
     playerExecutorSuspend { player, args ->
@@ -91,7 +95,9 @@ private fun replyCommand() = commandAPICommand("reply") {
         val target = ReplyCache.getLastTarget(player.uuid) ?: failCommand(ChatCommands.NO_REPLY_TARGET)
 
         if (target == player.uuid) failCommand(ChatCommands.CANNOT_MESSAGE_YOURSELF)
-        if (SurfCoreApi.getPlayer(target) == null) failCommand(CommandMessages.PLAYER_NOT_ONLINE)
+        // A vanished target is treated like an offline one.
+        PlayerVisibility.network.findOnlinePlayer(player.asViewer(), target)
+            ?: failCommand(CommandMessages.PLAYER_NOT_ONLINE)
 
         DirectMessageService.sendMessage(player, nachricht, target)
     }
@@ -104,7 +110,7 @@ private fun ignoreCommand() = commandAPICommand("ignore") {
 
     withSubcommand(subcommand("add") {
         withPermission(ChatPermissions.COMMAND_IGNORE_ADD)
-        surfOfflinePlayerArgument(PLAYER)
+        visibleOfflinePlayerArgument(PLAYER)
 
         playerExecutorSuspend { player, args ->
             val target = args.get<Deferred<SurfPlayer?>>(PLAYER).await()
@@ -166,31 +172,33 @@ private fun teamchatCommand() = commandAPICommand("teamchat") {
     }
 }
 
-/** `/spy add|remove|clear`: reading the private messages of players on this server. */
+/** `/spy add|remove|clear`: reading the private messages of players anywhere in the network. */
 private fun spyCommand() = commandAPICommand("spy") {
     withPermission(ChatPermissions.TEAM_SPY)
     helpExecutor(spyCommandHelp)
 
     withSubcommand(subcommand("add") {
-        playerArgument(PLAYER)
-        playerExecutor { player, args ->
-            val spieler: Player by args
-            val isTeam = spieler.hasPermission(ChatPermissions.BYPASS_SPY)
+        visiblePlayerArgument(PLAYER)
+        playerExecutorSuspend { player, args ->
+            val spieler: SurfPlayer by args
 
-            player.reply(ChatCommands.spyAdd(player.uuid, spieler.uuid, spieler.username, isTeam))
+            player.reply(ChatCommands.spyAdd(player.uuid, spieler.uuid, spieler.username))
         }
     })
 
     withSubcommand(subcommand("remove") {
-        playerArgument(PLAYER)
-        playerExecutor { player, args ->
-            val spieler: Player by args
+        // Also offline players: spying on a player who left the network continues when they return.
+        visibleOfflinePlayerArgument(PLAYER)
+        playerExecutorSuspend { player, args ->
+            val spieler = args.get<Deferred<SurfPlayer?>>(PLAYER).await()
+                ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)
+
             player.reply(ChatCommands.spyRemove(player.uuid, spieler.uuid, spieler.username))
         }
     })
 
     withSubcommand(subcommand("clear") {
-        playerExecutor { player, _ -> player.reply(ChatCommands.spyClear(player.uuid)) }
+        playerExecutorSuspend { player, _ -> player.reply(ChatCommands.spyClear(player.uuid)) }
     })
 }
 
@@ -230,7 +238,17 @@ fun chatAdminActions() = listOf(
         "Durchsucht den Chatverlauf (Filter: /surfplayer chat filters)",
         "[--filter wert ...]"
     ) {
-        greedyStringArgument("filter", optional = true)
+        greedyStringArgument("filter", optional = true) {
+            replaceSuggestions(ArgumentSuggestions.stringsAsync { info ->
+                val viewer = info.sender.asViewer()
+
+                withContext(Dispatchers.IO) {
+                    ChatCommands.lookupSuggestions(info.currentArg) { prefix ->
+                        PlayerVisibility.network.offlinePlayerNames(viewer, prefix)
+                    }
+                }
+            })
+        }
 
         anyExecutorSuspend { sender, args ->
             val filter = args.getOptional<String>("filter")

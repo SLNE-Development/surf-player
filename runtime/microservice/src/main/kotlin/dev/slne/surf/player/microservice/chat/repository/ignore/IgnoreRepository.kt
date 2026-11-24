@@ -3,7 +3,6 @@ package dev.slne.surf.player.microservice.chat.repository.ignore
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Op
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
-import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.or
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.insertIgnore
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
@@ -31,18 +30,18 @@ object IgnoreRepository {
     }
 
     suspend fun unignore(uuid: UUID, ignoredUUID: UUID): Boolean = suspendTransaction {
-        IgnoreListTable.deleteWhere { isIgnoring(uuid, ignoredUUID) } > 0
+        IgnoreListTable.deleteWhere { isIgnoringOp(uuid, ignoredUUID) } > 0
     }
 
-    /** Whether [playerA] ignores [playerB] or [playerB] ignores [playerA]. */
-    suspend fun isEitherIgnoring(playerA: UUID, playerB: UUID): Boolean = suspendTransaction {
+    /** Whether [player] ignores [target]. */
+    suspend fun isIgnoring(player: UUID, target: UUID): Boolean = suspendTransaction {
         IgnoreListTable.select(IgnoreListTable.id)
-            .where { isIgnoring(playerA, playerB) or isIgnoring(playerB, playerA) }
+            .where { isIgnoringOp(player, target) }
             .limit(1)
             .firstOrNull() != null
     }
 
-    private fun isIgnoring(player: UUID, target: UUID): Op<Boolean> =
+    private fun isIgnoringOp(player: UUID, target: UUID): Op<Boolean> =
         (IgnoreListTable.userUuid eq player) and (IgnoreListTable.ignoredUuid eq target)
 
     suspend fun findAllByUuid(uuid: UUID): List<IgnoreListEntry> = suspendTransaction {

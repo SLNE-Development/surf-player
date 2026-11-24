@@ -3,7 +3,6 @@ package dev.slne.surf.player.paper.minimap.command
 import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.anyExecutor
-import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.slne.surf.player.core.client.minimap.command.MapInfo
 import dev.slne.surf.player.core.client.minimap.command.sendMapInfo
@@ -13,6 +12,7 @@ import dev.slne.surf.player.core.client.minimap.config.ReloadResult
 import dev.slne.surf.player.core.client.minimap.permission.MinimapPermissions
 import dev.slne.surf.player.core.client.minimap.service.MapSyncService
 import dev.slne.surf.player.paper.command.PaperAdminAction
+import dev.slne.surf.player.paper.command.visibleLocalPlayerArgument
 import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
 import dev.slne.surf.player.paper.minimap.tracker.PaperTracker
 import dev.slne.surf.player.paper.plugin
@@ -49,7 +49,7 @@ fun minimapAdminActions() = listOf(
         "Zeigt, was ein Spieler auf diesem Server von den Karten-Mods bekommt",
         "<spieler>"
     ) {
-        entitySelectorArgumentOnePlayer("spieler")
+        visibleLocalPlayerArgument("spieler")
         anyExecutor { sender, args ->
             val spieler: Player by args
             // The player's channels, world and tracker state are read on their own thread.

@@ -15,7 +15,7 @@ val clanCommandHelp = CommandHelp(
         HelpEntry("/clan whois <spieler>", "Zeigt, in welchem Clan ein Spieler ist", ClanPermissions.COMMAND_WHOIS),
         HelpEntry("/clan list [seite]", "Zeigt alle Clans", ClanPermissions.COMMAND_LIST),
         HelpEntry("/clan members [clan]","Zeigt die Mitglieder eines Clans", ClanPermissions.COMMAND_MEMBERS),
-        HelpEntry("/clan chat <nachricht>", "Schreibt in den Clan-Chat (kurz: /cc)", ClanPermissions.COMMAND_CHAT),
+        HelpEntry("/clan chat <nachricht>", "Schreibt in den Clan-Chat (kurz: /cc, /clanchat)", ClanPermissions.COMMAND_CHAT),
         HelpEntry("/clan invite <spieler>", "Lädt einen Spieler in deinen Clan ein", ClanPermissions.COMMAND_INVITE),
         HelpEntry("/clan revoke <spieler>", "Zieht eine Einladung zurück", ClanPermissions.COMMAND_REVOKE),
         HelpEntry("/clan accept <clan>", "Nimmt eine Einladung an", ClanPermissions.COMMAND_ACCEPT),

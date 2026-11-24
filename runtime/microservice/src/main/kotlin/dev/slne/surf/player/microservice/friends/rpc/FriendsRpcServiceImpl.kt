@@ -7,11 +7,13 @@ import dev.slne.surf.player.api.friends.result.FriendRequestRemoveResult
 import dev.slne.surf.player.api.friends.result.FriendshipRemoveResult
 import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.common.friends.rpc.FriendRequestAnswer
+import dev.slne.surf.player.core.common.friends.rpc.FriendRequestPrivileges
 import dev.slne.surf.player.core.common.friends.rpc.FriendRequestState
 import dev.slne.surf.player.core.common.friends.rpc.FriendsRpcService
 import dev.slne.surf.player.microservice.chat.repository.ignore.IgnoreRepository
 import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldownKind
 import dev.slne.surf.player.microservice.friends.cooldown.FriendRequestCooldowns
+import dev.slne.surf.player.microservice.friends.db.repository.FriendRequestCooldownRepository
 import dev.slne.surf.player.microservice.friends.db.repository.FriendRequestRepository
 import dev.slne.surf.player.microservice.friends.db.repository.FriendshipsRepository
 import dev.slne.surf.player.microservice.settings.repository.PlayerSettingsRepository
@@ -22,19 +24,19 @@ object FriendsRpcServiceImpl : FriendsRpcService {
     override suspend fun findAllFriendRequests(): List<FriendRequest> =
         FriendRequestRepository.fetchFriendRequests()
 
-    override suspend fun createFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestCreateResult {
-        if (IgnoreRepository.isEitherIgnoring(senderUuid, targetUuid)) {
-            return FriendRequestCreateResult.Blocked(targetUuid)
-        }
-
-        if (!acceptsFriendRequests(targetUuid)) {
-            return FriendRequestCreateResult.RequestsDisabled(targetUuid)
-        }
-
-        val remainingCooldown = FriendRequestCooldowns.remaining(senderUuid, targetUuid)
-        if (remainingCooldown != null) {
-            return FriendRequestCreateResult.OnCooldown(targetUuid, remainingCooldown)
-        }
+    override suspend fun createFriendRequest(
+        senderUuid: UUID,
+        targetUuid: UUID,
+        privileges: FriendRequestPrivileges
+    ): FriendRequestCreateResult {
+        FriendRequestGate.refusal(
+            targetUuid,
+            privileges,
+            senderIgnoresTarget = { IgnoreRepository.isIgnoring(senderUuid, targetUuid) },
+            targetIgnoresSender = { IgnoreRepository.isIgnoring(targetUuid, senderUuid) },
+            targetAcceptsRequests = { acceptsFriendRequests(targetUuid) },
+            remainingCooldown = { FriendRequestCooldowns.remaining(senderUuid, targetUuid) },
+        )?.let { return it }
 
         val friendRequest = FriendRequest(
             senderUuid = senderUuid,
@@ -45,6 +47,9 @@ object FriendsRpcServiceImpl : FriendsRpcService {
         FriendRequestRepository.createFriendRequest(friendRequest)
         return FriendRequestCreateResult.Success(friendRequest)
     }
+
+    override suspend fun deleteFriendRequestCooldowns(senderUuid: UUID, targetUuid: UUID?): Int =
+        FriendRequestCooldownRepository.deleteCooldowns(senderUuid, targetUuid)
 
     override suspend fun revokeFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestRemoveResult {
         if (FriendRequestRepository.deleteFriendRequest(senderUuid, targetUuid)) {

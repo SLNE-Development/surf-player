@@ -32,8 +32,8 @@ the LuckPerms groups of the live network can be updated.
 | `/ignore <player>` (toggle) | `/ignore add <spieler>`, `/ignore remove <spieler>` |
 | `/ignore #list` | `/ignore list [seite]` |
 | `/friend`, `/f` | `/friend` (shows the help; `/f` removed) |
-| `/friend add <player>`, `/fa` | unchanged |
-| `/friend list`, `/fl` | `/friend list [seite]`, `/fl [seite]` |
+| `/friend add <player>`, `/fa` | `/friend add <spieler>` (`/fa` removed) |
+| `/friend list`, `/fl` | `/friend list [seite]` (`/fl` removed) |
 | `/friend info <friend>` | unchanged |
 | `/friend remove <friend>` | unchanged, now asks for confirmation |
 | `/friend requests` | `/friend requests [seite]` |
@@ -56,7 +56,7 @@ the LuckPerms groups of the live network can be updated.
 | `/clan promote/demote/kick <member>` | unchanged |
 | `/clan options tagcolor foreground\|background\|shadow <color>` | `/clan color foreground\|background\|shadow <farbe>` (`#` optional) |
 | `/clan player settings invite [bool]` | removed: setting `clan:invites` in `/settings` |
-| `/clan chat <message>`, `/cc`, `/clanchat` | `/clan chat <nachricht>`, `/cc` (`/clanchat` removed) |
+| `/clan chat <message>`, `/cc`, `/clanchat` | `/clan chat <nachricht>`, `/cc`, `/clanchat` |
 | `/playtime [player]`, `/pt` | unchanged |
 | `/profile` | unchanged |
 | `/settings` | unchanged (opens the menu) |
@@ -71,7 +71,7 @@ the LuckPerms groups of the live network can be updated.
 | Old command | New command |
 |---|---|
 | `/teamchat`, `/tc` | unchanged |
-| `/spy <player>` (toggle) | `/spy add <spieler>`, `/spy remove <spieler>` |
+| `/spy <player>` (toggle) | `/spy add <spieler>`, `/spy remove <spieler>` (network-wide: any player online in the network) |
 | `/spy #clear` | `/spy clear` |
 | `/slowchat #status` | `/slowchat info` |
 | `/slowchat <on\|off>` | `/slowchat toggle [an\|aus]` |
@@ -84,7 +84,7 @@ Paper and Minestom: `/surfplayer`; Velocity: `/surfplayervelocity`.
 | Old command | New command |
 |---|---|
 | `/surfchat reload`, `/sc reload` | `/surfplayer chat reload` |
-| `/surfchat lookup [query]` | `/surfplayer chat lookup [--filter wert ...]` (`--message` now works) |
+| `/surfchat lookup [query]` | `/surfplayer chat lookup [--filter wert ...]` (`--message` now works; filter names and values are tab-completed) |
 | `/surfchat lookuphelp` | `/surfplayer chat filters [seite]` |
 | `/surfchat functionality status` | `/surfplayer chat status` |
 | `/surfchat functionality change <on\|off>` | `/surfplayer chat toggle <an\|aus>` |
@@ -92,6 +92,7 @@ Paper and Minestom: `/surfplayer`; Velocity: `/surfplayervelocity`.
 | `/clan admin reload` | `/surfplayer clan reload` (Velocity: `/surfplayervelocity clan reload`) |
 | `/clan admin invalidateAllCaches` | `/surfplayer clan invalidatecaches` |
 | `/clan admin delete <clan>` | `/surfplayer clan delete <clan>` |
+| – | `/surfplayer friends cooldown clear <spieler> [ziel]` (new: deletes friend request cooldowns) |
 | `/playtimeadmin reload` | `/surfplayer playtime reload` |
 | `/playtimeadmin streak recalculate <player>` | `/surfplayer playtime recalculate <spieler>` |
 | `/playtimeadmin streak recalculateall` | `/surfplayer playtime recalculate` |
@@ -144,7 +145,7 @@ Paper and Minestom: `/surfplayer`; Velocity: `/surfplayervelocity`.
 | `surf.chat.command.surfchat.functionality.toggle` | `surf.player.admin.chat.toggle` |
 | `surf.chat.command.surfchat.functionality.list` | `surf.player.admin.chat.servers` |
 | `surf.chat.command.surfchat.delete` | `surf.player.chat.delete` (delete button on messages) |
-| `surf.chat.command.surfchat.teleport` | `surf.player.chat.teleport` (teleport button on messages and PM spy) |
+| `surf.chat.command.surfchat.teleport` | `surf.player.chat.teleport` (`[TP]` button in front of the sender's name in chat and in the PM spy; clicking a name now suggests `/msg <name>` for everyone) |
 | `surf.chat.bypass.filter` | `surf.player.chat.bypass.filter` |
 | `surf.chat.disabling.bypass` | `surf.player.chat.bypass.disabling` |
 | `surf.chat.bypass.functionality` | `surf.player.chat.bypass.functionality` |
@@ -154,7 +155,8 @@ Paper and Minestom: `/surfplayer`; Velocity: `/surfplayervelocity`.
 | `surf.chat.team.notify.functionality` | `surf.player.chat.notify.functionality` |
 | `surf.chat.team.notify.deletion` | `surf.player.chat.notify.deletion` |
 | `surf.chat.team` (AI moderation notices) | `surf.player.chat.notify.moderation` |
-| `surf.chat.connection.always-show` | `surf.player.chat.connection.always-show` |
+| `surf.chat.connection.always-show` | `surf.player.chat.connection.always-show` (now: the holder sees every join/quit message, despite their setting and the config; of vanished players only if they may see them) |
+| – | `surf.player.chat.ignore.exempt` (new, team: cannot be ignored; messages, private messages and friend requests get through older ignores) |
 
 ### Clan
 
@@ -204,6 +206,8 @@ Paper and Minestom: `/surfplayer`; Velocity: `/surfplayervelocity`.
 | `surf.friends.command.request.decline` | `surf.player.command.friend.deny` |
 | `surf.friends.command.request.revoke` | `surf.player.command.friend.revoke` |
 | `surf.friends.command.jump` | removed (was never used) |
+| – | `surf.player.friends.cooldown.bypass` (new, staff: friend requests ignore cooldowns) |
+| – | `surf.player.admin.friends.cooldown` (new: `/surfplayer friends cooldown clear`) |
 
 ### Playtime
 

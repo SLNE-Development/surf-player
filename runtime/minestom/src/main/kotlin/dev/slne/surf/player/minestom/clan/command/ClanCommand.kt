@@ -12,7 +12,8 @@ import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument
+import dev.slne.surf.player.minestom.command.asViewer
+import dev.slne.surf.player.minestom.command.visibleOfflinePlayerArgument
 import dev.slne.surf.player.api.chat.SurfChatApi
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
@@ -82,7 +83,7 @@ fun registerClanCommands() {
 
         withSubcommand(subcommand("whois") {
             withPermission(ClanPermissions.COMMAND_WHOIS)
-            surfOfflinePlayerArgument(PLAYER)
+            visibleOfflinePlayerArgument(PLAYER)
             anyExecutorSuspend { sender, args ->
                 val target = args.get<Deferred<SurfPlayer?>>(PLAYER).await()
                     ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)
@@ -100,7 +101,7 @@ fun registerClanCommands() {
             withPermission(ClanPermissions.COMMAND_MEMBERS)
             withOptionalArguments(ClanByTagArgument(CLAN))
             anyExecutorSuspend { sender, args ->
-                sender.reply(ClanCommands.members((sender as? Player)?.uuid, args.optionalClan(CLAN)))
+                sender.reply(ClanCommands.members(sender.asViewer(), args.optionalClan(CLAN)))
             }
         })
 
@@ -108,7 +109,7 @@ fun registerClanCommands() {
 
         withSubcommand(subcommand("invite") {
             withPermission(ClanPermissions.COMMAND_INVITE)
-            surfOfflinePlayerArgument(PLAYER)
+            visibleOfflinePlayerArgument(PLAYER)
             playerExecutorSuspend { player, args ->
                 val invitee = args.get<Deferred<SurfPlayer?>>(PLAYER).await()
                     ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)
@@ -230,14 +231,14 @@ fun registerClanCommands() {
         })
     }
 
-    clanChatCommand("cc").register()
+    clanChatCommand("cc").withAliases("clanchat").register()
 }
 
 private suspend fun changeColor(player: Player, update: ClanTagColorUpdate) =
     player.reply(ClanCommands.changeColor(player.uuid, update))
 
 /**
- * `/clan chat <nachricht>`, also registered as `/cc <nachricht>`.
+ * `/clan chat <nachricht>`, also registered as `/cc <nachricht>` and `/clanchat <nachricht>`.
  */
 private fun clanChatCommand(name: String): CommandAPICommand = subcommand(name) {
     withPermission(ClanPermissions.COMMAND_CHAT)

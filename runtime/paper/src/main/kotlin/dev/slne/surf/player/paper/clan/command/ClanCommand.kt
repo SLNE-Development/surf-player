@@ -15,7 +15,6 @@ import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.core.api.paper.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.player.api.chat.SurfChatApi
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
@@ -46,6 +45,8 @@ import dev.slne.surf.player.paper.command.pageArgument
 import dev.slne.surf.player.paper.command.playerClickEvent
 import dev.slne.surf.player.paper.command.reply
 import dev.slne.surf.player.paper.command.toggleArgument
+import dev.slne.surf.player.paper.command.visibleOfflinePlayerArgument
+import dev.slne.surf.player.paper.command.asViewer
 import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.ShadowColor
@@ -90,7 +91,7 @@ fun registerClanCommands() {
 
         subcommand("whois") {
             withPermission(ClanPermissions.COMMAND_WHOIS)
-            surfOfflinePlayerArgument(PLAYER)
+            visibleOfflinePlayerArgument(PLAYER)
             anyExecutorSuspend { sender, args ->
                 val target = args.awaitingOrNull<SurfPlayer?>(PLAYER) ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)
                 sender.reply(ClanCommands.whois(target.uuid, target.lastKnownName ?: target.uuid.toString()))
@@ -108,7 +109,7 @@ fun registerClanCommands() {
             withOptionalArguments(ClanByTagArgument(CLAN))
             anyExecutorSuspend { sender, args ->
                 val clan = args.awaitingOrNull<Clan>(CLAN)
-                sender.reply(ClanCommands.members((sender as? Player)?.uniqueId, clan))
+                sender.reply(ClanCommands.members(sender.asViewer(), clan))
             }
         }
 
@@ -116,7 +117,7 @@ fun registerClanCommands() {
 
         subcommand("invite") {
             withPermission(ClanPermissions.COMMAND_INVITE)
-            surfOfflinePlayerArgument(PLAYER)
+            visibleOfflinePlayerArgument(PLAYER)
             playerExecutorSuspend { player, args ->
                 val invitee = args.awaitingOrNull<SurfPlayer?>(PLAYER) ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)
                 val inviteeName = invitee.lastKnownName ?: invitee.uuid.toString()
@@ -239,14 +240,14 @@ fun registerClanCommands() {
         }
     }
 
-    clanChatCommand("cc").register()
+    clanChatCommand("cc").withAliases("clanchat").register()
 }
 
 private suspend fun changeColor(player: Player, update: ClanTagColorUpdate) =
     player.reply(ClanCommands.changeColor(player.uniqueId, update))
 
 /**
- * `/clan chat <nachricht>`, also registered as `/cc <nachricht>`.
+ * `/clan chat <nachricht>`, also registered as `/cc <nachricht>` and `/clanchat <nachricht>`.
  */
 private fun clanChatCommand(name: String) = CommandAPICommand(name).apply {
     withPermission(ClanPermissions.COMMAND_CHAT)

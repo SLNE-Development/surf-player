@@ -38,7 +38,18 @@ object ChatPermissions {
     const val BYPASS_SPY = "$PREFIX.bypass.spy"
     const val SLOW_CHAT_BYPASS = "$PREFIX.bypass.slowchat"
 
+    /**
+     * Team members: cannot be ignored. `/ignore add` refuses them, and their messages, private
+     * messages and friend requests reach players who ignored them before.
+     */
+    const val IGNORE_EXEMPT = "$PREFIX.ignore.exempt"
+
     // Extra visibility
+    /**
+     * Sees every join and quit message: also with the setting `connection-messages` off, with
+     * connection messages disabled in the config and, if allowed to see vanished players, those of
+     * vanished players.
+     */
     const val CONNECTION_MESSAGE_ALWAYS_SHOW = "$PREFIX.connection.always-show"
     const val SLOW_CHAT_NOTIFY = "$PREFIX.notify.slowchat"
     const val TEAM_NOTIFY_FUNCTIONALITY = "$PREFIX.notify.functionality"

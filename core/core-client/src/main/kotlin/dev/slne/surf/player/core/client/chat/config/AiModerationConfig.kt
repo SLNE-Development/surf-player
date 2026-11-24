@@ -52,6 +52,8 @@ data class AiModerationConfig(
     )
     val thresholds: AiModerationThresholds = AiModerationThresholds()
 ) {
+    /** Whether messages are classified at all, see [isAiModerationActive]. */
+    val isActive: Boolean get() = isAiModerationActive(enabled, apiKey)
 
     companion object {
         private lateinit var manager: SpongeConfigManager<AiModerationConfig>
@@ -124,3 +126,10 @@ data class AiModerationThresholds(
 )
 
 val aiModerationConfig get() = AiModerationConfig.getConfig()
+
+/**
+ * Whether the AI moderation classifies messages: it must be [enabled] and have an [apiKey]. Without
+ * a key every request to OpenAI fails, so an enabled moderation without one (the default config)
+ * stays inactive instead of failing for every message.
+ */
+fun isAiModerationActive(enabled: Boolean, apiKey: String): Boolean = enabled && apiKey.isNotBlank()

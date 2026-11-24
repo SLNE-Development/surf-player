@@ -22,6 +22,6 @@ object CorrectViewersPreChatProcessor : PreChatProcessor {
     private fun Audience.isConsole() = this is ConsoleSender
 
     private fun isIgnored(viewer: UUID?, sender: UUID): Boolean {
-        return viewer != null && IgnoreService.isIgnored(viewer, sender)
+        return viewer != null && IgnoreService.blocksMessage(viewer, sender)
     }
 }

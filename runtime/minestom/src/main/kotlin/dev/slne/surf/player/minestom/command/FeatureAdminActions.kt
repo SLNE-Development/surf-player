@@ -1,7 +1,6 @@
 package dev.slne.surf.player.minestom.command
 
 import dev.slne.surf.api.minestom.command.dsl.anyExecutor
-import dev.slne.surf.api.minestom.command.dsl.playerArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.coroutine.minestomBlockingScope
@@ -95,7 +94,7 @@ fun minimapAdminActions() = listOf(
         "Zeigt, was ein Spieler auf diesem Server von den Karten-Mods bekommt",
         "<spieler>"
     ) {
-        playerArgument("spieler")
+        visibleLocalPlayerArgument("spieler")
         anyExecutor { sender, args ->
             val target: Player = args.get("spieler")
             target.scheduler().scheduleNextTick {

@@ -42,10 +42,16 @@ Every command of surf-player follows these rules, on Paper, Minestom and Velocit
   `revoke`, `create`, `delete`, `leave`, `invite`, `kick`, `promote`, `demote`, `toggle`. No
   synonyms (`decline` → `deny`, `show` → `info`).
 - Short aliases exist only for the most used actions and are listed in the help: `/msg`
-  (`/dm`, `/w`, `/whisper`, `/tell`, `/pm`), `/r`, `/fa` (= `/friend add`), `/fl` (= `/friend list`),
-  `/cc` (= `/clan chat`), `/pt` (= `/playtime`).
+  (`/dm`, `/w`, `/whisper`, `/tell`, `/pm`), `/r`, `/cc` and `/clanchat` (= `/clan chat`),
+  `/pt` (= `/playtime`). `/friend` has no short forms.
 - Arguments look the same everywhere: a player argument suggests players online in the network
   (names, case-insensitive), a clan argument suggests clan tags, pages are `[seite]`.
+- Vanished players stay hidden: every player argument goes through `PlayerVisibility`
+  (core-client) and the platform's `player-arguments.kt` (`visiblePlayerArgument`,
+  `visibleOfflinePlayerArgument`, `visibleLocalPlayerArgument`). A vanished player is only
+  suggested to themself, to senders with `surf.player.vanish.bypass` and to the console; for
+  everybody else, typing their name behaves exactly as for an offline or unknown player. Never use
+  surf-core's `surfPlayerArgument`/`surfOfflinePlayerArgument` or entity selectors directly.
 - Destructive actions (`/clan delete`, `/clan leave`, `/friend remove`) ask for confirmation with a
   clickable button.
 

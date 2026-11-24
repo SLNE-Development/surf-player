@@ -1,13 +1,17 @@
 package dev.slne.surf.player.paper.chat.listener
 
-import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.api.paper.util.forEachPlayer
 import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
+import dev.slne.surf.player.core.client.chat.config.chatConfig
+import dev.slne.surf.player.core.client.chat.message.ConnectionMessageRecipients
 import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
-import dev.slne.surf.player.core.client.util.luckPermsPrefix
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.util.luckPermsPrefix
+import dev.slne.surf.player.core.client.vanish.VanishedPlayers
+import dev.slne.surf.player.paper.vanish.util.canVanishSee
 import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 fun createJoinMessage(player: Player) =
@@ -17,18 +21,29 @@ fun createQuitMessage(player: Player) =
     buildConnectionMessage(player.name, luckPermsPrefix(player.uniqueId), joined = false)
 
 /**
- * Sends the join/quit [message] of [player] to everyone who has connection messages enabled,
- * or to everyone if the player's connection messages must always be shown.
+ * Sends the join/quit [message] of [player] to every player on this server who sees it, see
+ * [ConnectionMessageRecipients.receives], and to the console unless [player] is vanished.
  */
 fun broadcastConnectionMessage(player: Player, message: Component) {
-    if (player.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW)) {
-        server.broadcast(message)
-        return
-    }
+    val configEnabled = chatConfig.connectionMessageConfig.enabled
+    val vanished = VanishedPlayers.isVanished(player.uniqueId)
 
     forEachPlayer { viewer ->
-        if (SurfSettingsApi.getSettingValue(viewer.uniqueId, SettingKeys.CONNECTION_MESSAGES)) {
+        val receives = ConnectionMessageRecipients.receives(
+            configEnabled = configEnabled,
+            playerVanished = vanished,
+            viewerIsPlayer = viewer.uniqueId == player.uniqueId,
+            viewerAlwaysShow = viewer.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW),
+            viewerSettingEnabled = { SurfSettingsApi.getSettingValue(viewer.uniqueId, SettingKeys.CONNECTION_MESSAGES) },
+            viewerCanSeeVanished = { viewer.canVanishSee(player) },
+        )
+
+        if (receives) {
             viewer.sendMessage(message)
         }
+    }
+
+    if (configEnabled && !vanished) {
+        Bukkit.getConsoleSender().sendMessage(message)
     }
 }

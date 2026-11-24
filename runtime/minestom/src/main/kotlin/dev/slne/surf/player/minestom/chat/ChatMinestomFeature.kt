@@ -6,6 +6,7 @@ import dev.slne.surf.player.core.client.chat.config.initChatConfig
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
 import dev.slne.surf.player.core.client.chat.redis.ChatRedisListener
 import dev.slne.surf.player.core.client.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.SpyService
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
 import dev.slne.surf.player.minestom.chat.command.chatAdminActions
 import dev.slne.surf.player.minestom.chat.command.registerChatCommands
@@ -23,6 +24,7 @@ object ChatMinestomFeature : MinestomPlayerFeature {
 
         registerProcessors()
 
+        SpyService.register(redisApi)
         redisApi.subscribeToEvents(ChatRedisListener)
         redisApi.registerRequestHandler(MinestomRedisEventListener)
 

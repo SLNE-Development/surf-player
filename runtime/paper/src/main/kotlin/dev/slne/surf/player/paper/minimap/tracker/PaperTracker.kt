@@ -17,6 +17,7 @@ import dev.slne.surf.player.paper.minimap.hook.ClanHook
 import dev.slne.surf.player.paper.minimap.hook.FriendsHook
 import dev.slne.surf.player.paper.minimap.platform.PaperMinimapPlayer
 import dev.slne.surf.player.paper.plugin
+import dev.slne.surf.player.paper.vanish.util.canVanishSee
 import dev.slne.surf.player.paper.vanish.util.isVanished
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -154,7 +155,9 @@ object PaperTracker {
     private fun isVisibleOnMap(player: Player, target: UUID): Boolean {
         val targetPlayer = Bukkit.getPlayer(target) ?: return false
         val onlineFor = joinedAt[target]?.elapsedNow() ?: Duration.ZERO
-        return MapVisibility.isShown(player.canSee(targetPlayer), onlineFor) { targetPlayer.isVanished }
+        return MapVisibility.isShown(player.canSee(targetPlayer), onlineFor) {
+            targetPlayer.isVanished && !player.canVanishSee(targetPlayer)
+        }
     }
 
     /**

@@ -24,9 +24,20 @@ interface FriendsRpcService {
      * Stores a request from [senderUuid] to [targetUuid], unless one of both ignores the other
      * ([FriendRequestCreateResult.Blocked]), [targetUuid] turned off the setting `friend:requests`
      * ([FriendRequestCreateResult.RequestsDisabled]) or [senderUuid] is on cooldown for
-     * [targetUuid] ([FriendRequestCreateResult.OnCooldown]), checked in this order.
+     * [targetUuid] ([FriendRequestCreateResult.OnCooldown]), checked in this order. [privileges]
+     * lift the ignore of [targetUuid] and the cooldown.
      */
-    suspend fun createFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestCreateResult
+    suspend fun createFriendRequest(
+        senderUuid: UUID,
+        targetUuid: UUID,
+        privileges: FriendRequestPrivileges
+    ): FriendRequestCreateResult
+
+    /**
+     * Deletes the friend request cooldowns of [senderUuid], only the one towards [targetUuid] if
+     * given; returns how many were deleted.
+     */
+    suspend fun deleteFriendRequestCooldowns(senderUuid: UUID, targetUuid: UUID?): Int
 
     /** Removes the request from [senderUuid] to [targetUuid] and puts [senderUuid] on the withdraw cooldown. */
     suspend fun revokeFriendRequest(senderUuid: UUID, targetUuid: UUID): FriendRequestRemoveResult

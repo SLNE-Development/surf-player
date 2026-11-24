@@ -49,19 +49,28 @@ fun SurfComponentBuilder.appendDelete(messageData: MessageData) = append(buildTe
     })
 })
 
-fun SurfComponentBuilder.appendName(name: String, senderUuid: UUID, prefix: String, allowTeleport: Boolean) =
+/**
+ * The name of a chat message's sender: clicking it suggests `/msg <name> ` to everyone. Viewers
+ * with [ChatPermissions.TELEPORT] ([showTeleportButton]) additionally get a `[TP]` button in front
+ * of the name that teleports them to the sender.
+ */
+fun SurfComponentBuilder.appendName(name: String, senderUuid: UUID, prefix: String, showTeleportButton: Boolean) =
     append {
-        append(miniMessage.deserialize(prefix + name))
-        if (allowTeleport) {
-            clickEvent(ClickEvent.callback({
-                val who = it.uuidOrNull() ?: return@callback
-                ChatPlatform.teleportToPlayer(who, senderUuid)
-            }, ClickCallback.Options.builder().uses(Int.MAX_VALUE).build()))
-            hoverEvent(buildText {
-                info("Teleportiere zu $name")
-            })
+        if (showTeleportButton) {
+            appendTeleport(name, senderUuid, ClickCallback.Options.builder().uses(Int.MAX_VALUE).build())
         }
+
+        append(nameComponent(name, prefix))
     }
+
+/** The prefixed [name], suggesting `/msg <name> ` when clicked. */
+fun nameComponent(name: String, prefix: String): Component = buildText {
+    append(miniMessage.deserialize(prefix + name))
+    clickSuggestsCommand("/msg $name ")
+    hoverEvent(buildText {
+        info("Klicke, um $name eine private Nachricht zu schreiben")
+    })
+}
 
 fun buildConnectionMessage(name: String, prefix: String, joined: Boolean): Component = buildText {
     darkSpacer("[")
@@ -74,15 +83,20 @@ fun buildConnectionMessage(name: String, prefix: String, joined: Boolean): Compo
     append(miniMessage.deserialize(prefix + name))
 }
 
-fun SurfComponentBuilder.appendTeleport(name: String, uuid: UUID) = append {
+/** The `[TP]` button that teleports the clicking player to the player [uuid] (called [name]). */
+fun SurfComponentBuilder.appendTeleport(
+    name: String,
+    uuid: UUID,
+    options: ClickCallback.Options = ClickCallback.Options.builder().build()
+) = append {
     darkSpacer("[")
     info("TP")
     darkSpacer("]")
     darkSpacer(" ")
-    clickEvent(ClickEvent.callback { clicked ->
+    clickEvent(ClickEvent.callback({ clicked ->
         val who = clicked.uuidOrNull() ?: return@callback
         ChatPlatform.teleportToPlayer(who, uuid)
-    })
+    }, options))
     hoverEvent(buildText {
         info("Klicke, um dich zu $name zu teleportieren")
     })
@@ -177,7 +191,7 @@ suspend fun formatTeamchat(messageData: MessageData) = buildText {
     darkSpacer(">> ")
     text("TEAM", Colors.RED, TextDecoration.BOLD)
     darkSpacer(" | ")
-    appendName(senderName, sender, luckPermsPrefix(sender), allowTeleport = false)
+    appendName(senderName, sender, luckPermsPrefix(sender), showTeleportButton = false)
     darkSpacer(" >> ")
     append(updateLinks(messageData.message))
 
@@ -186,8 +200,8 @@ suspend fun formatTeamchat(messageData: MessageData) = buildText {
 }
 
 /**
- * Formats the direct message in [messageData] for the spy [spy]; the teleport button is only shown
- * when [spy] may teleport.
+ * Formats the direct message in [messageData] for the spy [spy], who is on this server; the
+ * teleport button is only shown when [spy] may teleport and the receiver is on this server too.
  */
 suspend fun formatPmSpy(messageData: MessageData, spy: UUID) = buildText {
     val receiver = messageData.receiver ?: return Component.empty()
@@ -198,7 +212,7 @@ suspend fun formatPmSpy(messageData: MessageData, spy: UUID) = buildText {
     appendSpyIcon()
     appendSpace()
 
-    if (ChatPlatform.hasPermission(spy, ChatPermissions.TELEPORT)) {
+    if (ChatPlatform.hasPermission(spy, ChatPermissions.TELEPORT) && ChatPlatform.isOnline(receiver)) {
         appendTeleport(receiverName, receiver)
     }
 

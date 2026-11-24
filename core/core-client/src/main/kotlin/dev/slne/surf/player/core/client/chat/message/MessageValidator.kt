@@ -29,6 +29,14 @@ fun hasTooManyCapsInARow(message: String, maxInRow: Int): Boolean {
     return false
 }
 
+/**
+ * Whether a message of [type] is rejected because the chat of this server is switched off
+ * ([localChatEnabled] `false`): only global chat messages are, and only for senders without the
+ * bypass ([hasBypass] is asked only then).
+ */
+inline fun isBlockedByDisabledChat(type: MessageType, localChatEnabled: Boolean, hasBypass: () -> Boolean): Boolean =
+    type == MessageType.GLOBAL && !localChatEnabled && !hasBypass()
+
 object MessageValidator {
     fun validate(messageData: MessageData): MessageValidationResult {
         val sender = messageData.sender
@@ -42,13 +50,12 @@ object MessageValidator {
             return MessageValidationResult.Failure(MessageValidationError.AutoDisabled())
         }
 
-        if (messageData.type == MessageType.GLOBAL) {
-            if (!FunctionalityService.getFunctionalities().localChatEnabled && !sender.hasPermission(
-                    ChatPermissions.BYPASS_FUNCTIONALITY
-                )
-            ) {
-                return MessageValidationResult.Failure(MessageValidationError.ChatDisabled())
-            }
+        if (isBlockedByDisabledChat(
+                messageData.type,
+                FunctionalityService.getFunctionalities().localChatEnabled
+            ) { sender.hasPermission(ChatPermissions.BYPASS_FUNCTIONALITY) }
+        ) {
+            return MessageValidationResult.Failure(MessageValidationError.ChatDisabled())
         }
 
         if (hasTooManyCapsInARow(message, chatConfig.spamConfig.maxUppercaseCharsInRow)) {

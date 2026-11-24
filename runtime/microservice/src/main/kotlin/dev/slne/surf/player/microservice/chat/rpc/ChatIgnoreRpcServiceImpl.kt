@@ -21,6 +21,9 @@ object ChatIgnoreRpcServiceImpl : ChatIgnoreRpcService {
     override suspend fun deleteIgnore(playerUuid: UUID, targetUuid: UUID): Boolean =
         IgnoreRepository.unignore(playerUuid, targetUuid)
 
+    override suspend fun isIgnoring(playerUuid: UUID, targetUuid: UUID): Boolean =
+        IgnoreRepository.isIgnoring(playerUuid, targetUuid)
+
     override suspend fun findIgnoreList(playerUuid: UUID): List<IgnoreListEntry> =
         IgnoreRepository.findAllByUuid(playerUuid)
 }

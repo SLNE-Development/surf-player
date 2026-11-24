@@ -62,7 +62,7 @@ object MinestomMessageFormatter {
             senderPlayer.username,
             senderPlayer.uuid,
             luckPermsPrefix(senderPlayer.uuid),
-            allowTeleport = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.TELEPORT)
+            showTeleportButton = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.TELEPORT)
         )
         darkSpacer(":")
         appendSpace()

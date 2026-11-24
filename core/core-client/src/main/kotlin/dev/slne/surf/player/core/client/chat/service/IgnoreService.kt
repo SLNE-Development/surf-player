@@ -2,6 +2,8 @@ package dev.slne.surf.player.core.client.chat.service
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import dev.slne.surf.player.api.chat.entry.IgnoreListEntry
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.player.core.client.chat.rpc.chatIgnoreRpcService
 import dev.slne.surf.player.core.client.friends.FriendsClient
 import java.time.OffsetDateTime
@@ -55,6 +57,15 @@ object IgnoreService {
 
         return false
     }
+
+    /**
+     * Whether a message from [sender], who must be on this server, is kept from [receiver]
+     * because [receiver] ignores them, see [IgnoreRules.blocksMessage].
+     */
+    fun blocksMessage(receiver: UUID, sender: UUID): Boolean =
+        IgnoreRules.blocksMessage(isIgnored(receiver, sender)) {
+            ChatPlatform.hasPermission(sender, ChatPermissions.IGNORE_EXEMPT)
+        }
 
     fun getCachedIgnoreList(uuid: UUID): List<IgnoreListEntry> {
         return cache.getIfPresent(uuid) ?: emptyList()

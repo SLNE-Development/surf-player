@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component
 private val EMPTY_CONTENT_MESSAGE = buildText { error("Deine Nachricht darf nicht leer sein.") }
 private val TOO_MANY_CAPS_MESSAGE = buildText { error("Deine Nachricht enthält zu viele Großbuchstaben.") }
 private val AUTO_DISABLED_MESSAGE = buildText { error("Du kannst zurzeit nicht schreiben.") }
-private val CHAT_DISABLED_MESSAGE = buildText { error("Der Chat ist vorübergehend deaktiviert.") }
+private val CHAT_DISABLED_MESSAGE = buildText { error("Der Chat ist auf diesem Server derzeit deaktiviert.") }
 
 /**
  * Why a message failed validation.

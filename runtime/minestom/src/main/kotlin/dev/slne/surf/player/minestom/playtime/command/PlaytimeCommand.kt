@@ -9,7 +9,7 @@ import dev.slne.surf.api.minestom.command.dsl.stringArgument
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.command.executor.CommandArguments
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.core.api.minestom.command.argument.SurfOfflinePlayerArgument
+import dev.slne.surf.player.minestom.command.VisibleOfflinePlayerArgument
 import dev.slne.surf.player.core.client.playtime.command.PlaytimeCommands
 import dev.slne.surf.player.core.client.playtime.permission.PlaytimePermissions
 import dev.slne.surf.player.minestom.command.MinestomAdminAction
@@ -27,7 +27,7 @@ private suspend fun CommandArguments.optionalPlayer(): SurfPlayer? =
 fun playtimeCommand() = commandAPICommand("playtime") {
     withAliases("pt")
     withPermission(PlaytimePermissions.COMMAND_PLAYTIME)
-    withOptionalArguments(SurfOfflinePlayerArgument(PLAYER).withPermission(PlaytimePermissions.OTHERS))
+    withOptionalArguments(VisibleOfflinePlayerArgument(PLAYER).withPermission(PlaytimePermissions.OTHERS))
 
     playerExecutorSuspend { player, args ->
         if (PLAYER !in args) {
@@ -52,7 +52,7 @@ fun playtimeAdminActions() = listOf(
         "Berechnet die Login-Streak eines Spielers (ohne Spieler: aller Spieler) neu",
         "[spieler]"
     ) {
-        withOptionalArguments(SurfOfflinePlayerArgument(PLAYER))
+        withOptionalArguments(VisibleOfflinePlayerArgument(PLAYER))
         anyExecutorSuspend { sender, args ->
             sender.reply(PlaytimeCommands.recalculate(sender, args.optionalPlayer(), all = PLAYER !in args))
         }

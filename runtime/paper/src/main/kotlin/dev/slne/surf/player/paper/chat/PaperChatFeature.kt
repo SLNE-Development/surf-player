@@ -7,6 +7,7 @@ import dev.slne.surf.player.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.player.core.client.chat.config.initChatConfig
 import dev.slne.surf.player.core.client.chat.redis.ChatRedisListener
 import dev.slne.surf.player.core.client.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.SpyService
 import dev.slne.surf.player.paper.chat.command.chatAdminActions
 import dev.slne.surf.player.paper.chat.command.directMessageCommand
 import dev.slne.surf.player.paper.chat.command.ignoreCommand
@@ -39,6 +40,7 @@ object PaperChatFeature : PaperPlayerFeature {
         initChatConfig(dataPath)
         AiModerationConfig.init(dataPath)
 
+        SpyService.register(SurfPlayerClient.redisApi)
         SurfPlayerClient.redisApi.subscribeToEvents(ChatRedisListener)
         SurfPlayerClient.redisApi.registerRequestHandler(RedisEventListener)
 

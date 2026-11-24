@@ -7,14 +7,18 @@ import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.player.core.client.chat.config.chatConfig
 import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
+import dev.slne.surf.player.core.client.chat.message.ConnectionMessageRecipients
 import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.player.core.client.chat.service.IgnoreService
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
-import dev.slne.surf.player.core.client.chat.service.SpyService
+import dev.slne.surf.player.core.client.vanish.PlayerVisibility
+import dev.slne.surf.player.core.client.vanish.VanishedPlayers
+import dev.slne.surf.player.minestom.command.asViewer
 import dev.slne.surf.player.minestom.chat.message.MinestomMessageFormatter
 import net.kyori.adventure.text.Component
+import net.minestom.server.adventure.audience.Audiences
 import net.minestom.server.entity.Player
 
 /**
@@ -27,9 +31,7 @@ object ChatConnectionHandler {
         val uuid = player.uuid
         ChatPlatform.launchAsync { IgnoreService.loadIgnoreList(uuid) }
 
-        if (chatConfig.connectionMessageConfig.enabled) {
-            sendConnectionMessage(player, connectionMessage(player, joined = true))
-        }
+        sendConnectionMessage(player, connectionMessage(player, joined = true))
 
         if (chatConfig.chatMotdConfig.enabled) {
             player.sendText {
@@ -43,27 +45,41 @@ object ChatConnectionHandler {
 
         val uuid = player.uuid
 
-        if (chatConfig.connectionMessageConfig.enabled) {
-            sendConnectionMessage(player, connectionMessage(player, joined = false))
-        }
+        sendConnectionMessage(player, connectionMessage(player, joined = false))
 
         ChatPlatform.launchAsync {
             IgnoreService.cleanup(uuid)
-            SpyService.cleanup(uuid)
         }
     }
 
     private fun connectionMessage(player: Player, joined: Boolean): Component =
         buildConnectionMessage(player.username, luckPermsPrefix(player.uuid), joined)
 
+    /**
+     * Sends the join/quit [message] of [player] to every player on this server who sees it, see
+     * [ConnectionMessageRecipients.receives], and to the console unless [player] is vanished.
+     */
     private fun sendConnectionMessage(player: Player, message: Component) {
-        if (player.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW)) {
-            ChatPlatform.broadcast(message)
-            return
+        val configEnabled = chatConfig.connectionMessageConfig.enabled
+        val vanished = VanishedPlayers.isVanished(player.uuid)
+
+        for (viewer in ConnectionManager.onlinePlayers) {
+            val receives = ConnectionMessageRecipients.receives(
+                configEnabled = configEnabled,
+                playerVanished = vanished,
+                viewerIsPlayer = viewer.uuid == player.uuid,
+                viewerAlwaysShow = viewer.hasPermission(ChatPermissions.CONNECTION_MESSAGE_ALWAYS_SHOW),
+                viewerSettingEnabled = { SurfSettingsApi.getSettingValue(viewer.uuid, SettingKeys.CONNECTION_MESSAGES) },
+                viewerCanSeeVanished = { PlayerVisibility.network.canSee(viewer.asViewer(), player.uuid) },
+            )
+
+            if (receives) {
+                viewer.sendMessage(message)
+            }
         }
 
-        ConnectionManager.onlinePlayers
-            .filter { viewer -> SurfSettingsApi.getSettingValue(viewer.uuid, SettingKeys.CONNECTION_MESSAGES) }
-            .forEach { viewer -> viewer.sendMessage(message) }
+        if (configEnabled && !vanished) {
+            Audiences.console().sendMessage(message)
+        }
     }
 }

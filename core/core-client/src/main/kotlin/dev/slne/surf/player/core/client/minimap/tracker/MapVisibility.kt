@@ -18,8 +18,9 @@ object MapVisibility {
 
     /**
      * [canSee] tells whether the viewer sees the target in the world, [onlineFor] how long the target has been
-     * online. [isVanished] is only asked for targets that joined within [VANISH_GRACE].
+     * online. [hiddenByVanish] (the target is vanished and the viewer may not see them, see
+     * `VanishSight.canSee`) is only asked for targets that joined within [VANISH_GRACE].
      */
-    fun isShown(canSee: Boolean, onlineFor: Duration, isVanished: () -> Boolean): Boolean =
-        canSee && (onlineFor >= VANISH_GRACE || !isVanished())
+    fun isShown(canSee: Boolean, onlineFor: Duration, hiddenByVanish: () -> Boolean): Boolean =
+        canSee && (onlineFor >= VANISH_GRACE || !hiddenByVanish())
 }

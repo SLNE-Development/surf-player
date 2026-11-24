@@ -3,6 +3,7 @@ package dev.slne.surf.player.paper.friends
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.paper.PaperPlayerFeature
+import dev.slne.surf.player.paper.friends.command.friendAdminActions
 import dev.slne.surf.player.paper.friends.command.registerFriendCommands
 import dev.slne.surf.player.paper.friends.listener.FriendConnectionListener
 
@@ -20,4 +21,6 @@ object PaperFriendsFeature : PaperPlayerFeature {
 
         registerFriendCommands()
     }
+
+    override fun adminActions() = friendAdminActions()
 }

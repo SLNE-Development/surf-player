@@ -30,6 +30,7 @@ object ConnectionListener : Listener {
 
         if (player.isVanished) {
             event.joinMessage(null)
+            VanishService.refreshPriority(player)
         }
 
         VanishService.allOnline().forEach { vanishedPlayer ->
@@ -49,6 +50,11 @@ object ConnectionListener : Listener {
 
             plugin.launch {
                 forEachPlayerInRegion(plugin, { onlinePlayer ->
+                    if (onlinePlayer.uniqueId == player.uniqueId) {
+                        return@forEachPlayerInRegion
+                    }
+
+                    // Only players who may see vanished players learn about the vanished join.
                     if (!onlinePlayer.canVanishSee(player)) {
                         onlinePlayer.hidePlayer(plugin, player)
                     } else {

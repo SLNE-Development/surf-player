@@ -58,6 +58,18 @@ object FriendRequestCooldownRepository {
         Unit
     }
 
+    /**
+     * Deletes the cooldowns of [senderUuid], only the one towards [receiverUuid] if given; returns
+     * how many were deleted.
+     */
+    suspend fun deleteCooldowns(senderUuid: UUID, receiverUuid: UUID?): Int = suspendTransaction {
+        FriendRequestCooldownsTable.deleteWhere {
+            val ofSender = FriendRequestCooldownsTable.senderUuid eq senderUuid
+
+            if (receiverUuid == null) ofSender else ofSender and (FriendRequestCooldownsTable.receiverUuid eq receiverUuid)
+        }
+    }
+
     private fun ResultRow.toCooldown() = FriendRequestCooldown(
         declines = CooldownCounter(
             count = this[FriendRequestCooldownsTable.declineCount],

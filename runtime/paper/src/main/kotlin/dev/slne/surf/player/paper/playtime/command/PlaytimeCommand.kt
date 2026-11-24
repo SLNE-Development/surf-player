@@ -10,10 +10,10 @@ import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.core.api.paper.command.argument.SurfOfflinePlayerArgument
 import dev.slne.surf.player.core.client.playtime.command.PlaytimeCommands
 import dev.slne.surf.player.core.client.playtime.permission.PlaytimePermissions
 import dev.slne.surf.player.paper.command.PaperAdminAction
+import dev.slne.surf.player.paper.command.VisibleOfflinePlayerArgument
 import dev.slne.surf.player.paper.command.reply
 
 private const val PLAYER = "spieler"
@@ -24,7 +24,7 @@ private const val PLAYER = "spieler"
 fun playtimeCommand() = commandAPICommand("playtime") {
     withAliases("pt")
     withPermission(PlaytimePermissions.COMMAND_PLAYTIME)
-    withOptionalArguments(SurfOfflinePlayerArgument(PLAYER).withPermission(PlaytimePermissions.OTHERS))
+    withOptionalArguments(VisibleOfflinePlayerArgument(PLAYER).withPermission(PlaytimePermissions.OTHERS))
 
     playerExecutorSuspend { player, args ->
         if (args.getOptional(PLAYER).isEmpty) {
@@ -49,7 +49,7 @@ fun playtimeAdminActions() = listOf(
         "Berechnet die Login-Streak eines Spielers (ohne Spieler: aller Spieler) neu",
         "[spieler]"
     ) {
-        withOptionalArguments(SurfOfflinePlayerArgument(PLAYER))
+        withOptionalArguments(VisibleOfflinePlayerArgument(PLAYER))
         anyExecutorSuspend { sender, args ->
             val all = args.getOptional(PLAYER).isEmpty
             sender.reply(PlaytimeCommands.recalculate(sender, args.awaitingOrNull<SurfPlayer?>(PLAYER), all))

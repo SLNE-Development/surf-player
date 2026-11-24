@@ -1,6 +1,7 @@
 package dev.slne.surf.player.core.client.chat.ai
 
 import com.github.benmanes.caffeine.cache.Caffeine
+import com.openai.client.OpenAIClientAsync
 import com.openai.client.okhttp.OpenAIOkHttpClientAsync
 import com.openai.models.moderations.Moderation
 import com.openai.models.moderations.ModerationCreateParams
@@ -17,10 +18,21 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.toJavaDuration
 
 object OpenAiService {
-    private val client = OpenAIOkHttpClientAsync.builder()
-        .apiKey(aiModerationConfig.apiKey)
-        .logLevel(aiModerationConfig.logLevel)
-        .build()
+    /** The client and the API key it was built with; rebuilt when a reload changes the key. */
+    @Volatile
+    private var current: Pair<String, OpenAIClientAsync>? = null
+
+    private fun client(): OpenAIClientAsync {
+        val config = aiModerationConfig
+        current?.let { (apiKey, client) -> if (apiKey == config.apiKey) return client }
+
+        val client = OpenAIOkHttpClientAsync.builder()
+            .apiKey(config.apiKey)
+            .logLevel(config.logLevel)
+            .build()
+        current = config.apiKey to client
+        return client
+    }
 
     private val scoreCache = Caffeine
         .newBuilder()
@@ -70,7 +82,7 @@ object OpenAiService {
             )
             .build()
 
-        val result = client.moderations()
+        val result = client().moderations()
             .create(params)
             .await()
             .results()

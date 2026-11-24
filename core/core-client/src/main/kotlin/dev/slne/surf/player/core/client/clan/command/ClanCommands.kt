@@ -22,6 +22,7 @@ import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.command.failure
 import dev.slne.surf.player.core.client.command.reply
 import dev.slne.surf.player.core.client.util.usernameOrUuid
+import dev.slne.surf.player.core.client.vanish.CommandViewer
 import dev.slne.surf.player.core.common.clan.clan.ClanImpl
 import dev.slne.surf.player.core.common.clan.config.ClanConfig
 import net.kyori.adventure.text.event.ClickEvent
@@ -56,9 +57,9 @@ object ClanCommands {
         reply(whoisMessage(targetName, clanOf(targetUuid)))
 
     /** Lists the members of [clan], or of the clan of [player] when no clan is given. */
-    suspend fun members(player: UUID?, clan: Clan?): CommandOutcome {
-        val shown = clan ?: player?.let { clanOf(it) } ?: return failure(Messages.NOT_IN_CLAN)
-        val data = collectClanMemberData(shown)
+    suspend fun members(viewer: CommandViewer, clan: Clan?): CommandOutcome {
+        val shown = clan ?: viewer.uuid?.let { clanOf(it) } ?: return failure(Messages.NOT_IN_CLAN)
+        val data = collectClanMemberData(shown, viewer)
 
         return reply(clanMembersPagination(shown as ClanImpl).renderComponent(data))
     }

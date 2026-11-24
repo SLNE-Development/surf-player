@@ -5,6 +5,8 @@ import dev.slne.surf.api.minestom.coroutine.MinestomDispatchers
 import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
+import dev.slne.surf.player.core.client.vanish.CommandViewer
+import dev.slne.surf.player.minestom.command.asViewer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -15,6 +17,8 @@ import java.util.*
 @AutoService(FriendsPlatform::class)
 class MinestomFriendsPlatform : FriendsPlatform {
     override fun isOnline(uuid: UUID) = ConnectionManager.getOnlinePlayerByUuid(uuid) != null
+
+    override fun viewer(uuid: UUID): CommandViewer? = ConnectionManager.getOnlinePlayerByUuid(uuid)?.asViewer()
 
     override fun sendMessage(uuid: UUID, message: Component) {
         ConnectionManager.getOnlinePlayerByUuid(uuid)?.sendMessage(message)

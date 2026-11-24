@@ -27,17 +27,13 @@ object ConnectListener : Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         MessageFormatter.invalidateMentionCache()
 
-        if (event.joinMessage() == null) {
-            return
-        }
-
+        // Replaced by our own message, also for vanished players (whose vanilla message the vanish
+        // feature already removed): broadcastConnectionMessage decides who sees it.
         event.joinMessage(null)
 
-        if (!chatConfig.connectionMessageConfig.enabled) {
-            return
-        }
-
         val player = event.player
+        sendChatMotd(player)
+
         val messageEvent = PlayerJoinMessageEvent(player, createJoinMessage(player))
 
         if (!messageEvent.call()) {
@@ -45,7 +41,6 @@ object ConnectListener : Listener {
         }
 
         broadcastConnectionMessage(player, messageEvent.message)
-        sendChatMotd(player)
     }
 
     private fun sendChatMotd(player: Player) {

@@ -11,7 +11,8 @@ import dev.slne.surf.api.core.util.dateTimeFormatter
 import dev.slne.surf.player.core.common.clan.clan.ClanImpl
 import dev.slne.surf.player.core.client.clan.components.ClanComponents
 import dev.slne.surf.player.core.client.util.usernameOrUuid
-import dev.slne.surf.core.api.common.SurfCoreApi
+import dev.slne.surf.player.core.client.vanish.CommandViewer
+import dev.slne.surf.player.core.client.vanish.PlayerVisibility
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import net.kyori.adventure.text.format.TextDecoration
@@ -68,9 +69,10 @@ private val MEMBER_ORDER = compareBy<ClanMemberData> { it.activityRank }
     .thenBy(String.CASE_INSENSITIVE_ORDER) { it.memberName }
 
 /**
- * Looks up every member of [clan], ordered by activity status, then clan rank, then name.
+ * Looks up every member of [clan], ordered by activity status, then clan rank, then name. A
+ * member [viewer] may not see (vanished) is listed as offline.
  */
-suspend fun collectClanMemberData(clan: Clan): List<ClanMemberData> {
+suspend fun collectClanMemberData(clan: Clan, viewer: CommandViewer): List<ClanMemberData> {
     val members = clan.members
     val data = arrayOfNulls<ClanMemberData>(members.size)
     val now = OffsetDateTime.now()
@@ -83,7 +85,7 @@ suspend fun collectClanMemberData(clan: Clan): List<ClanMemberData> {
                 data[slot] = ClanMemberData(
                     usernameOrUuid(member.uuid),
                     member.role,
-                    SurfCoreApi.getPlayer(member.uuid)?.currentServer?.displayName,
+                    PlayerVisibility.network.findOnlinePlayer(viewer, member.uuid)?.currentServer?.displayName,
                     member.lastActiveAt,
                     member.isActiveAt(now)
                 )

@@ -19,6 +19,12 @@ interface ChatIgnoreRpcService {
     /** @return `false` if [playerUuid] did not ignore [targetUuid] */
     suspend fun deleteIgnore(playerUuid: UUID, targetUuid: UUID): Boolean
 
+    /**
+     * Whether [playerUuid] ignores [targetUuid]; for direct messages to a receiver on another
+     * server, whose ignore list the sender's server has not cached.
+     */
+    suspend fun isIgnoring(playerUuid: UUID, targetUuid: UUID): Boolean
+
     /** The players [playerUuid] ignores. */
     suspend fun findIgnoreList(playerUuid: UUID): List<IgnoreListEntry>
 }

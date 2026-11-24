@@ -9,7 +9,7 @@ import dev.slne.surf.api.minestom.command.executor.CommandArguments
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.core.api.minestom.command.argument.surfBackendServerArgument
-import dev.slne.surf.core.api.minestom.command.argument.surfOfflinePlayerArgument
+import dev.slne.surf.player.minestom.command.visibleOfflinePlayerArgument
 import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.command.CommandOutcome
 import dev.slne.surf.player.core.client.queue.command.QueueCommands
@@ -63,7 +63,7 @@ fun queueAdminActions() = listOf(
     },
 
     MinestomAdminAction("info", QueuePermissions.ADMIN_INFO, "Zeigt den Eintrag eines Spielers", "<spieler> [server]") {
-        surfOfflinePlayerArgument(PLAYER)
+        visibleOfflinePlayerArgument(PLAYER)
         serverArgument()
         anyExecutorSuspend { sender, args ->
             val player = args.player()
@@ -77,7 +77,7 @@ fun queueAdminActions() = listOf(
         "Reiht einen Spieler in eine Warteschlange ein",
         "<spieler> [server] [prioritaet]"
     ) {
-        surfOfflinePlayerArgument(PLAYER)
+        visibleOfflinePlayerArgument(PLAYER)
         serverArgument()
         integerArgument(PRIORITY, min = 0, max = RedisQueueScore.MAX_PRIORITY, optional = true)
         anyExecutorSuspend { sender, args ->
@@ -93,7 +93,7 @@ fun queueAdminActions() = listOf(
         "Entfernt einen Spieler aus einer Warteschlange",
         "<spieler> [server]"
     ) {
-        surfOfflinePlayerArgument(PLAYER)
+        visibleOfflinePlayerArgument(PLAYER)
         serverArgument()
         anyExecutorSuspend { sender, args ->
             val player = args.player()

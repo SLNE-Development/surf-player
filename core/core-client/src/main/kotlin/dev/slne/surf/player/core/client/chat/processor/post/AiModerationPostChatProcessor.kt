@@ -28,6 +28,7 @@ import net.kyori.adventure.text.event.ClickEvent
 import java.net.URI
 import java.time.OffsetDateTime
 import java.util.UUID
+import kotlin.coroutines.cancellation.CancellationException
 
 object AiModerationPostChatProcessor : PostChatProcessor {
     private val log = logger()
@@ -37,7 +38,7 @@ object AiModerationPostChatProcessor : PostChatProcessor {
             return
         }
 
-        if (!aiModerationConfig.enabled) {
+        if (!aiModerationConfig.isActive) {
             return
         }
 
@@ -72,12 +73,23 @@ object AiModerationPostChatProcessor : PostChatProcessor {
     }
 
     suspend fun processMessage(messageData: MessageData) {
+        if (!aiModerationConfig.isActive) {
+            return
+        }
+
         if (messageData.sender.hasPermission(ChatPermissions.BYPASS_FILTER)) {
             return
         }
 
         val plain = messageData.plainMessage
-        val classification = OpenAiService.classifyChatMessage(plain, messageData.type.value)
+        val classification = try {
+            OpenAiService.classifyChatMessage(plain, messageData.type.value)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log.atWarning().withCause(e).log("Failed to classify message %s", messageData.messageUuid)
+            return
+        }
 
         if (classification.action == ModerationClassificationAction.NONE) {
             return

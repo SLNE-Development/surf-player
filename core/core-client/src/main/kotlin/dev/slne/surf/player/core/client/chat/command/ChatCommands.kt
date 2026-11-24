@@ -9,6 +9,7 @@ import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.api.chat.entry.HistoryFilter
 import dev.slne.surf.player.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.player.core.client.chat.config.chatConfigProvider
+import dev.slne.surf.player.core.client.chat.lookup.LookupQuerySuggestions
 import dev.slne.surf.player.core.client.chat.lookup.RenderData
 import dev.slne.surf.player.core.client.chat.lookup.lookupPagination
 import dev.slne.surf.player.core.client.chat.lookup.parseFilters
@@ -16,7 +17,10 @@ import dev.slne.surf.player.core.client.chat.lookup.resolveSenderNames
 import dev.slne.surf.player.core.client.chat.message.format.appendStatusIcon
 import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.core.client.chat.service.HistoryService
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.chat.service.IgnoreRules
 import dev.slne.surf.player.core.client.chat.service.IgnoreService
+import dev.slne.surf.player.core.client.util.hasNetworkPermission
 import dev.slne.surf.player.core.client.chat.service.SlowChatService
 import dev.slne.surf.player.core.client.chat.service.SpyService
 import dev.slne.surf.player.core.client.chat.util.formatTime
@@ -42,8 +46,9 @@ object ChatCommands {
     // region ignore
 
     suspend fun ignoreAdd(player: UUID, target: UUID, targetName: String): CommandOutcome {
-        if (player == target) return failure("Du kannst dich nicht selbst ignorieren.")
-        if (IgnoreService.isIgnored(player, target)) return failure("Du ignorierst $targetName bereits.")
+        IgnoreRules.ignoreRefusal(player, target, targetName, IgnoreService.isIgnored(player, target)) {
+            hasNetworkPermission(target, ChatPermissions.IGNORE_EXEMPT)
+        }?.let { return failure(it) }
 
         if (!IgnoreService.ignore(player, target)) {
             return failure("$targetName konnte nicht ignoriert werden. Bitte versuche es erneut.")
@@ -112,10 +117,16 @@ object ChatCommands {
 
     // region spy
 
-    fun spyAdd(spy: UUID, target: UUID, targetName: String, targetIsTeam: Boolean): CommandOutcome {
+    /**
+     * [spy] starts reading the private messages of [target], who may be on any server of the
+     * network; team members ([ChatPermissions.BYPASS_SPY]) cannot be spied on.
+     */
+    suspend fun spyAdd(spy: UUID, target: UUID, targetName: String): CommandOutcome {
         if (spy == target) return failure("Du kannst dich nicht selbst ausspionieren.")
-        if (targetIsTeam) return failure("Du kannst keine Teammitglieder ausspionieren.")
-        if (spy in SpyService.getObservingPlayers(target)) {
+        if (hasNetworkPermission(target, ChatPermissions.BYPASS_SPY)) {
+            return failure("Du kannst keine Teammitglieder ausspionieren.")
+        }
+        if (SpyService.isSpying(spy, target)) {
             return failure("Du liest die privaten Nachrichten von $targetName bereits mit.")
         }
 
@@ -130,7 +141,7 @@ object ChatCommands {
     }
 
     fun spyRemove(spy: UUID, target: UUID, targetName: String): CommandOutcome {
-        if (spy !in SpyService.getObservingPlayers(target)) {
+        if (!SpyService.isSpying(spy, target)) {
             return failure("Du liest die privaten Nachrichten von $targetName nicht mit.")
         }
 
@@ -145,7 +156,7 @@ object ChatCommands {
     }
 
     fun spyClear(spy: UUID): CommandOutcome {
-        if (!SpyService.isPrivateMessageSpying(spy)) return failure("Du liest bei keinem Spieler mit.")
+        if (!SpyService.isSpyingAnyone(spy)) return failure("Du liest bei keinem Spieler mit.")
 
         SpyService.clearPrivateMessageSpies(spy)
 
@@ -302,10 +313,17 @@ object ChatCommands {
         .associate { pair -> pair.substringBefore(' ') to pair.substringAfter(' ', "").trim() }
 
     /** The filters `/surfplayer chat lookup` understands. */
-    val lookupFilterKeys = listOf(
-        "--type", "--range", "--message", "--deletedBy", "--deleted", "--page", "--limit",
-        "--server", "--sender", "--receiver", "--messageUuid",
-    )
+    val lookupFilterKeys = LookupQuerySuggestions.filterKeys
+
+    /**
+     * The tab completions of the lookup query typed so far ([input]): filter names, and after a
+     * filter name its values; player names come from [playerNames] (the platform's visible
+     * players), server names from surf-core.
+     */
+    fun lookupSuggestions(input: String, playerNames: (prefix: String) -> Collection<String>): List<String> =
+        LookupQuerySuggestions.suggest(input, playerNames) {
+            SurfCoreApi.getServers().map { it.name }.sorted()
+        }
 
     private data class FilterHelp(val key: String, val description: String, val example: String)
 

@@ -9,7 +9,6 @@ import dev.slne.surf.player.api.friends.result.FriendRequestCreateResult
 import dev.slne.surf.player.api.friends.utils.displayName
 import dev.slne.surf.player.core.client.friends.friendRequestsDisabledMessage
 import dev.slne.surf.player.core.client.friends.util.formatRemainingComponent
-import dev.slne.surf.player.core.client.util.undeliverableMessage
 import net.kyori.adventure.text.Component
 import java.util.*
 import kotlin.time.Duration
@@ -39,14 +38,19 @@ suspend fun sendFriendRequest(sender: UUID, target: SurfPlayer?): Component? {
     return failureMessage(result, target)
 }
 
-/** The message explaining why [result] sent no request to [target], or `null` on success. */
-private fun failureMessage(result: FriendRequestCreateResult, target: SurfPlayer): Component? = when (result) {
+/**
+ * The message explaining why [result] sent no request to [target], or `null` on success.
+ *
+ * A request blocked by an ignore gets the same message as one the target does not accept at all,
+ * so the sender cannot tell that one of both ignores the other.
+ */
+internal fun failureMessage(result: FriendRequestCreateResult, target: SurfPlayer): Component? = when (result) {
     is FriendRequestCreateResult.Success -> null
     is FriendRequestCreateResult.AlreadyFriends -> alreadyFriendsMessage(target)
     is FriendRequestCreateResult.AlreadySentFriendRequest -> alreadySentMessage(target)
     is FriendRequestCreateResult.AlreadyReceivedFriendRequest -> alreadyReceivedMessage(target)
     is FriendRequestCreateResult.OnCooldown -> onCooldownMessage(target, result.remaining)
-    is FriendRequestCreateResult.Blocked -> undeliverableMessage()
+    is FriendRequestCreateResult.Blocked,
     is FriendRequestCreateResult.RequestsDisabled -> friendRequestsDisabledMessage(target)
 }
 

@@ -17,7 +17,11 @@ import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsAction
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsRedisEvent
 import dev.slne.surf.player.core.client.friends.rpc.friendsRpcService
+import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
+import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
+import dev.slne.surf.player.core.client.util.hasNetworkPermission
 import dev.slne.surf.player.core.common.friends.rpc.FriendRequestAnswer
+import dev.slne.surf.player.core.common.friends.rpc.FriendRequestPrivileges
 import dev.slne.surf.player.core.common.friends.rpc.FriendRequestState
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
@@ -148,7 +152,11 @@ class SurfFriendsApiImpl : SurfFriendsApi {
             return FriendRequestCreateResult.AlreadyFriends(target)
         }
 
-        val result = friendsRpcService.createFriendRequest(senderUuid = uuid, targetUuid = target)
+        val result = friendsRpcService.createFriendRequest(
+            senderUuid = uuid,
+            targetUuid = target,
+            privileges = friendRequestPrivileges(uuid)
+        )
 
         if (result !is FriendRequestCreateResult.Success) {
             return result
@@ -160,6 +168,12 @@ class SurfFriendsApiImpl : SurfFriendsApi {
 
         return result
     }
+
+    /** What [sender] may skip when sending a friend request, from their permissions. */
+    private suspend fun friendRequestPrivileges(sender: UUID) = FriendRequestPrivileges(
+        ignoreExempt = hasNetworkPermission(sender, ChatPermissions.IGNORE_EXEMPT),
+        cooldownBypass = hasNetworkPermission(sender, FriendPermissions.COOLDOWN_BYPASS),
+    )
 
     override suspend fun revokeFriendRequest(uuid: UUID, target: UUID): FriendRequestRemoveResult {
         if (!hasSentFriendRequest(uuid, target)) {

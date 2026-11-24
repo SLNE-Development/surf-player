@@ -50,7 +50,7 @@ RPC:
 - `ChatFunctionalityRpcService`
   - `findFunctionalities(serverName): Functionalities` - creates the defaults for unknown servers
   - `findAllFunctionalities(): Map<String, Functionalities>`
-  - `saveFunctionalities(serverName, functionalities)`
+  - `saveFunctionalities(serverName, functionalities)` - upsert keyed by the server name
 - `ChatHistoryRpcService`
   - `createHistoryEntry(entry)`
   - `findHistoryEntries(filter): List<HistoryEntry>` - newest first
@@ -60,6 +60,9 @@ RPC:
     the pending friend requests between both players
   - `deleteIgnore(playerUuid, targetUuid): Boolean` - `false` if not ignored
   - `findIgnoreList(playerUuid): List<IgnoreListEntry>`
+  - `isIgnoring(playerUuid, targetUuid): Boolean` - asked by the sender's server before a direct
+    message to a receiver on another server (whose ignore list it has not cached); a receiver on
+    the same server is checked in the local cache
 - `ChatModerationRpcService`
   - `createModerationLog(messageData, classification)`
 
@@ -68,14 +71,17 @@ Redis:
 | Kind     | Name                                                                               | Purpose                                                                                       |
 |----------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
 | map      | `surf-player:chat:reply-targets`                                                    | last direct message partner per player for `/reply`, 15 min TTL per entry                      |
+| sync set | `surf-player:chat:spies`                                                            | `SpyEntry(spy, observed)`: `/spy` network-wide; a spy's entries are removed when the spy leaves the network (`FriendConnectionRedisEvent` with `online = false`) or runs `/spy clear` |
+| event    | `PrivateMessageSpyRedisEvent(messageData, spies)`                                   | a delivered direct message (not blocked by a pre processor) for the spies of its sender or receiver; every server shows it to the spies it hosts |
 | event    | `TeamBroadcastRedisEvent(message, permission)`                                      | team chat messages and message deletion notices, shown on every server to players with permission |
 | event    | `AiModerationNoticeRedisEvent(messageData, action)`                                 | AI moderation flag; every server renders the notice for its team itself, so the delete button's click callback is registered where it is clicked |
 | event    | `DeleteRemoteMessageRedisEvent(messageSignature)`                                   | deletes a signed chat message on every server; every chat deletion goes through it            |
 | request  | `SendDirectMessageRedisRequest` -> `SendDirectMessageHandledRedisResponse`         | delivers a direct message on the server hosting the receiver                                  |
 | request  | `SendSignedMessageRedisRequest(sender, senderName, target, message, requiredSetting?)` -> `SendSignedMessageHandledRedisResponse` | shows a signed message on the server hosting the target; with `requiredSetting` (a boolean setting name, e.g. `clan:chat-messages` for clan chat) that server answers but does not show it if the target turned the setting off |
 
-The three events are handled once for all platforms by `ChatRedisListener` (core-client); the two
-requests need platform types and are handled by the Paper and Minestom chat features.
+The chat events (and the network quit of `FriendConnectionRedisEvent`, to end spying) are handled
+once for all platforms by `ChatRedisListener` (core-client); the two requests need platform types
+and are handled by the Paper and Minestom chat features.
 
 ## clan
 
@@ -138,8 +144,13 @@ settings tables) and cooldowns.
 
 - `findAllFriendRequests(): List<FriendRequest>`
 - `findAllFriendships(): List<Friendship>` - stored once per direction
-- `createFriendRequest(senderUuid, targetUuid): FriendRequestCreateResult` - checked in the order
-  `Blocked` (ignore), `RequestsDisabled` (`friend:requests` off), `OnCooldown`
+- `createFriendRequest(senderUuid, targetUuid, privileges): FriendRequestCreateResult` - checked in
+  the order `Blocked` (ignore), `RequestsDisabled` (`friend:requests` off), `OnCooldown`.
+  `FriendRequestPrivileges(ignoreExempt, cooldownBypass)` is set by the client from the sender's
+  permissions (`surf.player.chat.ignore.exempt`: the target ignoring the sender does not block;
+  `surf.player.friends.cooldown.bypass`: no cooldown); the microservice trusts it
+- `deleteFriendRequestCooldowns(senderUuid, targetUuid?): Int` - the sender's cooldowns, only the
+  one towards `targetUuid` if given (`/surfplayer friends cooldown clear`)
 - `revokeFriendRequest(senderUuid, targetUuid): FriendRequestRemoveResult`
 - `answerFriendRequest(senderUuid, targetUuid, state): FriendRequestAnswer` - `Accepted(friendships)`
   with both stored directions (clients add exactly these to the sync list, timestamps included) /
@@ -226,13 +237,24 @@ No RPC.
 
 No RPC.
 
-| Kind     | Name                                    | Purpose                                                          |
-|----------|-----------------------------------------|------------------------------------------------------------------|
-| sync set | `surf-player:vanish:vanished-players`   | UUIDs of vanished players; kept across server switches on purpose |
+| Kind     | Name                                    | Purpose                                                                                     |
+|----------|-----------------------------------------|---------------------------------------------------------------------------------------------|
+| sync map | `surf-player:vanish:vanished-players`   | vanished player UUID → vanish priority (`Int`); kept across server switches on purpose      |
 
-The set is created on every platform by `SurfPlayerClient.load` (`VanishedPlayers` in
-core-client) and only changed by the Paper vanish feature. Friend online/offline notices skip
-vanished players, and vanished friends are not counted in the join greeting.
+The map is created on every platform by `SurfPlayerClient.load` (`VanishedPlayers` in
+core-client) and only changed by the Paper vanish feature: it stores a player when they vanish
+and removes them when they reappear. The value is the player's highest
+`surf.player.vanish.priority.<n>` (0 without any), refreshed when a vanished player joins a Paper
+server. It replaces the former sync set of the same name, so every server of the network must run
+the same version.
+
+Who sees a vanished player is decided by one rule, `VanishSight.canSee` in core-client: the
+player themself, holders of `surf.player.vanish.bypass`, the console, and viewers whose own
+priority (highest `surf.player.vanish.priority.<n>`, 0 with `surf.player.team.vanish`, none
+otherwise) is at least the stored priority. It applies on every platform to in-game visibility,
+tab list, maps, command suggestions and name lookups (`PlayerVisibility`), the friend list,
+friend online/offline notices and the friend count in the join greeting. Minestom and Velocity read
+the viewer's permission nodes from LuckPerms.
 
 ## Features without protocol
 

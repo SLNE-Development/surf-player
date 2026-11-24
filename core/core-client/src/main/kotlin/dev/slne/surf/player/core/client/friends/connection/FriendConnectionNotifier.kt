@@ -12,6 +12,7 @@ import dev.slne.surf.player.api.friends.utils.toSurfPlayer
 import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import dev.slne.surf.player.core.client.friends.redis.event.FriendConnectionRedisEvent
+import dev.slne.surf.player.core.client.vanish.PlayerVisibility
 import dev.slne.surf.player.core.client.vanish.VanishedPlayers
 import dev.slne.surf.redis.event.OnRedisEvent
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
@@ -58,14 +59,16 @@ object FriendConnectionNotifier {
     fun onFriendConnection(event: FriendConnectionRedisEvent) {
         val uuid = event.playerUuid
 
-        // Vanished players stay hidden: no notice to their friends. They are still greeted below.
-        if (!VanishedPlayers.isVanished(uuid)) {
-            FriendsPlatform.INSTANCE.launch {
-                if (event.online) {
-                    announce(uuid, " ist nun online.", ONLINE_SOUND)
-                } else {
-                    announce(uuid, " ist nun offline.", OFFLINE_SOUND)
-                }
+        // Vanished players stay hidden: only friends who may see them (PlayerVisibility) get a
+        // notice. They are still greeted below. The vanish state is read when the event arrives.
+        val targetPriority = VanishedPlayers.vanishPriority(uuid)
+        val visibility = PlayerVisibility { if (it == uuid) targetPriority else null }
+
+        FriendsPlatform.INSTANCE.launch {
+            if (event.online) {
+                announce(uuid, " ist nun online.", ONLINE_SOUND, visibility)
+            } else {
+                announce(uuid, " ist nun offline.", OFFLINE_SOUND, visibility)
             }
         }
 
@@ -99,15 +102,15 @@ object FriendConnectionNotifier {
     }
 
     /**
-     * Greets [uuid] with how many of their friends are online on the network (vanished friends are
-     * not counted) and how many friend requests are still open.
+     * Greets [uuid] with how many of their friends are online on the network (vanished friends they
+     * may not see are not counted) and how many friend requests are still open.
      */
     private fun greet(uuid: UUID) {
         val platform = FriendsPlatform.INSTANCE
-        if (!platform.isOnline(uuid)) return
+        val viewer = platform.viewer(uuid) ?: return
 
         val openFriendRequests = countReceivedFriendRequests(uuid)
-        val onlineFriends = SurfFriendsApi.onlineFriendUuids(uuid).count { !VanishedPlayers.isVanished(it) }
+        val onlineFriends = SurfFriendsApi.onlineFriendUuids(uuid).count { PlayerVisibility.network.canSee(viewer, it) }
 
         if (onlineFriends > 0) {
             platform.sendMessage(uuid, buildText {
@@ -145,10 +148,11 @@ object FriendConnectionNotifier {
     }
 
     /**
-     * Tells the friends of [uuid] on this server [message], if they enabled friend notifications,
-     * and plays [sound] to those who also enabled friend sounds.
+     * Tells the friends of [uuid] on this server [message], if they enabled friend notifications
+     * and may see [uuid] according to [visibility], and plays [sound] to those who also enabled
+     * friend sounds.
      */
-    private suspend fun announce(uuid: UUID, message: String, sound: Sound) {
+    private suspend fun announce(uuid: UUID, message: String, sound: Sound, visibility: PlayerVisibility) {
         val friendUuids = friendsOnThisServer(uuid)
         if (friendUuids.isEmpty()) return
 
@@ -160,6 +164,8 @@ object FriendConnectionNotifier {
         val platform = FriendsPlatform.INSTANCE
 
         for (friendUuid in friendUuids) {
+            val viewer = platform.viewer(friendUuid) ?: continue
+            if (!visibility.canSee(viewer, uuid)) continue
             if (!SurfFriendsApi.friendNotificationsEnabled(friendUuid)) continue
 
             platform.sendMessage(friendUuid, announcement)

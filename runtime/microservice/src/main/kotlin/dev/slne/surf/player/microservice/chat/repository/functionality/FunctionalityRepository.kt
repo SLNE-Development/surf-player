@@ -26,7 +26,9 @@ object FunctionalityRepository {
     }
 
     suspend fun updateOrCreate(server: String, functionalities: Functionalities) = suspendTransaction {
-        FunctionalityTable.upsert {
+        // Conflicts on the unique server name, not on the generated id: without the key column the
+        // upsert targets the primary key and fails with a unique violation for a known server.
+        FunctionalityTable.upsert(FunctionalityTable.server) {
             it[this.server] = server
             it[this.chatEnabled] = functionalities.localChatEnabled
         }

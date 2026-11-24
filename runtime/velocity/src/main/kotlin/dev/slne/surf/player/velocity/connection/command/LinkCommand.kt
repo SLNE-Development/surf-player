@@ -7,12 +7,12 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.velocity.command.executors.anyExecutorSuspend
 import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.core.api.velocity.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.player.api.connection.SurfConnectionApi
 import dev.slne.surf.player.core.client.command.CommandMessages
 import dev.slne.surf.player.core.client.connection.permission.ConnectionPermissions
 import dev.slne.surf.player.velocity.command.VelocityAdminAction
 import dev.slne.surf.player.velocity.command.failCommand
+import dev.slne.surf.player.velocity.command.visibleOfflinePlayerArgument
 import dev.slne.surf.player.velocity.connection.ConnectionVelocityFeature
 import dev.slne.surf.player.velocity.connection.config
 import dev.slne.surf.player.velocity.connection.httpClient
@@ -83,7 +83,7 @@ fun connectionAdminActions() = listOf(
         "Zeigt die verknüpften Twitch- und Discord-Konten eines Spielers",
         "<spieler>"
     ) {
-        surfOfflinePlayerArgument("spieler")
+        visibleOfflinePlayerArgument("spieler")
         anyExecutorSuspend { sender, arguments ->
             val target = arguments.awaitingOrNull<SurfPlayer?>("spieler") ?: failCommand(CommandMessages.PLAYER_NOT_FOUND)
             val name = target.lastKnownName ?: target.uuid.toString()
