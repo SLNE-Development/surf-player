@@ -379,16 +379,17 @@ fun registerChat() {
     }
 
     scenario("chat-32", "Verbindungsnachrichten per Config aus") {
-        // DevAdmin holds `*` and with it the always-show permission, so a normal player observes.
+        // As in surf-chat, disabled connection messages reach nobody, not even always-show holders.
         on(PAPER, admin, p2); on(LOBBY, p1)
+        sleep(1500) // a quit message of DevPlayer1 leaving Paper just now may still be on its way
         withConfig(PAPER, "chat/config.yml", { Yaml.set(it, "connection-message-config.enabled", "false") }, { reloadOn(PAPER, "chat") }) {
             val m = p2.mark()
             val ma = admin.mark()
             on(PAPER, p1)
             on(LOBBY, p1)
             p2.expectNone("${P1}", since = m, within = 2000)
-            val shown = admin.expect("[+]", "${P1}", since = ma)
-            note("${P2} sieht keine Join-/Quit-Nachricht (auch keine Vanilla-Nachricht); ${A} (always-show) sieht „${shown.plain.trim()}“")
+            admin.expectNone("${P1}", since = ma, within = 500)
+            note("Weder ${P2} noch ${A} sehen eine Join-/Quit-Nachricht (auch keine Vanilla-Nachricht)")
         }
     }
 

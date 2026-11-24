@@ -288,8 +288,10 @@ fun registerInfra() {
         val accepted = mutableListOf<String>()
         for (cmd in listOf("clan admin reload", "clan player settings invite", "clan options tagcolor foreground FF0000", "clan setdiscord NULL", "clan disband", "friend decline ${P1}", "spy #clear", "slowchat #status", "slowchat on", "ignore #list", "settings chat:pings #info", "vanish reload")) {
             val m = admin.run(cmd)
-            val r = admin.firstMessage(m, 3000)
-            if (r == null || !(r.plain.contains("command.unknown") || r.plain.contains("Incorrect argument") || r.plain.contains("Unknown"))) accepted += "/$cmd → „${r?.plain?.trim()?.take(80)}“"
+            // Look for the rejection instead of taking the first message: surf-core sends unrelated
+            // info messages (e.g. the "Du befindest dich momentan" notice) at any time.
+            val rejected = admin.await(3000, m) { it.plain.contains("command.unknown") || it.plain.contains("Incorrect argument") || it.plain.contains("Unknown") }
+            if (rejected == null) accepted += "/$cmd → „${admin.since(m).firstOrNull()?.plain?.trim()?.take(80)}“"
         }
         check(accepted.isEmpty()) { "Nicht abgelehnt: $accepted" }
         note("nick, f unbekannt; 12 alte Varianten abgelehnt")

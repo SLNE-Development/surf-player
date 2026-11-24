@@ -230,8 +230,12 @@ class Bot(val name: String, private val host: String, private val port: Int) {
                 // payload, which has to be sent back as it came.
                 val custom = payload as ClickEvent.Payload.Custom
                 val token = runCatching { custom.nbt()?.string() }.getOrNull()
-                val raw = token?.let { CustomClickPayloads.get(it) }
-                    ?: token?.let { runCatching { Snbt.parseCompound(it) }.getOrNull() }
+                // The stored payload is an NbtMap or, depending on how the component was decoded,
+                // its SNBT text; the server only accepts the compound.
+                val raw = when (val stored = token?.let { CustomClickPayloads.get(it) } ?: token) {
+                    is String -> runCatching { Snbt.parseCompound(stored) }.getOrNull()
+                    else -> stored
+                }
                 if (System.getenv("BOT_DEBUG") != null) println("[$name] custom click ${custom.key()} payload=${raw?.javaClass?.simpleName} $raw")
                 send(ServerboundCustomClickActionPacket(custom.key(), raw as? org.cloudburstmc.nbt.NbtMap))
             }

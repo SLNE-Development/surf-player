@@ -166,6 +166,9 @@ fun registerTab() {
     }
     scenario("tab-16", "AFK-Tag im Tab") {
         on(PAPER, p1, p2)
+        // Paper keeps the rotation of a player across logins: start from a known one, so the look
+        // below is a real change.
+        p2.look(0f, 0f)
         val d = eventually(200_000, "[AFK] bei ${P2} (Bot ohne Mausbewegung)") { tabDisplay(p1, p2).takeIf { it.contains("[AFK]") } }
         p2.look(45f, 5f)
         val back = eventually(6000, "[AFK] verschwindet nach Mausbewegung") { tabDisplay(p1, p2).takeIf { !it.contains("[AFK]") } }

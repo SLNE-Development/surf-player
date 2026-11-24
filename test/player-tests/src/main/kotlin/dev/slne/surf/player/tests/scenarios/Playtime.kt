@@ -133,8 +133,12 @@ fun registerPlaytime() {
     notAutomatable("playtime-14", "Laufen ohne Mausbewegung: der Bot kann sich wegen Paper-26.3-Bewegungsprüfung (\"moved too quickly\") nicht frei bewegen; nur Blickrichtung wird gesendet.")
     notAutomatable("playtime-15", "Braucht 5+ Minuten AFK und Vergleich der Sessions; zu langsam für den Lauf, Session-Logik durch Unit-Tests der Playtime-Sessions abgedeckt.")
     scenario("playtime-16", "Session-Speicherung") {
+        // Start a fresh session: a session older than the 5-minute flush already has its row, and
+        // ending it then only updates that row. Sessions shorter than one minute are not stored
+        // (as in surf-playtime), so stay a little longer.
+        on(LOBBY, p2)
         on(PAPER, p2)
-        sleep(3000)
+        sleep(65_000)
         val before = net.sql("""SELECT count(*) FROM "surf-playtime".playtime_sessions WHERE playtime_player_id = '${p2.uuid}'""")[0][0].toInt()
         on(LOBBY, p2)
         sleep(3000)
