@@ -89,14 +89,50 @@ object FriendsClient {
         }
     }
 
+    /**
+     * Adds [request] and waits until Redis has it, so a server that reacts to the event published
+     * afterwards can already read it there (see [hasFriendRequestCommitted]).
+     */
+    suspend fun addFriendRequest(request: FriendRequest) {
+        friendRequests.addAndAwait(request)
+    }
+
+    /** Adds [friendship] and waits until Redis has it, see [addFriendRequest]. */
+    suspend fun addFriendship(friendship: Friendship) {
+        friendships.addAndAwait(friendship)
+    }
+
+    /**
+     * Whether the request from [senderUuid] to [targetUuid] is pending. The local view of the
+     * synchronized list may lag behind a request that another server just created (the event about
+     * it can arrive first), so a miss is checked against Redis, which also refreshes the local view.
+     */
+    suspend fun hasFriendRequestCommitted(senderUuid: UUID, targetUuid: UUID): Boolean =
+        presentLocallyOrRemotely(friendRequests) { it.isFrom(senderUuid, targetUuid) }
+
+    /** Whether [playerUuid] is friends with [friendUuid], checked like [hasFriendRequestCommitted]. */
+    suspend fun hasFriendshipCommitted(playerUuid: UUID, friendUuid: UUID): Boolean =
+        presentLocallyOrRemotely(friendships) { it.playerUuid == playerUuid && it.friendUuid == friendUuid }
+
+    private suspend fun <T : Any> presentLocallyOrRemotely(list: SyncList<T>, predicate: (T) -> Boolean): Boolean =
+        list.snapshot().any(predicate) || list.snapshotRemote().any(predicate)
+
     /** Removes the pending request from [senderUuid] to [targetUuid] from the synchronized list. */
-    fun removeFriendRequest(senderUuid: UUID, targetUuid: UUID) {
-        friendRequests.removeIf { it.isFrom(senderUuid, targetUuid) }
+    suspend fun removeFriendRequest(senderUuid: UUID, targetUuid: UUID) {
+        friendRequests.removeIfAndAwait { it.isFrom(senderUuid, targetUuid) }
     }
 
     /** Removes the pending requests between [playerA] and [playerB] in both directions. */
     fun removeFriendRequestsBetween(playerA: UUID, playerB: UUID) {
         friendRequests.removeIf { it.isFrom(playerA, playerB) || it.isFrom(playerB, playerA) }
+    }
+
+    /** Removes the friendship between [playerA] and [playerB] in both directions. */
+    suspend fun removeFriendshipsBetween(playerA: UUID, playerB: UUID) {
+        friendships.removeIfAndAwait {
+            (it.playerUuid == playerA && it.friendUuid == playerB) ||
+                    (it.playerUuid == playerB && it.friendUuid == playerA)
+        }
     }
 
     private fun FriendRequest.isFrom(sender: UUID, target: UUID) =

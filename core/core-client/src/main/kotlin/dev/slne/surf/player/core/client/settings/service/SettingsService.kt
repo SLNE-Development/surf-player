@@ -6,6 +6,7 @@ import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.player.api.settings.setting.PlayerSetting
 import dev.slne.surf.player.api.settings.setting.Setting
 import dev.slne.surf.player.core.client.SurfPlayerClient
+import dev.slne.surf.player.core.client.settings.command.SettingNames
 import dev.slne.surf.player.core.client.settings.redis.PlayerSettingChangedRedisEvent
 import dev.slne.surf.player.core.client.settings.rpc.settingsRpcService
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
@@ -45,6 +46,19 @@ object SettingsService {
     val settings: ObjectSet<Setting> get() = registry.get().all
 
     fun getSettingByName(name: String): Setting? = registry.get().byName[name]
+
+    /**
+     * The setting a player means with [input] (a setting name such as `chat:pings`, case-insensitive,
+     * see [SettingNames.resolve]).
+     */
+    fun findSettingByInput(input: String): Setting? {
+        val byName = registry.get().byName
+        return SettingNames.resolve(input, byName.keys)?.let(byName::get)
+    }
+
+    /** The setting names to suggest for [input], see [SettingNames.suggestions]. */
+    fun suggestSettingNames(input: String): List<String> =
+        SettingNames.suggestions(input, registry.get().byName.keys)
 
     fun getSettingForPlayer(playerUuid: UUID, settingName: String): PlayerSetting? =
         playerCache[playerUuid]?.byName?.get(settingName)

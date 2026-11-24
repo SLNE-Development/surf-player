@@ -134,7 +134,13 @@ fun registerSettings() {
         val sub = eventually(5000, "Chat-Kategorie") { p1.window?.takeIf { it.titleText.contains("Chat") && it.items.isNotEmpty() } }
         sleep(500)
         p1.clickSlot(slotWith(sub, "Zurück"))
-        val main = eventually(5000, "Hauptmenü nach Zurück") { p1.window?.takeIf { it.titleText.trim() == "Einstellungen" && it.items.isNotEmpty() } }
+        // The title is rendered with glyphs around the header, so it is matched by its text only.
+        val main = eventually(5000, "Hauptmenü nach Zurück") {
+            p1.window?.takeIf { w ->
+                w.titleText.contains("Einstellungen") && !w.titleText.contains("Einstellungen - ") &&
+                    w.nonEmpty().values.any { dev.slne.surf.player.tests.bot.Text.has(it.nameText, "Chat") }
+            }
+        }
         note("Zurück führt zu „${main.titleText}“")
         p1.closeWindow()
     }

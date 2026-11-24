@@ -4,9 +4,10 @@ import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.CommonComponents
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.pagination.Pagination
-import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.player.api.friends.SurfFriendsApi
+import dev.slne.surf.player.api.friends.model.FriendRequest
 import dev.slne.surf.player.core.client.friends.util.format
+import dev.slne.surf.player.core.client.friends.util.resolveUsername
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import java.time.OffsetDateTime
@@ -33,17 +34,28 @@ private val pagination = Pagination<LocalFriendRequest> {
     }
 }
 
-private data class LocalFriendRequest(
+internal data class LocalFriendRequest(
     val requesterName: String,
     val createdAt: OffsetDateTime
 )
+
+/**
+ * One row per request of [requests], newest first. A sender whose name [nameOf] cannot resolve is
+ * listed by their UUID instead of being left out, so a pending request never disappears from the
+ * list.
+ */
+internal suspend fun friendRequestRows(
+    requests: Collection<FriendRequest>,
+    nameOf: suspend (UUID) -> String?,
+): List<LocalFriendRequest> = requests
+    .sortedByDescending { it.createdAt }
+    .map { LocalFriendRequest(nameOf(it.senderUuid) ?: it.senderUuid.toString(), it.createdAt) }
 
 /**
  * The open friend requests of [player] as they are shown to them.
  */
 suspend fun friendRequestListComponent(player: UUID, page: Int = 1): Component {
     val friendRequests = SurfFriendsApi.receivedFriendRequests(player)
-        .sortedByDescending { it.createdAt }
 
     if (friendRequests.isEmpty()) {
         return buildText {
@@ -52,13 +64,8 @@ suspend fun friendRequestListComponent(player: UUID, page: Int = 1): Component {
         }
     }
 
-    val requesterEntries = friendRequests.mapNotNull {
-        LocalFriendRequest(
-            requesterName = PlayerLookupService.getUsername(it.senderUuid)
-                ?: return@mapNotNull null,
-            createdAt = it.createdAt
-        )
-    }
+    // Names come from surf-core first: PlayerLookupService alone does not know every account.
+    val requesterEntries = friendRequestRows(friendRequests, ::resolveUsername)
 
     return buildText {
         appendNewline()

@@ -11,6 +11,7 @@ import dev.slne.surf.player.api.friends.utils.displayName
 import dev.slne.surf.player.api.friends.utils.toSurfPlayer
 import dev.slne.surf.player.core.client.command.runServiceAction
 import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
+import dev.slne.surf.player.core.client.friends.friendRequestAnswerFailureMessage
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsAction
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsRedisEvent
@@ -126,7 +127,9 @@ object FriendsRedisListener {
                     clickCallback { clicked ->
                         FriendsPlatform.INSTANCE.launch {
                             runServiceAction(clicked) {
-                                SurfFriendsApi.acceptFriendRequest(targetUuid, executorUuid)
+                                friendRequestAnswerFailureMessage(
+                                    SurfFriendsApi.acceptFriendRequest(targetUuid, executorUuid)
+                                )?.let(clicked::sendMessage)
                             }
                         }
                     }
@@ -142,7 +145,9 @@ object FriendsRedisListener {
                     clickCallback { clicked ->
                         FriendsPlatform.INSTANCE.launch {
                             runServiceAction(clicked) {
-                                SurfFriendsApi.declineFriendRequest(targetUuid, executorUuid)
+                                friendRequestAnswerFailureMessage(
+                                    SurfFriendsApi.declineFriendRequest(targetUuid, executorUuid)
+                                )?.let(clicked::sendMessage)
                             }
                         }
                     }

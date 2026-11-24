@@ -1,6 +1,7 @@
 package dev.slne.surf.player.tests.scenarios
 
 import dev.slne.surf.player.tests.bot.Bot
+import dev.slne.surf.player.tests.bot.Text
 import dev.slne.surf.player.tests.dsl.Ctx
 import dev.slne.surf.player.tests.dsl.Prefix
 import dev.slne.surf.player.tests.dsl.scenario
@@ -42,14 +43,17 @@ fun registerFriends() {
         resetFriends()
     }
 
-    scenario("friends-02", "/fa Kurzbefehl") {
+    // Changed on purpose: /friend has no short forms any more (docs/command-conventions.md).
+    scenario("friends-02", "/fa entfernt") {
         on(PAPER, admin, p1)
         resetFriends()
+        p1.expectCommandUnavailable("fa")
         val ma = admin.mark()
         val m = p1.run("fa ${A}")
-        p1.expect("Freundschaftsanfrage an ${A} gesendet", since = m)
-        admin.expect("Freundschaftsanfrage von ${P1}", since = ma)
-        note("/fa wirkt wie /friend add")
+        val r = p1.firstMessage(m, 3000) ?: bad("Keine Antwort auf /fa")
+        check(r.plain.contains("command.unknown.command") || r.plain.contains("Unbekannt", ignoreCase = true)) { "„${r.plain.trim()}“" }
+        admin.expectNone("Freundschaftsanfrage von ${P1}", since = ma, within = 1500)
+        note("/fa ist unbekannt: „${r.plain.trim().replace("\n", " ⏎ ")}“, keine Anfrage")
         resetFriends()
     }
 
@@ -165,7 +169,14 @@ fun registerFriends() {
             val r1 = p1.firstMessage(m) ?: bad("Keine Antwort für ${P1}")
             val m2 = admin.run("friend add ${P1}")
             val r2 = admin.firstMessage(m2) ?: bad("Keine Antwort für ${A}")
-            check(r1.plain.contains("nicht zugestellt") && r2.plain.contains("nicht zugestellt")) { "${P1}: „${r1.plain.trim()}“, ${A}: „${r2.plain.trim()}“" }
+            // Changed on purpose: a request blocked by an ignore reads like disabled requests.
+            check(
+                r1.plain.contains("${A} nimmt keine Freundschaftsanfragen an.") &&
+                    r2.plain.contains("${P1} nimmt keine Freundschaftsanfragen an.")
+            ) { "${P1}: „${r1.plain.trim()}“, ${A}: „${r2.plain.trim()}“" }
+            check(r1.component?.let(Text::prefixColor) == Prefix.Error.color && r2.component?.let(Text::prefixColor) == Prefix.Error.color) {
+                "Kein Fehler-Präfix: „${r1.plain.trim()}“ / „${r2.plain.trim()}“"
+            }
             note("Beide Richtungen: „${r1.plain.trim()}“")
         } finally {
             admin.cmd("ignore remove ${P1}"); sleep(800); resetFriends()
@@ -334,13 +345,14 @@ fun registerFriends() {
         resetFriends()
     }
 
-    scenario("friends-28", "/fl Kurzbefehl") {
-        on(PAPER, admin, p1)
-        makeFriends(p1, admin)
+    // Changed on purpose: /friend has no short forms any more (docs/command-conventions.md).
+    scenario("friends-28", "/fl entfernt") {
+        on(PAPER, admin)
+        admin.expectCommandUnavailable("fl")
         val m = admin.run("fl")
-        val r = admin.expect("${P1}", since = m)
-        note("„${r.plain.trim().replace("\n", " ⏎ ")}“")
-        resetFriends()
+        val r = admin.firstMessage(m, 3000) ?: bad("Keine Antwort auf /fl")
+        check(r.plain.contains("command.unknown.command") || r.plain.contains("Unbekannt", ignoreCase = true)) { "„${r.plain.trim()}“" }
+        note("/fl ist unbekannt: „${r.plain.trim().replace("\n", " ⏎ ")}“")
     }
 
     scenario("friends-29", "/friend list leer") {
@@ -493,16 +505,20 @@ fun registerFriends() {
         on(PAPER, p1)
         withPermission(p1, "surf.player.command.friend", false) {
             on(LOBBY, p1); on(PAPER, p1)
+            // /fa and /fl were removed on purpose, so nothing friend-related is left.
             p1.expectCommandUnavailable("friend")
-            p1.expectCommandAvailable("fa")
-            p1.expectCommandAvailable("fl")
-            note("/friend fehlt bei surf.player.command.friend=false, /fa und /fl bleiben")
+            p1.expectCommandUnavailable("fa")
+            p1.expectCommandUnavailable("fl")
+            note("/friend fehlt bei surf.player.command.friend=false; /fa und /fl gibt es nicht mehr")
         }
     }
 
     scenario("friends-42", "/friend Hilfe") {
         on(PAPER, p1)
-        note(helpContains(p1, "friend", "add", "/fa", "list", "/fl", "info", "remove", "requests", "accept", "deny", "revoke"))
+        val help = helpContains(p1, "friend", "add", "list", "info", "remove", "requests", "accept", "deny", "revoke")
+        // No short forms any more (removed on purpose), so the help lists none.
+        check(!help.contains("/fa") && !help.contains("/fl")) { "Hilfe nennt noch /fa oder /fl: $help" }
+        note(help)
     }
     scenario("friends-43", "Alias /f entfernt") { on(PAPER, p1); p1.expectCommandUnavailable("f"); note("/f fehlt im Befehlsbaum") }
     scenario("friends-44", "add: Ziel nimmt keine Anfragen an") {
@@ -603,9 +619,9 @@ fun registerFriends() {
             note("Anfrage ohne Sound")
         } finally { setSetting(admin, "friend:sounds", true); resetFriends() }
     }
-    scenario("friends-54", "/friend requests und /fl Seiten") {
+    scenario("friends-54", "/friend requests und /friend list Seiten") {
         on(PAPER, admin)
-        note("requests 2: „${answer(admin, "friend requests 2").take(120)}“; fl 2: „${answer(admin, "fl 2").take(120)}“")
+        note("requests 2: „${answer(admin, "friend requests 2").take(120)}“; list 2: „${answer(admin, "friend list 2").take(120)}“")
     }
     scenario("friends-55", "Vorschläge der Argumente") {
         on(PAPER, admin, p1, p2); makeFriends(p1, admin)

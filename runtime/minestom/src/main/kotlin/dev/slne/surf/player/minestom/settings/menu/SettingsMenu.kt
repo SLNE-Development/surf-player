@@ -40,6 +40,10 @@ import net.minestom.server.sound.SoundEventKeys
 
 private const val CATEGORY_STATE = "category"
 
+/** Marks the current value of a setting in its lore, besides the bold text. */
+private const val SELECTED_MARKER = "»"
+private const val OPTION_MARKER = "▪"
+
 val settingsView: AbstractSurfView = surfView("Einstellungen") {
     settings {
         rows(3)
@@ -136,13 +140,13 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
                         },
                         Component.empty(),
                         buildText {
-                            darkSpacer("▪")
+                            if (currentValue) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
                             appendSpace()
                             variableValue("Aktiviert")
                             if (currentValue) decorate(TextDecoration.BOLD)
                         },
                         buildText {
-                            darkSpacer("▪")
+                            if (!currentValue) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
                             appendSpace()
                             variableValue("Deaktiviert")
                             if (!currentValue) decorate(TextDecoration.BOLD)

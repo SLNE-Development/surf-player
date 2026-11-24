@@ -287,7 +287,20 @@ object ChatCommands {
      * Looks the chat history up with the filters in [query] (`--sender Name --range 1d ...`).
      */
     suspend fun lookup(query: Map<String, String>?): CommandOutcome =
-        lookup(query, { PlayerLookupService.getUuid(it) }, HistoryService::findHistoryEntry)
+        lookup(query, { resolveLookupPlayer(it) }, HistoryService::findHistoryEntry)
+
+    /**
+     * The UUID of the player named [name], as the chat history stores it: the UUID the network
+     * knows them by ([network], surf-core) first, Mojang's ([mojang]) only for names the network
+     * has never seen. Asking Mojang first gave a different player's UUID for accounts whose
+     * network UUID is not their Mojang UUID (e.g. offline-mode accounts), so the lookup found
+     * nothing.
+     */
+    internal suspend fun resolveLookupPlayer(
+        name: String,
+        network: suspend (String) -> UUID? = { SurfCoreApi.getPlayer(it)?.uuid ?: SurfCoreApi.getOfflinePlayer(it)?.uuid },
+        mojang: suspend (String) -> UUID? = { PlayerLookupService.getUuid(it) },
+    ): UUID? = network(name) ?: mojang(name)
 
     /**
      * [lookup] with the player resolution and the history query passed in: an unknown player in a

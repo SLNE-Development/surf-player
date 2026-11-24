@@ -9,6 +9,7 @@ import dev.slne.surf.player.paper.command.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.player.api.SurfCommunityPlayer
 import dev.slne.surf.player.core.client.friends.command.*
+import dev.slne.surf.player.core.client.friends.friendRequestAnswerFailureMessage
 import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 import dev.slne.surf.player.paper.command.asViewer
 import dev.slne.surf.player.paper.command.CONFIRMATION_LIFETIME
@@ -68,7 +69,8 @@ fun registerFriendCommands() {
             withArguments(receivedRequestArgument())
             playerExecutorSuspend { player, args ->
                 val sender = args.awaiting<SurfCommunityPlayer>(PLAYER)
-                SurfCommunityPlayer(player.uniqueId).acceptFriendRequest(sender.uuid)
+                friendRequestAnswerFailureMessage(SurfCommunityPlayer(player.uniqueId).acceptFriendRequest(sender.uuid))
+                    ?.let(player::sendMessage)
             }
         }
 
@@ -77,7 +79,8 @@ fun registerFriendCommands() {
             withArguments(receivedRequestArgument())
             playerExecutorSuspend { player, args ->
                 val sender = args.awaiting<SurfCommunityPlayer>(PLAYER)
-                SurfCommunityPlayer(player.uniqueId).declineFriendRequest(sender.uuid)
+                friendRequestAnswerFailureMessage(SurfCommunityPlayer(player.uniqueId).declineFriendRequest(sender.uuid))
+                    ?.let(player::sendMessage)
             }
         }
 
