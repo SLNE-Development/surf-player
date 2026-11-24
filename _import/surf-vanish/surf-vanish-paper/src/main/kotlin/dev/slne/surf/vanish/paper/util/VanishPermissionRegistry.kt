@@ -1,0 +1,15 @@
+package dev.slne.surf.vanish.paper.util
+
+import dev.slne.surf.api.paper.permission.PermissionRegistry
+
+object VanishPermissionRegistry : PermissionRegistry() {
+    const val BASE = "surf.vanish"
+    val VANISH_BYPASS = create("$BASE.bypass")
+    val VANISH_COMMAND = create("$BASE.command")
+    val VANISH_COMMAND_RELOAD = create("$VANISH_COMMAND.reload")
+    val NICK_COMMAND = create("$BASE.command.nick")
+
+    val VANISH_SAVE_FLY_STATE = create("$BASE.save-fly-state")
+
+    val VANISH_PRIORITY = create("$BASE.priority")
+}
