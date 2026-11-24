@@ -218,8 +218,10 @@ fun registerInfra() {
         on(PAPER, admin, p1)
         lp("user ${p1.uuid} meta setprefix 100 <red>[Test]")
         try {
-            val tab = eventually(8000, "Tab-Prefix") { tabDisplay(admin, p1).takeIf { it.contains("[Test]") } }
-            val tag = eventually(8000, "Nametag-Prefix") { admin.teamOf("${P1}")?.prefix?.let { dev.slne.surf.player.tests.bot.Text.plain(it) }?.takeIf { it.contains("[Test]") } }
+            // Paper's tab shows the display name without the LuckPerms prefix, as surf-tab did
+            // (product decision); the nametag and the Minestom tab carry the prefix.
+            val tab = tabDisplay(admin, p1)
+            val tag =eventually(8000, "Nametag-Prefix") { admin.teamOf("${P1}")?.prefix?.let { dev.slne.surf.player.tests.bot.Text.plain(it) }?.takeIf { it.contains("[Test]") } }
             on(LOBBY, admin, p1); sleep(1500)
             val lobby = tabDisplay(admin, p1)
             note("Paper Tab „$tab“, Nametag „$tag“; Lobby Tab „$lobby“")
@@ -290,7 +292,8 @@ fun registerInfra() {
             val m = admin.run(cmd)
             // Look for the rejection instead of taking the first message: surf-core sends unrelated
             // info messages (e.g. the "Du befindest dich momentan" notice) at any time.
-            val rejected = admin.await(3000, m) { it.plain.contains("command.unknown") || it.plain.contains("Incorrect argument") || it.plain.contains("Unknown") }
+            sleep(700) // twelve commands in a row otherwise trip Paper's spam kick
+            val rejected = admin.await(6000, m) { it.plain.contains("command.unknown") || it.plain.contains("Incorrect argument") || it.plain.contains("Unknown") }
             if (rejected == null) accepted += "/$cmd → „${admin.since(m).firstOrNull()?.plain?.trim()?.take(80)}“"
         }
         check(accepted.isEmpty()) { "Nicht abgelehnt: $accepted" }

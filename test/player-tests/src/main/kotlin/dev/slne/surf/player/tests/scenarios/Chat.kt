@@ -714,7 +714,7 @@ fun registerChat() {
             val m = p1.run("ignore list")
             val r = p1.firstMessage(m) ?: bad("$server: keine Antwort")
             check(r.plain.contains("niemanden")) { "$server: „${r.plain.trim()}“" }
-            if (!hasPrefix(r, Prefix.Error)) odd("$server: „${r.plain.trim()}“ ohne Fehler-Präfix")
+            if (!hasPrefix(r, Prefix.Info)) odd("$server: „${r.plain.trim()}“ ohne Info-Präfix")
             results += "$server: „${r.plain.trim()}“"
         }
         note(results.joinToString("; "))

@@ -152,7 +152,7 @@ fun registerChatMore() {
         chk("ignore add ${P2}", "bereits", Prefix.Error)
         chk("ignore remove ${P2}", "nicht mehr", Prefix.Success)
         chk("ignore remove ${P2}", "Du ignorierst ${P2} nicht", Prefix.Error)
-        chk("ignore list", "niemanden", Prefix.Error)
+        chk("ignore list", "niemanden", Prefix.Info) // empty results use the info prefix (parity fix)
         chk("msg ${P1} x", "selbst", Prefix.Error)
         if (problems.isNotEmpty()) bad(problems.joinToString("; "))
         note("Erfolg grün, Fehler rot für /ignore, /msg")

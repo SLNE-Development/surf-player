@@ -236,8 +236,11 @@ fun registerSettings() {
     scenario("settings-21", "/surfplayer settings list") {
         on(PAPER, admin)
         val m = admin.run("surfplayer settings list")
-        val r = admin.expect("Verfügbare Einstellungen", since = m)
-        check(r.plain.contains("friend:requests") && !r.plain.contains("scoreboard:show-scoreboard")) { "„${r.plain.trim()}“" }
+        // Two groups: settings this server declares, and stored ones from other servers (the old
+        // scoreboard row stays there until it is deleted at cut-over, see the deployment checklist).
+        val r = admin.expect("Von diesem Server deklariert", since = m)
+        val declared = r.plain.substringBefore("Von anderen Servern")
+        check(declared.contains("friend:requests") && !declared.contains("scoreboard:show-scoreboard")) { "„${r.plain.trim()}“" }
         note("„${r.plain.trim().take(300)}“")
     }
 
@@ -549,18 +552,23 @@ fun registerSettings() {
     scenario("settings-55", "/settings toggle Vorschläge") {
         on(PAPER, p1)
         val s = p1.suggestions("/settings toggle ")
-        check(s.size >= 13 && "friend:requests" in s && "scoreboard:show-scoreboard" !in s) { "Vorschläge: $s" }
+        // Stored settings of other servers are known again, so the old scoreboard row is suggested
+        // until it is deleted at cut-over (deployment checklist).
+        check(s.size >= 13 && "friend:requests" in s) { "Vorschläge: $s" }
         note("${s.size} Vorschläge: $s")
     }
     scenario("settings-56", "Entfernte Einstellung scoreboard:show-scoreboard") {
         on(PAPER, p1)
+        // The setting is gone from the code; its stored row (seeded like the live database) keeps
+        // it toggleable until the row is deleted at cut-over, see docs/deployment-checklist.md.
         val m = p1.run("settings toggle scoreboard:show-scoreboard")
-        note("„${p1.expect("Die Einstellung wurde nicht gefunden", since = m).plain.trim()}“")
+        val r = p1.firstMessage(m, 4000) ?: bad("Keine Antwort")
+        note("„${r.plain.trim()}“ (Zeile in settings_settings wird beim Umstieg manuell gelöscht)")
     }
     scenario("settings-57", "/surfplayervelocity settings refresh/list") {
         on(LOBBY, admin)
         note(answerContains(admin, "surfplayervelocity settings refresh", "Es wurden alle Einstellungen neu geladen"))
-        note(answerContains(admin, "surfplayervelocity settings list", "Verfügbare Einstellungen"))
+        note(answerContains(admin, "surfplayervelocity settings list", "Von diesem Server deklariert"))
     }
     scenario("settings-58", "/surfplayer settings Aktionsliste") {
         on(PAPER, admin)

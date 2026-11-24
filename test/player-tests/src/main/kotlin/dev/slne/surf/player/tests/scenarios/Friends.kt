@@ -442,7 +442,9 @@ fun registerFriends() {
         join(p1)
         val r = admin.expect("${P1} ist nun online", since = m, prefix = Prefix.Info)
         sleep(800)
-        val sound = admin.since(m).firstOrNull { it.kind == dev.slne.surf.player.tests.bot.Received.Kind.SOUND }
+        // Mobs nearby play sounds too: look for the notification sound itself.
+        val sounds = admin.since(m).filter { it.kind == dev.slne.surf.player.tests.bot.Received.Kind.SOUND }
+        val sound = sounds.firstOrNull { it.extra.contains("experience_orb") } ?: sounds.firstOrNull()
         note("${A} (Paper), ${P1} betritt die Lobby: „${r.plain.trim()}“, Sound ${sound?.extra ?: "keiner"}")
         resetFriends()
         if (sound == null || !sound.extra.contains("experience_orb")) bad("Kein XP-Orb-Sound; ${notes.last()}")
@@ -455,7 +457,8 @@ fun registerFriends() {
         quit(p1)
         val r = admin.expect("${P1} ist nun offline", since = m)
         sleep(800)
-        val sound = admin.since(m).firstOrNull { it.kind == dev.slne.surf.player.tests.bot.Received.Kind.SOUND }
+        val sounds = admin.since(m).filter { it.kind == dev.slne.surf.player.tests.bot.Received.Kind.SOUND }
+        val sound = sounds.firstOrNull { it.extra.contains("bass") } ?: sounds.firstOrNull()
         note("„${r.plain.trim()}“, Sound ${sound?.extra ?: "keiner"}")
         resetFriends()
         if (sound == null || !sound.extra.contains("bass")) bad("Kein Bass-Sound; ${notes.last()}")
@@ -602,8 +605,10 @@ fun registerFriends() {
     scenario("friends-52", "Join-Hinweis zählt vanished Freunde nicht") {
         on(PAPER, admin); makeFriends(p1, admin); vanish(admin, true)
         try {
-            quit(p1); join(p1)
-            p1.expectNone("deiner Freunde online", since = 0, within = 3000)
+            quit(p1)
+            val m = p1.mark() // the message list survives reconnects; only look at this join
+            join(p1)
+            p1.expectNone("deiner Freunde online", since = m, within = 3000)
             note("Kein „Aktuell sind 1 deiner Freunde online.“")
         } finally { vanish(admin, false); resetFriends() }
     }
