@@ -32,12 +32,10 @@ object PaperTabFeature : PaperFeature {
             PlaytimeListener.register()
         }
 
-        // Clans are bundled in the same plugin and enabled before tab.
+        // Clans and content creators are bundled in the same plugin and enabled before tab.
         ClanHook.createListeners()
+        ContentCreatorHook.registerListener()
 
-        if (isContentCreatorHook) {
-            ContentCreatorHook.registerListener()
-        }
         if (isVanishHook) {
             VanishListener.register()
         }
@@ -50,4 +48,3 @@ object PaperTabFeature : PaperFeature {
 
 val isVanishHook get() = pluginManager.isPluginEnabled("surf-vanish-paper")
 val isPlaytimeHook get() = pluginManager.isPluginEnabled("surf-playtime-paper")
-val isContentCreatorHook get() = pluginManager.isPluginEnabled("surf-content-creator-paper")

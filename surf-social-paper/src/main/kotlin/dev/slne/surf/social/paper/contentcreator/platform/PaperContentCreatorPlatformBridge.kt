@@ -1,10 +1,10 @@
-package dev.slne.surf.content.creator.paper.platform
+package dev.slne.surf.social.paper.contentcreator.platform
 
 import com.github.shynixn.mccoroutine.folia.scope
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.util.mutableObjectSetOf
-import dev.slne.surf.content.creator.core.platform.ContentCreatorPlatformBridge
-import dev.slne.surf.content.creator.paper.plugin
+import dev.slne.surf.social.core.client.contentcreator.platform.ContentCreatorPlatformBridge
+import dev.slne.surf.social.paper.plugin
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit

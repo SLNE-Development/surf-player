@@ -1,9 +1,9 @@
-package dev.slne.surf.nametag.minestom.platform
+package dev.slne.surf.social.minestom.nametag.platform
 
-import dev.slne.surf.nametag.api.nametag.Nametag
-import dev.slne.surf.nametag.core.client.config.NametagConfig
-import dev.slne.surf.nametag.core.client.platform.NametagPlayer
-import dev.slne.surf.nametag.core.client.service.teamDisplayName
+import dev.slne.surf.social.api.nametag.nametag.Nametag
+import dev.slne.surf.social.core.client.nametag.config.NametagConfig
+import dev.slne.surf.social.core.client.nametag.platform.NametagPlayer
+import dev.slne.surf.social.core.client.nametag.service.teamDisplayName
 import net.minestom.server.entity.Player
 import net.minestom.server.network.packet.server.play.TeamsPacket
 import java.util.*

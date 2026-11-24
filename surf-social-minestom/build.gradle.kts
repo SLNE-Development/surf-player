@@ -23,7 +23,6 @@ minestomPluginFile {
         register("surf-redis-minestom")
         register("surf-settings-minestom")
         register("surf-playtime-minestom")
-        register("surf-content-creator-minestom")
     }
 }
 
@@ -33,5 +32,4 @@ dependencies {
     compileOnly(libs.luckperms.api)
     compileOnly("dev.slne.surf.punish:surf-punish-api-common:+")
     compileOnly("dev.slne.surf.playtime:surf-playtime-api-minestom:+")
-    compileOnly("dev.slne.surf.content.creator:surf-content-creator-api:+")
 }

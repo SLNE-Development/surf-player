@@ -1,11 +1,11 @@
-package dev.slne.surf.content.creator.minestom.command
+package dev.slne.surf.social.minestom.contentcreator.command
 
 import dev.slne.surf.api.minestom.command.dsl.commandTree
 import dev.slne.surf.api.minestom.command.dsl.literalArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
-import dev.slne.surf.content.creator.api.platform.PlatformState
-import dev.slne.surf.content.creator.core.ContentCreatorPermissions
-import dev.slne.surf.content.creator.core.command.LiveStateDebugCommand
+import dev.slne.surf.social.api.contentcreator.platform.PlatformState
+import dev.slne.surf.social.core.client.contentcreator.ContentCreatorPermissions
+import dev.slne.surf.social.core.client.contentcreator.command.LiveStateDebugCommand
 
 fun contentCreatorCommand() {
     commandTree("surfcontentcreator") {

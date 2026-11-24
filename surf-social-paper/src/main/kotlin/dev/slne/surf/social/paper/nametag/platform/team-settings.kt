@@ -1,9 +1,9 @@
-package dev.slne.surf.nametag.paper.platform
+package dev.slne.surf.social.paper.nametag.platform
 
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams
-import dev.slne.surf.nametag.api.nametag.NametagVisibility
-import dev.slne.surf.nametag.core.client.config.NametagCollisionRule
-import dev.slne.surf.nametag.core.client.config.NametagOptionData
+import dev.slne.surf.social.api.nametag.nametag.NametagVisibility
+import dev.slne.surf.social.core.client.nametag.config.NametagCollisionRule
+import dev.slne.surf.social.core.client.nametag.config.NametagOptionData
 
 fun NametagVisibility.toPacketEvents(): WrapperPlayServerTeams.NameTagVisibility = when (this) {
     NametagVisibility.ALWAYS -> WrapperPlayServerTeams.NameTagVisibility.ALWAYS

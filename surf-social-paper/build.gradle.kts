@@ -34,7 +34,6 @@ surfPaperPluginApi {
         registerRequired("surf-punish-paper")
         registerRequired("surf-settings-paper")
         registerSoft("surf-playtime-paper")
-        registerSoft("surf-content-creator-paper")
         registerSoft("surf-vanish-paper")
     }
 
@@ -53,5 +52,4 @@ dependencies {
     compileOnly("dev.slne.surf.punish:surf-punish-api-common:+")
     compileOnly("dev.slne.surf.vanish:surf-vanish-api:+")
     compileOnly("dev.slne.surf.playtime:surf-playtime-api-paper:+")
-    compileOnly("dev.slne.surf.content.creator:surf-content-creator-api:+")
 }

@@ -4,7 +4,9 @@ import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
 import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.minestom.chat.ChatMinestomFeature
 import dev.slne.surf.social.minestom.clan.ClanMinestomFeature
+import dev.slne.surf.social.minestom.contentcreator.ContentCreatorMinestomFeature
 import dev.slne.surf.social.minestom.friends.FriendsMinestomFeature
+import dev.slne.surf.social.minestom.nametag.NametagMinestomFeature
 import dev.slne.surf.social.minestom.tab.TabMinestomFeature
 import kotlinx.coroutines.CancellationException
 import java.nio.file.Path
@@ -12,13 +14,16 @@ import kotlin.io.path.createDirectories
 
 /**
  * The single Minestom plugin of surf-social. It hosts every social feature and drives their
- * lifecycle in dependency order: chat → friends → clan → tab (disabled in reverse order).
+ * lifecycle in dependency order: chat → friends → clan → contentcreator → nametag → tab
+ * (disabled in reverse order).
  */
 object SocialMinestomPlugin : SurfMinestomPlugin() {
     private val features: List<MinestomSocialFeature> = listOf(
         ChatMinestomFeature,
         FriendsMinestomFeature,
         ClanMinestomFeature,
+        ContentCreatorMinestomFeature,
+        NametagMinestomFeature,
         TabMinestomFeature,
     )
 

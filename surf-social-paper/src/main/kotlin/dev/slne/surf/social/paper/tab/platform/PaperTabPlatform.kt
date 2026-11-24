@@ -5,7 +5,6 @@ import dev.slne.surf.social.core.client.tab.platform.TabPlatform
 import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.social.paper.tab.PaperTabFeature
 import dev.slne.surf.social.paper.tab.hook.VanishHook
-import dev.slne.surf.social.paper.tab.isContentCreatorHook
 import dev.slne.surf.social.paper.tab.isPlaytimeHook
 import dev.slne.surf.social.paper.tab.isVanishHook
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +16,7 @@ class PaperTabPlatform : TabPlatform {
 
     override val playtimeAvailable get() = isPlaytimeHook
     override val clanAvailable get() = true
-    override val contentCreatorAvailable get() = isContentCreatorHook
+    override val contentCreatorAvailable get() = true
 
     override fun onlinePlayers() = Bukkit.getOnlinePlayers().map { PaperTabPlayer(it) }
 

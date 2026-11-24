@@ -1,4 +1,4 @@
-package dev.slne.surf.nametag.paper.util
+package dev.slne.surf.social.paper.nametag.util
 
 import com.github.retrooper.packetevents.PacketEvents
 import com.github.retrooper.packetevents.wrapper.PacketWrapper

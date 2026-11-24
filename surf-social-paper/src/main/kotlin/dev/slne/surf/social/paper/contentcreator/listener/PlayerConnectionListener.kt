@@ -1,9 +1,9 @@
-package dev.slne.surf.content.creator.paper.listener
+package dev.slne.surf.social.paper.contentcreator.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.content.creator.core.client.ContentClientManager
-import dev.slne.surf.content.creator.core.service.ContentCreatorService
-import dev.slne.surf.content.creator.paper.plugin
+import dev.slne.surf.social.core.client.contentcreator.client.ContentClientManager
+import dev.slne.surf.social.core.client.contentcreator.service.ContentCreatorService
+import dev.slne.surf.social.paper.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent

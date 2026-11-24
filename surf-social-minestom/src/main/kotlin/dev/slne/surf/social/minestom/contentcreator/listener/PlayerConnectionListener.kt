@@ -1,10 +1,10 @@
-package dev.slne.surf.content.creator.minestom.listener
+package dev.slne.surf.social.minestom.contentcreator.listener
 
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.content.creator.core.client.ContentClientManager
-import dev.slne.surf.content.creator.core.service.ContentCreatorService
+import dev.slne.surf.social.core.client.contentcreator.client.ContentClientManager
+import dev.slne.surf.social.core.client.contentcreator.service.ContentCreatorService
 import kotlinx.coroutines.launch
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode

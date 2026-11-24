@@ -1,6 +1,6 @@
-package dev.slne.surf.nametag.minestom.hook
+package dev.slne.surf.social.minestom.nametag.hook
 
-import dev.slne.surf.nametag.core.client.hook.LuckPermsHook
+import dev.slne.surf.social.core.client.nametag.hook.LuckPermsHook
 import net.luckperms.api.event.node.NodeAddEvent
 import net.luckperms.api.event.node.NodeRemoveEvent
 import net.luckperms.api.event.user.UserDataRecalculateEvent

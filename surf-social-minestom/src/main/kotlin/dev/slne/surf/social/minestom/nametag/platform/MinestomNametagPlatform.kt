@@ -1,18 +1,18 @@
-package dev.slne.surf.nametag.minestom.platform
+package dev.slne.surf.social.minestom.nametag.platform
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.inventory.framework.view.util.shift as glyphShift
-import dev.slne.surf.nametag.core.client.platform.NametagPlatform
-import dev.slne.surf.nametag.minestom.NametagMinestomPlugin
+import dev.slne.surf.social.core.client.nametag.platform.NametagPlatform
+import dev.slne.surf.social.minestom.nametag.NametagMinestomFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 @AutoService(NametagPlatform::class)
 class MinestomNametagPlatform : NametagPlatform {
-    override val dataPath get() = NametagMinestomPlugin.dataDirectory
+    override val dataPath get() = NametagMinestomFeature.dataDirectory
 
     override val clanAvailable = true
     override val contentCreatorAvailable = true

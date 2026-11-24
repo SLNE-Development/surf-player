@@ -1,10 +1,10 @@
-package dev.slne.surf.nametag.minestom.listener
+package dev.slne.surf.social.minestom.nametag.listener
 
 import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.event.EventRegistrar
 import dev.slne.surf.api.minestom.extension.addListener
-import dev.slne.surf.nametag.core.client.service.NametagService
-import dev.slne.surf.nametag.minestom.platform.MinestomNametagPlayer
+import dev.slne.surf.social.core.client.nametag.service.NametagService
+import dev.slne.surf.social.minestom.nametag.platform.MinestomNametagPlayer
 import kotlinx.coroutines.launch
 import net.minestom.server.event.Event
 import net.minestom.server.event.EventNode

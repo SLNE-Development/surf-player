@@ -4,7 +4,9 @@ import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.paper.chat.PaperChatFeature
 import dev.slne.surf.social.paper.clan.PaperClanFeature
+import dev.slne.surf.social.paper.contentcreator.PaperContentCreatorFeature
 import dev.slne.surf.social.paper.friends.PaperFriendsFeature
+import dev.slne.surf.social.paper.nametag.PaperNametagFeature
 import dev.slne.surf.social.paper.shrieker.PaperShriekerFeature
 import dev.slne.surf.social.paper.tab.PaperTabFeature
 import org.bukkit.plugin.java.JavaPlugin
@@ -15,14 +17,16 @@ val plugin get() = JavaPlugin.getPlugin(SocialPaperPlugin::class.java)
 class SocialPaperPlugin : SuspendingJavaPlugin() {
 
     /**
-     * Load/enable order. Clan hooks into chat, tab hooks into clan,
-     * so dependencies come first. Disabling happens in reverse order.
+     * Load/enable order. Clan hooks into chat; nametag and tab hook into clan and
+     * content creator, so dependencies come first. Disabling happens in reverse order.
      */
     private val features: List<PaperFeature> = listOf(
         PaperChatFeature,
         PaperFriendsFeature,
         PaperClanFeature,
         PaperShriekerFeature,
+        PaperContentCreatorFeature,
+        PaperNametagFeature,
         PaperTabFeature,
     )
 
