@@ -11,7 +11,7 @@ import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.util.mapAsync
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.core.common.chat.service.IgnoreService
-import dev.slne.surf.social.core.client.chat.util.unixTime
+import dev.slne.surf.social.core.client.chat.util.formatTime
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.text.format.TextDecoration
@@ -29,7 +29,7 @@ private val pagination = Pagination<IgnoreListPaginationEntry> {
                 appendSpace()
                 variableKey(entry.targetName)
                 appendSpace()
-                spacer("(${entry.createdAt.unixTime()})")
+                spacer("(${entry.createdAt.formatTime()})")
             }
         )
     }
@@ -42,7 +42,6 @@ fun CommandAPICommand.ignoreListCommand() = subcommand("#list") {
             .mapAsync {
                 IgnoreListPaginationEntry(
                     targetName = SurfCoreApi.getOfflinePlayer(it.target)?.lastKnownName ?: it.target.toString(),
-                    targetUuid = it.target.toString(),
                     createdAt = it.createdAt
                 )
             }
@@ -59,6 +58,5 @@ fun CommandAPICommand.ignoreListCommand() = subcommand("#list") {
 
 private data class IgnoreListPaginationEntry(
     val targetName: String,
-    val targetUuid: String,
     val createdAt: OffsetDateTime
 )

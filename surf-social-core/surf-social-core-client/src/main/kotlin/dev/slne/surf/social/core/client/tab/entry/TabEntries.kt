@@ -3,8 +3,8 @@ package dev.slne.surf.social.core.client.tab.entry
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.social.api.tab.event.TabEntryRenderEvent
+import dev.slne.surf.social.core.client.contentcreator.LiveTagRenderer
 import dev.slne.surf.social.core.client.tab.hook.ClanHook
-import dev.slne.surf.social.core.client.tab.hook.ContentCreatorHook
 import dev.slne.surf.social.core.client.tab.hook.LuckPermsHook
 import dev.slne.surf.social.core.client.tab.hook.SurfPlaytimeHook
 import dev.slne.surf.social.core.client.tab.platform.TabPlayer
@@ -13,11 +13,9 @@ import dev.slne.surf.social.core.client.tab.service.UpdateCoalescer
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withTimeout
-import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.TextColor
-import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.seconds
@@ -48,8 +46,7 @@ private val vanishTag = buildText {
  * player's displayed name and ordering or take over rendering entirely by cancelling the event.
  *
  * Entries are initially rendered without clan information so they can be displayed immediately.
- * When clan integration is available, the clan tag is resolved asynchronously and the entry is
- * updated again if necessary.
+ * The clan tag is then resolved asynchronously and the entry is updated again if necessary.
  *
  * Optional decorations are resolved independently. A failure while resolving one decoration is
  * logged and replaced by its fallback value without preventing the remaining entry from rendering.
@@ -62,7 +59,7 @@ class TabEntries {
     /**
      * Stores the last entry state applied for each player to suppress unchanged updates.
      */
-    private val shown = ConcurrentHashMap<UUID, Shown>()
+    private val shown = ConcurrentHashMap<UUID, ShownEntry>()
 
     @Volatile
     private var started = false
@@ -160,15 +157,13 @@ class TabEntries {
 
         show(player, decorate(event.name, uuid, clan = null), event.order)
 
-        if (tabPlatform.clanAvailable) {
-            resolveClan(uuid)?.let { clan ->
-                show(player, decorate(event.name, uuid, clan), event.order)
-            }
+        resolveClan(uuid)?.let { clan ->
+            show(player, decorate(event.name, uuid, clan), event.order)
         }
     }
 
     private suspend fun show(player: TabPlayer, name: Component, order: Int) {
-        val next = Shown(player.audience, name, order)
+        val next = ShownEntry(player.audience, name, order)
 
         if (shown.put(player.uuid, next)?.sameAs(next) == true) return
 
@@ -207,9 +202,7 @@ class TabEntries {
         return if (tabPlatform.isVanished(uuid)) vanishTag else Component.empty()
     }
 
-    private fun liveTag(uuid: UUID): Component {
-        return if (tabPlatform.contentCreatorAvailable) ContentCreatorHook.renderLiveTag(uuid) else Component.empty()
-    }
+    private fun liveTag(uuid: UUID): Component = LiveTagRenderer.render(uuid, space = true)
 
     private fun afkTag(uuid: UUID): TextComponent {
         return if (tabPlatform.playtimeAvailable && SurfPlaytimeHook.isAfk(uuid)) afkTag else Component.empty()
@@ -236,14 +229,6 @@ class TabEntries {
         log.atWarning().withCause(throwable)
             .log("Failed to resolve tablist part %s for entry %s", what, uuid)
         fallback
-    }
-
-    private class Shown(audience: Audience, val name: Component, val order: Int) {
-        private val audience = WeakReference(audience)
-
-        fun sameAs(other: Shown): Boolean {
-            return audience.get() === other.audience.get() && name == other.name && order == other.order
-        }
     }
 
     // factor: higher = lighter, lower = darker

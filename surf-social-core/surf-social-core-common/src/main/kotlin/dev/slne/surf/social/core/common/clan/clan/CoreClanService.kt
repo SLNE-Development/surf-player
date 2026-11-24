@@ -1,7 +1,7 @@
 package dev.slne.surf.social.core.common.clan.clan
 
 import dev.slne.surf.social.api.clan.clan.ClanService
-import dev.slne.surf.social.api.clan.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.clan.ClanTagColorUpdate
 import dev.slne.surf.social.api.clan.invite.ClanInviteResult
 import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
 import dev.slne.surf.social.api.clan.member.ClanMemberRole
@@ -19,7 +19,7 @@ interface CoreClanService : ClanService {
 
     suspend fun updateDescription(clan: ClanImpl, description: String?): Boolean
     suspend fun updateDiscordInvite(clan: ClanImpl, discordInvite: String?): Boolean
-    suspend fun updateTagColor(clan: ClanImpl, update: ClanTagColor.Update): Boolean
+    suspend fun updateTagColor(clan: ClanImpl, update: ClanTagColorUpdate): Boolean
 
     suspend fun fetchPendingInvites(clan: AbstractClanView): Set<ClanInviteImpl>
     suspend fun invitePlayer(clan: ClanImpl, invitee: UUID, invitedBy: UUID): ClanInviteResult

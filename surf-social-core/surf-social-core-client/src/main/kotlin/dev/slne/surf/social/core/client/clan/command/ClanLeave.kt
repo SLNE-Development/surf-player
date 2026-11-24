@@ -5,7 +5,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
 import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextDecoration
@@ -20,7 +20,7 @@ const val CLAN_OWNER_CANNOT_LEAVE =
 suspend fun leaveConfirmationMessage(clan: Clan, click: ClickEvent<*>) = buildText {
     appendWarningPrefix()
     warning("Möchtest du den Clan ")
-    append(Components.Clan.renderClanInformationHover(clan as ClanImpl))
+    append(ClanComponents.renderClanInformationHover(clan as ClanImpl))
     warning(" wirklich verlassen? Klicke ")
     append {
         error("HIER", TextDecoration.BOLD)

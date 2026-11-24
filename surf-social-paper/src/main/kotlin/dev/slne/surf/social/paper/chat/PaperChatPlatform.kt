@@ -1,17 +1,15 @@
 package dev.slne.surf.social.paper.chat
 
-import com.github.shynixn.mccoroutine.folia.entityDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
-import dev.slne.surf.api.core.messages.adventure.playSound
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.social.paper.chat.util.schedulePingSound
 import dev.slne.surf.social.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
-import org.bukkit.Sound
 import java.util.UUID
 
 @AutoService(ChatPlatform::class)
@@ -40,13 +38,7 @@ class PaperChatPlatform : ChatPlatform {
     override fun isOnline(uuid: UUID) = Bukkit.getPlayer(uuid) != null
 
     override fun playPingSound(uuid: UUID) {
-        val player = Bukkit.getPlayer(uuid) ?: return
-
-        plugin.launch(plugin.entityDispatcher(player)) {
-            player.playSound(true) {
-                type(Sound.ENTITY_CHICKEN_EGG)
-            }
-        }
+        Bukkit.getPlayer(uuid)?.schedulePingSound()
     }
 
     override fun teleportToPlayer(who: UUID, target: UUID) {

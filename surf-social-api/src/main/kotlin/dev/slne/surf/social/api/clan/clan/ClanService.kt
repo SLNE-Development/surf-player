@@ -5,7 +5,7 @@ import dev.slne.surf.social.api.clan.util.InternalClanApi
 import dev.slne.surf.api.core.util.requiredService
 import java.util.*
 
-private val service = requiredService<ClanService>()
+private val instance = requiredService<ClanService>()
 
 @InternalClanApi
 interface ClanService {
@@ -19,7 +19,7 @@ interface ClanService {
     fun validateClanNameAndTag(name: String, tag: String): ClanValidationResult
     suspend fun createClan(properties: ClanCreateBuilder): ClanCreationResult
 
-    companion object : ClanService by service {
-        val INSTANCE get() = service
+    companion object : ClanService by instance {
+        val INSTANCE get() = instance
     }
 }

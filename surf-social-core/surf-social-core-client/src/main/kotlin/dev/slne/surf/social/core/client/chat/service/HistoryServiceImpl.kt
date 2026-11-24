@@ -6,7 +6,7 @@ import dev.slne.surf.api.core.util.toObjectList
 import dev.slne.surf.social.api.chat.entry.HistoryEntry
 import dev.slne.surf.social.api.chat.entry.HistoryFilter
 import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.rabbitApi
+import dev.slne.surf.social.core.client.SocialClient.rabbitApi
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.CreateHistoryEntryRequestPacket
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.FindHistoriesRequestPacket
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.history.MarkHistoryEntryDeletedRequestPacket

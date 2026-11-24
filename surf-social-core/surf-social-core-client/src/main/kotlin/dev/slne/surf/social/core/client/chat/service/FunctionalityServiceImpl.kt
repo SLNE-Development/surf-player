@@ -2,7 +2,7 @@ package dev.slne.surf.social.core.client.chat.service
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.social.api.chat.functionality.Functionalities
-import dev.slne.surf.social.core.client.chat.rabbitApi
+import dev.slne.surf.social.core.client.SocialClient.rabbitApi
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindAllFunctionalitiesRequestPacket
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.FindFunctionalityRequestPacket
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.functionality.UpsertFunctionalityRequestPacket

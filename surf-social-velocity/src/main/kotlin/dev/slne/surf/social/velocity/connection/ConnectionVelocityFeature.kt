@@ -5,7 +5,6 @@ import dev.slne.surf.social.velocity.connection.command.linkCommand
 import dev.slne.surf.social.velocity.connection.command.surfSocialCommand
 import dev.slne.surf.social.velocity.connection.command.unlinkCommand
 import dev.slne.surf.social.velocity.connection.config.SocialConfigManager
-import dev.slne.surf.social.velocity.plugin
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
@@ -21,7 +20,7 @@ object ConnectionVelocityFeature : VelocitySocialFeature {
         private set
 
     override suspend fun onLoad() {
-        socialConfigManager = SocialConfigManager(plugin.featureDataDirectory(this))
+        socialConfigManager = SocialConfigManager(dataDirectory)
     }
 
     override suspend fun onEnable() {
@@ -31,11 +30,14 @@ object ConnectionVelocityFeature : VelocitySocialFeature {
     }
 
     override suspend fun onDisable() {
-        client.close()
+        httpClient.close()
     }
 }
 
-val client = HttpClient {
+/**
+ * The HTTP client the connection feature talks to the CastCrafter auth service with.
+ */
+val httpClient = HttpClient {
     install(ContentNegotiation) {
         json()
     }

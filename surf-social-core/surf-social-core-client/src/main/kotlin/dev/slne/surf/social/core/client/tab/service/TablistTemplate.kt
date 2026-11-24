@@ -47,7 +47,7 @@ class TablistTemplate internal constructor(
      * Only ever replaced as a whole, so a reader sees either a complete previous render or none.
      */
     @Volatile
-    private var rendered: Rendered? = null
+    private var rendered: SharedRender? = null
 
     /**
      * Whether this template names [placeholder].
@@ -84,7 +84,7 @@ class TablistTemplate internal constructor(
         }
 
         val component = render()
-        rendered = Rendered(values, component)
+        rendered = SharedRender(values, component)
 
         return component
     }
@@ -96,8 +96,6 @@ class TablistTemplate internal constructor(
                 "rendersPerPlayer=$rendersPerPlayer" +
                 ")"
     }
-
-    private class Rendered(val values: TablistValues, val component: Component)
 
     companion object {
 

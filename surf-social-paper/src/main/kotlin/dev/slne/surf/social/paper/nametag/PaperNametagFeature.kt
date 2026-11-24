@@ -4,8 +4,9 @@ import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.social.core.client.nametag.config.NametagConfig
 import dev.slne.surf.social.core.client.nametag.hook.ClanHook
 import dev.slne.surf.social.core.client.nametag.hook.ContentCreatorHook
-import dev.slne.surf.social.paper.PaperFeature
-import dev.slne.surf.social.paper.nametag.hook.registerLuckPermsListeners
+import dev.slne.surf.social.core.client.nametag.hook.LuckPermsHook
+import dev.slne.surf.social.paper.PaperSocialFeature
+import dev.slne.surf.social.paper.hook.subscribeToLuckPermsUserChanges
 import dev.slne.surf.social.paper.nametag.listener.NametagListener
 
 /**
@@ -14,14 +15,14 @@ import dev.slne.surf.social.paper.nametag.listener.NametagListener
  * Clans and content creators are bundled in the same plugin and enabled before this feature,
  * so their hooks are always registered.
  */
-object PaperNametagFeature : PaperFeature {
+object PaperNametagFeature : PaperSocialFeature {
     override val name = "nametag"
 
     override suspend fun onEnable() {
         NametagConfig.init()
         NametagListener.register()
 
-        registerLuckPermsListeners()
+        subscribeToLuckPermsUserChanges(LuckPermsHook::updatePlayer)
 
         ClanHook.createListeners()
         ContentCreatorHook.registerListener()

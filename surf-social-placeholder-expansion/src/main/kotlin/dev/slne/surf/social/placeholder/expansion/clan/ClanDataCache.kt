@@ -6,11 +6,13 @@ import com.sksamuel.aedile.core.expireAfterWrite
 import com.sksamuel.aedile.core.refreshAfterWrite
 import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.social.api.clan.clan.listener.ClanUpdatedListener
-import net.kyori.adventure.text.Component
 import java.util.*
 import java.util.concurrent.CompletableFuture.completedFuture
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+
+/** Active members a clan needs before its tag is shown. */
+private const val MIN_ACTIVE_MEMBERS_FOR_TAG = 30
 
 object ClanDataCache : ClanUpdatedListener {
     private val cache = Caffeine.newBuilder()
@@ -23,7 +25,7 @@ object ClanDataCache : ClanUpdatedListener {
 
     private suspend fun loadClanData(uuid: UUID): CachedClanData {
         val clan = Clan.byPlayer(uuid) ?: return CachedClanData.Empty
-        return CachedClanData.Loaded(clan.name, clan.tag, clan.renderClanTag(minSize = 30))
+        return clan.toCachedData()
     }
 
     fun getData(uuid: UUID): CachedClanData {
@@ -31,7 +33,7 @@ object ClanDataCache : ClanUpdatedListener {
     }
 
     override fun onClanUpdated(clan: Clan) {
-        val updated = CachedClanData.Loaded(clan.name, clan.tag, clan.renderClanTag(minSize = 30))
+        val updated = clan.toCachedData()
         val entries = cache.underlying().asMap()
 
         for (member in clan.members) {
@@ -39,12 +41,6 @@ object ClanDataCache : ClanUpdatedListener {
         }
     }
 
-    sealed interface CachedClanData {
-        data object Empty : CachedClanData
-        data class Loaded(
-            val name: String,
-            val tag: String,
-            val renderedClanTag: Component
-        ) : CachedClanData
-    }
+    private fun Clan.toCachedData() =
+        CachedClanData.Loaded(name, tag, renderClanTag(minSize = MIN_ACTIVE_MEMBERS_FOR_TAG))
 }

@@ -8,11 +8,5 @@ import kotlinx.serialization.Serializable
 data class ChangeFriendRequestStateRequestPacket(
     val senderUuid: SerializableUUID,
     val targetUuid: SerializableUUID,
-    val state: State
-) : RabbitRequestPacket<ChangeFriendRequestStateResponsePacket>() {
-    @Serializable
-    enum class State {
-        ACCEPT,
-        DECLINE
-    }
-}
+    val state: FriendRequestState
+) : RabbitRequestPacket<ChangeFriendRequestStateResponsePacket>()

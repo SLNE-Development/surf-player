@@ -6,7 +6,6 @@ import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
-import dev.slne.surf.social.core.client.chat.service.SlowChatService.slowChatInterval
 import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean

@@ -2,7 +2,7 @@ package dev.slne.surf.social.core.client.clan.command
 
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 import net.kyori.adventure.text.event.ClickEvent
 
 const val NO_INVITE_PERMISSION = "Du hast keine Berechtigung, Spieler in den Clan einzuladen."
@@ -19,7 +19,7 @@ suspend fun inviteSentMessage(inviteeName: String, clan: ClanImpl) = buildText {
     success("Du hast ")
     variableValue(inviteeName)
     success(" in den Clan ")
-    append(Components.Clan.renderClanInformationHover(clan))
+    append(ClanComponents.renderClanInformationHover(clan))
     success(" eingeladen.")
 }
 
@@ -59,7 +59,7 @@ fun inviteReceivedMessage(inviterName: String, clanName: String) = buildText {
 suspend fun inviteAcceptedMessage(clan: ClanImpl) = buildText {
     appendSuccessPrefix()
     success("Du bist dem Clan ")
-    append(Components.Clan.renderClanInformationHover(clan))
+    append(ClanComponents.renderClanInformationHover(clan))
     success(" beigetreten.")
 }
 

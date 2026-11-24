@@ -6,7 +6,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextDecoration
@@ -47,6 +47,6 @@ suspend fun handleClanListClick(clicked: Audience, clanUuid: UUID) {
             error("Der Clan konnte nicht gefunden werden.")
         }
     } else {
-        clicked.sendMessage(Components.Clan.renderClanInformation(clan as ClanImpl))
+        clicked.sendMessage(ClanComponents.renderClanInformation(clan as ClanImpl))
     }
 }

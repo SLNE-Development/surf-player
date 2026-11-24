@@ -1,28 +1,28 @@
 package dev.slne.surf.social.minestom.tab
 
-import dev.slne.surf.social.minestom.MinestomSocialFeature
-import dev.slne.surf.social.minestom.SocialMinestomPlugin
 import dev.slne.surf.social.core.client.tab.hook.ClanHook
 import dev.slne.surf.social.core.client.tab.hook.ContentCreatorHook
+import dev.slne.surf.social.core.client.tab.hook.LuckPermsHook
 import dev.slne.surf.social.core.client.tab.redis.redisLoader
 import dev.slne.surf.social.core.client.tab.service.TablistService
+import dev.slne.surf.social.minestom.MinestomSocialFeature
+import dev.slne.surf.social.minestom.SocialMinestomPlugin
+import dev.slne.surf.social.minestom.hook.subscribeToLuckPermsUserChanges
 import dev.slne.surf.social.minestom.tab.command.surfTabCommand
-import dev.slne.surf.social.minestom.tab.hook.registerLuckPermsListeners
-import dev.slne.surf.social.minestom.tab.listener.PlayerListener
 import dev.slne.surf.social.minestom.tab.listener.PlaytimeListener
 import dev.slne.surf.social.minestom.tab.platform.MinestomTabPlatform
+import dev.slne.surf.social.minestom.tab.platform.MinestomTabPlayer
+import net.minestom.server.entity.Player
 
 object TabMinestomFeature : MinestomSocialFeature {
     override val id = "tab"
-
-    val dataDirectory get() = SocialMinestomPlugin.featureDataDirectory(this)
 
     override suspend fun onLoad() {
         redisLoader.register()
 
         TablistService.start(MinestomTabPlatform())
 
-        registerLuckPermsListeners()
+        subscribeToLuckPermsUserChanges(LuckPermsHook::updatePlayerInTablist)
         ClanHook.createListeners()
         ContentCreatorHook.registerListener()
     }
@@ -30,11 +30,18 @@ object TabMinestomFeature : MinestomSocialFeature {
     override suspend fun onEnable() {
         surfTabCommand()
 
-        PlayerListener.register(SocialMinestomPlugin.eventNode)
         PlaytimeListener.register(SocialMinestomPlugin.eventNode)
     }
 
     override suspend fun onDisable() {
         TablistService.stop()
+    }
+
+    override fun onPlayerJoin(player: Player) {
+        TablistService.viewerJoined(MinestomTabPlayer(player))
+    }
+
+    override fun onPlayerQuit(player: Player) {
+        TablistService.viewerLeft(player.uuid)
     }
 }

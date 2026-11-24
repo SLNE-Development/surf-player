@@ -2,10 +2,11 @@ package dev.slne.surf.social.minestom.clan.command.subcommands.options
 
 import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.social.api.clan.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.clan.ClanTagColorUpdate
 import dev.slne.surf.social.api.clan.permission.ClanPermission
 import dev.slne.surf.social.minestom.clan.command.arguments.color.clanTagHexColorArgument
 import dev.slne.surf.social.minestom.clan.command.arguments.color.clanTagShadowHexColorArgument
-import dev.slne.surf.social.minestom.clan.command.failCommand
+import dev.slne.surf.social.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
@@ -50,7 +51,7 @@ fun CommandAPICommand.clanTagColorCommand(): CommandAPICommand = withSubcommand(
     }
 )
 
-private suspend fun changeColor(sender: Player, update: ClanTagColor.Update) {
+private suspend fun changeColor(sender: Player, update: ClanTagColorUpdate) {
     val clan = Clan.byPlayer(sender.uuid)
         ?: failCommand(Messages.NOT_IN_CLAN)
 

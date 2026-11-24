@@ -3,7 +3,6 @@ package dev.slne.surf.social.core.client.tab.service
 import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
 import dev.slne.surf.social.api.tab.placeholder.UpdateCondition
 import dev.slne.surf.social.core.client.tab.platform.tabPlatform
-import dev.slne.surf.social.core.client.tab.service.TablistUpdateReason
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -73,15 +72,6 @@ object TablistScheduler {
             tick.reason?.let { TablistService.invalidateAll(it) }
         }
     }
-
-    /**
-     * Describes the next scheduled scheduler wake-up.
-     *
-     * @property delay the duration to wait before the scheduler wakes up
-     * @property reason the reason to invalidate the tab list after waking, or `null` when the
-     * scheduler should only recalculate its next tick
-     */
-    class Tick(val delay: Duration, val reason: TablistUpdateReason?)
 
     /**
      * Determines the earliest point at which [templates] may need to be rendered again without an

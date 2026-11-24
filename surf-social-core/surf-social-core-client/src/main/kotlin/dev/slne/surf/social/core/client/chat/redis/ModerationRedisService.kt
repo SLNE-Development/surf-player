@@ -3,9 +3,8 @@ package dev.slne.surf.social.core.client.chat.redis
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.social.api.chat.message.MessageData
 import dev.slne.surf.social.core.common.chat.aimoderation.ModerationClassificationResult
-import dev.slne.surf.social.core.client.chat.redisApi
+import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.redis.codec.JsonKotlinCodec
-import kotlinx.serialization.Serializable
 import java.util.concurrent.TimeUnit
 
 object ModerationRedisService {
@@ -43,10 +42,4 @@ object ModerationRedisService {
             null
         }
     }
-
-    @Serializable
-    private data class ModerationCacheEntry(
-        val messageData: MessageData,
-        val classificationResult: ModerationClassificationResult
-    )
 }

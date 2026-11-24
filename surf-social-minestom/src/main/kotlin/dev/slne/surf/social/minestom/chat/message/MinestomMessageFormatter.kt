@@ -8,7 +8,7 @@ import dev.slne.surf.api.core.messages.adventure.plain
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.hook.LuckPermsHook
+import dev.slne.surf.social.core.client.util.luckPermsPrefix
 import dev.slne.surf.social.core.client.chat.hook.SettingsHook
 import dev.slne.surf.social.core.client.chat.message.format.appendDelete
 import dev.slne.surf.social.core.client.chat.message.format.appendName
@@ -26,12 +26,6 @@ import java.util.concurrent.atomic.AtomicLong
 import java.util.regex.Pattern
 
 object MinestomMessageFormatter {
-    private class MentionCache(
-        val generation: Long,
-        val pattern: Pattern?,
-        val playersByName: Map<String, Player>
-    )
-
     private val mentionCacheLock = Any()
     private val mentionGeneration = AtomicLong()
 
@@ -66,7 +60,7 @@ object MinestomMessageFormatter {
         appendName(
             senderPlayer.username,
             senderPlayer.uuid,
-            LuckPermsHook.getPrefix(senderPlayer.uuid),
+            luckPermsPrefix(senderPlayer.uuid),
             allowTeleport = viewerPlayer != null && viewerPlayer.hasPermission(ChatPermissions.COMMAND_SURFCHAT_TELEPORT)
         )
         darkSpacer(":")

@@ -15,7 +15,7 @@ fun CommandAPICommand.surfChatReloadCommand(): CommandAPICommand = withSubcomman
         withPermission(ChatPermissions.COMMAND_SURFCHAT_RELOAD)
         anyExecutor { executor, _ ->
             val ms = measureTimeMillis {
-                chatConfigProvider.reload()
+                chatConfigProvider.reloadFromFile()
                 AiModerationConfig.reload()
             }
 

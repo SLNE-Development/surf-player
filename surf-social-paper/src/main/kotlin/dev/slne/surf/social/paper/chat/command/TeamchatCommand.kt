@@ -7,7 +7,7 @@ import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.api.chat.message.MessageData
 import dev.slne.surf.social.api.chat.message.MessageType
 import dev.slne.surf.social.core.common.chat.service.HistoryService
-import dev.slne.surf.social.core.client.chat.redisApi
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
 import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.social.core.client.chat.redis.event.TeamchatMessageRedisEvent
@@ -36,7 +36,7 @@ fun teamchatCommand() = commandAPICommand("teamchat") {
             MessageType.TEAM
         )
 
-        redisApi.publishEvent(
+        SocialClient.redisApi.publishEvent(
             TeamchatMessageRedisEvent(
                 messageData
             )

@@ -7,13 +7,14 @@ import dev.slne.surf.api.minestom.command.argument.CustomArgument
 import dev.slne.surf.api.minestom.command.argument.StringArgument
 import dev.slne.surf.api.minestom.command.suggestion.ArgumentSuggestions
 import dev.slne.surf.social.core.common.clan.clan.CoreClanService
+import dev.slne.surf.social.minestom.command.commandArgumentScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 
 class ClanByClanTagArgument(nodeName: String) :
     CustomArgument<Deferred<Clan?>, String>(StringArgument(nodeName), { info ->
         val tag = info.currentInput
-        clanArgumentScope.async { Clan.byTag(tag) }
+        commandArgumentScope.async { Clan.byTag(tag) }
     }) {
 
     init {

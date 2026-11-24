@@ -1,7 +1,6 @@
 package dev.slne.surf.social.paper.chat.command.argument
 
 import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.arguments.Argument
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.StringArgument
@@ -34,9 +33,5 @@ class NiceToggleArgument(nodeName: String) :
     }
 }
 
-inline fun CommandAPICommand.niceToggleArgument(
-    nodeName: String,
-    optional: Boolean = false,
-    block: Argument<*>.() -> Unit = {}
-): CommandAPICommand =
-    withArguments(NiceToggleArgument(nodeName).setOptional(optional).apply(block))
+fun CommandAPICommand.niceToggleArgument(nodeName: String): CommandAPICommand =
+    withArguments(NiceToggleArgument(nodeName))

@@ -4,6 +4,8 @@ import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
 import java.util.*
 
+private val instance = requiredService<SurfTabApi>()
+
 interface SurfTabApi {
 
     /**
@@ -59,9 +61,7 @@ interface SurfTabApi {
      */
     fun broadcastEntryUpdate(uuid: UUID)
 
-    companion object : SurfTabApi by INSTANCE {
-        val instance = INSTANCE
+    companion object : SurfTabApi by instance {
+        val INSTANCE get() = instance
     }
 }
-
-private val INSTANCE = requiredService<SurfTabApi>()

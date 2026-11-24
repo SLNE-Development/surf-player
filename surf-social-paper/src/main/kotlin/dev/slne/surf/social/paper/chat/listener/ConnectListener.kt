@@ -1,21 +1,14 @@
 package dev.slne.surf.social.paper.chat.listener
 
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.api.paper.event.common.connection.PlayerJoinMessageEvent
-import dev.slne.surf.api.paper.extensions.server
-import dev.slne.surf.api.paper.util.forEachPlayer
 import dev.slne.surf.social.core.client.chat.config.chatConfig
-import dev.slne.surf.social.core.client.chat.hook.LuckPermsHook
-import dev.slne.surf.social.core.client.chat.message.format.buildConnectionMessage
 import dev.slne.surf.social.core.common.chat.service.IgnoreService
 import dev.slne.surf.social.paper.chat.hook.MiniPlaceholdersHook
-import dev.slne.surf.social.core.client.chat.hook.SettingsHook
 import dev.slne.surf.social.paper.chat.message.MessageFormatter
-import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.PaperChatFeature
 import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent
 import kotlinx.coroutines.runBlocking
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -45,46 +38,23 @@ object ConnectListener : Listener {
         }
 
         val player = event.player
-        val alwaysShow = player.hasPermission(PermissionRegistry.CONNECTION_MESSAGE_ALWAYS_SHOW)
-        var message = buildConnectionMessage(
-            player.name,
-            LuckPermsHook.getPrefix(player.uniqueId),
-            joined = true
-        )
-
-        val messageEvent = PlayerJoinMessageEvent(player, message)
+        val messageEvent = PlayerJoinMessageEvent(player, createJoinMessage(player))
 
         if (!messageEvent.call()) {
             return
         }
 
-        message = messageEvent.message
+        broadcastConnectionMessage(player, messageEvent.message)
+        sendChatMotd(player)
+    }
 
-        if (alwaysShow) {
-            server.broadcast(message)
-        } else {
-            val settingsHook = PaperChatFeature.checkSettingsHook()
-
-            forEachPlayer { player ->
-                if (!settingsHook || SettingsHook.hasConnectionMessagesEnabled(player.uniqueId)) {
-                    player.sendMessage(message)
-                }
-            }
+    private fun sendChatMotd(player: Player) {
+        if (!chatConfig.chatMotdConfig.enabled) {
+            return
         }
 
-        if (chatConfig.chatMotdConfig.enabled) {
-            player.sendText {
-                append(
-                    if (PaperChatFeature.checkMiniPlaceholdersHook()) {
-                        MiniPlaceholdersHook.parse(
-                            player,
-                            chatConfig.chatMotdConfig.message
-                        )
-                    } else {
-                        miniMessage.deserialize(chatConfig.chatMotdConfig.message)
-                    }
-                )
-            }
+        player.sendText {
+            append(MiniPlaceholdersHook.parse(player, chatConfig.chatMotdConfig.message))
         }
     }
 }

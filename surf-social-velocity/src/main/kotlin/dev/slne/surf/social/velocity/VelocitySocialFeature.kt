@@ -1,18 +1,27 @@
 package dev.slne.surf.social.velocity
 
+import java.nio.file.Path
+import kotlin.io.path.createDirectories
+
 /**
- * One feature (currently only clan) bundled into [SocialVelocityPlugin].
+ * One feature (clan, connection) bundled into [SocialVelocityPlugin].
  *
- * The plugin forwards its lifecycle to every feature: [onLoad] (plugin construction) and
- * [onEnable] (proxy initialization) in registration order, [onDisable] (proxy shutdown) in
- * reverse order.
+ * The plugin forwards its lifecycle to every feature on proxy initialization: first [onLoad] for
+ * all features (before Redis is connected), then [onEnable] for all features, both in registration
+ * order; [onDisable] on proxy shutdown in reverse order.
  */
 interface VelocitySocialFeature {
     /**
      * Short identifier of the feature; also the name of its subfolder in the plugin's data
-     * directory, see [SocialVelocityPlugin.featureDataDirectory].
+     * directory.
      */
     val id: String
+
+    /**
+     * The data directory of this feature: `plugins/<plugin id>/<feature id>`.
+     */
+    val dataDirectory: Path
+        get() = plugin.dataPath.resolve(id).createDirectories()
 
     suspend fun onLoad() = Unit
 

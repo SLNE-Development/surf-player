@@ -13,48 +13,45 @@ import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.social.core.common.chat.service.FunctionalityService
 import net.kyori.adventure.text.format.TextDecoration
 
+private val pagination = Pagination<FunctionalityStatusEntry> {
+    title { primary("Chat Funktionalität", TextDecoration.BOLD) }
+    rowRenderer { row, _ ->
+        listOf(
+            buildText {
+                append(CommonComponents.EM_DASH)
+                appendSpace()
+                variableKey(row.name)
+                spacer(":")
+                appendSpace()
+                appendStatusIcon(row.status)
+            }
+        )
+    }
+}
+
 fun CommandAPICommand.functionalityListCommand(): CommandAPICommand = withSubcommand(
     subcommand("list") {
         withPermission(ChatPermissions.COMMAND_SURFCHAT_FUNCTIONALITY_LIST)
         integerArgument("page", 1, Int.MAX_VALUE, true)
-        anyExecutorSuspend { player, args ->
+        anyExecutorSuspend { sender, args ->
             val page = args.getOptional<Int>("page") ?: 1
-            val pagination = Pagination<FunctionalityStatusEntry> {
-                title { primary("Chat Funktionalität", TextDecoration.BOLD) }
-                rowRenderer { row, _ ->
-                    listOf(
-                        buildText {
-                            append(CommonComponents.EM_DASH)
-                            appendSpace()
-                            variableKey(row.name)
-                            spacer(":")
-                            appendSpace()
-                            appendStatusIcon(row.status)
-                        }
-                    )
-                }
-            }
 
-            player.sendText {
+            sender.sendText {
                 appendInfoPrefix()
                 info("Lädt...")
             }
 
+            val content = FunctionalityService.getFunctionalitiesForAllServers()
+                .map { (server, functionalities) ->
+                    FunctionalityStatusEntry(server, functionalities.localChatEnabled)
+                }
 
-            val content = FunctionalityService.getFunctionalitiesForAllServers().map { (server, functionalities) ->
-                FunctionalityStatusEntry(
-                    server,
-                    functionalities.localChatEnabled
-                )
-            }
-
-            player.sendText {
+            sender.sendText {
                 append(pagination.renderComponent(content, page))
             }
         }
     }
 )
-
 
 private data class FunctionalityStatusEntry(
     val name: String,

@@ -5,7 +5,7 @@ import dev.slne.surf.social.api.contentcreator.listener.StateChangeListener
 import net.kyori.adventure.text.Component
 import java.util.*
 
-private val api = requiredService<ContentCreatorApi>()
+private val instance = requiredService<ContentCreatorApi>()
 
 interface ContentCreatorApi {
 
@@ -17,7 +17,7 @@ interface ContentCreatorApi {
     fun registerStateChangeListener(listener: StateChangeListener)
     fun renderLiveTag(playerUuid: UUID, space: Boolean = true): Component
 
-    companion object : ContentCreatorApi by api {
-        val INSTANCE get() = api
+    companion object : ContentCreatorApi by instance {
+        val INSTANCE get() = instance
     }
 }

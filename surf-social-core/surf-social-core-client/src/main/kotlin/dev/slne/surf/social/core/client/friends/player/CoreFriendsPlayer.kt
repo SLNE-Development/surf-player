@@ -12,11 +12,12 @@ import dev.slne.surf.social.api.friends.result.FriendRequestStateResult
 import dev.slne.surf.social.api.friends.result.FriendshipRemoveResult
 import dev.slne.surf.social.api.friends.utils.toSurfPlayer
 import dev.slne.surf.social.core.client.friends.FriendsClientInstance
-import dev.slne.surf.social.core.client.friends.rabbitApi
+import dev.slne.surf.social.core.client.SocialClient.rabbitApi
+import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.client.friends.redis.event.*
-import dev.slne.surf.social.core.client.friends.redisApi
 import dev.slne.surf.social.core.common.friends.packets.friendrequest.ChangeFriendRequestStateRequestPacket
 import dev.slne.surf.social.core.common.friends.packets.friendrequest.CreateFriendRequestRequestPacket
+import dev.slne.surf.social.core.common.friends.packets.friendrequest.FriendRequestState
 import dev.slne.surf.social.core.common.friends.packets.friendrequest.RevokeFriendRequestRequestPacket
 import dev.slne.surf.social.core.common.friends.packets.friendship.RemoveFriendshipRequestPacket
 import dev.slne.surf.settings.api.SurfSettingsApi
@@ -228,7 +229,7 @@ class CoreFriendsPlayer(
             ChangeFriendRequestStateRequestPacket(
                 senderUuid = targetUuid,
                 targetUuid = uuid,
-                state = ChangeFriendRequestStateRequestPacket.State.ACCEPT
+                state = FriendRequestState.ACCEPT
             )
         ).result
 
@@ -278,7 +279,7 @@ class CoreFriendsPlayer(
             ChangeFriendRequestStateRequestPacket(
                 senderUuid = targetUuid,
                 targetUuid = uuid,
-                state = ChangeFriendRequestStateRequestPacket.State.DECLINE
+                state = FriendRequestState.DECLINE
             )
         ).result
 

@@ -1,7 +1,7 @@
 package dev.slne.surf.social.minestom.clan.command.subcommands
 
 import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.minestom.clan.command.failCommand
+import dev.slne.surf.social.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand

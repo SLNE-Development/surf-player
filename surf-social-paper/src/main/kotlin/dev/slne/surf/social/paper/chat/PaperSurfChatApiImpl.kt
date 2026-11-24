@@ -11,7 +11,7 @@ import dev.slne.surf.social.api.chat.processor.PreChatProcessor
 import dev.slne.surf.social.api.chat.processor.chatProcessorRegistry
 import dev.slne.surf.social.core.common.chat.service.HistoryService
 import dev.slne.surf.social.core.common.chat.service.IgnoreService
-import dev.slne.surf.social.core.client.chat.redisApi
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.core.client.chat.processor.post.AiModerationPostChatProcessor
 import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.social.core.client.chat.redis.event.DeleteRemoteMessageRedisEvent
@@ -35,7 +35,7 @@ class PaperSurfChatApiImpl : SurfChatApi, Services.Fallback {
 
     override suspend fun deleteRemoteMessage(deleter: UUID?, messageData: MessageData) {
         messageData.signature?.let {
-            redisApi.publishEvent(DeleteRemoteMessageRedisEvent(it))
+            SocialClient.redisApi.publishEvent(DeleteRemoteMessageRedisEvent(it))
         }
 
         HistoryService.markDeleted(messageData.messageUuid, deleter, null)

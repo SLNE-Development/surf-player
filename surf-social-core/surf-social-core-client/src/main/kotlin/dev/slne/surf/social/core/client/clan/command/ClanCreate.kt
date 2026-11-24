@@ -7,7 +7,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
 import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 import net.kyori.adventure.text.format.TextDecoration
 
 /**
@@ -16,7 +16,7 @@ import net.kyori.adventure.text.format.TextDecoration
 suspend fun clanCreatedMessage(clan: ClanImpl) = buildText {
     appendSuccessPrefix()
     success("Der Clan ")
-    append(Components.Clan.renderClanInformationHover(clan))
+    append(ClanComponents.renderClanInformationHover(clan))
     success(" wurde erfolgreich erstellt.")
 }
 

@@ -70,8 +70,6 @@ data class AiModerationConfig(
                         }
                     }
             )
-
-            manager = surfConfigApi.getSpongeConfigManagerForConfig(AiModerationConfig::class.java)
         }
 
         fun save() {

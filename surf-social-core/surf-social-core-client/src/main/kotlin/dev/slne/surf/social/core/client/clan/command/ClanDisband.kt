@@ -6,7 +6,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
 import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextDecoration
@@ -41,7 +41,7 @@ fun Clan.canBeDisbandedBy(playerUuid: UUID): DisbandError? {
 suspend fun disbandConfirmationMessage(clan: Clan, click: ClickEvent<*>) = buildText {
     appendWarningPrefix()
     warning("Bist du dir sicher, dass du den Clan ")
-    append(Components.Clan.renderClanInformationHover(clan as ClanImpl))
+    append(ClanComponents.renderClanInformationHover(clan as ClanImpl))
     warning(" auflösen möchtest?")
     appendSpace()
     warning("Klicke ")
@@ -99,7 +99,7 @@ private suspend fun broadcastClanDisband(deletedClan: Clan) {
     val message = buildText {
         appendSuccessPrefix()
         success("Der Clan ")
-        append(Components.Clan.renderClanInformationHover(deletedClan as ClanImpl))
+        append(ClanComponents.renderClanInformationHover(deletedClan as ClanImpl))
         success(" wurde erfolgreich aufgelöst.")
     }
 

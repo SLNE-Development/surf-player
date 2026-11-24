@@ -18,9 +18,8 @@ class ClanByClanTagArgument(nodeName: String) :
     companion object {
         private val suggestions = ArgumentSuggestions<CommandSender> { info, builder ->
             plugin.scope.future {
-                val tag = info.currentArg
-                for (tag in CoreClanService.computeTagSuggestions(tag)) {
-                    builder.suggest(tag)
+                for (suggestion in CoreClanService.computeTagSuggestions(info.currentArg)) {
+                    builder.suggest(suggestion)
                 }
                 builder.build()
             }

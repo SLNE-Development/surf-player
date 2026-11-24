@@ -10,10 +10,10 @@ import dev.slne.surf.social.paper.clan.commands.arguments.ClanMemberArgument
 import dev.slne.surf.social.paper.clan.commands.failCommand
 import dev.slne.surf.social.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaiting
-import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.core.client.clan.Messages
 import dev.slne.surf.social.core.client.clan.command.*
+import dev.slne.surf.social.core.client.util.usernameOrUuid
 
 fun CommandAPICommand.clanKickMemberCommand() = subcommand("kick") {
     withPermission(ClanPermissions.CLAN_KICK_MEMBER_COMMAND)
@@ -46,8 +46,6 @@ fun CommandAPICommand.clanKickMemberCommand() = subcommand("kick") {
             failCommand(KICK_FAILED)
         }
 
-        val memberName = PlayerLookupService.getUsername(member.uuid) ?: member.uuid.toString()
-
-        clan.broadcast(memberKickedMessage(memberName, player.name))
+        clan.broadcast(memberKickedMessage(usernameOrUuid(member.uuid), player.name))
     }
 }

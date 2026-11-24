@@ -16,7 +16,7 @@ import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.social.core.client.chat.processor.post.AiModerationPostChatProcessor
 import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.social.core.client.chat.redis.event.DeleteRemoteMessageRedisEvent
-import dev.slne.surf.social.core.client.chat.redisApi
+import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.common.chat.service.HistoryService
 import dev.slne.surf.social.core.common.chat.service.IgnoreService
 import dev.slne.surf.social.minestom.chat.player.boundDisplayName

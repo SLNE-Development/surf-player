@@ -2,12 +2,11 @@ package dev.slne.surf.social.minestom.chat.service
 
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.adventure.text
+import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.minestom.chat.RemoteChatSender
-import dev.slne.surf.api.minestom.chat.captureSignedMessage
 import dev.slne.surf.api.minestom.chat.sendRemoteSignedMessage
 import dev.slne.surf.api.minestom.chat.sendSignedMessage
-import dev.slne.surf.api.minestom.chat.signedChatSession
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.social.api.chat.message.MessageContext
 import dev.slne.surf.social.api.chat.message.MessageData
@@ -21,12 +20,11 @@ import dev.slne.surf.social.core.client.chat.processor.runPreProcessors
 import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageHandledRedisResponse
 import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageRedisRequest
 import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
-import dev.slne.surf.social.core.client.chat.redisApi
+import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.client.chat.service.ReplyCache
 import dev.slne.surf.social.minestom.chat.player.boundDisplayName
 import dev.slne.surf.social.minestom.chat.redis.rpc.chatSession
 import dev.slne.surf.social.minestom.chat.redis.rpc.toRemote
-import dev.slne.surf.social.minestom.chat.redis.rpc.toWire
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.redis.request.RequestTimeoutException
 import kotlinx.coroutines.coroutineScope
@@ -40,6 +38,7 @@ import java.util.*
  * Delivers direct messages between players, no matter which server of the network they are on.
  */
 object DirectMessageService {
+    private val log = logger()
 
     suspend fun sendMessage(sender: Player, message: SignedMessage, targetUuid: UUID) {
         var messageData = MessageData(
@@ -117,15 +116,18 @@ object DirectMessageService {
         messageData: MessageData,
         message: SignedMessage,
     ) {
-        val captured = sender.captureSignedMessage(message, formatIncomingPm(messageData))
-
-        requireNotNull(captured) { "Failed to capture the signed message." }
+        val captured = SignedMessageService.captureForRemoteDelivery(
+            sender,
+            message,
+            formatIncomingPm(messageData)
+        )
 
         try {
             redisApi.sendRequest<SendDirectMessageHandledRedisResponse>(
-                SendDirectMessageRedisRequest(messageData, captured.toWire(sender.signedChatSession)),
+                SendDirectMessageRedisRequest(messageData, captured),
             )
         } catch (_: RequestTimeoutException) {
+            log.atFine().log("No server delivered the direct message ${messageData.messageUuid}")
         }
     }
 

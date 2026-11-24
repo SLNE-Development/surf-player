@@ -3,12 +3,12 @@ package dev.slne.surf.social.minestom.clan.command.subcommands.member
 import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.social.api.clan.permission.ClanPermission
 import dev.slne.surf.social.minestom.clan.command.arguments.clanMemberArgument
-import dev.slne.surf.social.minestom.clan.command.failCommand
+import dev.slne.surf.social.minestom.command.failCommand
 import dev.slne.surf.social.minestom.clan.command.resolveClanMember
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
-import dev.slne.surf.api.core.service.PlayerLookupService
+import dev.slne.surf.social.core.client.util.usernameOrUuid
 import dev.slne.surf.social.core.client.clan.Messages
 import dev.slne.surf.social.core.client.clan.command.*
 import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
@@ -45,7 +45,7 @@ fun CommandAPICommand.clanKickMemberCommand(): CommandAPICommand = withSubcomman
                 failCommand(KICK_FAILED)
             }
 
-            val memberName = PlayerLookupService.getUsername(member.uuid) ?: member.uuid.toString()
+            val memberName = usernameOrUuid(member.uuid)
 
             clan.broadcast(memberKickedMessage(memberName, player.username))
         }

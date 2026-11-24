@@ -1,9 +1,10 @@
 package dev.slne.surf.social.paper.clan.commands.arguments.color
 
 import dev.slne.surf.social.core.client.clan.command.CLAN_TAG_SHADOW_COLOR_LENGTH
+import dev.slne.surf.social.core.client.clan.command.CLAN_TAG_SHADOW_COLOR_SUGGESTIONS
 import net.kyori.adventure.text.format.ShadowColor
 
 class ClanTagShadowHexColorArgument(nodeName: String) :
-    BaseHexColorArgument<ShadowColor>(nodeName, CLAN_TAG_SHADOW_COLOR_LENGTH, {
+    BaseHexColorArgument<ShadowColor>(nodeName, CLAN_TAG_SHADOW_COLOR_LENGTH, CLAN_TAG_SHADOW_COLOR_SUGGESTIONS, {
         ShadowColor.fromHexString("#$it")
     })

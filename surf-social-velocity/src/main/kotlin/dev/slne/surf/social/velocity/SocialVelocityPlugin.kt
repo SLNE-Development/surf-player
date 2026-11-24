@@ -8,15 +8,12 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.PluginContainer
 import com.velocitypowered.api.plugin.annotation.DataDirectory
-import com.velocitypowered.api.proxy.ProxyServer
 import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.velocity.clan.ClanVelocityFeature
 import dev.slne.surf.social.velocity.connection.ConnectionVelocityFeature
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
 import java.nio.file.Path
-import kotlin.io.path.createDirectories
 
 val plugin get() = SocialVelocityPlugin.instance
 
@@ -25,7 +22,6 @@ val plugin get() = SocialVelocityPlugin.instance
  * and forwards the plugin lifecycle to them.
  */
 class SocialVelocityPlugin @Inject constructor(
-    val proxy: ProxyServer,
     val eventManager: EventManager,
     val container: PluginContainer,
     val logger: Logger,
@@ -40,25 +36,19 @@ class SocialVelocityPlugin @Inject constructor(
     init {
         instance = this
         suspendingPluginContainer.initialize(this)
-
-        runBlocking {
-            SocialClient.load(dataPath)
-            SocialClient.connectRabbit()
-
-            for (feature in features) {
-                feature.onLoad()
-            }
-        }
     }
-
-    /**
-     * The data directory of [feature]: `plugins/<plugin id>/<feature id>`.
-     */
-    fun featureDataDirectory(feature: VelocitySocialFeature): Path =
-        dataPath.resolve(feature.id).createDirectories()
 
     @Subscribe
     suspend fun onProxyInitialization(event: ProxyInitializeEvent) {
+        // One shared RabbitMQ/Redis connection for every feature, see SocialClient.
+        SocialClient.load(dataPath)
+        SocialClient.connectRabbit()
+
+        // Features register everything Redis needs here, before Redis is frozen.
+        for (feature in features) {
+            feature.onLoad()
+        }
+
         SocialClient.connectRedis()
 
         for (feature in features) {
@@ -83,5 +73,6 @@ class SocialVelocityPlugin @Inject constructor(
 
     companion object {
         lateinit var instance: SocialVelocityPlugin
+            private set
     }
 }

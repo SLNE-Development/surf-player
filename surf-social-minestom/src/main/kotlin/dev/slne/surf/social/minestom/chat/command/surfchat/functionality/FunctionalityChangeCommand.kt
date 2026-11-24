@@ -16,47 +16,28 @@ fun CommandAPICommand.functionalityChangeCommand(): CommandAPICommand = withSubc
     subcommand("change") {
         withPermission(ChatPermissions.COMMAND_SURFCHAT_FUNCTIONALITY_TOGGLE)
         niceToggleArgument("toggle")
-        anyExecutorSuspend { player, args ->
+        anyExecutorSuspend { sender, args ->
             val toggle: Boolean by args
+            val state = if (toggle) "aktiviert" else "deaktiviert"
 
-            if (toggle) {
-                FunctionalityService.updateLocalFunctionalities {
-                    it.copy(localChatEnabled = true)
-                }
-
-                player.sendText {
-                    appendSuccessPrefix()
-                    success("Der Chat wurde aktiviert.")
-                }
-
-                val message = buildText {
-                    appendInfoPrefix()
-                    variableValue(if (player is Player) player.username else "Console")
-                    info(" hat den Chat für den Server ")
-                    variableValue(SurfCoreApi.getCurrentServerName())
-                    info(" aktiviert.")
-                }
-
-                ChatPlatform.broadcast(message, ChatPermissions.TEAM_NOTIFY_FUNCTIONALITY)
-            } else {
-                FunctionalityService.updateLocalFunctionalities {
-                    it.copy(localChatEnabled = false)
-                }
-                player.sendText {
-                    appendSuccessPrefix()
-                    success("Der Chat wurde deaktiviert.")
-                }
-
-                val message = buildText {
-                    appendSuccessPrefix()
-                    variableValue(if (player is Player) player.username else "Console")
-                    info(" hat den Chat für den Server ")
-                    variableValue(SurfCoreApi.getCurrentServerName())
-                    info(" deaktiviert.")
-                }
-
-                ChatPlatform.broadcast(message, ChatPermissions.TEAM_NOTIFY_FUNCTIONALITY)
+            FunctionalityService.updateLocalFunctionalities {
+                it.copy(localChatEnabled = toggle)
             }
+
+            sender.sendText {
+                appendSuccessPrefix()
+                success("Der Chat wurde $state.")
+            }
+
+            val notification = buildText {
+                appendInfoPrefix()
+                variableValue(if (sender is Player) sender.username else "Console")
+                info(" hat den Chat für den Server ")
+                variableValue(SurfCoreApi.getCurrentServerName())
+                info(" $state.")
+            }
+
+            ChatPlatform.broadcast(notification, ChatPermissions.TEAM_NOTIFY_FUNCTIONALITY)
         }
     }
 )

@@ -15,8 +15,6 @@ class PaperTabPlatform : TabPlatform {
     override val dataPath get() = PaperTabFeature.dataPath
 
     override val playtimeAvailable get() = isPlaytimeHook
-    override val clanAvailable get() = true
-    override val contentCreatorAvailable get() = true
 
     override fun onlinePlayers() = Bukkit.getOnlinePlayers().map { PaperTabPlayer(it) }
 

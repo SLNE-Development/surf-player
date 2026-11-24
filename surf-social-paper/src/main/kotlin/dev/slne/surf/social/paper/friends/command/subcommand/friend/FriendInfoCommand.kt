@@ -7,7 +7,7 @@ import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.api.friends.player.FriendsPlayer
 import dev.slne.surf.social.core.client.friends.command.friendInfoComponent
 import dev.slne.surf.social.core.client.friends.permission.FriendPermissions
-import dev.slne.surf.social.paper.friends.command.argument.friend.friendArgument
+import dev.slne.surf.social.paper.friends.command.argument.friendArgument
 
 fun CommandAPICommand.friendInfoCommand() = subcommand("info") {
     withPermission(FriendPermissions.COMMAND_FRIEND_INFO)

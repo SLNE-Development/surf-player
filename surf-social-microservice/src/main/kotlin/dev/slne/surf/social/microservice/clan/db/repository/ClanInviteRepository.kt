@@ -1,26 +1,110 @@
 package dev.slne.surf.social.microservice.clan.db.repository
 
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.ResultRow
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.inSubQuery
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.*
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.social.api.clan.invite.ClanInviteResult
-import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
+import dev.slne.surf.social.microservice.clan.db.table.ClanInvitesTable
+import dev.slne.surf.social.microservice.clan.db.table.ClanMembersTable
+import dev.slne.surf.social.microservice.clan.db.table.ClanPlayerTable
+import dev.slne.surf.social.microservice.clan.db.table.ClansTable
+import kotlinx.coroutines.flow.*
 import java.util.*
 
-private val instance = requiredService<ClanInviteRepository>()
+object ClanInviteRepository {
+    suspend fun fetchPendingInvites(clanID: ULong): Set<ClanInviteImpl> = suspendTransaction {
+        ClanInvitesTable
+            .selectAll()
+            .where { ClanInvitesTable.clanId eq clanID }
+            .map(::inviteFromRow)
+            .toSet()
+    }
 
-interface ClanInviteRepository {
-    suspend fun fetchPendingInvites(clanID: ULong): Set<ClanInviteImpl>
     suspend fun getPendingInviteByPlayerAndClanName(
         invited: UUID,
         clanName: String
-    ): ClanInviteImpl?
+    ): ClanInviteImpl? = suspendTransaction {
+        val clanIDSubQuery = ClansTable
+            .select(ClansTable.id)
+            .where { ClansTable.name eq clanName }
 
-    suspend fun getPendingInvitesByPlayer(invited: UUID): List<ClanInviteImpl>
-    suspend fun createInvite(clanID: ULong, invitee: UUID, invitedBy: UUID): ClanInviteResult
-    suspend fun deleteInvite(clanID: ULong, invitee: UUID): Boolean
-
-    suspend fun acceptInvite(inviteID: ULong, invitee: UUID, invitedBy: UUID): Boolean
-
-    companion object : ClanInviteRepository by instance {
-        val INSTANCE get() = instance
+        ClanInvitesTable
+            .selectAll()
+            .where { ClanInvitesTable.invited eq invited and (ClanInvitesTable.clanId inSubQuery clanIDSubQuery) }
+            .singleOrNull()
+            ?.let(::inviteFromRow)
     }
+
+    suspend fun getPendingInvitesByPlayer(invited: UUID): List<ClanInviteImpl> = suspendTransaction {
+        ClanInvitesTable
+            .selectAll()
+            .where { ClanInvitesTable.invited eq invited }
+            .map(::inviteFromRow)
+            .toList()
+    }
+
+    suspend fun createInvite(
+        clanID: ULong,
+        invitee: UUID,
+        invitedBy: UUID
+    ): ClanInviteResult = suspendTransaction {
+        if (ClanMemberRepository.isInAnyClan(invitee)) return@suspendTransaction ClanInviteResult.AlreadyInClan
+
+        val invitesEnabled = ClanPlayerTable
+            .select(ClanPlayerTable.acceptsClanInvites)
+            .where { ClanPlayerTable.uuid eq invitee }
+            .limit(1)
+            .singleOrNull()
+            ?.get(ClanPlayerTable.acceptsClanInvites)
+            ?: true
+
+        if (!invitesEnabled) return@suspendTransaction ClanInviteResult.InvitationsDisabled
+
+        // ON CONFLICT DO NOTHING rather than catching the constraint violation: PostgreSQL aborts the
+        // whole transaction on a failed statement, so catching one and returning normally makes the
+        // following COMMIT fail with PostgresqlRollbackException. No row back means the unique index
+        // on (invited, clan_id) already had one.
+        val row = ClanInvitesTable.insertReturning(ignoreErrors = true) {
+            it[this.invited] = invitee
+            it[this.invitedBy] = invitedBy
+            it[this.clanId] = clanID
+        }.singleOrNull() ?: return@suspendTransaction ClanInviteResult.AlreadyInvited
+
+        ClanInviteResult.Success(inviteFromRow(row))
+    }
+
+    suspend fun deleteInvite(clanID: ULong, invitee: UUID): Boolean = suspendTransaction {
+        ClanInvitesTable.deleteWhere {
+            ClanInvitesTable.clanId eq clanID and (ClanInvitesTable.invited eq invitee)
+        } > 0
+    }
+
+    suspend fun acceptInvite(inviteID: ULong, invitee: UUID, invitedBy: UUID): Boolean = suspendTransaction {
+        if (ClanMemberRepository.isInAnyClan(invitee)) return@suspendTransaction false
+
+        val deletedRow = ClanInvitesTable.deleteReturning {
+            ClanInvitesTable.id eq inviteID and (ClanInvitesTable.invited eq invitee)
+        }.singleOrNull() ?: return@suspendTransaction false
+
+        ClanMembersTable.insert {
+            it[uuid] = invitee
+            it[addedBy] = invitedBy
+            it[clanId] = deletedRow[ClanInvitesTable.clanId]
+        }
+
+        true
+    }
+
+    private fun inviteFromRow(row: ResultRow): ClanInviteImpl = ClanInviteImpl(
+        id = row[ClanInvitesTable.id].value,
+        clanID = row[ClanInvitesTable.clanId].value,
+        invited = row[ClanInvitesTable.invited],
+        invitedBy = row[ClanInvitesTable.invitedBy],
+        createdAt = row[ClanInvitesTable.createdAt],
+        updatedAt = row[ClanInvitesTable.updatedAt]
+    )
 }

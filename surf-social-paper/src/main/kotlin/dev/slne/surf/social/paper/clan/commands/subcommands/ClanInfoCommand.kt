@@ -11,7 +11,7 @@ import dev.slne.surf.api.core.command.args.awaitingOrNull
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
 import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 
 
 fun CommandAPICommand.clanInfoCommand() = subcommand("info") {
@@ -26,6 +26,6 @@ fun CommandAPICommand.clanInfoCommand() = subcommand("info") {
             failCommand(Messages.NOT_IN_CLAN)
         }
 
-        player.sendMessage(Components.Clan.renderClanInformation(clan as ClanImpl))
+        player.sendMessage(ClanComponents.renderClanInformation(clan as ClanImpl))
     }
 }

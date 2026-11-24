@@ -4,43 +4,20 @@ import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
-import net.kyori.adventure.text.format.TextColor
 import java.net.URI
 
-private val hexRegex = Regex("&#[A-Fa-f0-9]{6}")
-fun convertLegacy(input: String) = hexRegex.replace(input) {
-    "<#${it.value.removePrefix("&#")}>"
-}
-
-fun Component.remove(regex: Regex): Component {
-    return this.replaceText { config ->
-        config.match(regex.pattern).replacement("")
-    }
-}
-
-fun Long.coloredComponent(good: Long = 200L, okay: Long = 1000L) =
-    buildText {
-        when {
-            this@coloredComponent < good -> append(
-                Component.text(
-                    this@coloredComponent.toString() + "ms",
-                    Colors.GREEN
-                )
-            )
-
-            this@coloredComponent < okay -> append(
-                Component.text(
-                    this@coloredComponent.toString() + "ms",
-                    Colors.YELLOW
-                )
-            )
-
-            else -> append(Component.text(this@coloredComponent.toString() + "ms", Colors.RED))
-        }
+/**
+ * These milliseconds, colored green below [good], yellow below [okay] and red otherwise.
+ */
+fun Long.coloredComponent(good: Long = 200L, okay: Long = 1000L): Component {
+    val color = when {
+        this < good -> Colors.GREEN
+        this < okay -> Colors.YELLOW
+        else -> Colors.RED
     }
 
-fun TextColor.miniMessage() =
-    "<${this.asHexString()}>"
+    return buildText { append(Component.text("${this@coloredComponent}ms", color)) }
+}
 
 private val linkRegex = Regex("(?i)\\b((https?://)?[\\w-]+(\\.[\\w-]+)+(/\\S*)?)\\b")
 

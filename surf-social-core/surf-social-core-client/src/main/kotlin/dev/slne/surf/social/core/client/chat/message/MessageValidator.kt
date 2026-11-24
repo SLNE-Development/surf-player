@@ -2,6 +2,7 @@ package dev.slne.surf.social.core.client.chat.message
 
 import dev.slne.surf.social.api.chat.message.MessageData
 import dev.slne.surf.social.api.chat.message.MessageType
+import dev.slne.surf.social.api.chat.message.MessageValidationError
 import dev.slne.surf.social.api.chat.message.MessageValidationResult
 import dev.slne.surf.social.core.client.chat.config.chatConfig
 import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
@@ -37,7 +38,7 @@ object MessageValidator {
         }
 
         if (this.checkAutoDisabling(sender)) {
-            return MessageValidationResult.Failure(MessageValidationResult.MessageValidationError.AutoDisabled())
+            return MessageValidationResult.Failure(MessageValidationError.AutoDisabled())
         }
 
         if (messageData.type == MessageType.GLOBAL) {
@@ -45,16 +46,16 @@ object MessageValidator {
                     ChatPermissions.BYPASS_FUNCTIONALITY
                 )
             ) {
-                return MessageValidationResult.Failure(MessageValidationResult.MessageValidationError.ChatDisabled())
+                return MessageValidationResult.Failure(MessageValidationError.ChatDisabled())
             }
         }
 
         if (hasTooManyCapsInARow(message, chatConfig.spamConfig.maxUppercaseCharsInRow)) {
-            return MessageValidationResult.Failure(MessageValidationResult.MessageValidationError.TooManyCaps())
+            return MessageValidationResult.Failure(MessageValidationError.TooManyCaps())
         }
 
         if (message.isBlank()) {
-            return MessageValidationResult.Failure(MessageValidationResult.MessageValidationError.EmptyContent())
+            return MessageValidationResult.Failure(MessageValidationError.EmptyContent())
         }
 
         return MessageValidationResult.Success()

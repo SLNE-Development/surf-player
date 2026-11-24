@@ -7,7 +7,7 @@ import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
 
 private const val CLAN_TAG_NODE = "clanTag"
@@ -21,7 +21,7 @@ fun CommandAPICommand.clanInfoCommand(): CommandAPICommand = withSubcommand(
         playerExecutorSuspend { player, args ->
             val clan: Clan = args.resolveClanArgumentOrOwn(CLAN_TAG_NODE, player.uuid)
 
-            player.sendMessage(Components.Clan.renderClanInformation(clan as ClanImpl))
+            player.sendMessage(ClanComponents.renderClanInformation(clan as ClanImpl))
         }
     }
 )

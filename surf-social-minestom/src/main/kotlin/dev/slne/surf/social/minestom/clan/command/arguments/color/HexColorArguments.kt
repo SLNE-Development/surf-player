@@ -1,6 +1,6 @@
 package dev.slne.surf.social.minestom.clan.command.arguments.color
 
-import dev.slne.surf.social.minestom.clan.command.failCommand
+import dev.slne.surf.social.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.argument.Argument
 import dev.slne.surf.api.minestom.command.argument.CustomArgument

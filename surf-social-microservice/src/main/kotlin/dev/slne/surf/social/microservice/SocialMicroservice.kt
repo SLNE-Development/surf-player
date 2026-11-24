@@ -9,7 +9,6 @@ import dev.slne.surf.social.core.common.SOCIAL_CONNECTION_NAME
 import dev.slne.surf.social.core.common.SocialSerializerModule
 import dev.slne.surf.social.microservice.chat.ChatMicroserviceModule
 import dev.slne.surf.social.microservice.clan.ClanMicroserviceModule
-import dev.slne.surf.social.microservice.clan.clanMicroservice
 import dev.slne.surf.social.microservice.connection.ConnectionMicroserviceModule
 import dev.slne.surf.social.microservice.friends.FriendsMicroserviceModule
 import dev.slne.surf.social.microservice.shrieker.ShriekerMicroserviceModule
@@ -18,47 +17,38 @@ import kotlin.io.path.Path
 
 /**
  * The single surf-social microservice. Hosts chat, clan, friends, shrieker and social connections
- * on one database
- * connection and one RabbitMQ connection named [SOCIAL_CONNECTION_NAME].
+ * on one database connection and one RabbitMQ connection named [SOCIAL_CONNECTION_NAME].
  */
 @AutoService(Microservice::class)
 class SocialMicroservice : Microservice() {
     override val dataPath: Path = Path("config")
-    val databaseApi = DatabaseApi.create(dataPath)
-    val rabbitApi = ServerRabbitMQApi.create(
+    private val databaseApi = DatabaseApi.create(dataPath)
+    private val rabbitApi = ServerRabbitMQApi.create(
         SOCIAL_CONNECTION_NAME,
         dataPath,
         SocialSerializerModule.module
     )
 
-    init {
-        clanMicroservice = this
-    }
+    private val modules: List<SocialMicroserviceModule> = listOf(
+        ChatMicroserviceModule,
+        ClanMicroserviceModule,
+        FriendsMicroserviceModule,
+        ShriekerMicroserviceModule,
+        ConnectionMicroserviceModule
+    )
 
     override suspend fun onBootstrap(args: List<String>) {
-        ConnectionMicroserviceModule.load(dataPath)
+        modules.forEach { it.loadConfig(dataPath) }
 
         suspendTransaction {
-            ChatMicroserviceModule.createTables()
-            ClanMicroserviceModule.createTables()
-            FriendsMicroserviceModule.createTables()
-            ShriekerMicroserviceModule.createTables()
-            ConnectionMicroserviceModule.createTables()
+            modules.forEach { it.createTables() }
         }
 
-        ClanMicroserviceModule.load()
-
-        ChatMicroserviceModule.registerHandlers(rabbitApi)
-        ClanMicroserviceModule.registerHandlers(rabbitApi)
-        FriendsMicroserviceModule.registerHandlers(rabbitApi)
-        ShriekerMicroserviceModule.registerHandlers(rabbitApi)
-        ConnectionMicroserviceModule.registerHandlers(rabbitApi)
-
+        modules.forEach { it.registerHandlers(rabbitApi) }
         rabbitApi.freezeAndConnect()
     }
 
     override suspend fun onDisable() {
-        ClanMicroserviceModule.disable()
         rabbitApi.disconnect()
         databaseApi.shutdown()
     }

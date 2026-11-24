@@ -5,15 +5,15 @@ import it.unimi.dsi.fastutil.objects.ObjectSet
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 
+private val instance = requiredService<FriendsPlayerManager>()
+
 interface FriendsPlayerManager {
     val players: @UnmodifiableView ObjectSet<FriendsPlayer>
 
     fun findPlayer(uuid: UUID): FriendsPlayer
     fun invalidatePlayer(uuid: UUID)
 
-    companion object : FriendsPlayerManager by manager {
-        val INSTANCE get() = manager
+    companion object : FriendsPlayerManager by instance {
+        val INSTANCE get() = instance
     }
 }
-
-private val manager = requiredService<FriendsPlayerManager>()

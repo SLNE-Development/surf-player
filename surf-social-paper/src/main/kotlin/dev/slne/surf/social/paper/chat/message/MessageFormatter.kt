@@ -5,7 +5,6 @@ package dev.slne.surf.social.paper.chat.message
 import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.plain
-import dev.slne.surf.api.core.messages.adventure.playSound
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.social.api.chat.message.MessageData
@@ -15,15 +14,14 @@ import dev.slne.surf.social.core.client.chat.message.format.appendDelete
 import dev.slne.surf.social.core.client.chat.util.formatTime
 import dev.slne.surf.social.core.client.chat.util.updateLinks
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.PaperChatFeature
 import dev.slne.surf.social.paper.chat.util.appendName
+import dev.slne.surf.social.paper.chat.util.playPingSound
 import dev.slne.surf.core.api.paper.CorePlayerStatusAccess
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
@@ -34,12 +32,6 @@ import java.util.regex.Pattern
  */
 object MessageFormatter {
     private val itemRegex = Regex("\\[(?i)item]")
-
-    private class MentionCache(
-        val generation: Long,
-        val pattern: Pattern?,
-        val playersByName: Map<String, Player>
-    )
 
     private val mentionCacheLock = Any()
     private val mentionGeneration = AtomicLong()
@@ -231,12 +223,8 @@ object MessageFormatter {
                 .build()
         )
 
-        if (viewerMentioned) {
-            if (PaperChatFeature.checkSettingsHook() && SettingsHook.hasChatPingsEnabled(viewerUuid)) {
-                viewer.playSound(true) {
-                    type(Sound.ENTITY_CHICKEN_EGG)
-                }
-            }
+        if (viewerMentioned && SettingsHook.hasChatPingsEnabled(viewerUuid)) {
+            viewer.playPingSound()
         }
 
         return message

@@ -3,7 +3,7 @@ package dev.slne.surf.social.minestom.chat.service
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.message.format.Components
+import dev.slne.surf.social.core.client.chat.message.format.createMessageDeletedTeamNotification
 import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.social.core.common.chat.service.DeletionService
@@ -34,7 +34,7 @@ class DeletionServiceImpl : DeletionService {
 
             if (notifyTeam) {
                 val notification =
-                    Components.Deletion.createMessageDeletedTeamNotification(deleter, message)
+                    createMessageDeletedTeamNotification(deleter, message)
                 ChatPlatform.broadcast(notification, ChatPermissions.TEAM_NOTIFY_DELETION)
             }
         }

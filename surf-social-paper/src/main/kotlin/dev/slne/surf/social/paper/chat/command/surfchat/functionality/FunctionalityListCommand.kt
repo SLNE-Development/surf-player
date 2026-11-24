@@ -13,32 +13,32 @@ import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
 import dev.slne.surf.social.core.client.chat.message.format.appendStatusIcon
 import net.kyori.adventure.text.format.TextDecoration
 
+private val pagination = Pagination<FunctionalityStatusEntry> {
+    title { primary("Chat Funktionalität", TextDecoration.BOLD) }
+    rowRenderer { row, _ ->
+        listOf(
+            buildText {
+                append(CommonComponents.EM_DASH)
+                appendSpace()
+                variableKey(row.name)
+                spacer(":")
+                appendSpace()
+                appendStatusIcon(row.status)
+            }
+        )
+    }
+}
+
 fun CommandAPICommand.functionalityListCommand() = subcommand("list") {
     withPermission(PermissionRegistry.COMMAND_SURFCHAT_FUNCTIONALITY_LIST)
     integerArgument("page", 1, Int.MAX_VALUE, true)
     anyExecutorSuspend { player, args ->
         val page = args.getOrDefaultUnchecked("page", 1)
-        val pagination = Pagination<FunctionalityStatusEntry> {
-            title { primary("Chat Funktionalität", TextDecoration.BOLD) }
-            rowRenderer { row, _ ->
-                listOf(
-                    buildText {
-                        append(CommonComponents.EM_DASH)
-                        appendSpace()
-                        variableKey(row.name)
-                        spacer(":")
-                        appendSpace()
-                        appendStatusIcon(row.status)
-                    }
-                )
-            }
-        }
 
         player.sendText {
             appendInfoPrefix()
             info("Lädt...")
         }
-
 
         val content = FunctionalityService.getFunctionalitiesForAllServers().map { (server, functionalities) ->
             FunctionalityStatusEntry(
@@ -52,7 +52,6 @@ fun CommandAPICommand.functionalityListCommand() = subcommand("list") {
         }
     }
 }
-
 
 private data class FunctionalityStatusEntry(
     val name: String,

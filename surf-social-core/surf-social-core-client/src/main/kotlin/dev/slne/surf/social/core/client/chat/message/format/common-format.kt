@@ -9,12 +9,12 @@ import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
 import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.hook.LuckPermsHook
 import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.social.core.client.chat.util.formatTime
 import dev.slne.surf.social.core.client.chat.util.nameOrUnknown
 import dev.slne.surf.social.core.client.chat.util.updateLinks
+import dev.slne.surf.social.core.client.util.luckPermsPrefix
 import dev.slne.surf.social.core.common.chat.service.DeletionService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.audience.Audience
@@ -22,7 +22,6 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickCallback
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextDecoration
-import net.kyori.adventure.text.minimessage.MiniMessage
 import java.util.*
 
 fun SurfComponentBuilder.appendDelete(messageData: MessageData) = append(buildText {
@@ -52,7 +51,7 @@ fun SurfComponentBuilder.appendDelete(messageData: MessageData) = append(buildTe
 
 fun SurfComponentBuilder.appendName(name: String, senderUuid: UUID, prefix: String, allowTeleport: Boolean) =
     append {
-        append(MiniMessage.miniMessage().deserialize(prefix + name))
+        append(miniMessage.deserialize(prefix + name))
         if (allowTeleport) {
             clickEvent(ClickEvent.callback({
                 val who = it.uuidOrNull() ?: return@callback
@@ -141,20 +140,17 @@ fun SurfComponentBuilder.appendMessageData(senderName: String, messageData: Mess
 
 suspend fun formatIncomingPm(messageData: MessageData) = buildText {
     val senderUser = messageData.senderUser()
+    val senderName = senderUser.lastKnownName ?: senderUser.uuid.toString()
 
     darkSpacer(">> ")
     text("PM", Colors.RED)
     darkSpacer(" | ")
-    variableValue(senderUser.lastKnownName ?: senderUser.uuid.toString())
+    variableValue(senderName)
     darkSpacer(" -> ")
     variableValue("Dir")
     darkSpacer(" >> ")
     append(updateLinks(messageData.message))
-    hoverEvent(buildText {
-        appendMessageData(
-            senderUser.lastKnownName ?: senderUser.uuid.toString(), messageData
-        )
-    })
+    hoverEvent(buildText { appendMessageData(senderName, messageData) })
     clickSuggestsCommand("/msg ${senderUser.lastKnownName} ")
 }
 
@@ -181,7 +177,7 @@ suspend fun formatTeamchat(messageData: MessageData) = buildText {
     darkSpacer(">> ")
     text("TEAM", Colors.RED, TextDecoration.BOLD)
     darkSpacer(" | ")
-    appendName(senderName, sender, LuckPermsHook.getPrefix(sender), allowTeleport = false)
+    appendName(senderName, sender, luckPermsPrefix(sender), allowTeleport = false)
     darkSpacer(" >> ")
     append(updateLinks(messageData.message))
 
@@ -214,23 +210,18 @@ suspend fun formatPmSpy(messageData: MessageData) = buildText {
     clickSuggestsCommand("/msg $senderName ")
 }
 
-object Components {
-    object Deletion {
-        suspend fun createMessageDeletedTeamNotification(deleter: Audience?, data: MessageData) =
-            buildText {
-                val sender = data.senderUser()
-                val senderName = sender.lastKnownName ?: sender.uuid.toString()
+suspend fun createMessageDeletedTeamNotification(deleter: Audience?, data: MessageData) = buildText {
+    val sender = data.senderUser()
+    val senderName = sender.lastKnownName ?: sender.uuid.toString()
 
-                appendInfoPrefix()
-                if (deleter != null) {
-                    variableValue(deleter.nameOrUnknown())
-                    info(" hat eine Nachricht von ")
-                } else {
-                    info("Es wurde eine Nachricht von ")
-                }
-                variableValue(senderName)
-                info(" gelöscht: ")
-                append(data.message)
-            }
+    appendInfoPrefix()
+    if (deleter != null) {
+        variableValue(deleter.nameOrUnknown())
+        info(" hat eine Nachricht von ")
+    } else {
+        info("Es wurde eine Nachricht von ")
     }
+    variableValue(senderName)
+    info(" gelöscht: ")
+    append(data.message)
 }

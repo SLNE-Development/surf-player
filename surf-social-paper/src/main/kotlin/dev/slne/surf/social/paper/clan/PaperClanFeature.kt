@@ -1,10 +1,9 @@
 package dev.slne.surf.social.paper.clan
 
-import dev.slne.surf.api.paper.extensions.pluginManager
 import dev.slne.surf.social.core.common.clan.ClanInstance
-import dev.slne.surf.social.paper.PaperFeature
+import dev.slne.surf.social.paper.PaperSocialFeature
 
-object PaperClanFeature : PaperFeature {
+object PaperClanFeature : PaperSocialFeature {
     override val name = "clan"
 
     override suspend fun onLoad() {
@@ -18,6 +17,4 @@ object PaperClanFeature : PaperFeature {
     override suspend fun onDisable() {
         ClanInstance.disable()
     }
-
-    fun checkLuckPerms() = pluginManager.isPluginEnabled("LuckPerms")
 }

@@ -14,9 +14,6 @@ import java.util.*
 class MinestomNametagPlatform : NametagPlatform {
     override val dataPath get() = NametagMinestomFeature.dataDirectory
 
-    override val clanAvailable = true
-    override val contentCreatorAvailable = true
-
     override fun onlinePlayers() =
         ConnectionManager.onlinePlayers.map { MinestomNametagPlayer(it) }
 

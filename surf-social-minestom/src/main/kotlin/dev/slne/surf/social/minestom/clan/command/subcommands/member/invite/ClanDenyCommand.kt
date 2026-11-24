@@ -1,7 +1,7 @@
 package dev.slne.surf.social.minestom.clan.command.subcommands.member.invite
 
 import dev.slne.surf.social.minestom.clan.command.arguments.clanInviteArgument
-import dev.slne.surf.social.minestom.clan.command.failCommand
+import dev.slne.surf.social.minestom.command.failCommand
 import dev.slne.surf.social.minestom.clan.command.resolveClanInvite
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend

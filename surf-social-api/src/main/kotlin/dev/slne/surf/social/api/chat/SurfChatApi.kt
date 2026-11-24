@@ -15,7 +15,7 @@ import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component
 import java.util.*
 
-private val api = requiredService<SurfChatApi>()
+private val instance = requiredService<SurfChatApi>()
 
 interface SurfChatApi {
     suspend fun logMessage(data: MessageData)
@@ -44,5 +44,7 @@ interface SurfChatApi {
 
     suspend fun passAutoMod(messageData: MessageData)
 
-    companion object : SurfChatApi by api
+    companion object : SurfChatApi by instance {
+        val INSTANCE get() = instance
+    }
 }

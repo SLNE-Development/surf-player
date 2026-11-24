@@ -19,16 +19,6 @@ interface NametagPlatform {
     val dataPath: Path
 
     /**
-     * Whether clan tags can be looked up on this server.
-     */
-    val clanAvailable: Boolean
-
-    /**
-     * Whether live tags can be looked up on this server.
-     */
-    val contentCreatorAvailable: Boolean
-
-    /**
      * Every player currently on this server.
      */
     fun onlinePlayers(): Collection<NametagPlayer>

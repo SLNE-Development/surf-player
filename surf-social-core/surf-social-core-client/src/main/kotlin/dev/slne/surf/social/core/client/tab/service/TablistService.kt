@@ -7,12 +7,12 @@ import dev.slne.surf.social.api.tab.placeholder.TabPlaceholder
 import dev.slne.surf.social.api.tab.placeholder.UpdateCondition
 import dev.slne.surf.social.api.tab.redis.TabEntryUpdateRedisEvent
 import dev.slne.surf.social.core.client.tab.config.tablistConfig
-import dev.slne.surf.social.core.client.tab.config.tablistConfiguration
+import dev.slne.surf.social.core.client.tab.config.TablistConfigFile
 import dev.slne.surf.social.core.client.tab.entry.TabEntries
 import dev.slne.surf.social.core.client.tab.platform.TabPlatform
 import dev.slne.surf.social.core.client.tab.platform.TabPlayer
 import dev.slne.surf.social.core.client.tab.platform.tabPlatform
-import dev.slne.surf.social.core.client.tab.redis.redisApi
+import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.client.tab.util.AdventureTablistRenderer
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
@@ -69,7 +69,7 @@ object TablistService {
     private val generations = AtomicLong()
 
     @Volatile
-    private var analyzed: Analyzed? = null
+    private var analyzed: AnalyzedTemplates? = null
 
     private val entries = TabEntries()
 
@@ -308,7 +308,7 @@ object TablistService {
      * Both header/footer content and every currently known player entry are requested for re-rendering.
      */
     fun reload() {
-        tablistConfiguration.reload()
+        TablistConfigFile.reloadFromFile()
         refreshHeaderFooter()
         entries.updateAll()
     }
@@ -341,7 +341,7 @@ object TablistService {
             miniMessage,
             ::resolvePlaceholder
         )
-        analyzed = Analyzed(templates, version)
+        analyzed = AnalyzedTemplates(templates, version)
 
         return templates
     }
@@ -387,5 +387,4 @@ object TablistService {
         return TablistValues(generations.incrementAndGet(), values, tabPlatform.onlinePlayerCount())
     }
 
-    private class Analyzed(val templates: TablistTemplates, val version: Int)
 }

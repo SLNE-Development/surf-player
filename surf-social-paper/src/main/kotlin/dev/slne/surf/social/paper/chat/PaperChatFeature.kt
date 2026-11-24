@@ -1,9 +1,8 @@
 package dev.slne.surf.social.paper.chat
 
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.api.paper.extensions.pluginManager
 import dev.slne.surf.social.api.chat.processor.chatProcessorRegistry
-import dev.slne.surf.social.core.client.chat.ClientChatInstance
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.social.core.client.chat.config.initChatConfig
 import dev.slne.surf.social.core.common.chat.service.FunctionalityService
@@ -28,20 +27,19 @@ import dev.slne.surf.social.core.client.chat.processor.pre.validate.LinkPreChatP
 import dev.slne.surf.social.core.client.chat.processor.pre.validate.SpamPreChatProcessor
 import dev.slne.surf.social.paper.chat.processor.pre.CorrectViewersPreChatProcessor
 import dev.slne.surf.social.paper.chat.processor.pre.FormatPreChatProcessor
-import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.social.paper.chat.redis.listener.RedisEventListener
 import dev.slne.surf.core.api.common.SurfCoreApi
-import dev.slne.surf.social.paper.PaperFeature
+import dev.slne.surf.social.paper.PaperSocialFeature
 
-object PaperChatFeature : PaperFeature {
+object PaperChatFeature : PaperSocialFeature {
     override val name = "chat"
 
     override suspend fun onLoad() {
         initChatConfig(dataPath)
         AiModerationConfig.init(dataPath)
 
-        ClientChatInstance.redisApi.subscribeToEvents(RedisEventListener)
-        ClientChatInstance.redisApi.registerRequestHandler(RedisEventListener)
+        SocialClient.redisApi.subscribeToEvents(RedisEventListener)
+        SocialClient.redisApi.registerRequestHandler(RedisEventListener)
 
         chatProcessorRegistry.register(CharPreChatProcessor)
         chatProcessorRegistry.register(LinkPreChatProcessor)
@@ -72,7 +70,4 @@ object PaperChatFeature : PaperFeature {
 
         FunctionalityService.fetch(SurfCoreApi.getCurrentServerName())
     }
-
-    fun checkMiniPlaceholdersHook() = pluginManager.isPluginEnabled("MiniPlaceholders")
-    fun checkSettingsHook() = pluginManager.isPluginEnabled("surf-settings-paper")
 }

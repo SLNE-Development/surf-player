@@ -9,10 +9,10 @@ import net.kyori.adventure.text.Component
 import java.time.OffsetDateTime
 import java.util.*
 
-@Serializable
 /**
  * Represents a message in the chat system, including its content, metadata, and context.
  */
+@Serializable
 data class MessageData(
     /**
      * Represents the textual content of a message.

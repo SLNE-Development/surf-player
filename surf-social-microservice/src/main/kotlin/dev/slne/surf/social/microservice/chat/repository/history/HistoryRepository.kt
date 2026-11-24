@@ -54,7 +54,7 @@ object HistoryRepository {
 
         query
             .orderBy(HistoryTable.sentAt, SortOrder.DESC)
-            .map(::createByRow)
+            .map(::historyEntryFromRow)
             .toList()
     }
 
@@ -71,7 +71,7 @@ object HistoryRepository {
         } > 0
     }
 
-    fun createByRow(row: ResultRow) = HistoryEntry(
+    private fun historyEntryFromRow(row: ResultRow) = HistoryEntry(
         messageUuid = row[HistoryTable.messageUuid],
         senderUuid = row[HistoryTable.senderUuid],
         receiverUuid = row[HistoryTable.receiverUuid],

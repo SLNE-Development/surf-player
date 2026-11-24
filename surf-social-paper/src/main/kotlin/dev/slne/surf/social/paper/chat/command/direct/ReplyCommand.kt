@@ -7,6 +7,7 @@ import dev.slne.surf.api.paper.command.args.asyncSignedMessageArgument
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.core.client.chat.service.ReplyCache
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
+import dev.slne.surf.social.paper.chat.service.DirectMessageSender
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.chat.SignedMessage
 
@@ -46,6 +47,6 @@ fun replyCommand() = commandAPICommand("reply") {
             return@playerExecutorSuspend
         }
 
-        DirectMessageAccess.sendMessage(player, message, lastMessagedUuid)
+        DirectMessageSender.sendMessage(player, message, lastMessagedUuid)
     }
 }

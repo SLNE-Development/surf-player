@@ -7,5 +7,5 @@ import io.github.miniplaceholders.api.provider.LoadRequirement
 class PlaceholderExpansion : ExpansionProvider {
     override fun provideExpansion(): Expansion = ClanExpansionProvider.provideExpansion()
     override fun loadRequirement(): LoadRequirement =
-        LoadRequirement.requiredComplement("surf-clan-velocity", "surf-clan-paper")
+        LoadRequirement.requiredComplement("surf-social-velocity", "surf-social-paper")
 }

@@ -3,7 +3,7 @@ package dev.slne.surf.social.core.client.clan.command
 import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.social.api.clan.invite.ClanInvite
 import dev.slne.surf.social.api.clan.member.ClanMember
-import dev.slne.surf.api.core.service.PlayerLookupService
+import dev.slne.surf.social.core.client.util.usernameOrUuid
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
@@ -55,9 +55,7 @@ suspend fun clanMemberNames(player: UUID): Set<String> {
         for (member in clan.members) {
             launch {
                 semaphore.withPermit {
-                    memberNames.add(
-                        PlayerLookupService.getUsername(member.uuid) ?: member.uuid.toString()
-                    )
+                    memberNames.add(usernameOrUuid(member.uuid))
                 }
             }
         }

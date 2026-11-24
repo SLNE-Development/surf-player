@@ -1,12 +1,16 @@
 package dev.slne.surf.social.microservice.connection.config
 
-import org.slf4j.LoggerFactory
+import dev.slne.surf.api.core.util.logger
 import java.nio.file.Path
 import java.util.*
-import kotlin.io.path.*
+import kotlin.io.path.createDirectories
+import kotlin.io.path.exists
+import kotlin.io.path.inputStream
+import kotlin.io.path.writeText
 
 object SocialConfig {
-    private val logger = LoggerFactory.getLogger(SocialConfig::class.java)
+    private const val TOKEN_PLACEHOLDER = "YOUR_TOKEN_HERE"
+    private val log = logger()
 
     @Volatile
     lateinit var discordBotToken: String
@@ -20,10 +24,10 @@ object SocialConfig {
             configFile.writeText(
                 """
                 |# Discord Bot Token for fetching user information
-                |discord-bot-token=YOUR_TOKEN_HERE
+                |discord-bot-token=$TOKEN_PLACEHOLDER
                 """.trimMargin()
             )
-            logger.warn("Config file created at {}. Please configure your Discord bot token.", configFile)
+            log.atWarning().log("Config file created at %s. Please configure your Discord bot token.", configFile)
         }
 
         val properties = Properties()
@@ -31,9 +35,8 @@ object SocialConfig {
 
         discordBotToken = properties.getProperty("discord-bot-token", "")
 
-        if (discordBotToken.isBlank() || discordBotToken == "YOUR_TOKEN_HERE") {
-            logger.error("Discord bot token is not configured! Please set it in {}", configFile)
+        if (discordBotToken.isBlank() || discordBotToken == TOKEN_PLACEHOLDER) {
+            log.atSevere().log("Discord bot token is not configured! Please set it in %s", configFile)
         }
     }
 }
-

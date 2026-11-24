@@ -11,19 +11,13 @@ import kotlinx.coroutines.launch
 object IgnoreListHandler {
     @RabbitHandler
     fun handleUpdateIgnoreRequest(packet: UpdateIgnoreRequestPacket) = packet.launch {
-        packet.respond(
-            PrimitiveResponse.BooleanResponsePacket(
-                if (
-                    packet.ignored
-                )
-                    IgnoreRepository.ignore(packet.playerUuid, packet.targetPlayerUuid)
-                else
-                    IgnoreRepository.unignore(
-                        packet.playerUuid,
-                        packet.targetPlayerUuid
-                    )
-            )
-        )
+        val changed = if (packet.ignored) {
+            IgnoreRepository.ignore(packet.playerUuid, packet.targetPlayerUuid)
+        } else {
+            IgnoreRepository.unignore(packet.playerUuid, packet.targetPlayerUuid)
+        }
+
+        packet.respond(PrimitiveResponse.BooleanResponsePacket(changed))
     }
 
     @RabbitHandler

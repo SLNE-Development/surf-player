@@ -12,7 +12,7 @@ import dev.slne.surf.social.api.chat.message.MessageData
 import dev.slne.surf.social.api.chat.message.MessageType
 import dev.slne.surf.social.core.client.clan.Messages
 import dev.slne.surf.social.core.client.clan.chat.formatClanChatMessage
-import dev.slne.surf.social.core.client.clan.chat.prefixedName
+import dev.slne.surf.social.core.client.util.prefixedName
 import dev.slne.surf.core.api.common.server.SurfServer
 import kotlinx.coroutines.launch
 import net.kyori.adventure.chat.SignedMessage

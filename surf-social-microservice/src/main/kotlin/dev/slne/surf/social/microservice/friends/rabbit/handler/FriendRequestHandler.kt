@@ -61,7 +61,7 @@ object FriendRequestHandler {
     ) = request.launch {
         FriendRequestRepository.deleteFriendRequest(request.senderUuid, request.targetUuid)
 
-        if (request.state == ChangeFriendRequestStateRequestPacket.State.ACCEPT) {
+        if (request.state == FriendRequestState.ACCEPT) {
             FriendshipsRepository.createFriendship(
                 request.senderUuid,
                 request.targetUuid,

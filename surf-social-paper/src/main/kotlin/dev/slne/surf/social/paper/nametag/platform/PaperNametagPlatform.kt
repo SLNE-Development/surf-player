@@ -14,10 +14,6 @@ import java.util.*
 class PaperNametagPlatform : NametagPlatform {
     override val dataPath get() = PaperNametagFeature.dataPath
 
-    // Clans and content creators are bundled in the same plugin.
-    override val clanAvailable = true
-    override val contentCreatorAvailable = true
-
     override fun onlinePlayers() = Bukkit.getOnlinePlayers().map { PaperNametagPlayer(it) }
 
     override fun player(playerUuid: UUID) =

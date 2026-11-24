@@ -3,30 +3,25 @@ package dev.slne.surf.social.paper.clan.commands.arguments.color
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.CustomArgument
 import dev.jorel.commandapi.arguments.TextArgument
+import dev.slne.surf.social.core.client.clan.command.INVALID_HEX_COLOR
+import dev.slne.surf.social.core.client.clan.command.isHexColor
 import dev.slne.surf.social.paper.clan.commands.failCommand
-import dev.slne.surf.social.core.client.clan.command.*
 
+/**
+ * Parses a hex color of [requiredLength] digits (without `#`) via [factory].
+ */
 abstract class BaseHexColorArgument<T>(
     nodeName: String,
-    private val requiredLength: Int,
-    private val factory: (String) -> T?
+    requiredLength: Int,
+    suggestions: Collection<String>,
+    factory: (String) -> T?
 ) : CustomArgument<T, String>(TextArgument(nodeName), { info ->
     val input = info.currentInput().trim()
+    val color = if (isHexColor(input, requiredLength)) factory(input) else null
 
-    if (!isHexColor(input, requiredLength)) {
-        failCommand("$INVALID_HEX_COLOR ${info.currentInput}")
-    }
-
-    factory(input)
-        ?: failCommand("$INVALID_HEX_COLOR ${info.currentInput}")
+    color ?: failCommand("$INVALID_HEX_COLOR ${info.currentInput}")
 }) {
     init {
-        replaceSuggestions(ArgumentSuggestions.stringCollection { _ ->
-            if (requiredLength == CLAN_TAG_COLOR_LENGTH) {
-                CLAN_TAG_COLOR_SUGGESTIONS
-            } else {
-                CLAN_TAG_SHADOW_COLOR_SUGGESTIONS
-            }
-        })
+        replaceSuggestions(ArgumentSuggestions.stringCollection { _ -> suggestions })
     }
 }

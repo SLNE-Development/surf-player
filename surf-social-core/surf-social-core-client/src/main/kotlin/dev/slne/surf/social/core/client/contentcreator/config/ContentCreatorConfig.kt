@@ -11,14 +11,8 @@ data class ContentCreatorConfig(
 
     val liveStateRefreshSeconds: Long = 60,
 
-    val twitch: Twitch = Twitch(),
-) {
-    @ConfigSerializable
-    data class Twitch(
-        val clientId: String = "",
-        val clientSecret: String = ""
-    )
-}
+    val twitch: TwitchConfig = TwitchConfig(),
+)
 
 val config by lazy {
     surfConfigApi.createSpongeYmlConfig<ContentCreatorConfig>(

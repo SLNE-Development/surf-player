@@ -13,8 +13,6 @@ class MinestomTabPlatform : TabPlatform {
     override val dataPath get() = TabMinestomFeature.dataDirectory
 
     override val playtimeAvailable = true
-    override val clanAvailable = true
-    override val contentCreatorAvailable = true
 
     override fun onlinePlayers() = ConnectionManager.onlinePlayers.map { MinestomTabPlayer(it) }
 

@@ -9,12 +9,11 @@ import dev.slne.surf.social.api.clan.member.ClanMemberService
 import dev.slne.surf.social.api.clan.member.listener.ClanMemberChangedRoleListener
 import dev.slne.surf.social.api.clan.member.listener.ClanMemberListener
 import dev.slne.surf.api.core.service.PlayerLookupService
-import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.social.core.client.clan.rpc.clanMemberRpcService
+import dev.slne.surf.social.core.client.util.ListenerRegistry
 import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
 import dev.slne.surf.social.core.common.clan.member.CoreClanMemberService
 import java.util.*
-import java.util.concurrent.CopyOnWriteArrayList
 
 @AutoService(ClanMemberService::class)
 class ClientClanMemberServiceImpl : CoreClanMemberService {
@@ -23,36 +22,18 @@ class ClientClanMemberServiceImpl : CoreClanMemberService {
         .maximumSize(10_000)
         .build<UUID, ClanMemberImpl>()
 
-    private val listeners = CopyOnWriteArrayList<ClanMemberListener>()
+    private val listeners = ListenerRegistry<ClanMemberListener>()
 
     override fun registerListener(listener: ClanMemberListener) {
-        listeners.add(listener)
+        listeners.register(listener)
     }
 
     override fun unregisterListener(listener: ClanMemberListener) {
-        listeners.remove(listener)
+        listeners.unregister(listener)
     }
 
-    private inline fun invokeListenerSafe(block: () -> Unit) {
-        try {
-            block()
-        } catch (e: Throwable) {
-            log.atWarning()
-                .withCause(e)
-                .log("Failed to invoke clan member listener")
-        }
-    }
-
-    private inline fun <reified T : ClanMemberListener> callListeners(call: (T) -> Unit) {
-        for (listener in listeners) {
-            if (listener is T) {
-                invokeListenerSafe { call(listener) }
-            }
-        }
-    }
-
-    fun callClanMemberChangedRoleListeners(member: ClanMember, role: ClanMemberRole) {
-        callListeners<ClanMemberChangedRoleListener> { it.onClanMemberChangedRole(member, role) }
+    private fun callClanMemberChangedRoleListeners(member: ClanMember, role: ClanMemberRole) {
+        listeners.notify<ClanMemberChangedRoleListener> { it.onClanMemberChangedRole(member, role) }
     }
 
     override suspend fun findMemberByName(name: String): ClanMember? {
@@ -115,8 +96,6 @@ class ClientClanMemberServiceImpl : CoreClanMemberService {
     }
 
     companion object {
-        private val log = logger()
-
         fun get() = ClanMemberService.INSTANCE as ClientClanMemberServiceImpl
     }
 }

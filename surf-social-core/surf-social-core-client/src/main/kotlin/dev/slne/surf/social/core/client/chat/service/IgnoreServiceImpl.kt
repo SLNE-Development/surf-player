@@ -3,7 +3,7 @@ package dev.slne.surf.social.core.client.chat.service
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.google.auto.service.AutoService
 import dev.slne.surf.social.api.chat.entry.IgnoreListEntry
-import dev.slne.surf.social.core.client.chat.rabbitApi
+import dev.slne.surf.social.core.client.SocialClient.rabbitApi
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.FindIgnoreListEntriesRequestPacket
 import dev.slne.surf.social.core.common.chat.rabbit.packet.request.ignore.UpdateIgnoreRequestPacket
 import dev.slne.surf.social.core.common.chat.service.IgnoreService

@@ -33,7 +33,7 @@ class SendDirectMessageRedisRequestTest {
                 signature = ByteArray(8) { it.toByte() },
                 sessionId = SESSION_ID,
                 lastSeen = listOf(ByteArray(3) { it.toByte() }, ByteArray(2) { it.toByte() }),
-                sessionKey = SignedChatMessage.SessionKey(
+                sessionKey = SessionKey(
                     EXPIRES_AT,
                     key,
                     ByteArray(4) { (it * 3).toByte() }
@@ -68,7 +68,7 @@ class SendDirectMessageRedisRequestTest {
         signature: ByteArray?,
         sessionId: UUID,
         lastSeen: List<ByteArray>,
-        sessionKey: SignedChatMessage.SessionKey?
+        sessionKey: SessionKey?
     ) = SignedChatMessage(
         sender = SENDER,
         sessionId = sessionId,

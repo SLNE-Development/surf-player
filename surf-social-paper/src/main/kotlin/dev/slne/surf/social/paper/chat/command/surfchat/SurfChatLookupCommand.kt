@@ -54,7 +54,7 @@ fun CommandAPICommand.surfChatLookupCommand() = subcommand("lookup") {
         val page = query?.get("--page")?.toIntOrNull() ?: 1
         val history = try {
             HistoryService.findHistoryEntry(filter)
-        } catch (e: TimeoutCancellationException) {
+        } catch (_: TimeoutCancellationException) {
             throw CommandAPI.failWithString("Die Suche hat zu lange gedauert und wurde abgebrochen.")
         }
 

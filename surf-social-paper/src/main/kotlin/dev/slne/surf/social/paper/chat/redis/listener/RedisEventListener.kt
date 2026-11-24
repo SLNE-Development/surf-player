@@ -1,7 +1,6 @@
 package dev.slne.surf.social.paper.chat.redis.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.api.paper.nms.NmsUseWithCaution
 import dev.slne.surf.social.core.client.chat.message.format.formatTeamchat
 import dev.slne.surf.social.core.client.chat.redis.event.DeleteRemoteMessageRedisEvent
 import dev.slne.surf.social.core.client.chat.redis.event.TeamMessageRedisEvent
@@ -10,17 +9,16 @@ import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageHandledR
 import dev.slne.surf.social.core.client.chat.redis.rpc.SendDirectMessageRedisRequest
 import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageHandledRedisResponse
 import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
-import dev.slne.surf.social.paper.chat.command.direct.DirectMessageAccess
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.social.paper.chat.service.DirectMessageSender
 import dev.slne.surf.social.paper.chat.service.SignedMessageSender
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.redis.event.OnRedisEvent
 import dev.slne.surf.redis.request.HandleRedisRequest
 import dev.slne.surf.redis.request.RequestContext
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 
-@OptIn(NmsUseWithCaution::class)
 object RedisEventListener {
     @OnRedisEvent
     fun onTeamchatMessage(event: TeamchatMessageRedisEvent) {
@@ -36,7 +34,6 @@ object RedisEventListener {
         Bukkit.broadcast(message, PermissionRegistry.PREFIX_TEAM)
     }
 
-
     @HandleRedisRequest
     fun handleSendDirectMessageRedisRequest(context: RequestContext<SendDirectMessageRedisRequest>) {
         val (messageData, message) = context.request
@@ -44,7 +41,7 @@ object RedisEventListener {
         if (Bukkit.getPlayer(receiver) == null) return
 
         context.launch {
-            val handled = DirectMessageAccess.handleSendSignedPm(messageData, message)
+            val handled = DirectMessageSender.receiveRemoteMessage(messageData, message)
             if (handled) {
                 context.respond(SendDirectMessageHandledRedisResponse()).await()
             }

@@ -7,10 +7,10 @@ import dev.slne.surf.api.core.messages.Colors
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.builder.SurfComponentBuilder
 import dev.slne.surf.api.core.messages.pagination.Pagination
-import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.api.core.util.dateTimeFormatter
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
+import dev.slne.surf.social.core.client.util.usernameOrUuid
 import dev.slne.surf.core.api.common.SurfCoreApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -80,10 +80,8 @@ suspend fun collectClanMemberData(clan: Clan): List<ClanMemberData> {
         for (member in members) {
             val slot = index++
             launch {
-                val name = PlayerLookupService.getUsername(member.uuid) ?: member.uuid.toString()
-
                 data[slot] = ClanMemberData(
-                    name,
+                    usernameOrUuid(member.uuid),
                     member.role,
                     SurfCoreApi.getPlayer(member.uuid)?.currentServer?.displayName,
                     member.lastActiveAt,
@@ -97,7 +95,7 @@ suspend fun collectClanMemberData(clan: Clan): List<ClanMemberData> {
 }
 
 suspend fun clanMembersPagination(clan: ClanImpl): Pagination<ClanMemberData> {
-    val clanInformationHover = Components.Clan.renderClanInformationHover(clan)
+    val clanInformationHover = ClanComponents.renderClanInformationHover(clan)
     val now = OffsetDateTime.now()
 
     return Pagination {

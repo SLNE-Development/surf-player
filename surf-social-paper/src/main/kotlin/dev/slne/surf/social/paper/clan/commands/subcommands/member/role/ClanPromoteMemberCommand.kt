@@ -3,17 +3,12 @@ package dev.slne.surf.social.paper.clan.commands.subcommands.member.role
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.arguments
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.social.api.clan.clan.Clan
-import dev.slne.surf.social.api.clan.member.ClanMember
-import dev.slne.surf.social.api.clan.permission.ClanPermission
-import dev.slne.surf.social.paper.clan.commands.arguments.ClanMemberArgument
-import dev.slne.surf.social.paper.clan.commands.failCommand
-import dev.slne.surf.social.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaiting
-import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.social.core.client.clan.Messages
-import dev.slne.surf.social.core.client.clan.command.*
+import dev.slne.surf.social.api.clan.member.ClanMember
+import dev.slne.surf.social.core.client.clan.command.RoleChange
+import dev.slne.surf.social.paper.clan.commands.arguments.ClanMemberArgument
+import dev.slne.surf.social.paper.clan.permission.ClanPermissions
 
 fun CommandAPICommand.clanPromoteMemberCommand() = subcommand("promote") {
     withPermission(ClanPermissions.CLAN_PROMOTE_MEMBER_COMMAND)
@@ -21,51 +16,6 @@ fun CommandAPICommand.clanPromoteMemberCommand() = subcommand("promote") {
     arguments(ClanMemberArgument("member"))
 
     playerExecutorSuspend { player, args ->
-        val member = args.awaiting<ClanMember>("member")
-        val clan = Clan.byPlayer(player.uniqueId)
-            ?: failCommand(Messages.NOT_IN_CLAN)
-        val isInClan = clan.isMember(member.uuid)
-
-        if (!isInClan) {
-            failCommand(Messages.PLAYER_NOT_IN_YOUR_CLAN)
-        }
-
-        if (member.uuid == player.uniqueId) {
-            failCommand(CANNOT_PROMOTE_SELF)
-        }
-
-        if (!clan.hasMemberPermission(player.uniqueId, ClanPermission.PROMOTE)) {
-            failCommand(NO_PROMOTE_PERMISSION)
-        }
-
-        val executorMember = clan.getMember(player.uniqueId)
-            ?: failCommand(Messages.NOT_IN_CLAN)
-
-        if (executorMember.role <= member.role) {
-            failCommand(CANNOT_PROMOTE_SAME_OR_HIGHER_ROLE)
-        }
-
-        if (!member.role.hasNextRole()) {
-            failCommand(ALREADY_HIGHEST_ROLE)
-        }
-
-        val oldRole = member.role
-        val newRole = member.role.nextRole()
-        val changedRole = member.changeRole(newRole)
-
-        if (!changedRole) {
-            failCommand(ROLE_CHANGE_FAILED)
-        }
-
-        val memberName = PlayerLookupService.getUsername(member.uuid) ?: member.uuid.toString()
-        clan.broadcast(
-            memberRoleChangedMessage(
-                memberName,
-                player.name,
-                oldRole,
-                newRole,
-                RoleChange.PROMOTED
-            )
-        )
+        changeMemberRole(player, args.awaiting<ClanMember>("member"), RoleChange.PROMOTED)
     }
 }

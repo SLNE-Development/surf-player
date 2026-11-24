@@ -9,29 +9,28 @@ import dev.slne.surf.social.api.clan.clan.listener.*
 import dev.slne.surf.social.api.clan.invite.ClanInviteResult
 import dev.slne.surf.social.api.clan.member.ClanMemberAddResult
 import dev.slne.surf.social.api.clan.member.ClanMemberRole
-import dev.slne.surf.api.core.util.logger
+import dev.slne.surf.social.core.client.SocialClient
+import dev.slne.surf.social.core.client.clan.redis.ClanCaches
+import dev.slne.surf.social.core.client.clan.rpc.clanRpcService
+import dev.slne.surf.social.core.client.util.ListenerRegistry
 import dev.slne.surf.social.core.common.clan.clan.AbstractClanView
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
 import dev.slne.surf.social.core.common.clan.clan.ClanTagRules
 import dev.slne.surf.social.core.common.clan.clan.CoreClanService
-import dev.slne.surf.social.core.client.clan.redis.RedisService
-import dev.slne.surf.social.core.client.clan.rpc.clanRpcService
 import dev.slne.surf.social.core.common.clan.invite.ClanInviteImpl
 import dev.slne.surf.social.core.common.clan.member.ClanMemberImpl
-import dev.slne.surf.redis.cache.RedisSetIndexes
 import it.unimi.dsi.fastutil.chars.Char2BooleanOpenHashMap
 import java.util.*
-import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.time.Duration.Companion.minutes
 
 @AutoService(ClanService::class)
 class ClientClanServiceImpl : CoreClanService {
-    private val cache = RedisService.get().redisApi.createSimpleSetRedisCache(
-        RedisService.namespaced("clan_cache"),
+    private val cache = SocialClient.redisApi.createSimpleSetRedisCache(
+        ClanCaches.key("clan_cache"),
         ClanImpl.serializer(),
         15.minutes,
         { it.clanID.toString() },
-        CacheIndexes
+        ClanCacheIndexes
     )
 
     private val tagSuggestionBucketCache = Caffeine.newBuilder()
@@ -41,57 +40,33 @@ class ClientClanServiceImpl : CoreClanService {
             clanRpcService.findClanTagsByPrefix(bucketKey, 100)
         }
 
-    private val listeners = CopyOnWriteArrayList<ClanListener>()
+    private val listeners = ListenerRegistry<ClanListener>()
 
     override fun init() = Unit
 
     override fun registerListener(listener: ClanListener) {
-        listeners.add(listener)
+        listeners.register(listener)
     }
 
     override fun unregisterListener(listener: ClanListener) {
-        listeners.remove(listener)
+        listeners.unregister(listener)
     }
 
-    private inline fun invokeListenerSafe(block: () -> Unit) {
-        try {
-            block()
-        } catch (e: Throwable) {
-            log.atWarning()
-                .withCause(e)
-                .log("Failed to invoke clan listener")
-        }
+    private fun callClanCreatedListeners(clan: Clan) {
+        listeners.notify<ClanCreatedListener> { it.onClanCreated(clan) }
     }
 
-    private inline fun <reified T : ClanListener> callClanListeners(call: (T) -> Unit) {
-        for (listener in listeners) {
-            if (listener is T) {
-                invokeListenerSafe { call(listener) }
-            }
-        }
-    }
-
-    fun callClanCreatedListeners(clan: Clan) {
-        callClanListeners<ClanCreatedListener> { it.onClanCreated(clan) }
-    }
-
-    fun callClanDeletedListeners(clan: Clan) {
+    private fun callClanDeletedListeners(clan: Clan) {
         val view = clan.view()
-        callClanListeners<ClanDeletedListener> { it.onClanDeleted(view) }
+        listeners.notify<ClanDeletedListener> { it.onClanDeleted(view) }
     }
 
-    fun callClanUpdatedListeners(clan: Clan) {
-        callClanListeners<ClanUpdatedListener> { it.onClanUpdated(clan) }
+    private fun callClanUpdatedListeners(clan: Clan) {
+        listeners.notify<ClanUpdatedListener> { it.onClanUpdated(clan) }
     }
 
-    fun callClanMemberUpdatedListeners(clan: Clan, memberUuid: UUID, added: Boolean) {
-        callClanListeners<ClanUpdateMemberListener> {
-            it.onClanMemberUpdated(
-                clan,
-                memberUuid,
-                added
-            )
-        }
+    private fun callClanMemberUpdatedListeners(clan: Clan, memberUuid: UUID, added: Boolean) {
+        listeners.notify<ClanUpdateMemberListener> { it.onClanMemberUpdated(clan, memberUuid, added) }
     }
 
     override suspend fun invalidateCaches() {
@@ -99,7 +74,7 @@ class ClientClanServiceImpl : CoreClanService {
     }
 
     suspend fun invalidateCachedClanByMember(member: UUID) {
-        cache.removeByIndex(CacheIndexes.members, member)
+        cache.removeByIndex(ClanCacheIndexes.members, member)
     }
 
     suspend fun invalidateCachedClanByID(id: ULong) {
@@ -107,25 +82,25 @@ class ClientClanServiceImpl : CoreClanService {
     }
 
     override suspend fun findClanByPlayer(playerUuid: UUID): Clan? {
-        return cache.findCachedByIndexOrLoadNullable(CacheIndexes.members, playerUuid) {
+        return cache.findCachedByIndexOrLoadNullable(ClanCacheIndexes.members, playerUuid) {
             clanRpcService.findClanByMember(playerUuid)
         }
     }
 
     override suspend fun findClanByUuid(clanUuid: UUID): Clan? {
-        return cache.findCachedByIndexOrLoadNullable(CacheIndexes.uuid, clanUuid) {
+        return cache.findCachedByIndexOrLoadNullable(ClanCacheIndexes.uuid, clanUuid) {
             clanRpcService.findClanByClanUuid(clanUuid)
         }
     }
 
     override suspend fun findClanByTag(tag: String): Clan? {
-        return cache.findCachedByIndexOrLoadNullable(CacheIndexes.tag, tag) {
+        return cache.findCachedByIndexOrLoadNullable(ClanCacheIndexes.tag, tag) {
             clanRpcService.findClanByTag(normalizeTag(tag))
         }
     }
 
     override suspend fun findClanByID(id: ULong): ClanImpl? {
-        return cache.findCachedByIndexOrLoadNullable(CacheIndexes.id, id) {
+        return cache.findCachedByIndexOrLoadNullable(ClanCacheIndexes.id, id) {
             clanRpcService.findClanById(id)
         }
     }
@@ -220,7 +195,7 @@ class ClientClanServiceImpl : CoreClanService {
 
     override suspend fun updateTagColor(
         clan: ClanImpl,
-        update: ClanTagColor.Update
+        update: ClanTagColorUpdate
     ): Boolean {
         val updatedTagColor = clan.clanTagColor.update(update)
         val updated = clanRpcService.updateClanTagColor(
@@ -325,16 +300,7 @@ class ClientClanServiceImpl : CoreClanService {
             .toList()
     }
 
-    object CacheIndexes : RedisSetIndexes<ClanImpl>() {
-        val id by indexOne(valueOf = { it.clanID })
-        val tag by indexOne(normalize = { normalizeTag(it) }, valueOf = { it.tag })
-        val uuid by indexOne(valueOf = { it.uuid })
-        val members by index(valuesOf = { clan -> clan.members.map { it.uuid } })
-    }
-
     companion object {
-        private val log = logger()
-
         fun get() = ClanService.INSTANCE as ClientClanServiceImpl
         private fun normalizeTag(tag: String) = ClanTagRules.normalize(tag)
     }

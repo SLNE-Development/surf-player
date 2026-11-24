@@ -122,10 +122,4 @@ object OpenAiService {
         ModerationCategory.VIOLENCE -> null
         ModerationCategory.VIOLENCE_GRAPHIC -> thresholds.violenceGraphic
     }
-
-    private data class ModerationInput(
-        val model: String,
-        val message: String,
-        val messageType: String
-    )
 }

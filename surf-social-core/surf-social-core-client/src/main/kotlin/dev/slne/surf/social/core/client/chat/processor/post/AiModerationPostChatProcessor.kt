@@ -7,7 +7,7 @@ import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.social.api.chat.message.MessageContext
 import dev.slne.surf.social.api.chat.message.MessageData
 import dev.slne.surf.social.api.chat.processor.PostChatProcessor
-import dev.slne.surf.social.core.client.chat.ClientChatInstance
+import dev.slne.surf.social.core.client.SocialClient.redisApi
 import dev.slne.surf.social.core.client.chat.ai.OpenAiService
 import dev.slne.surf.social.core.client.chat.config.aiModerationConfig
 import dev.slne.surf.social.core.client.chat.message.format.appendBotIcon
@@ -15,7 +15,7 @@ import dev.slne.surf.social.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.social.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.social.core.client.chat.redis.event.TeamMessageRedisEvent
-import dev.slne.surf.social.core.client.chat.redisApi
+import dev.slne.surf.social.core.client.chat.rpc.moderationService
 import dev.slne.surf.social.core.client.chat.util.hasPermission
 import dev.slne.surf.social.core.client.chat.webhook.DiscordClient
 import dev.slne.surf.social.core.client.chat.webhook.DiscordMessages
@@ -71,7 +71,6 @@ object AiModerationPostChatProcessor : PostChatProcessor {
     private suspend fun nameOrUuid(uuid: UUID): String {
         return SurfCoreApi.getOfflinePlayer(uuid)?.lastKnownName ?: uuid.toString()
     }
-
 
     suspend fun processMessage(messageData: MessageData) {
         if (messageData.sender.hasPermission(ChatPermissions.BYPASS_FILTER)) {
@@ -159,7 +158,7 @@ object AiModerationPostChatProcessor : PostChatProcessor {
         }
 
         runCatching {
-            ClientChatInstance.moderationService.logModeration(messageData, classification)
+            moderationService.logModeration(messageData, classification)
         }.onFailure { log.atWarning().withCause(it).log("Failed to log AI moderation") }
     }
 

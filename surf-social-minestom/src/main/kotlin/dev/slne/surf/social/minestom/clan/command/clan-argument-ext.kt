@@ -5,6 +5,7 @@ import dev.slne.surf.social.api.clan.invite.ClanInvite
 import dev.slne.surf.social.api.clan.member.ClanMember
 import dev.slne.surf.api.minestom.command.executor.CommandArguments
 import dev.slne.surf.social.core.client.clan.Messages
+import dev.slne.surf.social.minestom.command.failCommand
 import kotlinx.coroutines.Deferred
 import java.util.*
 

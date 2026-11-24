@@ -2,6 +2,7 @@ package dev.slne.surf.social.core.common.clan.clan
 
 import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.social.api.clan.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.clan.ClanTagColorUpdate
 import dev.slne.surf.social.api.clan.invite.ClanInvite
 import dev.slne.surf.social.api.clan.invite.ClanInviteResult
 import dev.slne.surf.social.api.clan.member.ClanMember
@@ -38,7 +39,7 @@ data class ClanImpl(
         CoreClanService.updateDiscordInvite(this, discordInvite)
     }
 
-    override suspend fun changeClanTagColor(update: ClanTagColor.Update) {
+    override suspend fun changeClanTagColor(update: ClanTagColorUpdate) {
         CoreClanService.updateTagColor(this, update)
     }
 

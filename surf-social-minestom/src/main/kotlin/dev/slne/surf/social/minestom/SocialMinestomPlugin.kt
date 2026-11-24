@@ -1,5 +1,6 @@
 package dev.slne.surf.social.minestom
 
+import dev.slne.surf.api.minestom.extension.addListener
 import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
 import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.minestom.chat.ChatMinestomFeature
@@ -9,8 +10,8 @@ import dev.slne.surf.social.minestom.friends.FriendsMinestomFeature
 import dev.slne.surf.social.minestom.nametag.NametagMinestomFeature
 import dev.slne.surf.social.minestom.tab.TabMinestomFeature
 import kotlinx.coroutines.CancellationException
-import java.nio.file.Path
-import kotlin.io.path.createDirectories
+import net.minestom.server.event.player.PlayerDisconnectEvent
+import net.minestom.server.event.player.PlayerSpawnEvent
 
 /**
  * The single Minestom plugin of surf-social. It hosts every social feature and drives their
@@ -26,13 +27,6 @@ object SocialMinestomPlugin : SurfMinestomPlugin() {
         NametagMinestomFeature,
         TabMinestomFeature,
     )
-
-    /**
-     * The data directory of [feature]: `plugins/<plugin id>/<feature id>`. Each feature gets its
-     * own subfolder since several of them use the same file names (e.g. `config.yml`).
-     */
-    fun featureDataDirectory(feature: MinestomSocialFeature): Path =
-        dataDirectory.resolve(feature.id).createDirectories()
 
     override suspend fun onLoad() {
         // One shared RabbitMQ/Redis connection for every feature, see SocialClient.
@@ -51,6 +45,8 @@ object SocialMinestomPlugin : SurfMinestomPlugin() {
         for (feature in features) {
             feature.onEnable()
         }
+
+        registerPlayerConnectionListeners()
     }
 
     override suspend fun onDisable() {
@@ -65,5 +61,30 @@ object SocialMinestomPlugin : SurfMinestomPlugin() {
         }
 
         SocialClient.disable()
+    }
+
+    private fun registerPlayerConnectionListeners() {
+        eventNode.addListener<PlayerSpawnEvent> { event ->
+            if (!event.isFirstSpawn) return@addListener
+
+            forEachFeature("join") { it.onPlayerJoin(event.player) }
+        }
+
+        eventNode.addListener<PlayerDisconnectEvent> { event ->
+            forEachFeature("quit") { it.onPlayerQuit(event.player) }
+        }
+    }
+
+    /**
+     * Runs [action] for every feature; a failing feature does not keep the others from running.
+     */
+    private inline fun forEachFeature(event: String, action: (MinestomSocialFeature) -> Unit) {
+        for (feature in features) {
+            try {
+                action(feature)
+            } catch (e: Exception) {
+                logger.error("Feature '${feature.id}' failed to handle a player $event", e)
+            }
+        }
     }
 }

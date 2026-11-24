@@ -3,7 +3,6 @@ package dev.slne.surf.social.api.friends.utils
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.social.api.friends.player.FriendsPlayer
 import java.util.*
 
 suspend fun UUID.toSurfPlayer() = SurfCoreApi.getPlayer(this)
@@ -12,5 +11,3 @@ suspend fun UUID.toSurfPlayer() = SurfCoreApi.getPlayer(this)
 fun SurfPlayer?.displayName() = buildText {
     variableValue(this@displayName?.username ?: "unknown")
 }
-
-fun SurfPlayer.friendPlayer() = FriendsPlayer[uuid]

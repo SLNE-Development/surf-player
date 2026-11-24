@@ -3,7 +3,6 @@ package dev.slne.surf.social.velocity.connection.permission
 object SocialPermissions {
     const val BASE = "surf.social"
 
-
     const val COMMAND_SURF_SOCIAL = "$BASE.command.surfsocial"
     const val COMMAND_LINK = "$BASE.command.link"
     const val COMMAND_UNLINK = "$BASE.command.unlink"

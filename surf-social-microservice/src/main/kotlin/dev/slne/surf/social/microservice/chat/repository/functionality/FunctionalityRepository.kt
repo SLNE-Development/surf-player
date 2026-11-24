@@ -22,7 +22,7 @@ object FunctionalityRepository {
         FunctionalityTable.selectAll()
             .where { FunctionalityTable.server eq server }
             .single()
-            .let(::createByRow)
+            .let(::functionalitiesFromRow)
     }
 
     suspend fun updateOrCreate(server: String, functionalities: Functionalities) = suspendTransaction {
@@ -35,12 +35,12 @@ object FunctionalityRepository {
 
     suspend fun findAll(): Map<String, Functionalities> = suspendTransaction {
         FunctionalityTable.selectAll()
-            .map { row -> row[FunctionalityTable.server] to createByRow(row) }
+            .map { row -> row[FunctionalityTable.server] to functionalitiesFromRow(row) }
             .toList()
             .toMap()
     }
 
-    fun createByRow(row: ResultRow) = Functionalities(
+    private fun functionalitiesFromRow(row: ResultRow) = Functionalities(
         localChatEnabled = row[FunctionalityTable.chatEnabled]
     )
 }

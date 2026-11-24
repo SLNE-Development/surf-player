@@ -8,11 +8,9 @@ import java.time.temporal.ChronoUnit
 import java.util.Locale
 
 private val zone = ZoneId.of("Europe/Berlin")
-val timeFormatter: DateTimeFormatter = DateTimeFormatter
+private val timeFormatter: DateTimeFormatter = DateTimeFormatter
     .ofPattern("dd.MM.yyyy, HH:mm:ss", Locale.GERMANY)
     .withZone(zone)
-
-fun OffsetDateTime.unixTime(): String = formatTime()
 
 fun OffsetDateTime.formatTime(): String = atZoneSameInstant(zone).format(timeFormatter)
 

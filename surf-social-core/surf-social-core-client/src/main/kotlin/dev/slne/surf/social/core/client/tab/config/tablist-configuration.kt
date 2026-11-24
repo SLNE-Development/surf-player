@@ -1,4 +1,15 @@
 package dev.slne.surf.social.core.client.tab.config
 
-val tablistConfiguration = TablistConfigProvider()
-val tablistConfig get() = tablistConfiguration.config
+import dev.slne.surf.api.core.config.SpongeYmlConfigClass
+import dev.slne.surf.social.core.client.tab.platform.tabPlatform
+
+/**
+ * The tablist's `config.yml`, loaded from the data directory of the running platform.
+ */
+object TablistConfigFile : SpongeYmlConfigClass<TablistConfig>(
+    TablistConfig::class.java,
+    tabPlatform.dataPath,
+    "config.yml"
+)
+
+val tablistConfig: TablistConfig get() = TablistConfigFile.getConfig()

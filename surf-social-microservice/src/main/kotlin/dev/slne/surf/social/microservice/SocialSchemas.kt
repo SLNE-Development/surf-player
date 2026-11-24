@@ -1,5 +1,9 @@
 package dev.slne.surf.social.microservice
 
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Schema
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Table
+import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.SchemaUtils
+
 /**
  * PostgreSQL schema names of the merged social features.
  *
@@ -40,4 +44,13 @@ object SocialSchemas {
         require('.' !in name && '"' !in name) { "$envVar must not contain '.' or '\"', got '$name'" }
         return name
     }
+}
+
+/**
+ * Creates [schema] if it does not exist yet, then the missing [tables] in it.
+ * Must be called inside a transaction.
+ */
+suspend fun createSchemaWithTables(schema: String, vararg tables: Table) {
+    SchemaUtils.createSchema(Schema(schema))
+    SchemaUtils.create(*tables)
 }

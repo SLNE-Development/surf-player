@@ -4,7 +4,7 @@ import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.social.api.nametag.nametag.NametagVisibility
 import java.util.*
 
-private val api = requiredService<SurfNametagApi>()
+private val instance = requiredService<SurfNametagApi>()
 
 interface SurfNametagApi {
     fun preventNametagUpdate(playerUuid: UUID): Boolean
@@ -27,5 +27,7 @@ interface SurfNametagApi {
      */
     fun resetNametagVisibility(playerUuid: UUID)
 
-    companion object : SurfNametagApi by api
+    companion object : SurfNametagApi by instance {
+        val INSTANCE get() = instance
+    }
 }

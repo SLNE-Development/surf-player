@@ -4,7 +4,7 @@ import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.social.api.chat.message.MessageData
-import dev.slne.surf.social.core.client.chat.message.format.Components
+import dev.slne.surf.social.core.client.chat.message.format.createMessageDeletedTeamNotification
 import dev.slne.surf.social.core.common.chat.service.DeletionService
 import dev.slne.surf.social.core.common.chat.service.HistoryService
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
@@ -30,8 +30,8 @@ class DeletionServiceImpl : DeletionService {
             }
 
             if (notifyTeam) {
-                val message = Components.Deletion.createMessageDeletedTeamNotification(deleter, message)
-                Bukkit.broadcast(message, PermissionRegistry.TEAM_NOTIFY_DELETION)
+                val notification = createMessageDeletedTeamNotification(deleter, message)
+                Bukkit.broadcast(notification, PermissionRegistry.TEAM_NOTIFY_DELETION)
             }
         }
 

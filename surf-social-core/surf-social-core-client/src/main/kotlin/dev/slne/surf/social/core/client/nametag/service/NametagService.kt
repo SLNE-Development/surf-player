@@ -1,15 +1,14 @@
 package dev.slne.surf.social.core.client.nametag.service
 
-import dev.slne.surf.api.core.luckperms.LuckPermsAccess
-import dev.slne.surf.api.core.luckperms.prefix
 import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.social.api.nametag.nametag.Nametag
 import dev.slne.surf.social.api.nametag.nametag.NametagVisibility
 import dev.slne.surf.social.api.nametag.nametag.nametag
+import dev.slne.surf.social.core.client.contentcreator.LiveTagRenderer
 import dev.slne.surf.social.core.client.nametag.config.NametagConfig
 import dev.slne.surf.social.core.client.nametag.hook.ClanHook
-import dev.slne.surf.social.core.client.nametag.hook.ContentCreatorHook
 import dev.slne.surf.social.core.client.nametag.platform.NametagPlatform
+import dev.slne.surf.social.core.client.util.luckPermsPrefix
 import dev.slne.surf.social.core.client.nametag.platform.NametagPlayer
 import net.kyori.adventure.text.Component
 import java.util.*
@@ -58,19 +57,15 @@ object NametagService {
         NametagPlatform.launch { handleDataUpdate(player) }
     }
 
-    private suspend fun clanTag(player: NametagPlayer) = if (NametagPlatform.clanAvailable) {
-        ClanHook.getClanTag(player.uuid)
-    } else {
-        Component.empty()
-    }
+    private suspend fun clanTag(player: NametagPlayer) = ClanHook.getClanTag(player.uuid)
 
     private fun createNameTag(player: NametagPlayer, clanTag: Component): Nametag {
         val playerUuid = player.uuid
-        val prefixText = LuckPermsAccess.getUser(playerUuid)?.prefix
+        val prefixText = luckPermsPrefix(playerUuid)
 
         return nametag {
             prefix {
-                if (!prefixText.isNullOrEmpty()) {
+                if (prefixText.isNotEmpty()) {
                     append(miniMessage.deserialize(prefixText))
                 }
             }
@@ -80,11 +75,8 @@ object NametagService {
             suffix {
                 spacer(clanTagSpacer)
                 append(clanTag)
-
-                if (NametagPlatform.contentCreatorAvailable) {
-                    appendSpace()
-                    append(ContentCreatorHook.renderLiveTag(playerUuid))
-                }
+                appendSpace()
+                append(LiveTagRenderer.render(playerUuid, space = true))
             }
         }
     }

@@ -9,7 +9,6 @@ import dev.slne.surf.social.api.clan.member.ClanMemberRole
 import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 import org.jetbrains.annotations.ApiStatus
-import java.time.Duration
 import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -45,7 +44,7 @@ interface Clan : ClanView {
      */
     suspend fun setDiscordInvite(discordInvite: String?)
 
-    suspend fun changeClanTagColor(update: ClanTagColor.Update)
+    suspend fun changeClanTagColor(update: ClanTagColorUpdate)
 
     /**
      * Retrieves all pending invitations sent by this clan.
@@ -269,11 +268,8 @@ interface Clan : ClanView {
     }
 }
 
-suspend fun UUID.findClanByUuid() = Clan.byUuid(this)
-suspend fun UUID.findClanByPlayer() = Clan.byPlayer(this)
-
 suspend inline fun Clan.changeClanTagColor(
-    update: ClanTagColor.Update.Builder.() -> Unit
+    update: ClanTagColorUpdateBuilder.() -> Unit
 ) = changeClanTagColor(
     ClanTagColor.update(update)
 )

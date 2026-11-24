@@ -1,15 +1,13 @@
 package dev.slne.surf.social.core.client.friends
 
 import dev.slne.surf.api.core.util.requiredService
-import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.api.friends.model.FriendRequest
 import dev.slne.surf.social.api.friends.model.Friendship
+import dev.slne.surf.social.core.client.SocialClient
 import dev.slne.surf.social.core.client.friends.redis.listener.FriendRequestRedisListener
 import dev.slne.surf.social.core.client.friends.redis.listener.FriendshipRedisListener
 import dev.slne.surf.social.core.common.friends.packets.friendrequest.FetchFriendRequestsRequestPacket
 import dev.slne.surf.social.core.common.friends.packets.friendship.FetchFriendshipsRequestPacket
-import dev.slne.surf.rabbitmq.api.ClientRabbitMQApi
-import dev.slne.surf.redis.RedisApi
 import dev.slne.surf.redis.sync.list.SyncList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -17,14 +15,12 @@ import kotlinx.coroutines.Job
 import java.nio.file.Path
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * The friends state shared by every client platform. It uses the shared surf-social connections
+ * owned by [SocialClient].
+ */
 abstract class FriendsClientInstance {
     abstract val dataPath: Path
-
-    /** Shared surf-social Redis connection, owned by [SocialClient]. */
-    val redisApi: RedisApi get() = SocialClient.redisApi
-
-    /** Shared surf-social RabbitMQ connection, owned by [SocialClient]. */
-    val rabbitApi: ClientRabbitMQApi get() = SocialClient.rabbitApi
 
     @Volatile
     lateinit var friendRequests: SyncList<FriendRequest>
@@ -38,6 +34,8 @@ abstract class FriendsClientInstance {
      * Registers the friends Redis components. Must run before [SocialClient.connectRedis].
      */
     suspend fun onLoad() {
+        val redisApi = SocialClient.redisApi
+
         if (subscribeToEvents) {
             redisApi.subscribeToEvents(FriendshipRedisListener)
             redisApi.subscribeToEvents(FriendRequestRedisListener)
@@ -76,7 +74,7 @@ abstract class FriendsClientInstance {
     }
 
     suspend fun fetchFriendRequests() {
-        val fetched = rabbitApi.sendRequest(
+        val fetched = SocialClient.rabbitApi.sendRequest(
             FetchFriendRequestsRequestPacket()
         ).friendRequests
 
@@ -85,7 +83,7 @@ abstract class FriendsClientInstance {
     }
 
     suspend fun fetchFriendships() {
-        val fetched = rabbitApi.sendRequest(
+        val fetched = SocialClient.rabbitApi.sendRequest(
             FetchFriendshipsRequestPacket()
         ).friendships
 
@@ -98,12 +96,4 @@ abstract class FriendsClientInstance {
     }
 }
 
-fun launch(
-    context: CoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
-    block: suspend CoroutineScope.() -> Unit
-) = instance.launch(context, start, block)
-
 private val instance = requiredService<FriendsClientInstance>()
-val redisApi get() = instance.redisApi
-val rabbitApi get() = instance.rabbitApi

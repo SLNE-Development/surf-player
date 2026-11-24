@@ -3,6 +3,7 @@ package dev.slne.surf.social.paper.chat.redis.rpc
 import dev.slne.surf.api.paper.nms.NmsUseWithCaution
 import dev.slne.surf.api.paper.nms.bridges.data.chat.PlayerChatMessageMirror
 import dev.slne.surf.api.paper.nms.bridges.data.chat.RemoteChatSessionData
+import dev.slne.surf.social.core.client.chat.redis.rpc.SessionKey
 import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
 
 @OptIn(NmsUseWithCaution::class)
@@ -17,7 +18,7 @@ fun PlayerChatMessageMirror.toWire(session: RemoteChatSessionData?) = SignedChat
     lastSeen = signedBody.lastSeen.entries,
     unsignedContent = unsignedContent,
     sessionKey = session?.let {
-        SignedChatMessage.SessionKey(it.expiresAt, it.key, it.keySignature)
+        SessionKey(it.expiresAt, it.key, it.keySignature)
     }
 )
 

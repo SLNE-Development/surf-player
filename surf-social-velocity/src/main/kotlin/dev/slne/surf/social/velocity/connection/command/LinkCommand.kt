@@ -8,20 +8,24 @@ import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.velocity.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.social.api.connection.SurfConnectionApi
+import dev.slne.surf.social.api.connection.findConnection
 import dev.slne.surf.social.api.connection.impl.DiscordConnection
 import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.api.connection.findConnection
-import dev.slne.surf.social.velocity.connection.client
 import dev.slne.surf.social.velocity.connection.config
+import dev.slne.surf.social.velocity.connection.httpClient
 import dev.slne.surf.social.velocity.connection.permission.SocialPermissions
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.Serializable
 import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
+
+private const val ACCOUNT_LINKING_PAGE = "https://auth.castcrafter.de/account?tabs=accounts"
+private const val MINECRAFT_LINK_ENDPOINT = "https://auth.castcrafter.de/api/minecraft-link"
 
 fun linkCommand() = commandTree("link") {
     withPermission(SocialPermissions.COMMAND_LINK)
@@ -31,14 +35,13 @@ fun linkCommand() = commandTree("link") {
             appendInfoPrefix()
             info("Du kannst deine Konten unter ")
             append {
-                variableValue("https://auth.castcrafter.de/account?tabs=accounts")
+                variableValue(ACCOUNT_LINKING_PAGE)
                 decorate(TextDecoration.UNDERLINED)
-                clickOpensUrl("https://auth.castcrafter.de/account?tabs=accounts")
+                clickOpensUrl(ACCOUNT_LINKING_PAGE)
             }
 
             info(" verknüpfen.")
         }
-
     }
 
     stringArgument("code") {
@@ -74,39 +77,20 @@ fun linkCommand() = commandTree("link") {
                 }
 
                 val start = System.currentTimeMillis()
-
-                val (discordConnection, twitchConnection) = coroutineScope {
-                    val discord = async { SurfConnectionApi.findConnection<DiscordConnection>(target.uuid) }
-                    val twitch = async { SurfConnectionApi.findConnection<TwitchConnection>(target.uuid) }
-
-                    discord.await() to twitch.await()
-                }
+                val linkedAccounts = linkedAccountNames(target.uuid)
 
                 sender.sendText {
                     appendInfoPrefix()
                     info("Der Spieler ")
 
-                    if (discordConnection == null && twitchConnection == null) {
+                    if (linkedAccounts.isEmpty()) {
                         error("hat keine Verbindungen.")
-                    }
-
-                    if (discordConnection != null && twitchConnection != null) {
+                    } else {
                         info("ist mit dem ")
-                        variableValue("Twitch Account '${twitchConnection.twitchName}'")
-                        info(" und dem ")
-                        variableValue("Discord Account '${discordConnection.discordName}'")
-                        info(" verbunden.")
-                    }
-
-                    if (discordConnection != null && twitchConnection == null) {
-                        info("ist mit dem ")
-                        variableValue("Discord Account '${discordConnection.discordName}'")
-                        info(" verbunden.")
-                    }
-
-                    if (twitchConnection != null && discordConnection == null) {
-                        info("ist mit dem ")
-                        variableValue("Twitch Account '${twitchConnection.twitchName}'")
+                        linkedAccounts.forEachIndexed { index, account ->
+                            if (index > 0) info(" und dem ")
+                            variableValue(account)
+                        }
                         info(" verbunden.")
                     }
 
@@ -117,23 +101,35 @@ fun linkCommand() = commandTree("link") {
     }
 }
 
+/**
+ * The display names of the Twitch and Discord accounts linked to [playerUuid], Twitch first.
+ */
+private suspend fun linkedAccountNames(playerUuid: UUID): List<String> = coroutineScope {
+    val discord = async { SurfConnectionApi.findConnection<DiscordConnection>(playerUuid) }
+    val twitch = async { SurfConnectionApi.findConnection<TwitchConnection>(playerUuid) }
+
+    listOfNotNull(
+        twitch.await()?.let { "Twitch Account '${it.twitchName}'" },
+        discord.await()?.let { "Discord Account '${it.discordName}'" }
+    )
+}
+
 private suspend fun respondMinecraftAuth(playerUuid: UUID, code: String): Boolean =
     withTimeoutOrNull(5.seconds) {
         runCatching {
-            client.post {
-                url("https://auth.castcrafter.de/api/minecraft-link")
+            httpClient.post {
+                url(MINECRAFT_LINK_ENDPOINT)
                 contentType(ContentType.Application.Json)
                 bearerAuth(config.minecraftAuthToken)
                 userAgent("surf-social-velocity/LinkCommand")
 
-                setBody(
-                    """
-                    {
-                        "minecraftUuid": "$playerUuid",
-                        "code": "$code"
-                    }
-                    """.trimIndent()
-                )
+                setBody(MinecraftLinkRequest(playerUuid.toString(), code))
             }.status.isSuccess()
         }.getOrDefault(false)
     } ?: false
+
+@Serializable
+private data class MinecraftLinkRequest(
+    val minecraftUuid: String,
+    val code: String
+)

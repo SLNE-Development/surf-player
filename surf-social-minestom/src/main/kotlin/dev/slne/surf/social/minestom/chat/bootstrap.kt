@@ -10,7 +10,6 @@ import dev.slne.surf.social.core.client.chat.processor.pre.ValidatorPreChatProce
 import dev.slne.surf.social.core.client.chat.processor.pre.validate.CharPreChatProcessor
 import dev.slne.surf.social.core.client.chat.processor.pre.validate.LinkPreChatProcessor
 import dev.slne.surf.social.core.client.chat.processor.pre.validate.SpamPreChatProcessor
-import dev.slne.surf.social.minestom.chat.listener.ChatEventListener
 import dev.slne.surf.social.minestom.chat.processor.pre.CorrectViewersPreChatProcessor
 import dev.slne.surf.social.minestom.chat.processor.pre.FormatPreChatProcessor
 
@@ -30,11 +29,4 @@ fun registerProcessors() {
     chatProcessorRegistry.register(LogPostChatProcessor)
     chatProcessorRegistry.register(AiModerationPostChatProcessor)
     chatProcessorRegistry.register(PrivateMessageSpyPostChatProcessor)
-}
-
-/**
- * Registers the listener that runs incoming chat messages through the chat pipeline.
- */
-fun registerChatListener() {
-    ChatEventListener.register()
 }

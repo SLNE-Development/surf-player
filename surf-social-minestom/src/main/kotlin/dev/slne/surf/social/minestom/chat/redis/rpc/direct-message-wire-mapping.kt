@@ -1,6 +1,7 @@
 package dev.slne.surf.social.minestom.chat.redis.rpc
 
 import dev.slne.surf.api.minestom.chat.RemoteSignedMessage
+import dev.slne.surf.social.core.client.chat.redis.rpc.SessionKey
 import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
 import net.minestom.server.crypto.ChatSession
 import net.minestom.server.crypto.MessageSignature
@@ -17,7 +18,7 @@ fun RemoteSignedMessage.toWire(session: ChatSession?) = SignedChatMessage(
     lastSeen = lastSeen.map { it.signature() },
     unsignedContent = unsignedContent,
     sessionKey = session?.publicKey()?.let {
-        SignedChatMessage.SessionKey(it.expiresAt(), it.publicKey(), it.signature())
+        SessionKey(it.expiresAt(), it.publicKey(), it.signature())
     }
 )
 

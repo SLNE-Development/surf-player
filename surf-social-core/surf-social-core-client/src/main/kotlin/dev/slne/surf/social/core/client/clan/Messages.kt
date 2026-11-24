@@ -1,13 +1,8 @@
 package dev.slne.surf.social.core.client.clan
 
-@DslMarker
-annotation class MessageMarker
-
 /**
- * The player facing texts shared by every platform.
- *
- * Constants hold the plain texts a command reports through its platform's own failure mechanism;
- * the components hold the ones that are sent directly.
+ * The plain player facing texts a clan command reports through its platform's own failure
+ * mechanism, shared by every platform.
  */
 object Messages {
     const val NOT_IN_CLAN = "Du bist in keinem Clan."

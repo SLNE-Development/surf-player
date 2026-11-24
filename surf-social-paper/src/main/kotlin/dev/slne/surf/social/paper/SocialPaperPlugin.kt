@@ -20,7 +20,7 @@ class SocialPaperPlugin : SuspendingJavaPlugin() {
      * Load/enable order. Clan hooks into chat; nametag and tab hook into clan and
      * content creator, so dependencies come first. Disabling happens in reverse order.
      */
-    private val features: List<PaperFeature> = listOf(
+    private val features: List<PaperSocialFeature> = listOf(
         PaperChatFeature,
         PaperFriendsFeature,
         PaperClanFeature,

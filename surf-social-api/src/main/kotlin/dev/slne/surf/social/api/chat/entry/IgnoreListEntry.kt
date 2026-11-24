@@ -5,7 +5,6 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.*
 
-@Serializable
 /**
  * Represents an entry in the ignore list system.
  *
@@ -14,6 +13,7 @@ import java.util.*
  * It provides properties to identify the user who is ignoring someone,
  * the ignored user's details, and the timestamp of when the ignore action was created.
  */
+@Serializable
 data class IgnoreListEntry(
     /**
      * Represents the unique identifier of a user in the ignore list entry.
@@ -42,5 +42,4 @@ data class IgnoreListEntry(
      * or historical context of entries is relevant.
      */
     val createdAt: SerializableOffsetDateTime
-) {
-}
+)

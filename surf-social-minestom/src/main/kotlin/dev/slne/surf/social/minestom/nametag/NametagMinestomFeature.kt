@@ -1,12 +1,16 @@
 package dev.slne.surf.social.minestom.nametag
 
+import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.social.core.client.nametag.config.NametagConfig
 import dev.slne.surf.social.core.client.nametag.hook.ClanHook
 import dev.slne.surf.social.core.client.nametag.hook.ContentCreatorHook
+import dev.slne.surf.social.core.client.nametag.hook.LuckPermsHook
+import dev.slne.surf.social.core.client.nametag.service.NametagService
 import dev.slne.surf.social.minestom.MinestomSocialFeature
-import dev.slne.surf.social.minestom.SocialMinestomPlugin
-import dev.slne.surf.social.minestom.nametag.hook.registerLuckPermsListeners
-import dev.slne.surf.social.minestom.nametag.listener.NametagListener
+import dev.slne.surf.social.minestom.hook.subscribeToLuckPermsUserChanges
+import dev.slne.surf.social.minestom.nametag.platform.MinestomNametagPlayer
+import kotlinx.coroutines.launch
+import net.minestom.server.entity.Player
 
 /**
  * The former surf-nametag Minestom plugin. Clans and content creators are bundled in the same
@@ -15,17 +19,27 @@ import dev.slne.surf.social.minestom.nametag.listener.NametagListener
 object NametagMinestomFeature : MinestomSocialFeature {
     override val id = "nametag"
 
-    val dataDirectory get() = SocialMinestomPlugin.featureDataDirectory(this)
-
     override suspend fun onLoad() {
         NametagConfig.init()
 
-        registerLuckPermsListeners()
+        subscribeToLuckPermsUserChanges(LuckPermsHook::updatePlayer)
         ClanHook.createListeners()
         ContentCreatorHook.registerListener()
     }
 
-    override suspend fun onEnable() {
-        NametagListener.register(SocialMinestomPlugin.eventNode)
+    override fun onPlayerJoin(player: Player) {
+        val nametagPlayer = MinestomNametagPlayer(player)
+
+        minestomScope.launch {
+            NametagService.handleJoin(nametagPlayer)
+        }
+    }
+
+    override fun onPlayerQuit(player: Player) {
+        val nametagPlayer = MinestomNametagPlayer(player)
+
+        minestomScope.launch {
+            NametagService.handleLeave(nametagPlayer)
+        }
     }
 }

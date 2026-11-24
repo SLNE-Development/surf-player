@@ -3,9 +3,9 @@ package dev.slne.surf.social.paper.clan.commands.subcommands
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.social.api.clan.clan.Clan
+import dev.slne.surf.social.paper.clan.commands.failCommand
 import dev.slne.surf.social.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaitingOrNull
-import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.core.client.clan.Messages
 import dev.slne.surf.social.core.client.clan.command.whoisMessage
@@ -17,14 +17,7 @@ fun CommandAPICommand.clanWhoisCommand() = subcommand("whois") {
     surfOfflinePlayerArgument("target")
     playerExecutorSuspend { player, args ->
         val target = args.awaitingOrNull<SurfPlayer?>("target")
-
-        if (target == null) {
-            player.sendText {
-                appendErrorPrefix()
-                error(Messages.PLAYER_NOT_FOUND)
-            }
-            return@playerExecutorSuspend
-        }
+            ?: failCommand(Messages.PLAYER_NOT_FOUND)
 
         val targetName = target.lastKnownName ?: target.uuid.toString()
         player.sendMessage(whoisMessage(targetName, Clan.byPlayer(target.uuid)))

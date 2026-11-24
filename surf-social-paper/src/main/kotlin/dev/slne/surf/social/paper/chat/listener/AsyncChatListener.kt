@@ -2,6 +2,7 @@ package dev.slne.surf.social.paper.chat.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
+import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.social.api.chat.message.MessageContext
 import dev.slne.surf.social.api.chat.message.MessageData
 import dev.slne.surf.social.api.chat.message.MessageType
@@ -9,8 +10,6 @@ import dev.slne.surf.social.api.chat.message.redirector.MessageRedirectorRegistr
 import dev.slne.surf.social.core.client.chat.processor.runPostProcessors
 import dev.slne.surf.social.core.client.chat.processor.runPreProcessors
 import dev.slne.surf.social.paper.plugin
-import dev.slne.surf.social.paper.chat.util.cancel
-import dev.slne.surf.core.api.common.SurfCoreApi
 import io.papermc.paper.event.player.AsyncChatEvent
 import kotlinx.coroutines.runBlocking
 import org.bukkit.event.EventHandler
@@ -21,49 +20,39 @@ import java.util.*
 object AsyncChatListener : Listener {
     @EventHandler
     fun onAsyncChat(event: AsyncChatEvent) {
-        val sentAt = OffsetDateTime.now()
-        val sender = event.player
-
-        val message = event.message()
-        val messageId = UUID.randomUUID()
-
         val signedMessage = event.signedMessage()
-
-        var data = MessageData(
-            message,
-            messageId,
-            sender.uniqueId,
+        val data = MessageData(
+            event.message(),
+            UUID.randomUUID(),
+            event.player.uniqueId,
             null,
-            sentAt,
+            OffsetDateTime.now(),
             SurfCoreApi.getCurrentServerName(),
             signedMessage.signature(),
             MessageType.GLOBAL
         )
 
-        var cancelled = false
-
-        runBlocking {
-            val result = runPreProcessors(MessageContext(data, event.isCancelled, event.viewers()))
-            data = result.messageData
-            cancelled = result.isCancelled
-
-            if (result.isCancelled) {
-                event.cancel()
-            }
-
-            event.renderer { _, _, _, viewer ->
-                viewer.uuidOrNull()?.let { result.render(it, viewer) } ?: event.message()
-            }
+        // The event must be modified before this handler returns, so pre-processing blocks.
+        val result = runBlocking {
+            runPreProcessors(MessageContext(data, event.isCancelled, event.viewers()))
         }
 
-        val postContext = MessageContext(data, cancelled, event.viewers())
-        val postData = data
+        if (result.isCancelled) {
+            event.isCancelled = true
+        }
+
+        event.renderer { _, _, _, viewer ->
+            viewer.uuidOrNull()?.let { result.render(it, viewer) } ?: event.message()
+        }
+
+        val processedData = result.messageData
+        val postContext = MessageContext(processedData, result.isCancelled, event.viewers())
 
         plugin.launch {
             runPostProcessors(postContext)
 
             MessageRedirectorRegistry.redirectors.forEach {
-                it.redirectMessage(signedMessage, postData)
+                it.redirectMessage(signedMessage, processedData)
             }
         }
     }

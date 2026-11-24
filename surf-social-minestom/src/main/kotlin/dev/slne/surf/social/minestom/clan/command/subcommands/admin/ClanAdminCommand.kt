@@ -12,7 +12,7 @@ import dev.slne.surf.social.core.client.clan.command.clanDeletedMessage
 import dev.slne.surf.social.core.client.clan.command.invalidatedCachesMessage
 import dev.slne.surf.social.core.client.clan.command.invalidatingCachesMessage
 import dev.slne.surf.social.core.client.clan.permission.ClanPermissions
-import dev.slne.surf.social.core.client.clan.redis.RedisService
+import dev.slne.surf.social.core.client.clan.redis.ClanCaches
 import dev.slne.surf.social.core.common.clan.config.ClanConfig
 
 fun CommandAPICommand.clanAdminCommand(): CommandAPICommand = withSubcommand(
@@ -44,7 +44,7 @@ private fun CommandAPICommand.clanInvalidateAllCachesCommand(): CommandAPIComman
         anyExecutorSuspend { source, _ ->
             source.sendMessage(invalidatingCachesMessage())
 
-            RedisService.get().invalidateAllCaches()
+            ClanCaches.invalidateAll()
 
             source.sendMessage(invalidatedCachesMessage())
         }

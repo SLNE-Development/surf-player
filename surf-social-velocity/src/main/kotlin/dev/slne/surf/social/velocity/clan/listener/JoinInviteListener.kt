@@ -3,23 +3,24 @@ package dev.slne.surf.social.velocity.clan.listener
 import com.github.shynixn.mccoroutine.velocity.launch
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.player.ServerConnectedEvent
-import dev.slne.surf.social.api.clan.invite.ClanInvite
-import dev.slne.surf.social.velocity.plugin
 import dev.slne.surf.api.core.font.toSmallCaps
-import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
+import dev.slne.surf.social.api.clan.invite.ClanInvite
+import dev.slne.surf.social.core.client.clan.components.ClanComponents
 import dev.slne.surf.social.core.common.clan.clan.ClanImpl
-import dev.slne.surf.social.core.client.clan.components.Components
+import dev.slne.surf.social.velocity.plugin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.ComponentLike
-import net.kyori.adventure.text.event.ClickEvent
 import kotlin.time.Duration.Companion.seconds
 
+private const val MAX_CONCURRENT_CLAN_LOOKUPS = 64
+
+/**
+ * Lists the pending clan invitations of a player once they have joined the network.
+ */
 object JoinInviteListener {
     @Subscribe
     fun onServerConnected(event: ServerConnectedEvent) {
@@ -39,57 +40,41 @@ object JoinInviteListener {
                 return@launch
             }
 
-            val data = arrayOfNulls<ClanInviteRenderData>(invites.size)
-            val semaphore = Semaphore(64)
-
-            supervisorScope {
-                invites.forEachIndexed { slot, invite ->
-                    launch {
-                        semaphore.withPermit {
-                            val clan = invite.getClan() ?: return@launch
-                            data[slot] = ClanInviteRenderData(
-                                clanInformationHover = Components.Clan.renderClanInformationHover(
-                                    clan as ClanImpl
-                                ),
-                                clanName = clan.name
-                            )
-                        }
-                    }
-                }
-            }
+            val renderedInvites = renderInvites(invites)
 
             player.sendText {
                 appendInfoPrefix()
                 info("Du hast noch ".toSmallCaps())
                 variableValue(invites.size)
                 info(" offene Clan-Einladung${if (invites.size == 1) "" else "en"}.".toSmallCaps())
-                appendCollectionNewLine(data.filterNotNull()) { it.asComponent() }
+                appendCollectionNewLine(renderedInvites) { it.asComponent() }
             }
         }
     }
 
-    private data class ClanInviteRenderData(
-        private val clanInformationHover: Component,
-        private val clanName: String
-    ) : ComponentLike {
-        override fun asComponent(): Component = buildText {
-            append(clanInformationHover)
-            appendSpace()
-            append {
-                success("[Annehmen]")
-                hoverEvent(buildText {
-                    info("Klicke hier, um die Einladung anzunehmen.")
-                })
-                clickEvent(ClickEvent.runCommand("/clan accept $clanName"))
-            }
-            appendSpace()
-            append {
-                error("[Ablehnen]")
-                hoverEvent(buildText {
-                    info("Klicke hier, um die Einladung abzulehnen.")
-                })
-                clickEvent(ClickEvent.runCommand("/clan deny $clanName"))
+    /**
+     * Renders [invites] in their order, leaving out invitations whose clan no longer exists.
+     */
+    private suspend fun renderInvites(invites: List<ClanInvite>): List<ClanInviteRenderData> {
+        val rendered = arrayOfNulls<ClanInviteRenderData>(invites.size)
+        val semaphore = Semaphore(MAX_CONCURRENT_CLAN_LOOKUPS)
+
+        supervisorScope {
+            invites.forEachIndexed { slot, invite ->
+                launch {
+                    semaphore.withPermit {
+                        val clan = invite.getClan() ?: return@launch
+                        rendered[slot] = ClanInviteRenderData(
+                            clanInformationHover = ClanComponents.renderClanInformationHover(
+                                clan as ClanImpl
+                            ),
+                            clanName = clan.name
+                        )
+                    }
+                }
             }
         }
+
+        return rendered.filterNotNull()
     }
 }

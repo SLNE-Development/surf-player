@@ -6,6 +6,7 @@ import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.social.api.clan.clan.ClanTagColor
+import dev.slne.surf.social.api.clan.clan.ClanTagColorUpdate
 import dev.slne.surf.social.api.clan.permission.ClanPermission
 import dev.slne.surf.social.paper.clan.commands.arguments.color.ClanTagHexColorArgument
 import dev.slne.surf.social.paper.clan.commands.arguments.color.ClanTagShadowHexColorArgument
@@ -50,7 +51,7 @@ fun CommandAPICommand.clanTagColorCommand() = subcommand("tagcolor") {
     }
 }
 
-private suspend fun changeColor(sender: Player, update: ClanTagColor.Update) {
+private suspend fun changeColor(sender: Player, update: ClanTagColorUpdate) {
     val clan = Clan.byPlayer(sender.uniqueId)
         ?: failCommand(Messages.NOT_IN_CLAN)
 

@@ -4,20 +4,20 @@ import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.core.client.connection.service.SocialConnectionsService
-import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
+import dev.slne.surf.social.core.common.connection.rabbit.rpc.UnlinkResult
 import dev.slne.surf.social.velocity.connection.permission.SocialPermissions
-import dev.slne.surf.social.velocity.plugin
+import dev.slne.surf.social.velocity.connection.redis.DiscordRoleAction
 import dev.slne.surf.social.velocity.connection.redis.DiscordRolesPublisher
-import dev.slne.surf.social.velocity.connection.redis.SocialRedisService
+import dev.slne.surf.social.velocity.plugin
 import kotlinx.coroutines.CancellationException
 
 fun unlinkCommand() = commandTree("unlink") {
     withPermission(SocialPermissions.COMMAND_UNLINK)
 
-    playerExecutorSuspend { player, arguments ->
+    playerExecutorSuspend { player, _ ->
         val result = SocialConnectionsService.unlinkMinecraftAccount(player.uniqueId)
 
-        if (result == SocialConnectionRpc.UnlinkResult.NotLinked) {
+        if (result == UnlinkResult.NotLinked) {
             player.sendText {
                 appendErrorPrefix()
                 error("Du hast keinen verknüpften Account.")
@@ -26,31 +26,29 @@ fun unlinkCommand() = commandTree("unlink") {
             return@playerExecutorSuspend
         }
 
-        require(result is SocialConnectionRpc.UnlinkResult.Unlinked) {
+        require(result is UnlinkResult.Unlinked) {
             "Unexpected result type: ${result::class.java.name}"
         }
 
-        val discordId = result.discordId
-
-        if (discordId != null) {
-            try {
-                SocialRedisService.discordRolesPublisher.publish(
-                    DiscordRolesPublisher.Request.Action.REMOVE,
-                    discordId
-                )
-            } catch (cancellation: CancellationException) {
-                throw cancellation
-            } catch (throwable: Throwable) {
-                plugin.logger.error(
-                    "Failed to publish the discord role removal for user $discordId",
-                    throwable
-                )
-            }
-        }
+        result.discordId?.let { revokeDiscordRoles(it) }
 
         player.sendText {
             appendSuccessPrefix()
             success("Dein Minecraft Account wurde entkoppelt.")
         }
+    }
+}
+
+/**
+ * Asks surf-discord to remove the roles of the Discord user [discordId]; a failure is logged since
+ * the account is unlinked either way.
+ */
+private suspend fun revokeDiscordRoles(discordId: Long) {
+    try {
+        DiscordRolesPublisher.publish(DiscordRoleAction.REMOVE, discordId)
+    } catch (cancellation: CancellationException) {
+        throw cancellation
+    } catch (exception: Exception) {
+        plugin.logger.error("Failed to publish the discord role removal for user $discordId", exception)
     }
 }

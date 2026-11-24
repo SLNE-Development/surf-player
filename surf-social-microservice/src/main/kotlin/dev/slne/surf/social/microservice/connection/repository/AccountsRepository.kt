@@ -2,27 +2,23 @@ package dev.slne.surf.social.microservice.connection.repository
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.asLoadingCache
+import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.Op
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.and
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.eq
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.core.inSubQuery
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteReturning
-import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.select
 import dev.slne.surf.database.libs.org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import dev.slne.surf.social.api.connection.impl.DiscordConnection
 import dev.slne.surf.social.api.connection.impl.TwitchConnection
-import dev.slne.surf.social.core.common.connection.rabbit.rpc.SocialConnectionRpc
+import dev.slne.surf.social.core.common.connection.rabbit.rpc.UnlinkResult
 import dev.slne.surf.social.microservice.connection.config.SocialConfig
 import dev.slne.surf.social.microservice.connection.table.AccountsTable
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.future.await
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import org.slf4j.LoggerFactory
+import kotlinx.serialization.json.*
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -35,12 +31,13 @@ object AccountsRepository {
     private const val PROVIDER_MINECRAFT = "minecraft"
     private const val PROVIDER_DISCORD = "discord"
     private const val PROVIDER_TWITCH = "twitch"
+    private val REQUEST_TIMEOUT = Duration.ofSeconds(5)
 
-    private val logger = LoggerFactory.getLogger(AccountsRepository::class.java)
+    private val log = logger()
 
     private val httpClient = HttpClient.newBuilder()
         .followRedirects(HttpClient.Redirect.NORMAL)
-        .connectTimeout(Duration.ofSeconds(5))
+        .connectTimeout(REQUEST_TIMEOUT)
         .build()
 
     private val json = Json { ignoreUnknownKeys = true }
@@ -55,42 +52,30 @@ object AccountsRepository {
         .expireAfterWrite(30, TimeUnit.MINUTES)
         .asLoadingCache<Long, String> { fetchTwitchName(it) }
 
-    suspend fun findDiscordConnection(
-        minecraftUuid: UUID
-    ): DiscordConnection? {
+    suspend fun findDiscordConnection(minecraftUuid: UUID): DiscordConnection? {
         val discordId = findLinkedProviderAccountId(PROVIDER_DISCORD, minecraftUuid) ?: return null
-
-        return DiscordConnection(
-            discordId = discordId,
-            discordName = discordNameCache.get(discordId)
-        )
+        return DiscordConnection(discordId = discordId, discordName = discordNameCache.get(discordId))
     }
 
-    suspend fun findTwitchConnection(
-        minecraftUuid: UUID
-    ): TwitchConnection? {
+    suspend fun findTwitchConnection(minecraftUuid: UUID): TwitchConnection? {
         val twitchId = findLinkedProviderAccountId(PROVIDER_TWITCH, minecraftUuid) ?: return null
-
-        return TwitchConnection(
-            twitchId = twitchId,
-            twitchName = twitchNameCache.get(twitchId)
-        )
+        return TwitchConnection(twitchId = twitchId, twitchName = twitchNameCache.get(twitchId))
     }
 
-    suspend fun unlinkMinecraftAccount(minecraftUuid: UUID) = suspendTransaction {
-        AccountsTable.deleteWhere { (AccountsTable.provider eq PROVIDER_MINECRAFT) and (AccountsTable.providerAccountId eq minecraftUuid.toString()) } > 0
-    }
-
-    suspend fun unlinkMinecraftAccountWithResult(
+    /**
+     * Removes the Minecraft account link of [minecraftUuid] and reports the Discord account that was
+     * linked to the same user, so the caller can update it.
+     */
+    suspend fun unlinkMinecraftAccount(
         minecraftUuid: UUID
-    ): SocialConnectionRpc.UnlinkResult = suspendTransaction {
+    ): UnlinkResult = suspendTransaction {
         val deletedMinecraftAccount = AccountsTable
             .deleteReturning(listOf(AccountsTable.userId)) {
                 (AccountsTable.provider eq PROVIDER_MINECRAFT) and
                         (AccountsTable.providerAccountId eq minecraftUuid.toString())
             }
             .firstOrNull()
-            ?: return@suspendTransaction SocialConnectionRpc.UnlinkResult.NotLinked
+            ?: return@suspendTransaction UnlinkResult.NotLinked
 
         val linkedUserId = deletedMinecraftAccount[AccountsTable.userId]
 
@@ -105,7 +90,7 @@ object AccountsRepository {
             ?.getOrNull(AccountsTable.providerAccountId)
             ?.toLongOrNull()
 
-        SocialConnectionRpc.UnlinkResult.Unlinked(discordId)
+        UnlinkResult.Unlinked(discordId)
     }
 
     /**
@@ -135,75 +120,57 @@ object AccountsRepository {
                         )
                 )
 
-    private suspend fun fetchDiscordName(discordId: Long): String {
+    private suspend fun fetchDiscordName(discordId: Long): String =
+        fetchDisplayName("Discord", discordId, "https://discord.com/api/users/$discordId", {
+            header("Authorization", "Bot ${SocialConfig.discordBotToken}")
+        }) { body ->
+            val user = body.jsonObject
+            user.stringOrNull("global_name") ?: user.stringOrNull("username")
+        }
+
+    private suspend fun fetchTwitchName(twitchId: Long): String =
+        fetchDisplayName("Twitch", twitchId, "https://api.ivr.fi/v2/twitch/user?id=$twitchId") { body ->
+            val user = (body as? JsonArray)?.firstOrNull()?.jsonObject
+            user?.stringOrNull("displayName") ?: user?.stringOrNull("login")
+        }
+
+    /**
+     * Fetches the display name of account [id] on [platform] from [url]. Falls back to the id itself
+     * when the request fails or the response carries no name.
+     */
+    private suspend fun fetchDisplayName(
+        platform: String,
+        id: Long,
+        url: String,
+        configureRequest: HttpRequest.Builder.() -> Unit = {},
+        parseName: (JsonElement) -> String?
+    ): String {
         return try {
             val request = HttpRequest.newBuilder()
-                .uri(URI.create("https://discord.com/api/users/${discordId}"))
-                .header("Authorization", "Bot ${SocialConfig.discordBotToken}")
+                .uri(URI.create(url))
                 .header("Accept", "application/json")
-                .timeout(Duration.ofSeconds(5))
+                .timeout(REQUEST_TIMEOUT)
                 .GET()
+                .apply(configureRequest)
                 .build()
 
             val response = httpClient
                 .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .await()
 
-            if (response.statusCode() == 200) {
-                val jsonObject = json.parseToJsonElement(response.body()).jsonObject
-                val globalName = jsonObject["global_name"]?.jsonPrimitive?.content
-                val username = jsonObject["username"]?.jsonPrimitive?.content
-
-                globalName ?: username ?: discordId.toString()
-            } else {
-                logger.warn(
-                    "Discord API returned status {} for user {}",
-                    response.statusCode(),
-                    discordId
-                )
-                discordId.toString()
+            if (response.statusCode() != 200) {
+                log.atWarning().log("%s API returned status %s for user %s", platform, response.statusCode(), id)
+                return id.toString()
             }
+
+            parseName(json.parseToJsonElement(response.body())) ?: id.toString()
         } catch (cancellation: CancellationException) {
             throw cancellation
         } catch (e: Exception) {
-            logger.warn("Failed to fetch Discord name for id {}: {}", discordId, e.message)
-            discordId.toString()
+            log.atWarning().log("Failed to fetch %s name for id %s: %s", platform, id, e.message)
+            id.toString()
         }
     }
 
-    private suspend fun fetchTwitchName(twitchId: Long): String {
-        return try {
-            val request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.ivr.fi/v2/twitch/user?id=${twitchId}"))
-                .header("Accept", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .GET()
-                .build()
-
-            val response = httpClient
-                .sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .await()
-
-            if (response.statusCode() == 200) {
-                val jsonArray = json.parseToJsonElement(response.body())
-
-                if (jsonArray is JsonArray && jsonArray.isNotEmpty()) {
-                    val userObject = jsonArray[0].jsonObject
-                    val displayName = userObject["displayName"]?.jsonPrimitive?.content
-                    val login = userObject["login"]?.jsonPrimitive?.content
-
-                    displayName ?: login ?: twitchId.toString()
-                } else {
-                    twitchId.toString()
-                }
-            } else {
-                twitchId.toString()
-            }
-        } catch (cancellation: CancellationException) {
-            throw cancellation
-        } catch (e: Exception) {
-            logger.warn("Failed to fetch Twitch name for id {}: {}", twitchId, e.message)
-            twitchId.toString()
-        }
-    }
+    private fun JsonObject.stringOrNull(key: String): String? = this[key]?.jsonPrimitive?.contentOrNull
 }
