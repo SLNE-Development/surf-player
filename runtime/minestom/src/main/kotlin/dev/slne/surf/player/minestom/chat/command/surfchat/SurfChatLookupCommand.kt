@@ -12,7 +12,7 @@ import dev.slne.surf.player.core.client.chat.lookup.lookupPagination
 import dev.slne.surf.player.core.client.chat.lookup.parseFilters
 import dev.slne.surf.player.core.client.chat.lookup.resolveSenderNames
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.player.core.common.chat.service.HistoryService
+import dev.slne.surf.player.core.client.chat.service.HistoryService
 import kotlinx.coroutines.TimeoutCancellationException
 
 fun CommandAPICommand.surfChatLookupCommand(): CommandAPICommand = withSubcommand(

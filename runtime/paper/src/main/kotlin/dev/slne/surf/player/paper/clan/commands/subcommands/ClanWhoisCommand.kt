@@ -2,6 +2,7 @@ package dev.slne.surf.player.paper.clan.commands.subcommands
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.paper.clan.commands.failCommand
 import dev.slne.surf.player.paper.clan.permission.ClanPermissions
@@ -20,6 +21,6 @@ fun CommandAPICommand.clanWhoisCommand() = subcommand("whois") {
             ?: failCommand(Messages.PLAYER_NOT_FOUND)
 
         val targetName = target.lastKnownName ?: target.uuid.toString()
-        player.sendMessage(whoisMessage(targetName, Clan.byPlayer(target.uuid)))
+        player.sendMessage(whoisMessage(targetName, SurfClanApi.findClanByPlayer(target.uuid)))
     }
 }

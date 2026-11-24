@@ -7,7 +7,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.minestom.chat.command.argument.niceToggleArgument
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.minestom.server.entity.Player

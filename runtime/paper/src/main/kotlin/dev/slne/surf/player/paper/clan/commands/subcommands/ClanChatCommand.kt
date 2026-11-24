@@ -1,6 +1,7 @@
 package dev.slne.surf.player.paper.clan.commands.subcommands
 
 import dev.jorel.commandapi.CommandAPICommand
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.core.command.args.awaiting
@@ -27,7 +28,7 @@ class ClanChatCommand(name: String) : CommandAPICommand(name) {
         asyncSignedMessageArgument("message")
 
         playerExecutorSuspend { player, arguments ->
-            val playerClan = Clan.byPlayer(player.uniqueId)
+            val playerClan = SurfClanApi.findClanByPlayer(player.uniqueId)
             val message = arguments.awaiting<SignedMessage>("message")
 
             if (playerClan == null) {
@@ -44,9 +45,9 @@ class ClanChatCommand(name: String) : CommandAPICommand(name) {
             playerClan.members.forEach { member ->
                 launch {
                     SurfChatApi.sendSignedMessage(
-                        message,
                         player.uniqueId,
                         member.uuid,
+                        message,
                         formattedMessage
                     )
                 }

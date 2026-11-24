@@ -2,6 +2,7 @@ package dev.slne.surf.player.core.common.clan.member
 
 import dev.slne.surf.player.api.clan.member.ClanMember
 import dev.slne.surf.player.api.clan.member.ClanMemberRole
+import dev.slne.surf.player.core.common.clan.CoreClanApi
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableStringUUID
 import kotlinx.serialization.Serializable
@@ -18,7 +19,7 @@ data class ClanMemberImpl(
     override val lastActiveAt: SerializableOffsetDateTime = OffsetDateTime.now()
 ) : AbstractClanMemberView(), ClanMember {
     override suspend fun changeRole(role: ClanMemberRole): Boolean {
-        return CoreClanMemberService.Companion.changeRole(this, role)
+        return CoreClanApi.changeRole(this, role)
     }
 
     override fun view() = ClanMemberViewImpl(

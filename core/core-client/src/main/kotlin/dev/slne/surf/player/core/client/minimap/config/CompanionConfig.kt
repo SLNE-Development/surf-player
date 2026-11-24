@@ -1,14 +1,14 @@
 package dev.slne.surf.player.core.client.minimap.config
 
 import dev.slne.surf.api.core.config.SpongeYmlConfigClass
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlatform
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlatform
 
 /**
  * Loads [MinimapCompanionConfig] from `config.yml` in the plugin's data directory.
  */
 object CompanionConfig : SpongeYmlConfigClass<MinimapCompanionConfig>(
     MinimapCompanionConfig::class.java,
-    CompanionPlatform.dataPath,
+    MinimapPlatform.dataPath,
     "config.yml"
 )
 
@@ -17,7 +17,7 @@ object CompanionConfig : SpongeYmlConfigClass<MinimapCompanionConfig>(
  */
 object CompanionXaeroConfig : SpongeYmlConfigClass<XaeroConfig>(
     XaeroConfig::class.java,
-    CompanionPlatform.dataPath,
+    MinimapPlatform.dataPath,
     "xaero.yml"
 )
 
@@ -26,7 +26,7 @@ object CompanionXaeroConfig : SpongeYmlConfigClass<XaeroConfig>(
  */
 object CompanionJourneyMapConfig : SpongeYmlConfigClass<JourneyMapConfig>(
     JourneyMapConfig::class.java,
-    CompanionPlatform.dataPath,
+    MinimapPlatform.dataPath,
     "journeymap.yml"
 )
 
@@ -35,6 +35,6 @@ object CompanionJourneyMapConfig : SpongeYmlConfigClass<JourneyMapConfig>(
  */
 object CompanionVoxelMapConfig : SpongeYmlConfigClass<VoxelMapConfig>(
     VoxelMapConfig::class.java,
-    CompanionPlatform.dataPath,
+    MinimapPlatform.dataPath,
     "voxelmap.yml"
 )

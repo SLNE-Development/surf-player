@@ -1,20 +1,25 @@
 package dev.slne.surf.player.core.client.contentcreator.service
 
+import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.api.core.util.toObjectSet
 import dev.slne.surf.player.api.contentcreator.ContentCreator
+import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
+import dev.slne.surf.player.api.contentcreator.listener.StateChangeListener
 import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
-import dev.slne.surf.player.core.client.contentcreator.ContentCreatorInstance
 import dev.slne.surf.player.core.client.contentcreator.CoreContentCreator
 import dev.slne.surf.player.api.connection.SurfConnectionApi
-import dev.slne.surf.player.api.connection.impl.TwitchConnection
-import dev.slne.surf.player.api.connection.findConnection
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArraySet
 
 object ContentCreatorService {
+
+    private val log = logger()
+
+    private val stateChangeListeners = CopyOnWriteArraySet<StateChangeListener>()
 
     private val coreCreators = ConcurrentHashMap<UUID, CoreContentCreator>()
     private val onlineSessions = ConcurrentHashMap.newKeySet<UUID>()
@@ -38,7 +43,7 @@ object ContentCreatorService {
         return coreCreators.remove(playerUuid)
     }
 
-    suspend fun cacheCreator(playerUuid: UUID) = SurfConnectionApi.findConnection<TwitchConnection>(playerUuid)?.let {
+    suspend fun cacheCreator(playerUuid: UUID) = SurfConnectionApi.findTwitchConnection(playerUuid)?.let {
         val creator = CoreContentCreator(playerUuid).also { c ->
             c.twitchName = it.twitchName
         }
@@ -68,9 +73,36 @@ object ContentCreatorService {
         val platform = getContentCreator(playerUuid)?.getPlatform(platformType) ?: return false
 
         platform.state = newState
-        ContentCreatorInstance.callOnStateChangeListener(playerUuid, platform, newState)
+        callOnStateChangeListener(playerUuid, platform, newState)
 
         return true
+    }
+
+    fun registerStateChangeListener(listener: StateChangeListener) {
+        stateChangeListeners.add(listener)
+    }
+
+    /**
+     * Notifies every registered [StateChangeListener] that [contentCreatorPlatform] of [playerUuid]
+     * changed to [newState]. A listener that throws does not stop the others.
+     */
+    fun callOnStateChangeListener(
+        playerUuid: UUID,
+        contentCreatorPlatform: ContentCreatorPlatform,
+        newState: PlatformState
+    ) {
+        for (listener in stateChangeListeners) {
+            try {
+                listener.onStateChanged(playerUuid, contentCreatorPlatform, newState)
+            } catch (e: Exception) {
+                log.atWarning()
+                    .withCause(e)
+                    .log(
+                        "State change listener ${listener.javaClass.name} threw while handling " +
+                                "$newState for $playerUuid."
+                    )
+            }
+        }
     }
 
     /**

@@ -1,15 +1,15 @@
 package dev.slne.surf.player.api
 
-import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.player.api.chat.SurfChatApi
 import dev.slne.surf.player.api.connection.SurfConnectionApi
-import dev.slne.surf.player.api.contentcreator.ContentCreatorApi
-import dev.slne.surf.player.api.friends.player.FriendsPlayerManager
-import dev.slne.surf.player.api.minimap.SurfMinimapCompanionApi
+import dev.slne.surf.player.api.contentcreator.SurfContentCreatorApi
+import dev.slne.surf.player.api.clan.SurfClanApi
+import dev.slne.surf.player.api.friends.SurfFriendsApi
+import dev.slne.surf.player.api.minimap.SurfMinimapApi
 import dev.slne.surf.player.api.nametag.SurfNametagApi
 import dev.slne.surf.player.api.playtime.SurfPlaytimeApi
 import dev.slne.surf.player.api.profile.SurfProfileApi
-import dev.slne.surf.player.api.queue.SurfQueue
+import dev.slne.surf.player.api.queue.SurfQueueApi
 import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.tab.SurfTabApi
 import dev.slne.surf.player.api.vanish.SurfVanishApi
@@ -31,16 +31,13 @@ object SurfPlayerApi {
     fun player(uuid: UUID): SurfCommunityPlayer = SurfCommunityPlayer(uuid)
 
     /** Per-player settings such as chat pings or direct messages (Paper, Minestom and Velocity). */
-    val settings: SurfSettingsApi get() = SurfSettingsApi
+    val settings: SurfSettingsApi get() = SurfSettingsApi.INSTANCE
 
     /** The profile menu of players (Paper and Minestom). */
     val profile: SurfProfileApi get() = SurfProfileApi.INSTANCE
 
-    /** The queue of players waiting to join the server named [serverName]. */
-    fun queue(serverName: String): SurfQueue = SurfQueue.byServer(serverName)
-
-    /** The queue of players waiting to join [server]. */
-    fun queue(server: SurfServer): SurfQueue = SurfQueue.byServer(server)
+    /** The queues of players waiting to join a server, one per server. */
+    val queue: SurfQueueApi get() = SurfQueueApi.INSTANCE
 
     /** Chat processing, message history and ignore lists. */
     val chat: SurfChatApi get() = SurfChatApi.INSTANCE
@@ -51,24 +48,24 @@ object SurfPlayerApi {
     /** Tab list placeholders and entry updates. */
     val tab: SurfTabApi get() = SurfTabApi.INSTANCE
 
-    /** Friendships and friend requests, resolved per player. */
-    val friends: FriendsPlayerManager get() = FriendsPlayerManager.INSTANCE
+    /** Friendships and friend requests. */
+    val friends: SurfFriendsApi get() = SurfFriendsApi.INSTANCE
 
     /** Player nametags above the head. */
     val nametags: SurfNametagApi get() = SurfNametagApi.INSTANCE
 
     /** Content creators and their live state (e.g. Twitch). */
-    val contentCreators: ContentCreatorApi get() = ContentCreatorApi.INSTANCE
+    val contentCreators: SurfContentCreatorApi get() = SurfContentCreatorApi.INSTANCE
 
     /** Linked Discord/Twitch accounts of players. */
     val connections: SurfConnectionApi get() = SurfConnectionApi.INSTANCE
 
-    /** Access to clans and their members, invites and players. */
-    val clans: SurfPlayerClans get() = SurfPlayerClans
+    /** Clans and their members and invites. */
+    val clans: SurfClanApi get() = SurfClanApi.INSTANCE
 
     /** Vanished players in the network (Paper only). */
     val vanish: SurfVanishApi get() = SurfVanishApi.INSTANCE
 
     /** Level IDs the minimap mods (Xaero, JourneyMap, VoxelMap) see (Paper and Minestom). */
-    val minimap: SurfMinimapCompanionApi get() = SurfMinimapCompanionApi.INSTANCE
+    val minimap: SurfMinimapApi get() = SurfMinimapApi.INSTANCE
 }

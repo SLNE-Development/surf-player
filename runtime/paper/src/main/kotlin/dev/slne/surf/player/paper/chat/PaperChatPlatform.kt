@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.folia.launch
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.paper.extensions.server
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
+import dev.slne.surf.player.paper.chat.service.SignedMessageSender
 import dev.slne.surf.player.paper.chat.util.schedulePingSound
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
@@ -50,5 +51,26 @@ class PaperChatPlatform : ChatPlatform {
 
     override fun launchAsync(block: suspend CoroutineScope.() -> Unit) {
         plugin.launch { block() }
+    }
+
+    override suspend fun sendSignedMessage(
+        senderUuid: UUID,
+        targetUuid: UUID,
+        signedMessage: SignedMessage,
+        contentComponent: Component
+    ) {
+        val sender = Bukkit.getPlayer(senderUuid)
+
+        if (sender == null) {
+            plugin.logger.warning("Tried to send signed message from offline player $senderUuid to $targetUuid!")
+            return
+        }
+
+        val target = Bukkit.getPlayer(targetUuid)
+        if (target != null) {
+            SignedMessageSender.sendLocalSignedMessage(sender, target, contentComponent, signedMessage)
+        } else {
+            SignedMessageSender.sendRemoteSignedMessage(sender, targetUuid, contentComponent, signedMessage)
+        }
     }
 }

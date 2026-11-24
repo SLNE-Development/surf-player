@@ -5,6 +5,7 @@ import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.player.ServerConnectedEvent
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.sendText
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.invite.ClanInvite
 import dev.slne.surf.player.core.client.clan.components.ClanComponents
 import dev.slne.surf.player.core.common.clan.clan.ClanImpl
@@ -34,7 +35,7 @@ object JoinInviteListener {
                 return@launch
             }
 
-            val invites = ClanInvite.pendingInvitesByPlayer(player.uniqueId)
+            val invites = SurfClanApi.findClanInvites(player.uniqueId)
 
             if (invites.isEmpty()) {
                 return@launch

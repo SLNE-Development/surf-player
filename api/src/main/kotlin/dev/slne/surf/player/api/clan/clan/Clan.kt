@@ -1,6 +1,5 @@
 package dev.slne.surf.player.api.clan.clan
 
-import dev.slne.surf.player.api.clan.clan.listener.ClanListener
 import dev.slne.surf.player.api.clan.invite.ClanInvite
 import dev.slne.surf.player.api.clan.invite.ClanInviteResult
 import dev.slne.surf.player.api.clan.member.ClanMember
@@ -10,9 +9,6 @@ import net.kyori.adventure.text.format.ShadowColor
 import net.kyori.adventure.text.format.TextColor
 import org.jetbrains.annotations.ApiStatus
 import java.util.*
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import kotlin.time.Duration.Companion.days
 
 /**
@@ -172,99 +168,6 @@ interface Clan : ClanView {
          * The maximum allowed length for a clan tag.
          */
         const val MAX_TAG_LENGTH = 4
-
-        /**
-         * Registers a listener to receive clan-related events.
-         *
-         * @param listener the listener to register
-         * @see ClanListener
-         */
-        fun registerListener(listener: ClanListener) =
-            ClanService.registerListener(listener)
-
-        /**
-         * Unregisters a previously registered clan listener.
-         *
-         * @param listener the listener to unregister
-         * @see ClanListener
-         */
-        fun unregisterListener(listener: ClanListener) =
-            ClanService.unregisterListener(listener)
-
-        /**
-         * Retrieves the clan that a player is a member of.
-         *
-         * @param uuid the UUID of the player
-         * @return the [Clan] the player belongs to, or `null` if they are not in any clan
-         */
-        suspend fun byPlayer(uuid: UUID): Clan? = ClanService.findClanByPlayer(uuid)
-
-        /**
-         * Retrieves a clan by its unique identifier.
-         *
-         * @param uuid the UUID of the clan
-         * @return the [Clan] if found, or `null` otherwise
-         */
-        suspend fun byUuid(uuid: UUID): Clan? = ClanService.findClanByUuid(uuid)
-
-        /**
-         * Retrieves a clan by its tag.
-         *
-         * @param tag the clan tag to search for
-         * @return the [Clan] if found, or `null` otherwise
-         */
-        suspend fun byTag(tag: String): Clan? = ClanService.findClanByTag(tag)
-
-        /**
-         * Validates a clan name and tag against system rules.
-         *
-         * This should be called before attempting to create a clan to ensure the
-         * name and tag meet requirements.
-         *
-         * @param name the proposed clan name
-         * @param tag the proposed clan tag
-         * @return a [ClanValidationResult] indicating if the inputs are valid
-         */
-        fun validateClanNameAndTag(name: String, tag: String): ClanValidationResult =
-            ClanService.validateClanNameAndTag(name, tag)
-
-        /**
-         * Creates a new clan with the specified parameters.
-         *
-         * This function uses a builder pattern to configure optional clan properties.
-         *
-         * Example usage:
-         * ```kotlin
-         * val result = Clan.createClan("Warriors", "WAR", ownerUuid) {
-         *     tagColor(TextColor.color(255, 0, 0))
-         *     description("A clan for warriors")
-         *     discordInvite("https://discord.gg/example")
-         * }
-         * ```
-         *
-         * @param name the name of the new clan
-         * @param tag the tag of the new clan
-         * @param owner the UUID of the player who will own the clan
-         * @param additional optional builder block to configure additional properties
-         * @return a [ClanCreationResult] indicating the outcome of the creation attempt
-         * @see ClanCreateBuilder
-         */
-        @OptIn(ExperimentalContracts::class)
-        suspend fun createClan(
-            name: String,
-            tag: String,
-            owner: UUID,
-            additional: ClanCreateBuilder.() -> Unit = {}
-        ): ClanCreationResult {
-            contract {
-                callsInPlace(additional, InvocationKind.EXACTLY_ONCE)
-            }
-
-            val builder = ClanCreateBuilder(name, tag, owner)
-            builder.additional()
-
-            return ClanService.createClan(builder.copy())
-        }
     }
 }
 

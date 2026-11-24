@@ -5,7 +5,7 @@ import dev.slne.surf.api.minestom.command.dsl.anyExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.player.core.common.clan.clan.CoreClanService
+import dev.slne.surf.player.core.client.clan.services.ClientClanService
 import dev.slne.surf.player.core.client.clan.command.clanListPagination
 import dev.slne.surf.player.core.client.clan.command.handleClanListClick
 import dev.slne.surf.player.core.client.clan.permission.ClanPermissions
@@ -27,7 +27,7 @@ fun CommandAPICommand.clanListCommand(): CommandAPICommand = withSubcommand(
         withPermission(ClanPermissions.CLAN_LIST_COMMAND)
 
         anyExecutorSuspend { executor, _ ->
-            val clans = CoreClanService.fetchAllClansWithoutMembersSortByMemberCount()
+            val clans = ClientClanService.fetchAllClansWithoutMembersSortByMemberCount()
 
             executor.sendText {
                 appendNewline()

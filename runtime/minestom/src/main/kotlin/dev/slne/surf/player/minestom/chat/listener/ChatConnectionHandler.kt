@@ -10,9 +10,9 @@ import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.client.chat.message.format.buildConnectionMessage
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
-import dev.slne.surf.player.core.common.chat.service.IgnoreService
+import dev.slne.surf.player.core.client.chat.service.IgnoreService
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
-import dev.slne.surf.player.core.common.chat.service.SpyService
+import dev.slne.surf.player.core.client.chat.service.SpyService
 import dev.slne.surf.player.minestom.chat.message.MinestomMessageFormatter
 import net.kyori.adventure.text.Component
 import net.minestom.server.entity.Player

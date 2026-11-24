@@ -2,6 +2,7 @@ package dev.slne.surf.player.paper.clan.commands.subcommands
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.paper.clan.commands.failCommand
 import dev.slne.surf.player.paper.clan.commands.playerClickEvent
@@ -19,7 +20,7 @@ fun CommandAPICommand.clanLeaveCommand() = subcommand("leave") {
     withPermission(ClanPermissions.CLAN_LEAVE_COMMAND)
 
     playerExecutorSuspend { player, args ->
-        val clan = Clan.byPlayer(player.uniqueId)
+        val clan = SurfClanApi.findClanByPlayer(player.uniqueId)
             ?: failCommand(Messages.NOT_IN_CLAN)
 
         if (clan.createdByUuid == player.uniqueId) {

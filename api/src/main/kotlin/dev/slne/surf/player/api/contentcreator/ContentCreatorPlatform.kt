@@ -4,21 +4,21 @@ import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
 
 /**
- * Represents a content creator plattform
+ * Represents a content creator platform
  *
- * @param name The name of the plattform
- * @param plattform The type of the plattform
- * @param state The state of the plattform
+ * @param name The name of the platform
+ * @param platform The type of the platform
+ * @param state The state of the platform
  */
 data class ContentCreatorPlatform(
     val name: String,
-    val plattform: PlatformType,
+    val platform: PlatformType,
     @Volatile var state: PlatformState = PlatformState.UNKNOWN
 )
 
-fun PlatformType.toPlattform(name: String, state: PlatformState = PlatformState.UNKNOWN): ContentCreatorPlatform =
+fun PlatformType.toPlatform(name: String, state: PlatformState = PlatformState.UNKNOWN): ContentCreatorPlatform =
     ContentCreatorPlatform(
         name = name,
-        plattform = this,
+        platform = this,
         state = state
     )

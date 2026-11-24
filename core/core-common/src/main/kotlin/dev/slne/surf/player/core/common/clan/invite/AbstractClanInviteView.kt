@@ -2,13 +2,13 @@ package dev.slne.surf.player.core.common.clan.invite
 
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.invite.ClanInviteView
-import dev.slne.surf.player.core.common.clan.clan.CoreClanService
+import dev.slne.surf.player.core.common.clan.CoreClanApi
 
 abstract class AbstractClanInviteView : ClanInviteView {
     abstract val clanID: ULong
 
     override suspend fun getClan(): Clan? {
-        return CoreClanService.Companion.findClanByID(clanID)
+        return CoreClanApi.findClanByID(clanID)
     }
 
     override suspend fun getClanOrThrow(): Clan {

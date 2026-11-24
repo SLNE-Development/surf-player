@@ -8,7 +8,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import dev.slne.surf.player.core.client.chat.message.format.appendStatusIcon
 import net.kyori.adventure.text.format.TextDecoration

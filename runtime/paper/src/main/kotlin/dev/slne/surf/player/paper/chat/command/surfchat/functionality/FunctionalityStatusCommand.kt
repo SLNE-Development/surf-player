@@ -4,7 +4,7 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 
 fun CommandAPICommand.functionalityStatusCommand() = subcommand("status") {

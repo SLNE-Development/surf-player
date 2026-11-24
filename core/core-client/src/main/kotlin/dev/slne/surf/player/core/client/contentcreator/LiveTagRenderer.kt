@@ -21,16 +21,21 @@ object LiveTagRenderer {
      * @param space whether the tag is prefixed with a space
      */
     fun render(playerUuid: UUID, space: Boolean): Component {
-        val creator = ContentCreatorService.getContentCreator(playerUuid) ?: return Component.empty()
-
-        val live = PlatformType.entries
-            .any { creator.getPlatform(it)?.state == PlatformState.ONLINE }
-
-        if (!live) {
+        if (!isLive(playerUuid)) {
             return Component.empty()
         }
 
         return renderTag(true, space, miniMessage.deserialize(config.liveTag))
+    }
+
+    /**
+     * Whether the content creator behind [playerUuid] is live on any platform.
+     */
+    fun isLive(playerUuid: UUID): Boolean {
+        val creator = ContentCreatorService.getContentCreator(playerUuid) ?: return false
+
+        return PlatformType.entries
+            .any { creator.getPlatform(it)?.state == PlatformState.ONLINE }
     }
 
     internal fun renderTag(live: Boolean, space: Boolean, liveTag: Component): Component {

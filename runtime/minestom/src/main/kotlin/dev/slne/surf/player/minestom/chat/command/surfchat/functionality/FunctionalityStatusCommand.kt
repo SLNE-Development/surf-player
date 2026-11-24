@@ -5,7 +5,7 @@ import dev.slne.surf.api.minestom.command.dsl.anyExecutor
 import dev.slne.surf.api.minestom.command.dsl.subcommand
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 
 fun CommandAPICommand.functionalityStatusCommand(): CommandAPICommand = withSubcommand(
     subcommand("status") {

@@ -6,7 +6,7 @@ import com.velocitypowered.api.event.connection.PostLoginEvent
 import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.player.api.queue.SurfQueue
+import dev.slne.surf.player.api.queue.SurfQueueApi
 import dev.slne.surf.player.api.settings.SurfSettingsApi
 import dev.slne.surf.player.api.settings.setting.SettingKeys
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
@@ -110,8 +110,8 @@ object QueuePlayerListener {
                 info(" verbunden. Du kannst diese Funktion jederzeit in der Lobby im Settings-Menü deaktivieren.")
             }
 
-            val enqueued = SurfQueue
-                .byServer(targetServer)
+            val enqueued = SurfQueueApi
+                .queue(targetServer)
                 .enqueue(uuid)
 
             QueueReconnectStore.remove(uuid)

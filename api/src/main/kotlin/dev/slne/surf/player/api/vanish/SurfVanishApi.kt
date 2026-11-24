@@ -24,6 +24,6 @@ interface SurfVanishApi {
     fun onlineVanishedPlayers(): ObjectSet<UUID>
 
     companion object : SurfVanishApi by instance {
-        val INSTANCE get() = instance
+        val INSTANCE: SurfVanishApi get() = instance
     }
 }

@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.permission.ClanPermission
 import dev.slne.surf.player.minestom.command.failCommand
@@ -22,7 +23,7 @@ fun CommandAPICommand.clanSetDiscordCommand(): CommandAPICommand = withSubcomman
 
         playerExecutorSuspend { player, args ->
             val rawLink = args.get<String>("link")
-            val clan = Clan.byPlayer(player.uuid)
+            val clan = SurfClanApi.findClanByPlayer(player.uuid)
                 ?: failCommand(Messages.NOT_IN_CLAN)
 
             if (!clan.hasMemberPermission(player.uuid, ClanPermission.DISCORD)) {

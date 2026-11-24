@@ -1,6 +1,7 @@
 package dev.slne.surf.player.paper.tab.platform
 
 import com.github.shynixn.mccoroutine.folia.launch
+import com.google.auto.service.AutoService
 import dev.slne.surf.player.core.client.tab.platform.TabPlatform
 import dev.slne.surf.player.paper.plugin
 import dev.slne.surf.player.paper.tab.PaperTabFeature
@@ -9,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import java.util.*
 
+@AutoService(TabPlatform::class)
 class PaperTabPlatform : TabPlatform {
     override val dataPath get() = PaperTabFeature.dataPath
 

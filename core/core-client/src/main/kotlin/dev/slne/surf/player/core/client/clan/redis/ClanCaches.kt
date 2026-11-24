@@ -1,7 +1,7 @@
 package dev.slne.surf.player.core.client.clan.redis
 
-import dev.slne.surf.player.core.common.clan.clan.CoreClanService
-import dev.slne.surf.player.core.common.clan.player.CoreClanPlayerService
+import dev.slne.surf.player.core.client.clan.services.ClientClanPlayerService
+import dev.slne.surf.player.core.client.clan.services.ClientClanService
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 
@@ -16,8 +16,8 @@ object ClanCaches {
 
     suspend fun invalidateAll() {
         supervisorScope {
-            launch { CoreClanService.invalidateCaches() }
-            launch { CoreClanPlayerService.invalidateCaches() }
+            launch { ClientClanService.invalidateCaches() }
+            launch { ClientClanPlayerService.invalidateCaches() }
         }
     }
 }

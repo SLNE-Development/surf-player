@@ -1,6 +1,7 @@
 package dev.slne.surf.player.minestom.queue
 
-import dev.slne.surf.player.core.client.queue.ClientQueueInstance
+import dev.slne.surf.player.core.client.queue.ClientQueueSystem
+import dev.slne.surf.player.core.common.queue.QueueSystem
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
 import dev.slne.surf.player.minestom.queue.command.queueCommand
 
@@ -11,15 +12,16 @@ object QueueMinestomFeature : MinestomPlayerFeature {
     override val id = "queue"
 
     override suspend fun onLoad() {
-        ClientQueueInstance.get().load()
+        ClientQueueSystem.load(dataDirectory)
     }
 
     override suspend fun onEnable() {
-        ClientQueueInstance.get().enable()
+        ClientQueueSystem.enable()
+        QueueSystem.isLoaded = true
         queueCommand()
     }
 
     override suspend fun onDisable() {
-        ClientQueueInstance.get().disable()
+        ClientQueueSystem.disable()
     }
 }

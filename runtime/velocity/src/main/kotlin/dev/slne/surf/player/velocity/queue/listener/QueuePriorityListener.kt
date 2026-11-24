@@ -2,7 +2,7 @@ package dev.slne.surf.player.velocity.queue.listener
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.api.core.util.logger
-import dev.slne.surf.player.core.common.queue.QueueInstance
+import dev.slne.surf.player.core.common.queue.QueueSystem
 import dev.slne.surf.player.core.common.queue.priority.LuckpermsPriorityResolver
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueService
 import dev.slne.surf.player.velocity.plugin
@@ -25,7 +25,7 @@ object QueuePriorityListener {
     fun register() {
         check(subscription == null) { "QueuePriorityListener already registered" }
 
-        scope = QueueInstance.get().queueScheduler.createServiceScope()
+        scope = QueueSystem.queueScheduler.createServiceScope()
         subscription = LuckPermsAccess.luckperms.eventBus.subscribe(
             plugin.container,
             UserDataRecalculateEvent::class.java,

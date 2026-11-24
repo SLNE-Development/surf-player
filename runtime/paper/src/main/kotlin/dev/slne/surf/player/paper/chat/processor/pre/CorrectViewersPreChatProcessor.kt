@@ -3,7 +3,7 @@ package dev.slne.surf.player.paper.chat.processor.pre
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.player.api.chat.message.MessageContext
 import dev.slne.surf.player.api.chat.processor.PreChatProcessor
-import dev.slne.surf.player.core.common.chat.service.IgnoreService
+import dev.slne.surf.player.core.client.chat.service.IgnoreService
 import dev.slne.surf.player.core.client.chat.processor.ProcessorOrder
 import dev.slne.surf.player.paper.chat.util.isConsole
 import java.util.*

@@ -21,7 +21,7 @@ import dev.slne.surf.player.core.client.chat.webhook.DiscordClient
 import dev.slne.surf.player.core.client.chat.webhook.DiscordMessages
 import dev.slne.surf.player.core.common.chat.aimoderation.ModerationClassificationAction
 import dev.slne.surf.player.core.common.chat.aimoderation.ModerationClassificationResult
-import dev.slne.surf.player.core.common.chat.service.DeletionService
+import dev.slne.surf.player.core.client.chat.service.DeletionService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.punish.api.common.punishment.PunishType
 import dev.slne.surf.punish.api.common.user.PunishmentUser

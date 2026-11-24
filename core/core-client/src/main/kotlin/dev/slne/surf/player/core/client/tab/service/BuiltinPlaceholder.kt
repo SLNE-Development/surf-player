@@ -6,7 +6,7 @@ import dev.slne.surf.api.core.util.freeze
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.player.api.tab.placeholder.TabPlaceholder
 import dev.slne.surf.player.api.tab.placeholder.UpdateCondition
-import dev.slne.surf.player.core.client.tab.platform.tabPlatform
+import dev.slne.surf.player.core.client.tab.platform.TabPlatform
 import dev.slne.surf.player.core.client.tab.util.formatTablistDate
 import dev.slne.surf.player.core.client.tab.util.formatTablistTime
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
@@ -31,12 +31,12 @@ enum class BuiltinPlaceholder(
 
     /** How many players are on this server. */
     PLAYERS_ONLINE("players_online", UpdateCondition.OnDemand) {
-        override fun value(): Component = text(tabPlatform.onlinePlayerCount(), Colors.INFO)
+        override fun value(): Component = text(TabPlatform.onlinePlayerCount(), Colors.INFO)
     },
 
     /** How many players this server has room for. */
     PLAYERS_MAX("players_max", UpdateCondition.OnDemand) {
-        override fun value(): Component = text(tabPlatform.maxPlayerCount(), Colors.INFO)
+        override fun value(): Component = text(TabPlatform.maxPlayerCount(), Colors.INFO)
     },
 
     /** Today's date. */

@@ -3,7 +3,7 @@ package dev.slne.surf.player.paper.clan.commands.subcommands.player.subcommands.
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.booleanArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.player.api.clan.player.ClanPlayer
+import dev.slne.surf.player.api.SurfCommunityPlayer
 import dev.slne.surf.player.paper.clan.commands.failCommand
 import dev.slne.surf.player.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
@@ -17,9 +17,9 @@ fun CommandAPICommand.clanPlayerSettingInviteCommand() = subcommand("invite") {
 
     playerExecutorSuspend { player, args ->
         val acceptByArgs = args.getUnchecked<Boolean?>("accept")
-        val clanPlayer = ClanPlayer.byUuid(player.uniqueId)
+        val clanPlayer = SurfCommunityPlayer(player.uniqueId)
 
-        val accept = acceptByArgs ?: clanPlayer.acceptsClanInvites.not()
+        val accept = acceptByArgs ?: clanPlayer.acceptsClanInvites().not()
         val changed = clanPlayer.setAcceptsClanInvites(accept)
 
         if (!changed) {

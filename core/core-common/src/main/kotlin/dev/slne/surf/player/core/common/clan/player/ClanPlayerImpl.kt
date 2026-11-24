@@ -1,22 +1,14 @@
 package dev.slne.surf.player.core.common.clan.player
 
-import dev.slne.surf.player.api.clan.player.ClanPlayer
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableStringUUID
 import kotlinx.serialization.Serializable
 
+/**
+ * The clan related data of a player, as stored by the microservice.
+ */
 @Serializable
 data class ClanPlayerImpl(
     val ID: ULong,
-    override val uuid: SerializableStringUUID,
-    @field:Volatile override var acceptsClanInvites: Boolean = true
-) : ClanPlayer {
-
-    override suspend fun setAcceptsClanInvites(acceptsClanInvites: Boolean): Boolean {
-        val changed = CoreClanPlayerService.changeAcceptsClanInvites(this, acceptsClanInvites)
-        if (changed) {
-            this.acceptsClanInvites = acceptsClanInvites
-        }
-
-        return changed
-    }
-}
+    val uuid: SerializableStringUUID,
+    val acceptsClanInvites: Boolean = true
+)

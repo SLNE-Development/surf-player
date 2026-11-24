@@ -1,7 +1,7 @@
 package dev.slne.surf.player.paper.friends
 
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.player.core.client.friends.FriendsClientInstance
+import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.paper.PaperPlayerFeature
 import dev.slne.surf.player.paper.friends.command.friendCommand
 import dev.slne.surf.player.paper.friends.command.subcommand.friend.FriendListCommand
@@ -12,23 +12,16 @@ object PaperFriendsFeature : PaperPlayerFeature {
     override val name = "friends"
 
     override suspend fun onLoad() {
-        val instance = FriendsClientInstance.INSTANCE
-
-        instance.withEvents()
-        instance.onLoad()
+        FriendsClient.load()
     }
 
     override suspend fun onEnable() {
-        FriendsClientInstance.INSTANCE.onEnable()
+        FriendsClient.enable()
 
         FriendConnectionListener.register()
 
         friendCommand()
         FriendRequestSendCommand("fa").register()
         FriendListCommand("fl").register()
-    }
-
-    override suspend fun onDisable() {
-        FriendsClientInstance.INSTANCE.onDisable()
     }
 }

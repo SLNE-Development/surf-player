@@ -14,7 +14,7 @@ object QueueMetricsLogger {
 
     fun start(): Unit = synchronized(lock) {
         job?.cancel()
-        job = QueuePlatform.get().launchAsync {
+        job = QueuePlatform.launchAsync {
             while (isActive) {
                 delay(5.minutes)
                 try {

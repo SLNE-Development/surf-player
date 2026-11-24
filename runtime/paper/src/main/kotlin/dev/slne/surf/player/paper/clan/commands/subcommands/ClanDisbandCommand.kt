@@ -2,6 +2,7 @@ package dev.slne.surf.player.paper.clan.commands.subcommands
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.paper.clan.commands.failCommand
 import dev.slne.surf.player.paper.clan.commands.playerClickEvent
@@ -21,7 +22,7 @@ fun CommandAPICommand.clanDisbandCommand() = subcommand("disband") {
     playerExecutorSuspend { player, args ->
         val playerUuid = player.uniqueId
         val clan =
-            Clan.byPlayer(playerUuid) ?: failCommand(Messages.NOT_IN_CLAN)
+            SurfClanApi.findClanByPlayer(playerUuid) ?: failCommand(Messages.NOT_IN_CLAN)
 
         clan.canBeDisbandedBy(playerUuid)?.let { error ->
             failCommand(error.message)

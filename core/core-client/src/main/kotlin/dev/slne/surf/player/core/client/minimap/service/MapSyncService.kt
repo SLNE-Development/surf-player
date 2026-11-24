@@ -5,7 +5,7 @@ import dev.slne.surf.player.core.client.minimap.config.CompanionSettings
 import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapChannels
 import dev.slne.surf.player.core.client.minimap.journeymap.JourneyMapSyncService
 import dev.slne.surf.player.core.client.minimap.platform.CompanionPlayer
-import dev.slne.surf.player.core.client.minimap.platform.CompanionPlatform
+import dev.slne.surf.player.core.client.minimap.platform.MinimapPlatform
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapChannels
 import dev.slne.surf.player.core.client.minimap.voxelmap.VoxelMapSyncService
 import dev.slne.surf.player.core.client.minimap.world.WorldInfo
@@ -27,7 +27,7 @@ object MapSyncService {
     fun sync(
         player: CompanionPlayer,
         settings: CompanionSettings = CompanionConfigs.current,
-        tracksPlayers: Boolean = CompanionPlatform.tracksPlayers,
+        tracksPlayers: Boolean = MinimapPlatform.tracksPlayers,
     ) {
         XaeroSyncService.sync(player, XaeroChannels.ALL, settings.config, settings.xaero)
         JourneyMapSyncService.sync(player, settings.config, settings.journeyMap, playerRadar(settings, tracksPlayers))
@@ -41,7 +41,7 @@ object MapSyncService {
         player: CompanionPlayer,
         channels: Collection<String>,
         settings: CompanionSettings = CompanionConfigs.current,
-        tracksPlayers: Boolean = CompanionPlatform.tracksPlayers,
+        tracksPlayers: Boolean = MinimapPlatform.tracksPlayers,
     ) {
         val xaeroChannels = channels.filter(XaeroChannels::isXaero)
         if (xaeroChannels.isNotEmpty()) {
@@ -63,7 +63,7 @@ object MapSyncService {
         player: CompanionPlayer,
         channel: String,
         settings: CompanionSettings = CompanionConfigs.current,
-        tracksPlayers: Boolean = CompanionPlatform.tracksPlayers,
+        tracksPlayers: Boolean = MinimapPlatform.tracksPlayers,
     ) {
         if (channel == WorldInfo.CHANNEL) {
             WorldInfo.send(player, settings.config)

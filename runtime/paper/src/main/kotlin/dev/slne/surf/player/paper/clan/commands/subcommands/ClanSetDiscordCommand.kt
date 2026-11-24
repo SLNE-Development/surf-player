@@ -4,6 +4,7 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.kotlindsl.greedyStringArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.permission.ClanPermission
 import dev.slne.surf.player.paper.clan.commands.failCommand
@@ -21,7 +22,7 @@ fun CommandAPICommand.clanSetDiscordCommand() = subcommand("setdiscord") {
 
     playerExecutorSuspend { player, args ->
         val rawLink = args.getUnchecked<String>("link")!!
-        val clan = Clan.byPlayer(player.uniqueId)
+        val clan = SurfClanApi.findClanByPlayer(player.uniqueId)
             ?: failCommand(Messages.NOT_IN_CLAN)
 
         if (!clan.hasMemberPermission(player.uniqueId, ClanPermission.DISCORD)) {

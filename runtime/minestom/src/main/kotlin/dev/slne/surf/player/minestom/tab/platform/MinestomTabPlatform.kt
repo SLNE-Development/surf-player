@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.tab.platform
 
+import com.google.auto.service.AutoService
 import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.core.api.common.server.SurfServer
@@ -9,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 
+@AutoService(TabPlatform::class)
 class MinestomTabPlatform : TabPlatform {
     override val dataPath get() = TabMinestomFeature.dataDirectory
 

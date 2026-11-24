@@ -4,8 +4,10 @@ import com.google.auto.service.AutoService
 import dev.slne.surf.player.api.playtime.SurfPlaytimeApi
 import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
 import dev.slne.surf.player.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
 import dev.slne.surf.player.core.client.playtime.afk.AfkService
 import dev.slne.surf.player.core.client.playtime.service.PlaytimeService
+import dev.slne.surf.player.core.client.playtime.service.PlaytimeStreakService
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
@@ -37,6 +39,9 @@ class SurfPlaytimeApiImpl : SurfPlaytimeApi {
 
     override suspend fun getPlaytimePerPlayer(filter: PlaytimeFilter): Object2LongMap<UUID> =
         PlaytimeService.loadPlaytimePerPlayer(filter)
+
+    override suspend fun getLoginStreak(playerUuid: UUID): PlaytimeStreak? =
+        PlaytimeStreakService.loadPlaytimeStreak(playerUuid)
 
     /**
      * Sums [stored] and [currentSession], counting a stored save of [currentSession] only once.

@@ -4,8 +4,8 @@ import com.destroystokyo.paper.event.player.PlayerConnectionCloseEvent
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.api.paper.event.common.connection.PlayerQuitMessageEvent
 import dev.slne.surf.player.core.client.chat.config.chatConfig
-import dev.slne.surf.player.core.common.chat.service.IgnoreService
-import dev.slne.surf.player.core.common.chat.service.SpyService
+import dev.slne.surf.player.core.client.chat.service.IgnoreService
+import dev.slne.surf.player.core.client.chat.service.SpyService
 import dev.slne.surf.player.paper.chat.message.MessageFormatter
 import dev.slne.surf.player.paper.plugin
 import org.bukkit.event.EventHandler

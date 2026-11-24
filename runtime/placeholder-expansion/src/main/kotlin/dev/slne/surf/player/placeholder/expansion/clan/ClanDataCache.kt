@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.asLoadingCache
 import com.sksamuel.aedile.core.expireAfterWrite
 import com.sksamuel.aedile.core.refreshAfterWrite
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.clan.listener.ClanUpdatedListener
 import java.util.*
@@ -24,7 +25,7 @@ object ClanDataCache : ClanUpdatedListener {
         }
 
     private suspend fun loadClanData(uuid: UUID): CachedClanData {
-        val clan = Clan.byPlayer(uuid) ?: return CachedClanData.Empty
+        val clan = SurfClanApi.findClanByPlayer(uuid) ?: return CachedClanData.Empty
         return clan.toCachedData()
     }
 

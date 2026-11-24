@@ -83,7 +83,7 @@ class QueueTransfer(private val serverName: String) {
             SurfServerConnectResult.Status.CONNECTION_CANCELLED -> TransferAction.PLUGIN_CANCELLED_TRANSFER
             SurfServerConnectResult.Status.CONNECTION_IN_PROGRESS -> TransferAction.PLAYER_ALREADY_CONNECTING
             SurfServerConnectResult.Status.SERVER_DISCONNECTED -> {
-                when (QueuePlatform.get().consumeKickReason(player.uuid)) {
+                when (QueuePlatform.consumeKickReason(player.uuid)) {
                     TransferKickReason.FULL_SERVER -> TransferAction.SERVER_FULL
                     TransferKickReason.NOT_WHITELISTED -> TransferAction.NOT_WHITELISTED
                     TransferKickReason.OTHER -> TransferAction.PLAYER_KICKED_FROM_SERVER

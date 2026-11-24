@@ -8,7 +8,7 @@ import dev.slne.surf.player.api.clan.invite.ClanInviteResult
 import dev.slne.surf.player.api.clan.member.ClanMember
 import dev.slne.surf.player.api.clan.member.ClanMemberAddResult
 import dev.slne.surf.player.api.clan.member.ClanMemberRole
-import dev.slne.surf.player.api.clan.util.InternalClanApi
+import dev.slne.surf.player.core.common.clan.CoreClanApi
 import dev.slne.surf.api.core.util.freeze
 import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.player.core.common.clan.member.ClanMemberImpl
@@ -32,27 +32,27 @@ data class ClanImpl(
     override val createdAt: @Contextual OffsetDateTime,
 ) : AbstractClanView(), Clan {
     override suspend fun setDescription(description: String?) {
-        CoreClanService.updateDescription(this, description)
+        CoreClanApi.updateDescription(this, description)
     }
 
     override suspend fun setDiscordInvite(discordInvite: String?) {
-        CoreClanService.updateDiscordInvite(this, discordInvite)
+        CoreClanApi.updateDiscordInvite(this, discordInvite)
     }
 
     override suspend fun changeClanTagColor(update: ClanTagColorUpdate) {
-        CoreClanService.updateTagColor(this, update)
+        CoreClanApi.updateTagColor(this, update)
     }
 
     override suspend fun getPendingInvites(): Set<ClanInvite> {
-        return CoreClanService.fetchPendingInvites(this)
+        return CoreClanApi.fetchPendingInvites(this)
     }
 
     override suspend fun invite(invitee: UUID, invitedBy: UUID): ClanInviteResult {
-        return CoreClanService.invitePlayer(this, invitee, invitedBy)
+        return CoreClanApi.invitePlayer(this, invitee, invitedBy)
     }
 
     override suspend fun revokeInvite(uuid: UUID): Boolean {
-        return CoreClanService.revokeInvite(this, uuid)
+        return CoreClanApi.revokeInvite(this, uuid)
     }
 
     override suspend fun addMember(
@@ -60,7 +60,7 @@ data class ClanImpl(
         role: ClanMemberRole,
         addedBy: UUID?
     ): ClanMemberAddResult {
-        return CoreClanService.addMember(this, uuid, role, addedBy)
+        return CoreClanApi.addMember(this, uuid, role, addedBy)
     }
 
     override suspend fun removeMember(member: ClanMember): Boolean {
@@ -68,7 +68,7 @@ data class ClanImpl(
     }
 
     override suspend fun removeMember(uuid: UUID): Boolean {
-        return CoreClanService.removeMember(this, uuid)
+        return CoreClanApi.removeMember(this, uuid)
     }
 
     override fun getMember(uuid: UUID): ClanMember? {
@@ -84,7 +84,7 @@ data class ClanImpl(
     }
 
     override suspend fun delete(): Boolean {
-        return CoreClanService.delete(this)
+        return CoreClanApi.delete(this)
     }
 
     override fun view() = ClanViewImpl(

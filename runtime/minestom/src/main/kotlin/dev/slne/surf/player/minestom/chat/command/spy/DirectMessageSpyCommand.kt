@@ -7,7 +7,7 @@ import dev.slne.surf.api.minestom.command.dsl.playerArgument
 import dev.slne.surf.api.minestom.command.dsl.playerExecutor
 import dev.slne.surf.api.minestom.permission.hasPermission
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.player.core.common.chat.service.SpyService
+import dev.slne.surf.player.core.client.chat.service.SpyService
 import net.minestom.server.entity.Player
 
 fun directMessageSpyCommand() = commandTree("spy") {

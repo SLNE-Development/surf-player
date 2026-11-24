@@ -3,7 +3,7 @@ package dev.slne.surf.player.core.client.contentcreator
 import dev.slne.surf.player.api.contentcreator.ContentCreator
 import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
-import dev.slne.surf.player.api.contentcreator.toPlattform
+import dev.slne.surf.player.api.contentcreator.toPlatform
 import java.util.*
 
 data class CoreContentCreator(
@@ -16,7 +16,7 @@ data class CoreContentCreator(
     @Volatile
     var twitchName: String? = null
         set(value) {
-            twitchPlatform = value?.let { PlatformType.TWITCH.toPlattform(it.lowercase()) }
+            twitchPlatform = value?.let { PlatformType.TWITCH.toPlatform(it.lowercase()) }
             field = value
         }
 

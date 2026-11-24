@@ -2,7 +2,7 @@ package dev.slne.surf.player.core.client.tab.service
 
 import dev.slne.surf.player.api.tab.placeholder.TabPlaceholder
 import dev.slne.surf.player.api.tab.placeholder.UpdateCondition
-import dev.slne.surf.player.core.client.tab.platform.tabPlatform
+import dev.slne.surf.player.core.client.tab.platform.TabPlatform
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
@@ -49,7 +49,7 @@ object TablistScheduler {
      * Starts the scheduler task.
      */
     fun startTask() {
-        task = tabPlatform.launch { run() }
+        task = TabPlatform.launch { run() }
     }
 
     /**

@@ -4,7 +4,7 @@ import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.clickRunsCommand
 import dev.slne.surf.core.api.common.player.SurfPlayer
-import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.result.FriendRequestCreateResult
 import dev.slne.surf.player.api.friends.utils.displayName
 import dev.slne.surf.player.core.client.friends.util.formatRemainingComponent
@@ -33,7 +33,7 @@ suspend fun sendFriendRequest(sender: UUID, target: SurfPlayer?): Component? {
         }
     }
 
-    val result = FriendsPlayer[sender].sendFriendRequest(FriendsPlayer[target.uuid])
+    val result = SurfFriendsApi.sendFriendRequest(sender, target.uuid)
 
     return failureMessage(result, target)
 }

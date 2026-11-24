@@ -7,7 +7,7 @@ import dev.slne.surf.player.api.settings.setting.SettingKey
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
 
-private val api = requiredService<SurfSettingsApi>()
+private val instance = requiredService<SurfSettingsApi>()
 
 interface SurfSettingsApi {
     /**
@@ -77,5 +77,7 @@ interface SurfSettingsApi {
     @Deprecated("Use getSetting(key) instead.", ReplaceWith("getSetting(key)"))
     fun getSetting(name: String): Setting?
 
-    companion object : SurfSettingsApi by api
+    companion object : SurfSettingsApi by instance {
+        val INSTANCE: SurfSettingsApi get() = instance
+    }
 }

@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
@@ -24,7 +25,7 @@ fun CommandAPICommand.clanLeaveCommand(): CommandAPICommand = withSubcommand(
         withPermission(ClanPermissions.CLAN_LEAVE_COMMAND)
 
         playerExecutorSuspend { player, args ->
-            val clan = Clan.byPlayer(player.uuid)
+            val clan = SurfClanApi.findClanByPlayer(player.uuid)
                 ?: failCommand(Messages.NOT_IN_CLAN)
 
             if (clan.createdByUuid == player.uuid) {

@@ -8,7 +8,7 @@ import dev.slne.surf.player.core.client.chat.config.chatConfig
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.player.core.client.chat.util.hasPermission
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import java.util.UUID
 
 fun hasTooManyCapsInARow(message: String, maxInRow: Int): Boolean {

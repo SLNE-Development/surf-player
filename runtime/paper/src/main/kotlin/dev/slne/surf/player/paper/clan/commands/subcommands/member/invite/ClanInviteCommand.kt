@@ -2,6 +2,7 @@ package dev.slne.surf.player.paper.clan.commands.subcommands.member.invite
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.invite.ClanInviteResult
 import dev.slne.surf.player.api.clan.permission.ClanPermission
@@ -24,7 +25,7 @@ fun CommandAPICommand.clanInviteCommand() = subcommand("invite") {
     playerExecutorSuspend { player, args ->
         val invitee = args.awaitingOrNull<SurfPlayer?>("invitee")
             ?: failCommand(Messages.PLAYER_NOT_FOUND)
-        val clan = Clan.byPlayer(player.uniqueId)
+        val clan = SurfClanApi.findClanByPlayer(player.uniqueId)
             ?: failCommand(Messages.NOT_IN_CLAN)
 
         if (!clan.hasMemberPermission(player.uniqueId, ClanPermission.INVITE)) {

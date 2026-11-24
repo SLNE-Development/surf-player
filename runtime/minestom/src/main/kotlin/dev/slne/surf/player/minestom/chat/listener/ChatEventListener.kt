@@ -6,7 +6,7 @@ import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.player.api.chat.message.MessageContext
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
-import dev.slne.surf.player.api.chat.message.redirector.MessageRedirectorRegistry
+import dev.slne.surf.player.core.client.chat.message.MessageRedirectorRegistry
 import dev.slne.surf.player.core.client.chat.platform.ChatPlatform
 import dev.slne.surf.player.core.client.chat.processor.runPostProcessors
 import dev.slne.surf.player.core.client.chat.processor.runPreProcessors

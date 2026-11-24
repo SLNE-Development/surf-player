@@ -6,7 +6,7 @@ import dev.jorel.commandapi.kotlindsl.greedyStringArgument
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
-import dev.slne.surf.player.core.common.chat.service.HistoryService
+import dev.slne.surf.player.core.client.chat.service.HistoryService
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService

@@ -6,7 +6,7 @@ import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.api.chat.message.MessageContext
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.MessageType
-import dev.slne.surf.player.api.chat.message.redirector.MessageRedirectorRegistry
+import dev.slne.surf.player.core.client.chat.message.MessageRedirectorRegistry
 import dev.slne.surf.player.core.client.chat.processor.runPostProcessors
 import dev.slne.surf.player.core.client.chat.processor.runPreProcessors
 import dev.slne.surf.player.paper.plugin

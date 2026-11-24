@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands.member.invite
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.invite.ClanInviteResult
 import dev.slne.surf.player.api.clan.permission.ClanPermission
@@ -25,7 +26,7 @@ fun CommandAPICommand.clanInviteCommand(): CommandAPICommand = withSubcommand(
         playerExecutorSuspend { player, args ->
             val invitee = args.get<Deferred<SurfPlayer?>>("invitee").await()
                 ?: failCommand(Messages.PLAYER_NOT_FOUND)
-            val clan = Clan.byPlayer(player.uuid)
+            val clan = SurfClanApi.findClanByPlayer(player.uuid)
                 ?: failCommand(Messages.NOT_IN_CLAN)
 
             if (!clan.hasMemberPermission(player.uuid, ClanPermission.INVITE)) {

@@ -6,7 +6,7 @@ import dev.jorel.commandapi.arguments.StringArgument
 import dev.slne.surf.api.core.messages.adventure.uuid
 import dev.slne.surf.api.core.messages.adventure.uuidOrNull
 import dev.slne.surf.api.paper.command.args.SuspendCustomArgument
-import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.SurfCommunityPlayer
 import dev.slne.surf.player.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
@@ -14,7 +14,7 @@ import net.kyori.adventure.text.Component
 import java.util.*
 
 /**
- * Resolves a [FriendsPlayer] related to the command sender (a friend, a request sender, ...).
+ * Resolves a player related to the command sender (a friend, a request sender, ...).
  *
  * @param find looks up the related player by the sender's uuid and the typed input
  * @param suggestedNames names of all related players of the sender
@@ -22,10 +22,10 @@ import java.util.*
  */
 class FriendsPlayerArgument(
     nodeName: String,
-    private val find: suspend (sender: UUID, input: String) -> FriendsPlayer?,
+    private val find: suspend (sender: UUID, input: String) -> SurfCommunityPlayer?,
     suggestedNames: suspend (sender: UUID) -> List<String>,
     private val notFoundMessage: Component,
-) : SuspendCustomArgument<FriendsPlayer, String>(StringArgument(nodeName)) {
+) : SuspendCustomArgument<SurfCommunityPlayer, String>(StringArgument(nodeName)) {
 
     init {
         replaceSuggestions(
@@ -39,7 +39,7 @@ class FriendsPlayerArgument(
         )
     }
 
-    override suspend fun CoroutineScope.parse(info: CustomArgumentInfo<String>): FriendsPlayer {
+    override suspend fun CoroutineScope.parse(info: CustomArgumentInfo<String>): SurfCommunityPlayer {
         return find(info.sender.uuid(), info.currentInput)
             ?: throw CustomArgumentException.fromAdventureComponent(notFoundMessage)
     }

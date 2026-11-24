@@ -42,26 +42,27 @@ interface SurfTabApi {
     fun invalidate(vararg placeholders: TabPlaceholder)
 
     /**
-     * Re-renders the tab entry of the player identified by [uuid].
+     * Re-renders the tab entry of the player identified by [playerUuid].
      *
      * The updated entry is sent only if its visible content has changed. Plugins that modify their
      * contribution in [dev.slne.surf.player.api.tab.event.TabEntryRenderEvent] should call this method after
      * the relevant data changes.
      *
-     * @param uuid the UUID of the player whose tab entry should be updated
+     * @param playerUuid the UUID of the player whose tab entry should be updated
      */
-    fun updateEntry(uuid: UUID)
+    fun updateTabEntry(playerUuid: UUID)
 
     /**
-     * Requests an [updateEntry] for the player identified by [uuid] on every server in the network.
+     * Requests an [updateTabEntry] for the player identified by [playerUuid] on every server in the
+     * network.
      *
      * The update request is propagated through the tab list's internal communication channel.
      *
-     * @param uuid the UUID of the player whose tab entry should be updated
+     * @param playerUuid the UUID of the player whose tab entry should be updated
      */
-    fun broadcastEntryUpdate(uuid: UUID)
+    fun broadcastTabEntryUpdate(playerUuid: UUID)
 
     companion object : SurfTabApi by instance {
-        val INSTANCE get() = instance
+        val INSTANCE: SurfTabApi get() = instance
     }
 }

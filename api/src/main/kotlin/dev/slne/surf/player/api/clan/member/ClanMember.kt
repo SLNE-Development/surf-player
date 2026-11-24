@@ -1,8 +1,6 @@
 package dev.slne.surf.player.api.clan.member
 
-import dev.slne.surf.player.api.clan.member.listener.ClanMemberListener
 import org.jetbrains.annotations.ApiStatus
-import java.util.*
 
 /**
  * Represents a mutable clan member with the ability to perform actions.
@@ -35,40 +33,4 @@ interface ClanMember : ClanMemberView {
      * @return an immutable view of this member
      */
     fun view(): ClanMemberView
-
-    companion object {
-        /**
-         * Registers a listener to receive clan member-related events.
-         *
-         * @param listener the listener to register
-         * @see ClanMemberListener
-         */
-        fun registerListener(listener: ClanMemberListener) =
-            ClanMemberService.registerListener(listener)
-
-        /**
-         * Unregisters a previously registered clan member listener.
-         *
-         * @param listener the listener to unregister
-         * @see ClanMemberListener
-         */
-        fun unregisterListener(listener: ClanMemberListener) =
-            ClanMemberService.unregisterListener(listener)
-
-        /**
-         * Retrieves a clan member by their unique identifier.
-         *
-         * @param uuid the unique identifier of the member
-         * @return the [ClanMember] instance, or `null` if no member exists with the given UUID
-         */
-        suspend fun byUuid(uuid: UUID) = ClanMemberService.findMemberByUuid(uuid)
-
-        /**
-         * Retrieves a clan member by their player name.
-         *
-         * @param name the name of the member
-         * @return the [ClanMember] instance, or `null` if no member exists with the given name
-         */
-        suspend fun byName(name: String) = ClanMemberService.findMemberByName(name)
-    }
 }

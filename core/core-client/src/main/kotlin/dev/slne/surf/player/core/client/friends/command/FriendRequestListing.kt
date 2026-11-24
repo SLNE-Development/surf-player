@@ -5,7 +5,7 @@ import dev.slne.surf.api.core.messages.CommonComponents
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.service.PlayerLookupService
-import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.core.client.friends.util.format
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
@@ -42,7 +42,7 @@ private data class LocalFriendRequest(
  * The open friend requests of [player] as they are shown to them.
  */
 suspend fun friendRequestListComponent(player: UUID): Component {
-    val friendRequests = FriendsPlayer[player].receivedFriendRequests
+    val friendRequests = SurfFriendsApi.receivedFriendRequests(player)
         .sortedByDescending { it.createdAt }
 
     if (friendRequests.isEmpty()) {

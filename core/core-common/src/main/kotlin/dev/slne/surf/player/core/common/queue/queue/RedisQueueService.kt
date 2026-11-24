@@ -4,9 +4,7 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.core.util.runAtFixedRate
 import dev.slne.surf.api.core.util.withAutoCloseOnRemoval
-import dev.slne.surf.player.api.queue.InternalSurfQueueApi
-import dev.slne.surf.player.api.queue.service.SurfQueueService
-import dev.slne.surf.player.core.common.queue.QueueInstance
+import dev.slne.surf.player.core.common.queue.QueueSystem
 import dev.slne.surf.player.core.common.queue.redis.redisApi
 import dev.slne.surf.redis.libs.redisson.api.options.KeysScanOptions
 import kotlinx.coroutines.Job
@@ -20,8 +18,7 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Creates, caches and periodically discovers the queues stored in Redis.
  */
-@OptIn(InternalSurfQueueApi::class)
-object RedisQueueService : SurfQueueService, AutoCloseable {
+object RedisQueueService : AutoCloseable {
     const val QUEUE_REFRESH_INTERVAL_SECONDS = 30
     private val log = logger()
 
@@ -31,17 +28,18 @@ object RedisQueueService : SurfQueueService, AutoCloseable {
             log.atInfo().log("Queue removed from cache: key=%s, cause=%s", key, cause)
         }
         .build<String, AbstractQueue> { serverName ->
-            QueueInstance.get().createQueue(serverName).also { queue ->
+            QueueSystem.createQueue(serverName).also { queue ->
                 if (queue is AbstractTickableQueue) {
                     queue.startTicking()
                 }
             }
         }
 
-    private val scope = QueueInstance.get().queueScheduler.createServiceScope()
+    private val scope = QueueSystem.queueScheduler.createServiceScope()
     private var refreshJob: Job? = null
 
-    override fun getQueueByName(serverName: String): AbstractQueue = queues.get(serverName)
+    /** The queue of the server named [serverName], created if it does not exist yet. */
+    fun getQueueByName(serverName: String): AbstractQueue = queues.get(serverName)
     fun getAll(): Collection<AbstractQueue> = queues.asMap().values
 
     fun delete(serverName: String) = queues.invalidate(serverName)

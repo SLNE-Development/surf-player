@@ -1,7 +1,7 @@
 package dev.slne.surf.player.core.client.contentcreator
 
 import dev.slne.surf.player.core.client.contentcreator.client.ContentClientManager
-import dev.slne.surf.player.core.client.contentcreator.platform.platformBridge
+import dev.slne.surf.player.core.client.contentcreator.platform.ContentCreatorPlatform
 import dev.slne.surf.player.core.client.contentcreator.service.ContentCreatorService
 
 /**
@@ -13,8 +13,8 @@ object ContentCreatorLifecycle {
      * Connects every content client and starts listening for the streams of all online players.
      */
     suspend fun enable() {
-        ContentClientManager.startAll(platformBridge.pluginScope)
-        ContentClientManager.enableStreamEventListener(platformBridge.onlinePlayerUuids())
+        ContentClientManager.startAll(ContentCreatorPlatform.pluginScope)
+        ContentClientManager.enableStreamEventListener(ContentCreatorPlatform.onlinePlayerUuids())
     }
 
     /**

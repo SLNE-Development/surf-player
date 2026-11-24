@@ -1,6 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands.player
 
-import dev.slne.surf.player.api.clan.player.ClanPlayer
+import dev.slne.surf.player.api.SurfCommunityPlayer
 import dev.slne.surf.player.minestom.command.failCommand
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.booleanArgument
@@ -34,9 +34,9 @@ private fun CommandAPICommand.clanPlayerSettingInviteCommand(): CommandAPIComman
 
         playerExecutorSuspend { player, args ->
             val acceptByArgs = args.getOptional<Boolean>("accept")
-            val clanPlayer = ClanPlayer.byUuid(player.uuid)
+            val clanPlayer = SurfCommunityPlayer(player.uuid)
 
-            val accept = acceptByArgs ?: clanPlayer.acceptsClanInvites.not()
+            val accept = acceptByArgs ?: clanPlayer.acceptsClanInvites().not()
             val changed = clanPlayer.setAcceptsClanInvites(accept)
 
             if (!changed) {

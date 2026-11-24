@@ -6,10 +6,9 @@ import dev.slne.surf.api.core.messages.adventure.clickCallback
 import dev.slne.surf.api.core.messages.adventure.clickRunsCommand
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.util.sendText
-import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
 import dev.slne.surf.player.api.friends.utils.toSurfPlayer
-import dev.slne.surf.player.core.client.friends.FriendsClientInstance
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import dev.slne.surf.player.core.client.friends.redis.event.FriendRequestAcceptRedisEvent
 import dev.slne.surf.player.core.client.friends.redis.event.FriendRequestDenyRedisEvent
@@ -22,7 +21,7 @@ object FriendRequestRedisListener {
     @OnRedisEvent
     fun onFriendRequestAccept(
         event: FriendRequestAcceptRedisEvent
-    ) = FriendsClientInstance.INSTANCE.launch {
+    ) = FriendsPlatform.INSTANCE.launch {
         val executor = event.executorUuid.toSurfPlayer()
         val target = event.targetUuid.toSurfPlayer()
 
@@ -49,7 +48,7 @@ object FriendRequestRedisListener {
     @OnRedisEvent
     fun onFriendRequestDeny(
         event: FriendRequestDenyRedisEvent
-    ) = FriendsClientInstance.INSTANCE.launch {
+    ) = FriendsPlatform.INSTANCE.launch {
         val executor = event.executorUuid.toSurfPlayer()
         val target = event.targetUuid.toSurfPlayer()
 
@@ -76,7 +75,7 @@ object FriendRequestRedisListener {
     @OnRedisEvent
     fun onFriendRequestRevoke(
         event: FriendRequestRevokeRedisEvent
-    ) = FriendsClientInstance.INSTANCE.launch {
+    ) = FriendsPlatform.INSTANCE.launch {
         val executor = event.executorUuid.toSurfPlayer()
         val target = event.targetUuid.toSurfPlayer()
 
@@ -106,12 +105,12 @@ object FriendRequestRedisListener {
     @OnRedisEvent
     fun onFriendRequestSend(
         event: FriendRequestSendRedisEvent
-    ) = FriendsClientInstance.INSTANCE.launch {
+    ) = FriendsPlatform.INSTANCE.launch {
         val executor = event.executorUuid.toSurfPlayer()
         val target = event.targetUuid.toSurfPlayer()
 
-        val executorFriendsPlayer = FriendsPlayer[event.executorUuid]
-        val targetFriendPlayer = FriendsPlayer[event.targetUuid]
+        val executorUuid = event.executorUuid
+        val targetUuid = event.targetUuid
 
         if (event.notifyTarget) {
             if (isOnThisServer(target)) {
@@ -130,8 +129,8 @@ object FriendRequestRedisListener {
                             spacer(" anzunehmen.")
                         }))
                         clickCallback {
-                            FriendsClientInstance.INSTANCE.launch {
-                                targetFriendPlayer.acceptFriendRequest(executorFriendsPlayer)
+                            FriendsPlatform.INSTANCE.launch {
+                                SurfFriendsApi.acceptFriendRequest(targetUuid, executorUuid)
                             }
                         }
                     }
@@ -144,8 +143,8 @@ object FriendRequestRedisListener {
                             spacer(" abzulehnen.")
                         }))
                         clickCallback {
-                            FriendsClientInstance.INSTANCE.launch {
-                                targetFriendPlayer.declineFriendRequest(executorFriendsPlayer)
+                            FriendsPlatform.INSTANCE.launch {
+                                SurfFriendsApi.declineFriendRequest(targetUuid, executorUuid)
                             }
                         }
                     }

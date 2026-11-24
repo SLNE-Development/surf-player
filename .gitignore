@@ -51,3 +51,7 @@ bin/
 !/.projectatlas/projectatlas-nonsource-files.toon
 # JVM heap dumps
 *.hprof
+
+# Local docker test network: downloaded jars and generated credentials
+/docker/test-network/plugins/
+/docker/test-network/.env

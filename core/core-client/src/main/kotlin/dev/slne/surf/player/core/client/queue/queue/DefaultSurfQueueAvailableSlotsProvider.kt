@@ -7,7 +7,7 @@ import dev.slne.surf.player.core.client.queue.platform.QueuePlatform
 object DefaultSurfQueueAvailableSlotsProvider : SurfQueueAvailableSlotsProvider {
     override suspend fun getAvailableSlots(server: SurfServer): Int {
         return if (SurfServer.current().name == server.name) {
-            QueuePlatform.get().maxPlayers() - QueuePlatform.get().onlinePlayerCount()
+            QueuePlatform.maxPlayers() - QueuePlatform.onlinePlayerCount()
         } else {
             server.maxPlayers - server.getPlayers().size
         }

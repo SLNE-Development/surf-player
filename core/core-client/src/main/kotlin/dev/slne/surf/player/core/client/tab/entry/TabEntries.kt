@@ -8,7 +8,7 @@ import dev.slne.surf.player.core.client.playtime.afk.AfkService
 import dev.slne.surf.player.core.client.tab.hook.ClanHook
 import dev.slne.surf.player.core.client.tab.hook.LuckPermsHook
 import dev.slne.surf.player.core.client.tab.platform.TabPlayer
-import dev.slne.surf.player.core.client.tab.platform.tabPlatform
+import dev.slne.surf.player.core.client.tab.platform.TabPlatform
 import dev.slne.surf.player.core.client.tab.service.UpdateCoalescer
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
@@ -65,7 +65,7 @@ class TabEntries {
     private var started = false
 
     private val updates = UpdateCoalescer<UUID>(
-        runUpdates = { block -> tabPlatform.launch { block() } },
+        runUpdates = { block -> TabPlatform.launch { block() } },
         updateTimeout = entryUpdateTimeout,
         onTimeout = { uuid, _ ->
             log.atWarning().log("Tablist entry update for %s timed out", uuid)
@@ -107,7 +107,7 @@ class TabEntries {
      * Requests a re-render of every currently online player's tab list entry.
      */
     fun updateAll() {
-        for (player in tabPlatform.onlinePlayers()) {
+        for (player in TabPlatform.onlinePlayers()) {
             updateEntry(player.uuid)
         }
     }
@@ -125,8 +125,8 @@ class TabEntries {
     }
 
     private suspend fun render(uuid: UUID) {
-        val player = tabPlatform.player(uuid) ?: return
-        val vanished = tabPlatform.isVanished(uuid)
+        val player = TabPlatform.player(uuid) ?: return
+        val vanished = TabPlatform.isVanished(uuid)
 
         val event = TabEntryRenderEvent(
             uuid,
@@ -199,7 +199,7 @@ class TabEntries {
     }
 
     private fun vanishTag(uuid: UUID): TextComponent {
-        return if (tabPlatform.isVanished(uuid)) vanishTag else Component.empty()
+        return if (TabPlatform.isVanished(uuid)) vanishTag else Component.empty()
     }
 
     private fun liveTag(uuid: UUID): Component = LiveTagRenderer.render(uuid, space = true)

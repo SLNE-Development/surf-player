@@ -1,6 +1,6 @@
 package dev.slne.surf.player.core.client.tab.hook
 
-import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.ClanView
 import dev.slne.surf.player.core.client.clan.onEveryClanChange
 import dev.slne.surf.player.core.client.tab.service.TablistService
@@ -9,7 +9,7 @@ import java.util.*
 
 object ClanHook {
     suspend fun getClanTag(playerUuid: UUID): Component? =
-        Clan.byPlayer(playerUuid)?.renderClanTag(10)
+        SurfClanApi.findClanByPlayer(playerUuid)?.renderClanTag(10)
 
     fun createListeners() {
         onEveryClanChange(::updateMembers)

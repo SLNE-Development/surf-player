@@ -15,7 +15,7 @@ import dev.slne.surf.player.core.client.chat.util.formatTime
 import dev.slne.surf.player.core.client.chat.util.nameOrUnknown
 import dev.slne.surf.player.core.client.chat.util.updateLinks
 import dev.slne.surf.player.core.client.util.luckPermsPrefix
-import dev.slne.surf.player.core.common.chat.service.DeletionService
+import dev.slne.surf.player.core.client.chat.service.DeletionService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component

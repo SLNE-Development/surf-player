@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * This sealed interface provides various outcomes when trying to create a new clan,
  * including validation failures and conflicts with existing clans.
  *
- * @see Clan.createClan
+ * @see dev.slne.surf.player.api.clan.SurfClanApi.createClan
  */
 @Serializable
 sealed interface ClanCreationResult {

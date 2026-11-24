@@ -1,7 +1,7 @@
 package dev.slne.surf.player.placeholder.expansion.clan
 
 import dev.slne.surf.api.core.messages.adventure.uuid
-import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.SurfClanApi
 import io.github.miniplaceholders.api.Expansion
 import io.github.miniplaceholders.api.utils.Tags
 import net.kyori.adventure.audience.Audience
@@ -11,7 +11,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag
 
 object ClanExpansionProvider {
     fun provideExpansion(): Expansion {
-        Clan.registerListener(ClanDataCache)
+        SurfClanApi.registerListener(ClanDataCache)
 
         return Expansion.builder("clan")
             .author("Ammo, red & twisti")

@@ -6,7 +6,7 @@ import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.surf.api.core.messages.adventure.sendText
-import dev.slne.surf.player.core.common.chat.service.SpyService
+import dev.slne.surf.player.core.client.chat.service.SpyService
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import org.bukkit.entity.Player
 

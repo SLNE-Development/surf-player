@@ -1,6 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands
 
-import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.ClanCreationResult
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
@@ -22,7 +22,7 @@ fun CommandAPICommand.clanCreateCommand(): CommandAPICommand = withSubcommand(
             val name: String by args
             val tag: String by args
 
-            val result = Clan.createClan(name, tag, player.uuid)
+            val result = SurfClanApi.createClan(player.uuid, name, tag)
             if (result !is ClanCreationResult.Success) {
                 player.sendMessage(clanCreationFailedMessage(result))
                 return@playerExecutorSuspend

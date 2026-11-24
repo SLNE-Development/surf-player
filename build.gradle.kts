@@ -1,5 +1,4 @@
 import dev.slne.surf.api.gradle.util.slneReleases
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
 
 buildscript {
     repositories {
@@ -19,12 +18,6 @@ allprojects {
 
 subprojects {
     afterEvaluate {
-        extensions.findByType<KotlinJvmExtension>()?.apply {
-            compilerOptions {
-                optIn.add("dev.slne.surf.player.api.clan.util.InternalClanApi")
-            }
-        }
-
         plugins.withType<PublishingPlugin> {
             configure<PublishingExtension> {
                 repositories {

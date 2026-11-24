@@ -1,5 +1,6 @@
 package dev.slne.surf.player.paper.clan.commands.subcommands.member.role
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.member.ClanMember
 import dev.slne.surf.player.api.clan.permission.ClanPermission
@@ -13,7 +14,7 @@ import org.bukkit.entity.Player
  * Promotes or demotes [member] by one role on behalf of [player] and announces it to the clan.
  */
 suspend fun changeMemberRole(player: Player, member: ClanMember, change: RoleChange) {
-    val clan = Clan.byPlayer(player.uniqueId)
+    val clan = SurfClanApi.findClanByPlayer(player.uniqueId)
         ?: failCommand(Messages.NOT_IN_CLAN)
 
     if (!clan.isMember(member.uuid)) {

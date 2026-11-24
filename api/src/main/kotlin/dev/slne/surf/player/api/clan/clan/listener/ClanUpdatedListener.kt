@@ -17,13 +17,12 @@ import dev.slne.surf.player.api.clan.clan.Clan
  * val listener = ClanUpdatedListener { clan ->
  *     println("Clan updated: ${clan.name}")
  * }
- * Clan.registerListener(listener)
+ * SurfClanApi.registerListener(listener)
  * ```
  *
  * @see ClanListener
  * @see ClanUpdateMemberListener
- * @see Clan.registerListener
- * @see Clan.unregisterListener
+ * @see dev.slne.surf.player.api.clan.SurfClanApi.registerListener
  */
 fun interface ClanUpdatedListener : ClanListener {
 

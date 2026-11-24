@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands.options
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.clan.ClanTagColor
 import dev.slne.surf.player.api.clan.clan.ClanTagColorUpdate
@@ -52,7 +53,7 @@ fun CommandAPICommand.clanTagColorCommand(): CommandAPICommand = withSubcommand(
 )
 
 private suspend fun changeColor(sender: Player, update: ClanTagColorUpdate) {
-    val clan = Clan.byPlayer(sender.uuid)
+    val clan = SurfClanApi.findClanByPlayer(sender.uuid)
         ?: failCommand(Messages.NOT_IN_CLAN)
 
     if (!clan.hasMemberPermission(sender.uuid, ClanPermission.OPTIONS_TAG_COLOR)) {

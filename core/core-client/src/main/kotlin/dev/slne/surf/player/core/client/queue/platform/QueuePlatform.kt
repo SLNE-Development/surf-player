@@ -5,6 +5,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import java.util.*
 
+private val platform = requiredService<QueuePlatform>()
+
 /**
  * Platform abstraction for the few operations the shared queue logic cannot express
  * on its own.
@@ -36,9 +38,5 @@ interface QueuePlatform {
      */
     fun launchAsync(block: suspend CoroutineScope.() -> Unit): Job
 
-    companion object {
-        val instance = requiredService<QueuePlatform>()
-
-        fun get() = instance
-    }
+    companion object : QueuePlatform by platform
 }

@@ -3,6 +3,7 @@ package dev.slne.surf.player.paper.clan.commands.arguments
 import com.github.shynixn.mccoroutine.folia.scope
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.StringArgument
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.invite.ClanInvite
 import dev.slne.surf.player.paper.clan.commands.failCommand
 import dev.slne.surf.player.paper.plugin
@@ -40,7 +41,7 @@ class ClanInviteArgument(nodeName: String) :
         val clanName = info.currentInput
         val sender = info.sender as? Player
             ?: failCommand(CLAN_INVITE_ARGUMENT_NEEDS_PLAYER)
-        val invite = ClanInvite.pendingInviteByPlayerAndClanName(sender.uniqueId, clanName)
+        val invite = SurfClanApi.findClanInvite(sender.uniqueId, clanName)
 
         return invite ?: failCommand(Messages.noPendingInviteForClan(clanName))
     }

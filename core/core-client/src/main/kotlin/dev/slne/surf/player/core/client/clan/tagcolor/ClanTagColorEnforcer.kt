@@ -2,6 +2,7 @@ package dev.slne.surf.player.core.client.clan.tagcolor
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.sksamuel.aedile.core.expireAfterWrite
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.member.ClanMemberRole
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
@@ -27,7 +28,7 @@ object ClanTagColorEnforcer {
 
     suspend fun enforceForClanOf(playerUuid: UUID) {
         try {
-            val clan = Clan.byPlayer(playerUuid) ?: return
+            val clan = SurfClanApi.findClanByPlayer(playerUuid) ?: return
             enforce(clan)
         } catch (e: Throwable) {
             log.atWarning()

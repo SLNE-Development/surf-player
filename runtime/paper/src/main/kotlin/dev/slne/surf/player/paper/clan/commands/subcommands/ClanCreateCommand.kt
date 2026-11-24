@@ -4,7 +4,7 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.getValue
 import dev.jorel.commandapi.kotlindsl.stringArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
-import dev.slne.surf.player.api.clan.clan.Clan
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.ClanCreationResult
 import dev.slne.surf.player.paper.clan.permission.ClanPermissions
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
@@ -22,7 +22,7 @@ fun CommandAPICommand.clanCreateCommand() = subcommand("create") {
         val name: String by args
         val tag: String by args
 
-        val result = Clan.createClan(name, tag, player.uniqueId)
+        val result = SurfClanApi.createClan(player.uniqueId, name, tag)
         if (result !is ClanCreationResult.Success) {
             player.sendMessage(clanCreationFailedMessage(result))
             return@playerExecutorSuspend

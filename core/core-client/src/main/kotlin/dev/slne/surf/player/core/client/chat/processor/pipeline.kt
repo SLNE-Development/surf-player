@@ -1,12 +1,11 @@
 package dev.slne.surf.player.core.client.chat.processor
 
 import dev.slne.surf.player.api.chat.message.MessageContext
-import dev.slne.surf.player.api.chat.processor.chatProcessorRegistry
 
 suspend fun runPreProcessors(context: MessageContext): MessageContext {
     var current = context
 
-    for (processor in chatProcessorRegistry.preChatProcessors) {
+    for (processor in ChatProcessorRegistry.preChatProcessors) {
         current = processor.processAsync(current)
 
         if (current.isCancelled) {
@@ -18,7 +17,7 @@ suspend fun runPreProcessors(context: MessageContext): MessageContext {
 }
 
 suspend fun runPostProcessors(context: MessageContext) {
-    for (processor in chatProcessorRegistry.postChatProcessors) {
+    for (processor in ChatProcessorRegistry.postChatProcessors) {
         processor.process(context)
     }
 }

@@ -17,7 +17,7 @@ fun CommandAPICommand.friendInfoCommand(): CommandAPICommand = withSubcommand(
         playerExecutorSuspend { player, args ->
             val target = args.resolveFriend("target")
 
-            player.sendMessage(friendInfoComponent(player.uuid, target))
+            player.sendMessage(friendInfoComponent(player.uuid, target.uuid))
         }
     }
 )

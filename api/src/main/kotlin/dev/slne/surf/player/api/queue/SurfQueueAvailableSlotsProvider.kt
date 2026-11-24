@@ -4,6 +4,8 @@ import dev.slne.surf.core.api.common.server.SurfServer
 
 /**
  * Provides the number of currently available slots for a given [SurfServer].
+ *
+ * The provider in use is [SurfQueueApi.availableSlotsProvider].
  */
 interface SurfQueueAvailableSlotsProvider {
 
@@ -14,29 +16,4 @@ interface SurfQueueAvailableSlotsProvider {
      * @return the amount of free slots on the server
      */
     suspend fun getAvailableSlots(server: SurfServer): Int
-
-    /**
-     * Holds global access to the currently configured [SurfQueueAvailableSlotsProvider].
-     */
-    companion object {
-        @Volatile
-        private lateinit var instance: SurfQueueAvailableSlotsProvider
-
-        /**
-         * Sets the global [SurfQueueAvailableSlotsProvider] instance.
-         *
-         * @param provider the provider instance to register
-         */
-        fun set(provider: SurfQueueAvailableSlotsProvider) {
-            instance = provider
-        }
-
-        /**
-         * Returns the globally configured [SurfQueueAvailableSlotsProvider] instance.
-         *
-         * @return the registered provider instance
-         * @throws UninitializedPropertyAccessException if no provider has been set yet
-         */
-        fun get() = instance
-    }
 }

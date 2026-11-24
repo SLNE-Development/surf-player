@@ -23,5 +23,16 @@ interface ChatPlatform {
     fun teleportToPlayer(who: UUID, target: UUID)
     fun launchAsync(block: suspend CoroutineScope.() -> Unit)
 
+    /**
+     * Sends [signedMessage] from the player identified by [senderUuid], who must be on this
+     * server, to the player identified by [targetUuid], on this or another server.
+     */
+    suspend fun sendSignedMessage(
+        senderUuid: UUID,
+        targetUuid: UUID,
+        signedMessage: SignedMessage,
+        contentComponent: Component
+    )
+
     companion object : ChatPlatform by platform
 }

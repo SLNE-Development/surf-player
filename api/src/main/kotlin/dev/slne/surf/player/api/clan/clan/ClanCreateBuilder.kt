@@ -6,15 +6,14 @@ import java.util.*
  * Builder class for configuring optional properties when creating a clan.
  *
  * This class uses a fluent API to set optional clan properties such as tag color,
- * description, and Discord invite. Instances are created internally by [Clan.createClan].
+ * description, and Discord invite. Instances are created by [dev.slne.surf.player.api.clan.SurfClanApi.createClan].
  *
  * @property name the name of the clan being created
  * @property tag the tag of the clan being created
  * @property owner the UUID of the clan owner
- * @see Clan.createClan
+ * @see dev.slne.surf.player.api.clan.SurfClanApi.createClan
  */
-@ConsistentCopyVisibility
-data class ClanCreateBuilder internal constructor(
+data class ClanCreateBuilder(
     val name: String,
     val tag: String,
     val owner: UUID

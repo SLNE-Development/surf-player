@@ -5,13 +5,12 @@ import dev.slne.surf.api.core.minimessage.miniMessage
 import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.player.api.tab.placeholder.TabPlaceholder
 import dev.slne.surf.player.api.tab.placeholder.UpdateCondition
-import dev.slne.surf.player.api.tab.redis.TabEntryUpdateRedisEvent
 import dev.slne.surf.player.core.client.tab.config.tablistConfig
 import dev.slne.surf.player.core.client.tab.config.TablistConfigFile
 import dev.slne.surf.player.core.client.tab.entry.TabEntries
 import dev.slne.surf.player.core.client.tab.platform.TabPlatform
 import dev.slne.surf.player.core.client.tab.platform.TabPlayer
-import dev.slne.surf.player.core.client.tab.platform.tabPlatform
+import dev.slne.surf.player.core.client.tab.redis.TabEntryUpdateRedisEvent
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
 import dev.slne.surf.player.core.client.tab.util.AdventureTablistRenderer
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
@@ -76,27 +75,25 @@ object TablistService {
     private val additions = TablistAdditions(
         templates = { templates() },
         captureValues = { captureValues(templates()) },
-        onlinePlayers = { tabPlatform.onlinePlayers() },
-        onlinePlayerCount = { tabPlatform.onlinePlayerCount() },
+        onlinePlayers = { TabPlatform.onlinePlayers() },
+        onlinePlayerCount = { TabPlatform.onlinePlayerCount() },
         renderer = AdventureTablistRenderer,
-        runUpdates = { block -> tabPlatform.launch { block() } }
+        runUpdates = { block -> TabPlatform.launch { block() } }
     )
 
     /**
-     * Binds the supplied [platform] and starts the tab list service.
+     * Starts the tab list service on the running [TabPlatform].
      *
      * The current templates are analyzed before the service is marked as started so invalid
      * configuration fails immediately during startup. Once initialized, the scheduler is started and
      * both header/footer content and all currently online player entries are rendered.
      *
-     * @param platform the platform implementation used by the tab list service
      * @throws IllegalStateException if the service has already been started
      */
     @Synchronized
-    fun start(platform: TabPlatform) {
+    fun start() {
         check(!started) { "The tablist was already started" }
 
-        tabPlatform = platform
         templates()
 
         started = true
@@ -130,7 +127,7 @@ object TablistService {
      * @param viewer the player that joined
      */
     fun viewerJoined(viewer: TabPlayer) {
-        tabPlatform.launch {
+        TabPlatform.launch {
             additions.invalidatePlayer(viewer)
             additions.invalidateAll(TablistUpdateReason.PLAYER_COUNT)
             entries.updateEntry(viewer.uuid)
@@ -384,7 +381,7 @@ object TablistService {
             }
         }
 
-        return TablistValues(generations.incrementAndGet(), values, tabPlatform.onlinePlayerCount())
+        return TablistValues(generations.incrementAndGet(), values, TabPlatform.onlinePlayerCount())
     }
 
 }

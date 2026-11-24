@@ -1,7 +1,7 @@
 package dev.slne.surf.player.minestom.friends
 
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
-import dev.slne.surf.player.core.client.friends.FriendsClientInstance
+import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
 import dev.slne.surf.player.minestom.friends.command.friendCommand
@@ -14,22 +14,15 @@ object FriendsMinestomFeature : MinestomPlayerFeature {
     override val id = "friends"
 
     override suspend fun onLoad() {
-        val instance = FriendsClientInstance.INSTANCE
-
-        instance.withEvents()
-        instance.onLoad()
+        FriendsClient.load()
     }
 
     override suspend fun onEnable() {
-        FriendsClientInstance.INSTANCE.onEnable()
+        FriendsClient.enable()
         friendCommand()
 
         friendRequestSendCommand("fa").register()
         friendListCommand("fl").register()
-    }
-
-    override suspend fun onDisable() {
-        FriendsClientInstance.INSTANCE.onDisable()
     }
 
     override fun onPlayerJoin(player: Player) {

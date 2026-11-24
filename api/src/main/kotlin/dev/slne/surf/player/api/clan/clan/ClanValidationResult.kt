@@ -8,7 +8,7 @@ import it.unimi.dsi.fastutil.chars.Char2BooleanMap
  * This sealed interface provides various validation outcomes, indicating whether
  * the proposed clan name and tag meet system requirements.
  *
- * @see Clan.validateClanNameAndTag
+ * @see dev.slne.surf.player.api.clan.SurfClanApi.validateClanNameAndTag
  */
 sealed interface ClanValidationResult {
     /**

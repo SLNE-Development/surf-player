@@ -6,7 +6,6 @@ import dev.slne.surf.player.api.chat.entry.HistoryFilter
 import dev.slne.surf.player.api.chat.entry.IgnoreListEntry
 import dev.slne.surf.player.api.chat.message.MessageData
 import dev.slne.surf.player.api.chat.message.redirector.MessageRedirector
-import dev.slne.surf.player.api.chat.message.redirector.MessageRedirectorRegistry
 import dev.slne.surf.player.api.chat.processor.PostChatProcessor
 import dev.slne.surf.player.api.chat.processor.PreChatProcessor
 import it.unimi.dsi.fastutil.objects.ObjectList
@@ -17,34 +16,55 @@ import java.util.*
 
 private val instance = requiredService<SurfChatApi>()
 
+/**
+ * Entry point to chat processing, message history and ignore lists.
+ *
+ * Everything about a single player is also available through [ChatCapability].
+ */
 interface SurfChatApi {
+    /** Stores [data] in the chat history and the moderation cache. */
     suspend fun logMessage(data: MessageData)
 
+    /** Adds [processor] to the chat pipeline, ordered by [PreChatProcessor.order]. */
     fun registerChatProcessor(processor: PreChatProcessor)
+
+    /** Adds [processor] to the end of the chat pipeline. */
     fun registerChatProcessor(processor: PostChatProcessor)
 
-    fun registerMessageRedirector(redirector: MessageRedirector) = MessageRedirectorRegistry.register(redirector)
+    /** Adds [redirector], which receives every chat message sent on this server. */
+    fun registerMessageRedirector(redirector: MessageRedirector)
 
-    fun getCachedIgnoreList(uuid: UUID): List<IgnoreListEntry>
-    suspend fun getIgnoreList(uuid: UUID): List<IgnoreListEntry>
+    /** The ignore list of the player identified by [uuid] as cached on this server. */
+    fun cachedIgnoreList(uuid: UUID): List<IgnoreListEntry>
 
+    /** Loads the ignore list of the player identified by [uuid] and caches it on this server. */
+    suspend fun ignoreList(uuid: UUID): List<IgnoreListEntry>
+
+    /** Deletes the signed message with [signature] for every player on this server. */
     fun deleteMessage(signature: SignedMessage.Signature)
+
+    /** Deletes [messageData] on every server and marks it deleted by [deleter] in the history. */
     suspend fun deleteRemoteMessage(deleter: UUID?, messageData: MessageData)
 
+    /** The chat history entries matching [filter]. */
     @Throws(TimeoutCancellationException::class)
     suspend fun lookupHistory(filter: HistoryFilter): ObjectList<HistoryEntry>
 
+    /**
+     * Sends [signedMessage] from the player identified by [senderUuid], who must be on this
+     * server, to the player identified by [targetUuid] anywhere in the network.
+     */
     suspend fun sendSignedMessage(
-        signedMessage: SignedMessage,
         senderUuid: UUID,
         targetUuid: UUID,
+        signedMessage: SignedMessage,
         contentComponent: Component
     )
 
-
+    /** Runs the AI moderation on [messageData]. */
     suspend fun passAutoMod(messageData: MessageData)
 
     companion object : SurfChatApi by instance {
-        val INSTANCE get() = instance
+        val INSTANCE: SurfChatApi get() = instance
     }
 }

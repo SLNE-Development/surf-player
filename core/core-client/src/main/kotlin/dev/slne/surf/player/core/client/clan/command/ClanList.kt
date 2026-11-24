@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.clan.command
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
@@ -39,7 +40,7 @@ fun clanListPagination(clanClickEvent: (clanUuid: UUID) -> ClickEvent<*>) = Pagi
  * Shows the information of the clan whose row was clicked.
  */
 suspend fun handleClanListClick(clicked: Audience, clanUuid: UUID) {
-    val clan = Clan.byUuid(clanUuid)
+    val clan = SurfClanApi.findClanByUuid(clanUuid)
 
     if (clan == null) {
         clicked.sendText {

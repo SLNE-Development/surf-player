@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands.member.role
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.permission.ClanPermission
 import dev.slne.surf.player.minestom.clan.command.arguments.clanMemberArgument
@@ -21,7 +22,7 @@ fun CommandAPICommand.clanPromoteMemberCommand(): CommandAPICommand = withSubcom
 
         playerExecutorSuspend { player, args ->
             val member = args.resolveClanMember("member")
-            val clan = Clan.byPlayer(player.uuid)
+            val clan = SurfClanApi.findClanByPlayer(player.uuid)
                 ?: failCommand(Messages.NOT_IN_CLAN)
             val isInClan = clan.isMember(member.uuid)
 

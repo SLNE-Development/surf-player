@@ -4,6 +4,7 @@ import dev.slne.surf.api.core.util.requiredService
 import dev.slne.surf.player.api.playtime.event.AfkStateChangeEvent
 import dev.slne.surf.player.api.playtime.session.PlaytimeFilter
 import dev.slne.surf.player.api.playtime.session.PlaytimeSession
+import dev.slne.surf.player.api.playtime.session.PlaytimeStreak
 import it.unimi.dsi.fastutil.objects.Object2LongMap
 import it.unimi.dsi.fastutil.objects.ObjectSet
 import java.util.*
@@ -43,7 +44,10 @@ interface SurfPlaytimeApi {
      */
     suspend fun getPlaytimePerPlayer(filter: PlaytimeFilter): Object2LongMap<UUID>
 
+    /** The stored login streak of [playerUuid], or `null` if none has been stored yet. */
+    suspend fun getLoginStreak(playerUuid: UUID): PlaytimeStreak?
+
     companion object : SurfPlaytimeApi by instance {
-        val INSTANCE get() = instance
+        val INSTANCE: SurfPlaytimeApi get() = instance
     }
 }

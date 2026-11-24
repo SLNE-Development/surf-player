@@ -3,17 +3,17 @@ package dev.slne.surf.player.api.contentcreator.platform
 enum class PlatformState {
 
     /**
-     * The plattform is online.
+     * The platform is online.
      */
     ONLINE,
 
     /**
-     * The plattform is offline.
+     * The platform is offline.
      */
     OFFLINE,
 
     /**
-     * The plattform is unknown.
+     * The platform is unknown.
      */
     UNKNOWN
 }

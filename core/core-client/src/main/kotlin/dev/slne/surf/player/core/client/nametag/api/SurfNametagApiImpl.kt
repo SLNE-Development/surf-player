@@ -9,14 +9,12 @@ import java.util.*
 
 @AutoService(SurfNametagApi::class)
 class SurfNametagApiImpl : SurfNametagApi, Services.Fallback {
-    override fun preventNametagUpdate(playerUuid: UUID): Boolean {
+    override fun preventNametagUpdates(playerUuid: UUID) {
         NametagService.preventUpdates(playerUuid)
-        return true
     }
 
-    override fun allowNametagUpdate(playerUuid: UUID): Boolean {
+    override fun allowNametagUpdates(playerUuid: UUID) {
         NametagService.allowUpdates(playerUuid)
-        return true
     }
 
     override fun setNametagVisibility(playerUuid: UUID, visibility: NametagVisibility) {

@@ -2,7 +2,7 @@ package dev.slne.surf.player.api.friends.model
 
 import dev.slne.surf.api.core.serializer.java.datetime.datetime.offset.SerializableOffsetDateTime
 import dev.slne.surf.api.core.serializer.java.uuid.SerializableUUID
-import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.SurfCommunityPlayer
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,6 +11,6 @@ data class FriendRequest(
     val targetUuid: SerializableUUID,
     val createdAt: SerializableOffsetDateTime
 ) {
-    val sender get() = FriendsPlayer[senderUuid]
-    val target get() = FriendsPlayer[targetUuid]
+    val sender get() = SurfCommunityPlayer(senderUuid)
+    val target get() = SurfCommunityPlayer(targetUuid)
 }

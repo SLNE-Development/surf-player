@@ -10,7 +10,7 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.util.mapAsync
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
-import dev.slne.surf.player.core.common.chat.service.IgnoreService
+import dev.slne.surf.player.core.client.chat.service.IgnoreService
 import dev.slne.surf.player.core.client.chat.util.formatTime
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import dev.slne.surf.core.api.common.SurfCoreApi

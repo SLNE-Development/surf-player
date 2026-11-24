@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.arguments
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.invite.ClanInvite
 import dev.slne.surf.player.minestom.command.commandArgumentScope
 import dev.slne.surf.player.minestom.command.failCommand
@@ -21,7 +22,7 @@ class ClanInviteArgument(nodeName: String) :
         val clanName = info.currentInput
 
         commandArgumentScope.async {
-            ClanInvite.pendingInviteByPlayerAndClanName(sender.uuid, clanName)
+            SurfClanApi.findClanInvite(sender.uuid, clanName)
         }
     }) {
 

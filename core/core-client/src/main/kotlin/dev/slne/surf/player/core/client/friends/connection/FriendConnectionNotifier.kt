@@ -3,9 +3,10 @@ package dev.slne.surf.player.core.client.friends.connection
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.clickRunsCommand
-import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
-import dev.slne.surf.player.core.client.friends.FriendsClientInstance
+import dev.slne.surf.player.api.friends.utils.toSurfPlayer
+import dev.slne.surf.player.core.client.friends.FriendsClient
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import java.util.*
@@ -75,7 +76,7 @@ object FriendConnectionNotifier {
     private suspend fun announce(uuid: UUID, friendUuids: List<UUID>, message: String) {
         if (friendUuids.isEmpty()) return
 
-        val displayName = FriendsPlayer[uuid].surfPlayer().displayName()
+        val displayName = uuid.toSurfPlayer().displayName()
 
         val announcement = buildText {
             appendInfoPrefix()
@@ -85,7 +86,7 @@ object FriendConnectionNotifier {
         val platform = FriendsPlatform.INSTANCE
 
         friendUuids.forEach { friendUuid ->
-            if (!FriendsPlayer[friendUuid].notificationsEnabled) return@forEach
+            if (!SurfFriendsApi.friendNotificationsEnabled(friendUuid)) return@forEach
 
             platform.sendMessage(friendUuid, announcement)
         }
@@ -95,7 +96,7 @@ object FriendConnectionNotifier {
      * How many friend requests [uuid] has received.
      */
     private fun countReceivedFriendRequests(uuid: UUID): Int {
-        val snapshot = FriendsClientInstance.INSTANCE.friendRequests.snapshot()
+        val snapshot = FriendsClient.friendRequests.snapshot()
         var count = 0
 
         for (index in snapshot.indices) {
@@ -109,7 +110,7 @@ object FriendConnectionNotifier {
      * The friends of [uuid] that are connected to this server.
      */
     private fun friendsOnThisServer(uuid: UUID): List<UUID> {
-        val snapshot = FriendsClientInstance.INSTANCE.friendships.snapshot()
+        val snapshot = FriendsClient.friendships.snapshot()
         val platform = FriendsPlatform.INSTANCE
         val online = ObjectArrayList<UUID>()
 

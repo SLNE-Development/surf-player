@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.invite.ClanInvite
 import dev.slne.surf.player.api.clan.member.ClanMember
@@ -17,7 +18,7 @@ suspend fun CommandArguments.resolveClanArgumentOrOwn(node: String, player: UUID
         return resolveClanArgument(node)
     }
 
-    return Clan.byPlayer(player) ?: failCommand(Messages.NOT_IN_CLAN)
+    return SurfClanApi.findClanByPlayer(player) ?: failCommand(Messages.NOT_IN_CLAN)
 }
 
 /**

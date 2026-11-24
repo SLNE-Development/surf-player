@@ -8,9 +8,6 @@ import dev.slne.surf.api.velocity.command.executors.playerExecutorSuspend
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.velocity.command.argument.surfOfflinePlayerArgument
 import dev.slne.surf.player.api.connection.SurfConnectionApi
-import dev.slne.surf.player.api.connection.findConnection
-import dev.slne.surf.player.api.connection.impl.DiscordConnection
-import dev.slne.surf.player.api.connection.impl.TwitchConnection
 import dev.slne.surf.player.velocity.connection.config
 import dev.slne.surf.player.velocity.connection.httpClient
 import dev.slne.surf.player.velocity.connection.permission.SocialPermissions
@@ -105,8 +102,8 @@ fun linkCommand() = commandTree("link") {
  * The display names of the Twitch and Discord accounts linked to [playerUuid], Twitch first.
  */
 private suspend fun linkedAccountNames(playerUuid: UUID): List<String> = coroutineScope {
-    val discord = async { SurfConnectionApi.findConnection<DiscordConnection>(playerUuid) }
-    val twitch = async { SurfConnectionApi.findConnection<TwitchConnection>(playerUuid) }
+    val discord = async { SurfConnectionApi.findDiscordConnection(playerUuid) }
+    val twitch = async { SurfConnectionApi.findTwitchConnection(playerUuid) }
 
     listOfNotNull(
         twitch.await()?.let { "Twitch Account '${it.twitchName}'" },

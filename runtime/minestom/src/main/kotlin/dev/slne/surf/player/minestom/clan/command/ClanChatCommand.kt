@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
 import dev.slne.surf.api.minestom.command.dsl.signedMessageArgument
@@ -25,7 +26,7 @@ fun clanChatCommand(name: String) = subcommand(name) {
     signedMessageArgument("message")
 
     playerExecutorSuspend { player, arguments ->
-        val playerClan = Clan.byPlayer(player.uuid)
+        val playerClan = SurfClanApi.findClanByPlayer(player.uuid)
         val message = arguments.get<SignedMessage>("message")
 
         if (playerClan == null) {
@@ -42,9 +43,9 @@ fun clanChatCommand(name: String) = subcommand(name) {
         playerClan.members.forEach { member ->
             launch {
                 SurfChatApi.sendSignedMessage(
-                    message,
                     player.uuid,
                     member.uuid,
+                    message,
                     formattedMessage
                 )
             }

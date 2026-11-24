@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.clan.command
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.api.clan.permission.ClanPermission
 import dev.slne.surf.api.core.messages.adventure.buildText
@@ -70,7 +71,7 @@ private fun disbandHoverText() = buildText {
  * Disbands the clan [clicker] confirmed, provided they are still in it and still allowed to.
  */
 suspend fun handleDisbandClick(clicked: Audience, clicker: UUID, oldClanUuid: UUID) {
-    val currentClan = Clan.byPlayer(clicker) ?: return clicked.sendText {
+    val currentClan = SurfClanApi.findClanByPlayer(clicker) ?: return clicked.sendText {
         appendErrorPrefix()
         error(Messages.NO_LONGER_IN_A_CLAN)
     }

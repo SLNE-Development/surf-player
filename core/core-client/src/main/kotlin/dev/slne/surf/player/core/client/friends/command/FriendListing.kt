@@ -6,7 +6,7 @@ import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.api.core.service.PlayerLookupService
 import dev.slne.surf.core.api.common.SurfCoreApi
-import dev.slne.surf.player.api.friends.player.FriendsPlayer
+import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import net.kyori.adventure.text.Component
@@ -46,7 +46,7 @@ private data class LocalFriendEntry(
  * The friend list of [player] as it is shown to them.
  */
 suspend fun friendListComponent(player: UUID): Component {
-    val friendList = FriendsPlayer[player].friendships
+    val friendList = SurfFriendsApi.friendships(player)
 
     if (friendList.isEmpty()) {
         return buildText {

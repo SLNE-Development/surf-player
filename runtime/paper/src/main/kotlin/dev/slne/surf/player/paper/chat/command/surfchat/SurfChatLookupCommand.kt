@@ -13,7 +13,7 @@ import dev.slne.surf.player.core.client.chat.lookup.RenderData
 import dev.slne.surf.player.core.client.chat.lookup.lookupPagination
 import dev.slne.surf.player.core.client.chat.lookup.parseFilters
 import dev.slne.surf.player.core.client.chat.lookup.resolveSenderNames
-import dev.slne.surf.player.core.common.chat.service.HistoryService
+import dev.slne.surf.player.core.client.chat.service.HistoryService
 import dev.slne.surf.player.paper.chat.permission.PermissionRegistry
 import kotlinx.coroutines.TimeoutCancellationException
 

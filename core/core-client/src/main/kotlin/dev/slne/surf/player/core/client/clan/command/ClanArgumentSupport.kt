@@ -1,7 +1,6 @@
 package dev.slne.surf.player.core.client.clan.command
 
-import dev.slne.surf.player.api.clan.clan.Clan
-import dev.slne.surf.player.api.clan.invite.ClanInvite
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.member.ClanMember
 import dev.slne.surf.player.core.client.util.usernameOrUuid
 import kotlinx.coroutines.launch
@@ -20,7 +19,7 @@ const val CLAN_INVITE_ARGUMENT_NEEDS_PLAYER =
  * The names of the clans [player] currently has a pending invitation to.
  */
 suspend fun invitedClanNames(player: UUID): Set<String> {
-    val invites = ClanInvite.pendingInvitesByPlayer(player)
+    val invites = SurfClanApi.findClanInvites(player)
 
     if (invites.isEmpty()) return emptySet()
 
@@ -47,7 +46,7 @@ suspend fun invitedClanNames(player: UUID): Set<String> {
  * unknown.
  */
 suspend fun clanMemberNames(player: UUID): Set<String> {
-    val clan = Clan.byPlayer(player) ?: return emptySet()
+    val clan = SurfClanApi.findClanByPlayer(player) ?: return emptySet()
 
     val memberNames = ConcurrentHashMap.newKeySet<String>()
     val semaphore = Semaphore(LOOKUP_CONCURRENCY)
@@ -70,5 +69,9 @@ suspend fun clanMemberNames(player: UUID): Set<String> {
 suspend fun findClanMember(nameOrUuid: String): ClanMember? {
     val uuid = runCatching { UUID.fromString(nameOrUuid) }.getOrNull()
 
-    return if (uuid != null) ClanMember.byUuid(uuid) else ClanMember.byName(nameOrUuid)
+    return if (uuid != null) {
+        SurfClanApi.findClanMember(uuid)
+    } else {
+        SurfClanApi.findClanMemberByName(nameOrUuid)
+    }
 }

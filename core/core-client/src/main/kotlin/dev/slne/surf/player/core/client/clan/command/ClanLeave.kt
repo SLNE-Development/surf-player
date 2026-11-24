@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.clan.command
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.api.core.messages.adventure.buildText
 import dev.slne.surf.api.core.messages.adventure.sendText
@@ -50,7 +51,7 @@ suspend fun handleLeaveClick(
     clickerName: String,
     originalClanUuid: UUID
 ) {
-    val clan = Clan.byPlayer(clicker) ?: return clicked.sendText {
+    val clan = SurfClanApi.findClanByPlayer(clicker) ?: return clicked.sendText {
         appendErrorPrefix()
         error(Messages.NO_LONGER_IN_A_CLAN)
     }

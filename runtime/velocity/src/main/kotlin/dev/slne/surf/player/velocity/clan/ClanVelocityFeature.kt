@@ -1,6 +1,6 @@
 package dev.slne.surf.player.velocity.clan
 
-import dev.slne.surf.player.core.common.clan.ClanInstance
+import dev.slne.surf.player.core.client.clan.ClanClient
 import dev.slne.surf.player.velocity.PlayerVelocityPlugin
 import dev.slne.surf.player.velocity.VelocityPlayerFeature
 import dev.slne.surf.player.velocity.clan.listener.JoinInviteListener
@@ -13,16 +13,10 @@ object ClanVelocityFeature : VelocityPlayerFeature {
     override val id = "clan"
 
     override suspend fun onLoad() {
-        ClanInstance.load()
+        ClanClient.load(dataDirectory)
     }
 
     override suspend fun onEnable() {
-        ClanInstance.enable()
-
         plugin.eventManager.register(plugin, JoinInviteListener)
-    }
-
-    override suspend fun onDisable() {
-        ClanInstance.disable()
     }
 }

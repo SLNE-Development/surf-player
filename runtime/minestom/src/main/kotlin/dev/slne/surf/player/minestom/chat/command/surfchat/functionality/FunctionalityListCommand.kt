@@ -10,7 +10,7 @@ import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.core.messages.pagination.Pagination
 import dev.slne.surf.player.core.client.chat.message.format.appendStatusIcon
 import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import net.kyori.adventure.text.format.TextDecoration
 
 private val pagination = Pagination<FunctionalityStatusEntry> {

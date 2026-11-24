@@ -7,7 +7,6 @@ import dev.slne.surf.player.api.contentcreator.ContentCreator
 import dev.slne.surf.player.api.contentcreator.ContentCreatorPlatform
 import dev.slne.surf.player.api.contentcreator.platform.PlatformState
 import dev.slne.surf.player.api.contentcreator.platform.PlatformType
-import dev.slne.surf.player.core.client.contentcreator.ContentCreatorInstance
 import dev.slne.surf.player.core.client.contentcreator.config.config
 import dev.slne.surf.player.core.client.contentcreator.service.ContentCreatorService
 import it.unimi.dsi.fastutil.objects.ObjectSet
@@ -60,7 +59,7 @@ abstract class ContentClient(private val platformType: PlatformType) : Closeable
             platform.state = newState
         }
 
-        ContentCreatorInstance.callOnStateChangeListener(
+        ContentCreatorService.callOnStateChangeListener(
             contentCreator.minecraftUuid,
             platform,
             newState

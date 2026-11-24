@@ -3,6 +3,7 @@ package dev.slne.surf.player.paper.clan.commands.subcommands.member
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.optionalArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.player.paper.clan.commands.arguments.ClanByClanTagArgument
 import dev.slne.surf.player.paper.clan.commands.failCommand
@@ -21,7 +22,7 @@ fun CommandAPICommand.clanMembersCommand() = subcommand("members") {
 
     playerExecutorSuspend { player, args ->
         val clan = args.awaitingOrNull<Clan>("clan") ?: run {
-            Clan.byPlayer(player.uniqueId)
+            SurfClanApi.findClanByPlayer(player.uniqueId)
                 ?: failCommand(Messages.NOT_IN_CLAN)
         }
 

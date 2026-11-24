@@ -14,4 +14,5 @@ luckperms-api = { module = "net.luckperms:api", version.ref = "luckperms-api" }
 openai = { module = "com.openai:openai-java", version.ref = "openai" }
 twitch4j = { module = "com.github.twitch4j:twitch4j", version.ref = "twitch4j" }
 polar = { module = "top.polar:api", version.ref = "polar" }
+xanthic-cache-caffeine3 = { module = "io.github.xanthic.cache:cache-provider-caffeine3", version = "0.7.1" }
 surf-transaction-api = { module = "dev.slne.surf.transaction:surf-transaction-api", version = "+" }

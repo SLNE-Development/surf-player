@@ -7,9 +7,16 @@ import java.util.*
 private val instance = requiredService<SurfNametagApi>()
 
 interface SurfNametagApi {
-    fun preventNametagUpdate(playerUuid: UUID): Boolean
 
-    fun allowNametagUpdate(playerUuid: UUID): Boolean
+    /**
+     * Stops updating the nametag of [playerUuid] until [allowNametagUpdates] is called.
+     */
+    fun preventNametagUpdates(playerUuid: UUID)
+
+    /**
+     * Updates the nametag of [playerUuid] again after [preventNametagUpdates].
+     */
+    fun allowNametagUpdates(playerUuid: UUID)
 
     /**
      * Shows the nametag of [playerUuid] with [visibility] to every viewer, instead of the configured
@@ -28,6 +35,6 @@ interface SurfNametagApi {
     fun resetNametagVisibility(playerUuid: UUID)
 
     companion object : SurfNametagApi by instance {
-        val INSTANCE get() = instance
+        val INSTANCE: SurfNametagApi get() = instance
     }
 }

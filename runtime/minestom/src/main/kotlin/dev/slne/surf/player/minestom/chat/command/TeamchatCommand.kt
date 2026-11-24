@@ -9,7 +9,7 @@ import dev.slne.surf.player.core.client.chat.permission.ChatPermissions
 import dev.slne.surf.player.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.player.core.client.chat.redis.event.TeamchatMessageRedisEvent
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
-import dev.slne.surf.player.core.common.chat.service.HistoryService
+import dev.slne.surf.player.core.client.chat.service.HistoryService
 import dev.slne.surf.core.api.common.SurfCoreApi
 import net.kyori.adventure.text.Component
 import java.time.OffsetDateTime

@@ -14,12 +14,11 @@ import dev.slne.surf.player.api.clan.member.ClanMemberRole
  * val listener = ClanMemberChangedRoleListener { member, newRole ->
  *     println("${member.uuid} changed to $newRole")
  * }
- * ClanMember.registerListener(listener)
+ * SurfClanApi.registerListener(listener)
  * ```
  *
  * @see ClanMemberListener
- * @see ClanMember.registerListener
- * @see ClanMember.unregisterListener
+ * @see dev.slne.surf.player.api.clan.SurfClanApi.registerListener
  */
 fun interface ClanMemberChangedRoleListener : ClanMemberListener {
 

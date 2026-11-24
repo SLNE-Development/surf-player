@@ -4,7 +4,7 @@ import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.player.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.player.core.client.chat.config.initChatConfig
 import dev.slne.surf.player.core.client.SurfPlayerClient.redisApi
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.minestom.MinestomPlayerFeature
 import dev.slne.surf.player.minestom.chat.command.direct.directMessageCommand
 import dev.slne.surf.player.minestom.chat.command.direct.replyCommand

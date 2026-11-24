@@ -1,7 +1,6 @@
 package dev.slne.surf.player.api.clan.invite
 
 import org.jetbrains.annotations.ApiStatus
-import java.util.*
 
 /**
  * Represents a mutable clan invitation with the ability to perform actions.
@@ -44,25 +43,4 @@ interface ClanInvite : ClanInviteView {
      * @return an immutable view of this invitation
      */
     fun view(): ClanInviteView
-
-    companion object {
-        /**
-         * Retrieves all pending invitations for a specific player.
-         *
-         * @param invited the UUID of the invited player
-         * @return a list of all pending invitations for the player, or an empty list if none exist
-         */
-        suspend fun pendingInvitesByPlayer(invited: UUID): List<ClanInvite> =
-            ClanInviteService.getPendingInvitesByPlayer(invited)
-
-        /**
-         * Retrieves a specific pending invitation for a player by clan name.
-         *
-         * @param invited the UUID of the invited player
-         * @param clanName the name of the clan that sent the invitation
-         * @return the pending invitation, or `null` if no matching invitation exists
-         */
-        suspend fun pendingInviteByPlayerAndClanName(invited: UUID, clanName: String): ClanInvite? =
-            ClanInviteService.getPendingInviteByPlayerAndClanName(invited, clanName)
-    }
 }

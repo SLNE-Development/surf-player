@@ -18,12 +18,11 @@ import java.util.*
  *         println("Member $memberUuid left ${clan.name}")
  *     }
  * }
- * Clan.registerListener(listener)
+ * SurfClanApi.registerListener(listener)
  * ```
  *
  * @see ClanListener
- * @see Clan.registerListener
- * @see Clan.unregisterListener
+ * @see dev.slne.surf.player.api.clan.SurfClanApi.registerListener
  */
 fun interface ClanUpdateMemberListener : ClanListener {
 

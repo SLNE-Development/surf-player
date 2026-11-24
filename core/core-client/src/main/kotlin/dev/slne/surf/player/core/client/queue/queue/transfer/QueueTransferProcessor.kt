@@ -5,10 +5,10 @@ import dev.slne.surf.api.core.util.mutableObjectSetOf
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.player.api.queue.SurfQueueAvailableSlotsProvider
+import dev.slne.surf.player.api.queue.SurfQueueApi
 import dev.slne.surf.player.core.client.queue.config.SurfQueueConfig
 import dev.slne.surf.player.core.client.queue.metrics.QueueMetrics
-import dev.slne.surf.player.core.common.queue.QueueInstance
+import dev.slne.surf.player.core.common.queue.QueueSystem
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueLockManager
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueScore
 import dev.slne.surf.player.core.common.queue.queue.RedisQueueStore
@@ -44,7 +44,7 @@ class QueueTransferProcessor(
     }
 
     suspend fun tick() {
-        if (!QueueInstance.get().isLoaded) return
+        if (!QueueSystem.isLoaded) return
 
         // Exponential backoff: decrease CPU usage and Redis commands when the
         // queue is empty or the target server is full.
@@ -77,7 +77,7 @@ class QueueTransferProcessor(
     private suspend fun startTransfers(): Int {
         val targetServer = SurfServer[serverName] ?: return 0
         val availableSlots =
-            SurfQueueAvailableSlotsProvider.get().getAvailableSlots(targetServer) - inFlight.size
+            SurfQueueApi.availableSlotsProvider.getAvailableSlots(targetServer) - inFlight.size
 
         if (availableSlots <= 0) return 0
         val maxTransfers = min(availableSlots, SurfQueueConfig.getConfig().maxTransfersPerSecond)

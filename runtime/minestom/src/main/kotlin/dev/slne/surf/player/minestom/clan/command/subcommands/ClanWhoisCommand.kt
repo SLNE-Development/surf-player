@@ -1,5 +1,6 @@
 package dev.slne.surf.player.minestom.clan.command.subcommands
 
+import dev.slne.surf.player.api.clan.SurfClanApi
 import dev.slne.surf.player.api.clan.clan.Clan
 import dev.slne.surf.api.minestom.command.CommandAPICommand
 import dev.slne.surf.api.minestom.command.dsl.playerExecutorSuspend
@@ -30,7 +31,7 @@ fun CommandAPICommand.clanWhoisCommand(): CommandAPICommand = withSubcommand(
             }
 
             val targetName = target.lastKnownName ?: target.uuid.toString()
-            player.sendMessage(whoisMessage(targetName, Clan.byPlayer(target.uuid)))
+            player.sendMessage(whoisMessage(targetName, SurfClanApi.findClanByPlayer(target.uuid)))
         }
     }
 )

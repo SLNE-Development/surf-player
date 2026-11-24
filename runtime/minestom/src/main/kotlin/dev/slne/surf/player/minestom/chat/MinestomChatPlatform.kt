@@ -2,7 +2,12 @@ package dev.slne.surf.player.minestom.chat
 
 import com.google.auto.service.AutoService
 import dev.slne.surf.api.core.messages.adventure.sound
+import dev.slne.surf.api.core.util.logger
 import dev.slne.surf.api.minestom.chat.deleteSignedMessage
+import dev.slne.surf.api.minestom.chat.sendSignedMessage
+import dev.slne.surf.core.api.common.SurfCoreApi
+import dev.slne.surf.player.minestom.chat.player.boundDisplayName
+import dev.slne.surf.player.minestom.chat.service.SignedMessageService
 import dev.slne.surf.api.minestom.coroutine.minestomAsyncScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.api.minestom.permission.hasPermission
@@ -63,7 +68,44 @@ class MinestomChatPlatform : ChatPlatform {
         minestomAsyncScope.launch { block() }
     }
 
+    override suspend fun sendSignedMessage(
+        senderUuid: UUID,
+        targetUuid: UUID,
+        signedMessage: SignedMessage,
+        contentComponent: Component
+    ) {
+        val sender = ConnectionManager.getOnlinePlayerByUuid(senderUuid)
+
+        if (sender == null) {
+            log.atWarning()
+                .log("Tried to send signed message from offline player $senderUuid to $targetUuid!")
+            return
+        }
+
+        val target = ConnectionManager.getOnlinePlayerByUuid(targetUuid)
+
+        if (target != null) {
+            target.sendSignedMessage(signedMessage, sender.boundDisplayName(), contentComponent)
+            return
+        }
+
+        if (SurfCoreApi.getPlayer(targetUuid) == null) {
+            log.atWarning()
+                .log("Tried to send signed message from $senderUuid to offline player $targetUuid!")
+            return
+        }
+
+        SignedMessageService.sendRemoteSignedMessage(
+            sender,
+            targetUuid,
+            contentComponent,
+            signedMessage
+        )
+    }
+
     companion object {
+        private val log = logger()
+
         private val PING_SOUND = sound {
             type(SoundEvent.ENTITY_CHICKEN_EGG)
             source(Sound.Source.PLAYER)

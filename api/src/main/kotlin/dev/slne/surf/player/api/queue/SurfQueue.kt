@@ -2,7 +2,6 @@ package dev.slne.surf.player.api.queue
 
 import dev.slne.surf.core.api.common.SurfCoreApi
 import dev.slne.surf.core.api.common.server.SurfServer
-import dev.slne.surf.player.api.queue.service.SurfQueueService
 import it.unimi.dsi.fastutil.objects.Object2IntMap
 import it.unimi.dsi.fastutil.objects.ObjectList
 import java.util.*
@@ -11,6 +10,7 @@ import java.util.*
  * Public API interface for a server-specific player queue.
  *
  * Each instance represents the queue for a single target server, identified by [serverName].
+ * Obtain one through [SurfQueueApi.queue].
  * All queue operations are suspend functions and safe to call from any coroutine context.
  */
 interface SurfQueue {
@@ -86,22 +86,4 @@ interface SurfQueue {
      * Returns all queued UUIDs in ascending position order (position 1 first).
      */
     suspend fun getAllUuidsOrderedByPosition(): ObjectList<UUID>
-
-    @OptIn(InternalSurfQueueApi::class)
-    companion object {
-        /**
-         * Returns the [SurfQueue] for the given [serverName], or creates a new one if it doesn't exist.
-         */
-        fun byServer(serverName: String) = SurfQueueService.instance.getQueueByName(serverName)
-
-        /**
-         * Returns the [SurfQueue] for the given [server], or creates a new one if it doesn't exist.
-         */
-        fun byServer(server: SurfServer) = byServer(server.name)
-    }
 }
-
-/**
- * Convenience extension to retrieve the queue for this server.
- */
-fun SurfServer.queue() = SurfQueue.byServer(this)

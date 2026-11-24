@@ -1,11 +1,11 @@
 package dev.slne.surf.player.paper.chat
 
 import dev.slne.surf.api.paper.event.register
-import dev.slne.surf.player.api.chat.processor.chatProcessorRegistry
+import dev.slne.surf.player.core.client.chat.processor.ChatProcessorRegistry
 import dev.slne.surf.player.core.client.SurfPlayerClient
 import dev.slne.surf.player.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.player.core.client.chat.config.initChatConfig
-import dev.slne.surf.player.core.common.chat.service.FunctionalityService
+import dev.slne.surf.player.core.client.chat.service.FunctionalityService
 import dev.slne.surf.player.paper.chat.command.direct.directMessageCommand
 import dev.slne.surf.player.paper.chat.command.direct.replyCommand
 import dev.slne.surf.player.paper.chat.command.ignore.ignoreCommand
@@ -41,18 +41,18 @@ object PaperChatFeature : PaperPlayerFeature {
         SurfPlayerClient.redisApi.subscribeToEvents(RedisEventListener)
         SurfPlayerClient.redisApi.registerRequestHandler(RedisEventListener)
 
-        chatProcessorRegistry.register(CharPreChatProcessor)
-        chatProcessorRegistry.register(LinkPreChatProcessor)
-        chatProcessorRegistry.register(SpamPreChatProcessor)
-        chatProcessorRegistry.register(CorrectViewersPreChatProcessor)
-        chatProcessorRegistry.register(FormatPreChatProcessor)
-        chatProcessorRegistry.register(IgnorePreChatProcessor)
-        chatProcessorRegistry.register(ValidatorPreChatProcessor)
-        chatProcessorRegistry.register(SlowChatPreChatProcessor)
+        ChatProcessorRegistry.register(CharPreChatProcessor)
+        ChatProcessorRegistry.register(LinkPreChatProcessor)
+        ChatProcessorRegistry.register(SpamPreChatProcessor)
+        ChatProcessorRegistry.register(CorrectViewersPreChatProcessor)
+        ChatProcessorRegistry.register(FormatPreChatProcessor)
+        ChatProcessorRegistry.register(IgnorePreChatProcessor)
+        ChatProcessorRegistry.register(ValidatorPreChatProcessor)
+        ChatProcessorRegistry.register(SlowChatPreChatProcessor)
 
-        chatProcessorRegistry.register(LogPostChatProcessor)
-        chatProcessorRegistry.register(AiModerationPostChatProcessor)
-        chatProcessorRegistry.register(PrivateMessageSpyPostChatProcessor)
+        ChatProcessorRegistry.register(LogPostChatProcessor)
+        ChatProcessorRegistry.register(AiModerationPostChatProcessor)
+        ChatProcessorRegistry.register(PrivateMessageSpyPostChatProcessor)
     }
 
     override suspend fun onEnable() {

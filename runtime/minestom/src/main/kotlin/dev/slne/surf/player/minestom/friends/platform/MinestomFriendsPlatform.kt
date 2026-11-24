@@ -1,8 +1,13 @@
 package dev.slne.surf.player.minestom.friends.platform
 
 import com.google.auto.service.AutoService
+import dev.slne.surf.api.minestom.coroutine.MinestomDispatchers
+import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import net.kyori.adventure.text.Component
 import java.util.*
 
@@ -13,4 +18,7 @@ class MinestomFriendsPlatform : FriendsPlatform {
     override fun sendMessage(uuid: UUID, message: Component) {
         ConnectionManager.getOnlinePlayerByUuid(uuid)?.sendMessage(message)
     }
+
+    override fun launch(block: suspend CoroutineScope.() -> Unit): Job =
+        minestomScope.launch(context = MinestomDispatchers.Main, block = block)
 }

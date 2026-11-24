@@ -16,12 +16,11 @@ import dev.slne.surf.player.api.clan.clan.ClanView
  * val listener = ClanDeletedListener { clan ->
  *     println("Clan deleted: ${clan.name}")
  * }
- * Clan.registerListener(listener)
+ * SurfClanApi.registerListener(listener)
  * ```
  *
  * @see ClanListener
- * @see dev.slne.surf.player.api.clan.clan.Clan.registerListener
- * @see dev.slne.surf.player.api.clan.clan.Clan.unregisterListener
+ * @see dev.slne.surf.player.api.clan.SurfClanApi.registerListener
  */
 fun interface ClanDeletedListener : ClanListener {
     /**
