@@ -11,7 +11,7 @@ import dev.slne.surf.social.api.friends.player.FriendsPlayer
 import dev.slne.surf.social.core.client.friends.command.NO_SENT_FRIEND_REQUEST_MESSAGE
 import dev.slne.surf.social.core.client.friends.command.findSentFriendRequestTarget
 import dev.slne.surf.social.core.client.friends.command.sentFriendRequestNames
-import dev.slne.surf.social.paper.friends.plugin
+import dev.slne.surf.social.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 

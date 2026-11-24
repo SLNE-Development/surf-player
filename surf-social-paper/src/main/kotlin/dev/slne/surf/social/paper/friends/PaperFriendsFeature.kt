@@ -1,35 +1,34 @@
 package dev.slne.surf.social.paper.friends
 
-import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.social.core.client.friends.FriendsClientInstance
+import dev.slne.surf.social.paper.PaperFeature
 import dev.slne.surf.social.paper.friends.command.friendCommand
 import dev.slne.surf.social.paper.friends.command.subcommand.friend.FriendListCommand
 import dev.slne.surf.social.paper.friends.command.subcommand.request.FriendRequestSendCommand
 import dev.slne.surf.social.paper.friends.listener.ConnectionListener
-import org.bukkit.plugin.java.JavaPlugin
+import dev.slne.surf.social.paper.plugin
 
-val plugin get() = JavaPlugin.getPlugin(SurfFriendsPaper::class.java)
+object PaperFriendsFeature : PaperFeature {
+    override val name = "friends"
 
-class SurfFriendsPaper : SuspendingJavaPlugin() {
-    override suspend fun onLoadAsync() {
+    override suspend fun onLoad() {
         val instance = FriendsClientInstance.INSTANCE
 
         instance.withEvents()
         instance.onLoad()
     }
 
-    override suspend fun onEnableAsync() {
+    override suspend fun onEnable() {
         FriendsClientInstance.INSTANCE.onEnable()
 
-        server.pluginManager.registerEvents(ConnectionListener(), this)
+        plugin.server.pluginManager.registerEvents(ConnectionListener(), plugin)
 
         friendCommand()
         FriendRequestSendCommand("fa").register()
         FriendListCommand("fl").register()
     }
 
-    override suspend fun onDisableAsync() {
+    override suspend fun onDisable() {
         FriendsClientInstance.INSTANCE.onDisable()
     }
 }
-

@@ -10,7 +10,7 @@ import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageHandledR
 import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
 import dev.slne.surf.social.core.client.chat.redis.rpc.SignedChatMessage
 import dev.slne.surf.social.core.client.chat.redisApi
-import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.social.paper.chat.redis.rpc.chatSession
 import dev.slne.surf.social.paper.chat.redis.rpc.toMirror
 import dev.slne.surf.social.paper.chat.redis.rpc.toWire

@@ -12,7 +12,7 @@ import kotlin.coroutines.CoroutineContext
 
 @AutoService(FriendsClientInstance::class)
 class MinestomFriendsClientInstance : FriendsClientInstance() {
-    override val dataPath: Path get() = FriendsMinestomPlugin.dataDirectory
+    override val dataPath: Path get() = FriendsMinestomFeature.dataDirectory
 
     override val mainDispatcher: CoroutineContext
         get() = MinestomDispatchers.Main

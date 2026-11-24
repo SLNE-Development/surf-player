@@ -2,7 +2,7 @@ package dev.slne.surf.social.paper.tab.hook
 
 import dev.slne.surf.api.core.luckperms.LuckPermsAccess
 import dev.slne.surf.social.core.client.tab.hook.LuckPermsHook
-import dev.slne.surf.social.paper.tab.plugin
+import dev.slne.surf.social.paper.plugin
 import net.luckperms.api.event.node.NodeAddEvent
 import net.luckperms.api.event.node.NodeRemoveEvent
 import net.luckperms.api.event.user.UserDataRecalculateEvent

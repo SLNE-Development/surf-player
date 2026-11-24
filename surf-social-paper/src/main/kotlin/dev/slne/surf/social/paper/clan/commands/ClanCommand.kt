@@ -12,8 +12,6 @@ import dev.slne.surf.social.paper.clan.commands.subcommands.member.role.clanDemo
 import dev.slne.surf.social.paper.clan.commands.subcommands.member.role.clanPromoteMemberCommand
 import dev.slne.surf.social.paper.clan.commands.subcommands.player.clanPlayerCommand
 import dev.slne.surf.social.paper.clan.permission.ClanPermissions
-import dev.slne.surf.social.paper.clan.plugin
-
 fun clanCommand() = commandAPICommand("clan") {
     withPermission(ClanPermissions.CLAN_COMMAND)
 
@@ -39,8 +37,5 @@ fun clanCommand() = commandAPICommand("clan") {
     clanOptionsCommand()
     clanListCommand()
 
-
-    if (plugin.checkSurfChat()) {
-        withSubcommand(ClanChatCommand("chat"))
-    }
+    withSubcommand(ClanChatCommand("chat"))
 }

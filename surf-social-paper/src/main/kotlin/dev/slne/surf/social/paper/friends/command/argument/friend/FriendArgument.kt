@@ -11,7 +11,7 @@ import dev.slne.surf.social.api.friends.player.FriendsPlayer
 import dev.slne.surf.social.core.client.friends.command.NOT_FRIENDS_MESSAGE
 import dev.slne.surf.social.core.client.friends.command.findFriend
 import dev.slne.surf.social.core.client.friends.command.friendNames
-import dev.slne.surf.social.paper.friends.plugin
+import dev.slne.surf.social.paper.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 

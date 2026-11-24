@@ -1,6 +1,5 @@
 package dev.slne.surf.social.paper.chat
 
-import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.slne.surf.api.paper.event.register
 import dev.slne.surf.api.paper.extensions.pluginManager
 import dev.slne.surf.social.api.chat.processor.chatProcessorRegistry
@@ -32,12 +31,12 @@ import dev.slne.surf.social.paper.chat.processor.pre.FormatPreChatProcessor
 import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.social.paper.chat.redis.listener.RedisEventListener
 import dev.slne.surf.core.api.common.SurfCoreApi
-import org.bukkit.plugin.java.JavaPlugin
+import dev.slne.surf.social.paper.PaperFeature
 
-val plugin get() = JavaPlugin.getPlugin(PaperMain::class.java)
+object PaperChatFeature : PaperFeature {
+    override val name = "chat"
 
-class PaperMain : SuspendingJavaPlugin() {
-    override suspend fun onLoadAsync() {
+    override suspend fun onLoad() {
         initChatConfig(dataPath)
         AiModerationConfig.init(dataPath)
 
@@ -57,7 +56,7 @@ class PaperMain : SuspendingJavaPlugin() {
         chatProcessorRegistry.register(PrivateMessageSpyPostChatProcessor)
     }
 
-    override suspend fun onEnableAsync() {
+    override suspend fun onEnable() {
         ClientChatInstance.redisApi.subscribeToEvents(RedisEventListener)
         ClientChatInstance.redisApi.registerRequestHandler(RedisEventListener)
         ClientChatInstance.chatClientLoader.onEnable()
@@ -77,7 +76,7 @@ class PaperMain : SuspendingJavaPlugin() {
         FunctionalityService.fetch(SurfCoreApi.getCurrentServerName())
     }
 
-    override suspend fun onDisableAsync() {
+    override suspend fun onDisable() {
         ClientChatInstance.chatClientLoader.onDisable()
     }
 

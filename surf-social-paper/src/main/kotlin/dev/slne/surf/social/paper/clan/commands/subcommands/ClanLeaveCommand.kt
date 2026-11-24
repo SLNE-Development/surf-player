@@ -6,7 +6,7 @@ import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.social.api.clan.clan.Clan
 import dev.slne.surf.social.paper.clan.commands.failCommand
 import dev.slne.surf.social.paper.clan.permission.ClanPermissions
-import dev.slne.surf.social.paper.clan.plugin
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.api.paper.command.executors.playerExecutorSuspend
 import dev.slne.surf.social.core.client.clan.Messages
 import dev.slne.surf.social.core.client.clan.command.CLAN_OWNER_CANNOT_LEAVE

@@ -2,21 +2,21 @@ package dev.slne.surf.social.paper.tab.platform
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.social.core.client.tab.platform.TabPlatform
+import dev.slne.surf.social.paper.plugin
+import dev.slne.surf.social.paper.tab.PaperTabFeature
 import dev.slne.surf.social.paper.tab.hook.VanishHook
-import dev.slne.surf.social.paper.tab.isClansHook
 import dev.slne.surf.social.paper.tab.isContentCreatorHook
 import dev.slne.surf.social.paper.tab.isPlaytimeHook
 import dev.slne.surf.social.paper.tab.isVanishHook
-import dev.slne.surf.social.paper.tab.plugin
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.Bukkit
 import java.util.*
 
 class PaperTabPlatform : TabPlatform {
-    override val dataPath get() = plugin.dataPath
+    override val dataPath get() = PaperTabFeature.dataPath
 
     override val playtimeAvailable get() = isPlaytimeHook
-    override val clanAvailable get() = isClansHook
+    override val clanAvailable get() = true
     override val contentCreatorAvailable get() = isContentCreatorHook
 
     override fun onlinePlayers() = Bukkit.getOnlinePlayers().map { PaperTabPlayer(it) }

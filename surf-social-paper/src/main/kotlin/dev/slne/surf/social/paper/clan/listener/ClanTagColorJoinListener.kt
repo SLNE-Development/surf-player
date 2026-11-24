@@ -2,7 +2,7 @@ package dev.slne.surf.social.paper.clan.listener
 
 import com.github.shynixn.mccoroutine.folia.asyncDispatcher
 import com.github.shynixn.mccoroutine.folia.launch
-import dev.slne.surf.social.paper.clan.plugin
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.social.core.client.clan.tagcolor.ClanTagColorEnforcer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

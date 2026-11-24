@@ -13,7 +13,8 @@ import dev.slne.surf.social.core.common.chat.service.SpyService
 import dev.slne.surf.social.core.client.chat.hook.SettingsHook
 import dev.slne.surf.social.paper.chat.message.MessageFormatter
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.chat.PaperChatFeature
+import dev.slne.surf.social.paper.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -53,7 +54,7 @@ object DisconnectListener : Listener {
         if (alwaysShow) {
             server.broadcast(message)
         } else {
-            val settingsHook = plugin.checkSettingsHook()
+            val settingsHook = PaperChatFeature.checkSettingsHook()
 
             forEachPlayer { player ->
                 if (!settingsHook || SettingsHook.hasConnectionMessagesEnabled(player.uniqueId)) {

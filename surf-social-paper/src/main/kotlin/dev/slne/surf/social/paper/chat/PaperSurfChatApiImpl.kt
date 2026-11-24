@@ -16,6 +16,7 @@ import dev.slne.surf.social.core.client.chat.processor.post.AiModerationPostChat
 import dev.slne.surf.social.core.client.chat.redis.ModerationRedisService
 import dev.slne.surf.social.core.client.chat.redis.event.DeleteRemoteMessageRedisEvent
 import dev.slne.surf.social.paper.chat.service.SignedMessageSender
+import dev.slne.surf.social.paper.plugin
 import it.unimi.dsi.fastutil.objects.ObjectList
 import net.kyori.adventure.chat.SignedMessage
 import net.kyori.adventure.text.Component

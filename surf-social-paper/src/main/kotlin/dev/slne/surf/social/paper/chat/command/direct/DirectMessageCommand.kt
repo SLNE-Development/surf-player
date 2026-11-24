@@ -30,7 +30,8 @@ import dev.slne.surf.social.core.client.chat.redisApi
 import dev.slne.surf.social.core.client.chat.service.ReplyCache
 import dev.slne.surf.social.core.client.chat.hook.SettingsHook
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.chat.PaperChatFeature
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.social.paper.chat.redis.rpc.chatSession
 import dev.slne.surf.social.paper.chat.redis.rpc.toMirror
 import dev.slne.surf.social.paper.chat.redis.rpc.toWire
@@ -143,11 +144,11 @@ object DirectMessageAccess {
     }
 
     private fun preSignedMessageSend(target: Player): Boolean {
-        if (plugin.checkSettingsHook() && !SettingsHook.hasDirectMessagesEnabled(target.uniqueId)) {
+        if (PaperChatFeature.checkSettingsHook() && !SettingsHook.hasDirectMessagesEnabled(target.uniqueId)) {
             return false
         }
 
-        if (plugin.checkSettingsHook() && SettingsHook.hasChatPingsEnabled(target.uniqueId)) {
+        if (PaperChatFeature.checkSettingsHook() && SettingsHook.hasChatPingsEnabled(target.uniqueId)) {
             plugin.launch(plugin.entityDispatcher(target)) {
                 target.playSound(true) {
                     type(Sound.ENTITY_CHICKEN_EGG)

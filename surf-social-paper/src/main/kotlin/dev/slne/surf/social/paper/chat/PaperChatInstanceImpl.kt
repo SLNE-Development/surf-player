@@ -9,7 +9,7 @@ import net.kyori.adventure.util.Services
 
 @AutoService(ChatInstance::class)
 class PaperChatInstanceImpl : ClientChatInstance, Services.Fallback {
-    override val chatClientLoader = ChatClientLoader(plugin.dataPath)
+    override val chatClientLoader = ChatClientLoader(PaperChatFeature.dataPath)
     override val moderationService by lazy {
         rabbitApi.createRpcService<ModerationService>()
     }

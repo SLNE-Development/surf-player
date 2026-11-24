@@ -13,7 +13,7 @@ import dev.slne.surf.social.paper.chat.hook.MiniPlaceholdersHook
 import dev.slne.surf.social.core.client.chat.hook.SettingsHook
 import dev.slne.surf.social.paper.chat.message.MessageFormatter
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.chat.PaperChatFeature
 import io.papermc.paper.event.connection.configuration.AsyncPlayerConnectionConfigureEvent
 import kotlinx.coroutines.runBlocking
 import org.bukkit.event.EventHandler
@@ -63,7 +63,7 @@ object ConnectListener : Listener {
         if (alwaysShow) {
             server.broadcast(message)
         } else {
-            val settingsHook = plugin.checkSettingsHook()
+            val settingsHook = PaperChatFeature.checkSettingsHook()
 
             forEachPlayer { player ->
                 if (!settingsHook || SettingsHook.hasConnectionMessagesEnabled(player.uniqueId)) {
@@ -75,7 +75,7 @@ object ConnectListener : Listener {
         if (chatConfig.chatMotdConfig.enabled) {
             player.sendText {
                 append(
-                    if (plugin.checkMiniPlaceholdersHook()) {
+                    if (PaperChatFeature.checkMiniPlaceholdersHook()) {
                         MiniPlaceholdersHook.parse(
                             player,
                             chatConfig.chatMotdConfig.message

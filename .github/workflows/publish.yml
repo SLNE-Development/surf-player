@@ -10,5 +10,5 @@ jobs:
   build:
     uses: SLNE-Development/surf-workflows/.github/workflows/build-publish-release-gradle.yml@master
     with:
-      modules: "surf-tab-paper-*-all.jar"
+      modules: "surf-social-paper-*-all.jar;surf-social-minestom-*-all.jar;surf-social-velocity-*-all.jar;surf-social-placeholder-expansion-*-all.jar;surf-social-microservice-*-all.jar"
     secrets: inherit

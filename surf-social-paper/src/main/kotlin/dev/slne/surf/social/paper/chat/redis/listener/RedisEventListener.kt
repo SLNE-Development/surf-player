@@ -12,7 +12,7 @@ import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageHandledR
 import dev.slne.surf.social.core.client.chat.redis.rpc.SendSignedMessageRedisRequest
 import dev.slne.surf.social.paper.chat.command.direct.DirectMessageAccess
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.social.paper.chat.service.SignedMessageSender
 import dev.slne.surf.redis.event.OnRedisEvent
 import dev.slne.surf.redis.request.HandleRedisRequest

@@ -15,7 +15,7 @@ import dev.slne.surf.social.core.client.chat.message.format.appendDelete
 import dev.slne.surf.social.core.client.chat.util.formatTime
 import dev.slne.surf.social.core.client.chat.util.updateLinks
 import dev.slne.surf.social.paper.chat.permission.PermissionRegistry
-import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.chat.PaperChatFeature
 import dev.slne.surf.social.paper.chat.util.appendName
 import dev.slne.surf.core.api.paper.CorePlayerStatusAccess
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
@@ -232,7 +232,7 @@ object MessageFormatter {
         )
 
         if (viewerMentioned) {
-            if (plugin.checkSettingsHook() && SettingsHook.hasChatPingsEnabled(viewerUuid)) {
+            if (PaperChatFeature.checkSettingsHook() && SettingsHook.hasChatPingsEnabled(viewerUuid)) {
                 viewer.playSound(true) {
                     type(Sound.ENTITY_CHICKEN_EGG)
                 }

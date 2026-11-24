@@ -2,7 +2,7 @@ package dev.slne.surf.social.paper.friends.listener
 
 import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.surf.social.core.client.friends.connection.FriendConnectionNotifier
-import dev.slne.surf.social.paper.friends.plugin
+import dev.slne.surf.social.paper.plugin
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent

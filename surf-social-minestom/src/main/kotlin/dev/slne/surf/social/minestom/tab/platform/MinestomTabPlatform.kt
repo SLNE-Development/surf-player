@@ -4,13 +4,13 @@ import dev.slne.surf.api.minestom.coroutine.minestomScope
 import dev.slne.surf.api.minestom.extension.ConnectionManager
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.social.core.client.tab.platform.TabPlatform
-import dev.slne.surf.social.minestom.tab.TabMinestomPlugin
+import dev.slne.surf.social.minestom.tab.TabMinestomFeature
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 
 class MinestomTabPlatform : TabPlatform {
-    override val dataPath get() = TabMinestomPlugin.dataDirectory
+    override val dataPath get() = TabMinestomFeature.dataDirectory
 
     override val playtimeAvailable = true
     override val clanAvailable = true

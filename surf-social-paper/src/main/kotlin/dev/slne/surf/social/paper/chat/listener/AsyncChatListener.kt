@@ -8,7 +8,7 @@ import dev.slne.surf.social.api.chat.message.MessageType
 import dev.slne.surf.social.api.chat.message.redirector.MessageRedirectorRegistry
 import dev.slne.surf.social.core.client.chat.processor.runPostProcessors
 import dev.slne.surf.social.core.client.chat.processor.runPreProcessors
-import dev.slne.surf.social.paper.chat.plugin
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.social.paper.chat.util.cancel
 import dev.slne.surf.core.api.common.SurfCoreApi
 import io.papermc.paper.event.player.AsyncChatEvent

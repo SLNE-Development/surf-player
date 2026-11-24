@@ -4,7 +4,7 @@ import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.subcommand
 import dev.slne.surf.social.paper.clan.permission.ClanPermissions
-import dev.slne.surf.social.paper.clan.plugin
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.api.paper.command.executors.anyExecutorSuspend
 import dev.slne.surf.social.core.common.clan.clan.CoreClanService

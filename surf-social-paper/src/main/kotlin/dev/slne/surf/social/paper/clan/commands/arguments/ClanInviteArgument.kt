@@ -5,7 +5,7 @@ import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.arguments.StringArgument
 import dev.slne.surf.social.api.clan.invite.ClanInvite
 import dev.slne.surf.social.paper.clan.commands.failCommand
-import dev.slne.surf.social.paper.clan.plugin
+import dev.slne.surf.social.paper.plugin
 import dev.slne.surf.api.paper.command.args.SuspendCustomArgument
 import dev.slne.surf.social.core.client.clan.Messages
 import dev.slne.surf.social.core.client.clan.command.CLAN_INVITE_ARGUMENT_NEEDS_PLAYER

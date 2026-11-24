@@ -1,6 +1,7 @@
 package dev.slne.surf.social.minestom.chat
 
-import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
+import dev.slne.surf.social.minestom.MinestomSocialFeature
+import dev.slne.surf.social.minestom.SocialMinestomPlugin
 import dev.slne.surf.social.core.client.chat.config.AiModerationConfig
 import dev.slne.surf.social.core.client.chat.config.initChatConfig
 import dev.slne.surf.social.core.common.chat.service.FunctionalityService
@@ -15,7 +16,11 @@ import dev.slne.surf.social.minestom.chat.listener.ConnectionListener
 import dev.slne.surf.social.minestom.chat.redis.listener.MinestomRedisEventListener
 import dev.slne.surf.core.api.common.SurfCoreApi
 
-object SurfChatMinestomPlugin : SurfMinestomPlugin() {
+object ChatMinestomFeature : MinestomSocialFeature {
+    override val id = "chat"
+
+    val dataDirectory get() = SocialMinestomPlugin.featureDataDirectory(this)
+
     override suspend fun onLoad() {
         initChatConfig(dataDirectory)
         AiModerationConfig.init(dataDirectory)
@@ -43,7 +48,7 @@ object SurfChatMinestomPlugin : SurfMinestomPlugin() {
         directMessageCommand()
         replyCommand()
 
-        ConnectionListener.register(eventNode)
+        ConnectionListener.register(SocialMinestomPlugin.eventNode)
     }
 
     override suspend fun onDisable() {

@@ -8,13 +8,13 @@ import dev.slne.surf.social.core.common.chat.rabbit.rpc.ModerationService
 import net.kyori.adventure.util.Services
 
 /**
- * Platform local name for the chat instance backing this plugin.
+ * Platform local name for the chat instance backing the chat feature.
  */
 typealias MinestomChatInstance = ClientChatInstance
 
 @AutoService(ChatInstance::class)
 class MinestomChatInstanceImpl : ClientChatInstance, Services.Fallback {
-    override val chatClientLoader = ChatClientLoader(SurfChatMinestomPlugin.dataDirectory)
+    override val chatClientLoader = ChatClientLoader(ChatMinestomFeature.dataDirectory)
     override val moderationService by lazy {
         rabbitApi.createRpcService<ModerationService>()
     }

@@ -1,13 +1,18 @@
 package dev.slne.surf.social.minestom.friends
 
-import dev.slne.surf.api.minestom.plugin.SurfMinestomPlugin
+import dev.slne.surf.social.minestom.MinestomSocialFeature
+import dev.slne.surf.social.minestom.SocialMinestomPlugin
 import dev.slne.surf.social.core.client.friends.FriendsClientInstance
 import dev.slne.surf.social.minestom.friends.command.friendCommand
 import dev.slne.surf.social.minestom.friends.command.subcommand.friend.friendListCommand
 import dev.slne.surf.social.minestom.friends.command.subcommand.request.friendRequestSendCommand
 import dev.slne.surf.social.minestom.friends.listener.ConnectionListener
 
-object FriendsMinestomPlugin : SurfMinestomPlugin() {
+object FriendsMinestomFeature : MinestomSocialFeature {
+    override val id = "friends"
+
+    val dataDirectory get() = SocialMinestomPlugin.featureDataDirectory(this)
+
     override suspend fun onLoad() {
         val instance = FriendsClientInstance.INSTANCE
 
@@ -22,7 +27,7 @@ object FriendsMinestomPlugin : SurfMinestomPlugin() {
         friendRequestSendCommand("fa").register()
         friendListCommand("fl").register()
 
-        ConnectionListener.register(eventNode)
+        ConnectionListener.register(SocialMinestomPlugin.eventNode)
     }
 
     override suspend fun onDisable() {
