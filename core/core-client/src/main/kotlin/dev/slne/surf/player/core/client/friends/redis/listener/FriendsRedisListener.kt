@@ -2,17 +2,15 @@ package dev.slne.surf.player.core.client.friends.redis.listener
 
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
-import dev.slne.surf.api.core.messages.adventure.clickCallback
 import dev.slne.surf.api.core.messages.adventure.clickRunsCommand
 import dev.slne.surf.core.api.common.player.SurfPlayer
 import dev.slne.surf.core.api.common.util.sendText
 import dev.slne.surf.player.api.friends.SurfFriendsApi
 import dev.slne.surf.player.api.friends.utils.displayName
 import dev.slne.surf.player.api.friends.utils.toSurfPlayer
-import dev.slne.surf.player.core.client.command.runServiceAction
 import dev.slne.surf.player.core.client.friends.connection.FriendConnectionNotifier
-import dev.slne.surf.player.core.client.friends.friendRequestAnswerFailureMessage
 import dev.slne.surf.player.core.client.friends.platform.FriendsPlatform
+import dev.slne.surf.player.core.client.friends.util.resolveUsername
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsAction
 import dev.slne.surf.player.core.client.friends.redis.event.FriendsRedisEvent
 import dev.slne.surf.redis.event.OnRedisEvent
@@ -105,6 +103,8 @@ object FriendsRedisListener {
 
         if (target != null && SurfFriendsApi.friendRequestNotificationsEnabled(targetUuid)) {
             val executorName = displayNameOf(executorUuid)
+            // The buttons run the commands, which find the request by the sender's name.
+            val executorCommandName = resolveUsername(executorUuid) ?: executorUuid.toString()
 
             if (SurfFriendsApi.friendSoundsEnabled(targetUuid)) {
                 FriendsPlatform.INSTANCE.playSound(targetUuid, FriendConnectionNotifier.REQUEST_SOUND)
@@ -124,15 +124,7 @@ object FriendsRedisListener {
                         append(executorName)
                         spacer(" anzunehmen.")
                     }))
-                    clickCallback { clicked ->
-                        FriendsPlatform.INSTANCE.launch {
-                            runServiceAction(clicked) {
-                                friendRequestAnswerFailureMessage(
-                                    SurfFriendsApi.acceptFriendRequest(targetUuid, executorUuid)
-                                )?.let(clicked::sendMessage)
-                            }
-                        }
-                    }
+                    clickRunsCommand("/friend accept $executorCommandName")
                 }
                 appendSpace()
                 append {
@@ -142,15 +134,7 @@ object FriendsRedisListener {
                         append(executorName)
                         spacer(" abzulehnen.")
                     }))
-                    clickCallback { clicked ->
-                        FriendsPlatform.INSTANCE.launch {
-                            runServiceAction(clicked) {
-                                friendRequestAnswerFailureMessage(
-                                    SurfFriendsApi.declineFriendRequest(targetUuid, executorUuid)
-                                )?.let(clicked::sendMessage)
-                            }
-                        }
-                    }
+                    clickRunsCommand("/friend deny $executorCommandName")
                 }
             }
         }

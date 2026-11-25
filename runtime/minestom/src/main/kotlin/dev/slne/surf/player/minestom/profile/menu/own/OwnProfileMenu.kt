@@ -7,7 +7,10 @@ import dev.slne.surf.api.minestom.inventory.framework.view.onFirstRender
 import dev.slne.surf.api.minestom.inventory.framework.view.settings
 import dev.slne.surf.api.minestom.inventory.framework.view.surfView
 import dev.slne.surf.core.api.minestom.util.toSurfPlayer
+import dev.slne.surf.api.minestom.permission.hasPermission
+import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 import dev.slne.surf.player.core.client.profile.menu.own.OwnProfileMenuContent
+import dev.slne.surf.player.minestom.profile.menu.friends.openFriendsMenu
 import dev.slne.surf.player.minestom.settings.menu.openSettingsMenu
 import dev.slne.surf.player.minestom.profile.menu.playClickSound
 import net.minestom.server.component.DataComponents
@@ -38,6 +41,13 @@ val ownProfileMenu = surfView(OwnProfileMenuContent.TITLE) {
             withItem(Material.POPPY) {
                 displayName(OwnProfileMenuContent.friendsDisplayName)
                 lore(*OwnProfileMenuContent.friendsLore)
+            }
+
+            onClick { click ->
+                if (!click.player.hasPermission(FriendPermissions.COMMAND_LIST)) return@onClick
+
+                click.playClickSound()
+                click.player.openFriendsMenu()
             }
         }
 
