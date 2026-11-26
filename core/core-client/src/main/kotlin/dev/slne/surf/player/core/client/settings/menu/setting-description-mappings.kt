@@ -19,6 +19,12 @@ val settingKeyMappings = mapOf(
         Key.key("red_bed"),
         SettingCategory.CHAT,
     ),
+    SettingKeys.CHAT_ADVANCEMENTS to SettingKeyDisplay(
+        "Fortschrittsnachrichten",
+        "Zeigt Nachrichten über abgeschlossene Fortschritte anderer Spieler im Chat an",
+        Key.key("experience_bottle"),
+        SettingCategory.CHAT,
+    ),
     SettingKeys.DIRECT_MESSAGES to SettingKeyDisplay(
         "Private Nachrichten",
         "Benachrichtigungen für private Nachrichten",

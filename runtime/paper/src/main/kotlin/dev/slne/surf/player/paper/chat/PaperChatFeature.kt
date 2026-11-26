@@ -15,6 +15,7 @@ import dev.slne.surf.player.paper.chat.command.replyCommand
 import dev.slne.surf.player.paper.chat.command.slowChatCommand
 import dev.slne.surf.player.paper.chat.command.spyCommand
 import dev.slne.surf.player.paper.chat.command.teamchatCommand
+import dev.slne.surf.player.paper.chat.listener.AdvancementMessageListener
 import dev.slne.surf.player.paper.chat.listener.AsyncChatListener
 import dev.slne.surf.player.paper.chat.listener.ConnectListener
 import dev.slne.surf.player.paper.chat.listener.DisconnectListener
@@ -69,6 +70,7 @@ object PaperChatFeature : PaperPlayerFeature {
         AsyncChatListener.register()
         DisconnectListener.register()
         ConnectListener.register()
+        AdvancementMessageListener.register()
 
         FunctionalityService.fetch(SurfCoreApi.getCurrentServerName())
     }
