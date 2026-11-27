@@ -8,7 +8,9 @@ import dev.slne.surf.api.paper.inventory.framework.view.onFirstRender
 import dev.slne.surf.api.paper.inventory.framework.view.settings
 import dev.slne.surf.api.paper.inventory.framework.view.surfView
 import dev.slne.surf.core.api.paper.util.toSurfPlayer
+import dev.slne.surf.player.core.client.friends.permission.FriendPermissions
 import dev.slne.surf.player.core.client.profile.menu.own.OwnProfileMenuContent
+import dev.slne.surf.player.paper.profile.menu.friends.openFriendsMenu
 import dev.slne.surf.player.paper.settings.menu.openSettingsMenu
 import dev.slne.surf.player.paper.profile.menu.playClickSound
 import io.papermc.paper.datacomponent.DataComponentTypes
@@ -43,6 +45,13 @@ val ownProfileMenu = surfView(OwnProfileMenuContent.TITLE) {
             withItem(ItemType.POPPY) {
                 displayName(OwnProfileMenuContent.friendsDisplayName)
                 lore(*OwnProfileMenuContent.friendsLore)
+            }
+
+            onClick { click ->
+                if (!click.player.hasPermission(FriendPermissions.COMMAND_LIST)) return@onClick
+
+                click.playClickSound()
+                click.player.openFriendsMenu()
             }
         }
 
