@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import dev.slne.surf.api.core.font.toSmallCaps
 import dev.slne.surf.api.core.messages.adventure.buildText
+import dev.slne.surf.api.core.messages.adventure.sound
 import dev.slne.surf.api.core.messages.adventure.clickRunsCommand
 import dev.slne.surf.core.api.common.server.SurfServer
 import dev.slne.surf.player.api.friends.SurfFriendsApi
@@ -34,13 +35,20 @@ import java.util.concurrent.TimeUnit
  */
 object FriendConnectionNotifier {
     /** Played to friends with friend sounds enabled when a friend comes online. */
-    val ONLINE_SOUND: Sound = Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 0.6f, 1.4f)
+    val ONLINE_SOUND: Sound = friendSound("entity.experience_orb.pickup", pitch = 1.4f)
 
     /** Played to friends with friend sounds enabled when a friend goes offline. */
-    val OFFLINE_SOUND: Sound = Sound.sound(Key.key("block.note_block.bass"), Sound.Source.MASTER, 0.6f, 0.8f)
+    val OFFLINE_SOUND: Sound = friendSound("block.note_block.bass", pitch = 0.8f)
 
     /** Played to players with friend sounds enabled when they receive a friend request. */
-    val REQUEST_SOUND: Sound = Sound.sound(Key.key("block.note_block.pling"), Sound.Source.MASTER, 0.6f, 1.6f)
+    val REQUEST_SOUND: Sound = friendSound("block.note_block.pling", pitch = 1.6f)
+
+    private fun friendSound(key: String, pitch: Float): Sound = sound {
+        type(Key.key(key))
+        source(Sound.Source.MASTER)
+        volume(0.6f)
+        pitch(pitch)
+    }
 
     private val pendingGreetings: Cache<UUID, GreetingState> = Caffeine.newBuilder()
         .expireAfterWrite(1, TimeUnit.MINUTES)

@@ -74,10 +74,14 @@ object OwnProfileMenuContent {
         localColored("Freunde".toSmallCaps(), TextDecoration.BOLD)
     }
 
-    val friendsLore: Array<TextComponent> = arrayOf(
+    val friendsLore: Array<Component> = arrayOf(
         empty(),
         buildText { variableValue("Beschreibung:".toSmallCaps()) },
-        buildText { note("Das Freundesystem ist derzeit nur über Befehle verfügbar.") }
+        settingsDescriptionLine("Freunde und Online-Status ansehen"),
+        settingsDescriptionLine("Freundschaftsanfragen beantworten"),
+
+        empty(),
+        buildText { spacer("Klicke, um das Freundesmenü zu öffnen.") },
     )
 
     val settingsDisplayName: Component = buildText {
