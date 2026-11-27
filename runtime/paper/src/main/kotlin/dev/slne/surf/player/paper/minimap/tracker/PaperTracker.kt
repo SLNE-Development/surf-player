@@ -58,6 +58,9 @@ object PaperTracker {
 
     private val joinedAt = ConcurrentHashMap<UUID, TimeSource.Monotonic.ValueTimeMark>()
 
+    // Players in spectator mode, kept by their own tick so other players' ticks never read a foreign game mode.
+    private val spectating = ConcurrentHashMap.newKeySet<UUID>()
+
     /**
      * Reads the tracker config and starts refreshing the relations of the enabled sources.
      * Called again on reload, off the players' threads; players stop or start seeing each other on their next tick.
@@ -118,6 +121,8 @@ object PaperTracker {
         val trackerOn = everyoneTracksEveryone || relations != null
         if (!trackerOn && !journeyMapRadar && !tracker.hasSent(player.uniqueId)) return
 
+        if (player.gameMode == GameMode.SPECTATOR) spectating.add(player.uniqueId) else spectating.remove(player.uniqueId)
+
         val location = player.location
         val world = player.world.key.asString()
         tracker.update(player.uniqueId, TrackedPosition(location.x, location.y, location.z, world))
@@ -152,7 +157,9 @@ object PaperTracker {
 
     // The maps show whom the viewer sees in the world. Vanish hides vanished players only from the viewers whose
     // level may not see them, a little after they join, so vanished players stay off every map until then.
+    // Players in spectator mode are team members on duty, so they never show up on another player's map.
     private fun isVisibleOnMap(player: Player, target: UUID): Boolean {
+        if (target in spectating) return false
         val targetPlayer = Bukkit.getPlayer(target) ?: return false
         val onlineFor = joinedAt[target]?.elapsedNow() ?: Duration.ZERO
         return MapVisibility.isShown(player.canSee(targetPlayer), onlineFor) {
@@ -181,6 +188,7 @@ object PaperTracker {
 
     fun forget(player: Player) {
         joinedAt.remove(player.uniqueId)
+        spectating.remove(player.uniqueId)
         tracker.forget(player.uniqueId)
         journeyMapTracker.forget(player.uniqueId)
         relations?.forget(player.uniqueId)
