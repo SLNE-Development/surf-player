@@ -1,5 +1,6 @@
 package dev.slne.surf.player.core.client.settings.menu
 
+import dev.slne.surf.player.api.settings.setting.AdvancementMessageVisibility
 import dev.slne.surf.player.api.settings.setting.SettingKeys
 import net.kyori.adventure.key.Key
 
@@ -18,6 +19,17 @@ val settingKeyMappings = mapOf(
         "Zeigt Todesnachrichten im Chat an",
         Key.key("red_bed"),
         SettingCategory.CHAT,
+    ),
+    SettingKeys.CHAT_ADVANCEMENT_MESSAGES to SettingKeyDisplay(
+        "Fortschrittsnachrichten",
+        "Legt fest, welche Fortschrittsnachrichten du im Chat siehst",
+        Key.key("experience_bottle"),
+        SettingCategory.CHAT,
+        options = listOf(
+            SettingOption(AdvancementMessageVisibility.ALL.name, "Alle"),
+            SettingOption(AdvancementMessageVisibility.OWN.name, "Nur eigene"),
+            SettingOption(AdvancementMessageVisibility.NONE.name, "Aus"),
+        ),
     ),
     SettingKeys.DIRECT_MESSAGES to SettingKeyDisplay(
         "Private Nachrichten",

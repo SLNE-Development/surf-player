@@ -58,6 +58,21 @@ class SettingKey<T : Any>(
          */
         fun ofString(key: Key, defaultValue: String = ""): SettingKey<String> =
             SettingKey(key, defaultValue, { it }, { it })
+
+        /**
+         * Creates a [SettingKey] for the constants of the enum [E], stored by name. A stored value
+         * that names no constant of [E] reads as [defaultValue].
+         */
+        inline fun <reified E : Enum<E>> ofEnum(key: Key, defaultValue: E): SettingKey<E> =
+            SettingKey(
+                key,
+                defaultValue,
+                { it.name },
+                { value ->
+                    enumValues<E>().firstOrNull { it.name.equals(value, ignoreCase = true) }
+                        ?: defaultValue
+                },
+            )
     }
 }
 

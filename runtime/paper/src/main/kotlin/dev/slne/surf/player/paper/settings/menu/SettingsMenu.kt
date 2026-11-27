@@ -128,7 +128,8 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
             }
 
             onItemRender {
-                val currentValue = SettingsMenuDrafts.currentValue(player.uniqueId, playerSetting)
+                val currentOption =
+                    SettingsMenuDrafts.currentOption(player.uniqueId, playerSetting, display)
 
                 item = buildItem(display.icon.toMaterial()) {
                     displayName {
@@ -141,23 +142,20 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
                             spacer(display.description)
                         }
                         emptyLine()
-                        line {
-                            if (currentValue) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
-                            appendSpace()
-                            variableValue("Aktiviert")
-                            if (currentValue) decorate(TextDecoration.BOLD)
-                        }
-                        line {
-                            if (!currentValue) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
-                            appendSpace()
-                            variableValue("Deaktiviert")
-                            if (!currentValue) decorate(TextDecoration.BOLD)
+                        for (option in display.options) {
+                            val selected = option == currentOption
+                            line {
+                                if (selected) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
+                                appendSpace()
+                                variableValue(option.label)
+                                if (selected) decorate(TextDecoration.BOLD)
+                            }
                         }
                     }
                 }
             }
             onClick { click ->
-                SettingsMenuDrafts.toggle(click.player.uniqueId, playerSetting)
+                SettingsMenuDrafts.selectNext(click.player.uniqueId, playerSetting, display)
 
                 click.player.playSound(true) {
                     type(BukkitSound.UI_BUTTON_CLICK)

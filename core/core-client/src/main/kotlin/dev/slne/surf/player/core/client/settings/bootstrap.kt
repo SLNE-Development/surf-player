@@ -8,6 +8,7 @@ import dev.slne.surf.player.core.client.settings.service.SettingsService
 private val builtinSettings: List<SettingKey<*>> = listOf(
     SettingKeys.CHAT_PINGS,
     SettingKeys.CHAT_DEATH_MESSAGES,
+    SettingKeys.CHAT_ADVANCEMENT_MESSAGES,
     SettingKeys.DIRECT_MESSAGES,
     SettingKeys.CONNECTION_MESSAGES,
     SettingKeys.LOBBY_SCROLL_SOUND,
