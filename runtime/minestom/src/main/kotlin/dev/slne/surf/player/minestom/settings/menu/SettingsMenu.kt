@@ -126,38 +126,37 @@ val settingsCategoryView: AbstractPaginatedSurfView = paginatedSurfView("Einstel
             }
 
             onItemRender {
-                val currentValue = SettingsMenuDrafts.currentValue(player.uuid, playerSetting)
+                val currentOption =
+                    SettingsMenuDrafts.currentOption(player.uuid, playerSetting, display)
 
                 item = buildItem(display.icon.toMaterial()) {
                     displayName {
                         white(display.displayName.toSmallCaps())
                     }
 
-                    val lines = listOf(
+                    val optionLines = display.options.map { option ->
+                        val selected = option == currentOption
+                        buildText {
+                            if (selected) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
+                            appendSpace()
+                            variableValue(option.label)
+                            if (selected) decorate(TextDecoration.BOLD)
+                        }
+                    }
+
+                    val lines = (listOf(
                         Component.empty(),
                         buildText {
                             spacer(display.description)
                         },
                         Component.empty(),
-                        buildText {
-                            if (currentValue) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
-                            appendSpace()
-                            variableValue("Aktiviert")
-                            if (currentValue) decorate(TextDecoration.BOLD)
-                        },
-                        buildText {
-                            if (!currentValue) variableValue(SELECTED_MARKER) else darkSpacer(OPTION_MARKER)
-                            appendSpace()
-                            variableValue("Deaktiviert")
-                            if (!currentValue) decorate(TextDecoration.BOLD)
-                        }
-                    ).map { it.decoration(TextDecoration.ITALIC, false) }
+                    ) + optionLines).map { it.decoration(TextDecoration.ITALIC, false) }
 
                     lore(*lines.toTypedArray())
                 }
             }
             onClick { click ->
-                SettingsMenuDrafts.toggle(click.player.uuid, playerSetting)
+                SettingsMenuDrafts.selectNext(click.player.uuid, playerSetting, display)
 
                 click.player.playSound(true) {
                     type(SoundEventKeys.UI_BUTTON_CLICK.key())

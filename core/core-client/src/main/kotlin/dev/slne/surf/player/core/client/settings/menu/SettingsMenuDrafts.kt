@@ -9,31 +9,48 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * The settings players toggled in the settings menu. They are only stored once the player closes
- * the menu, so toggling a setting back and forth costs no request.
+ * The settings players changed in the settings menu. They are only stored once the player closes
+ * the menu, so clicking through the options of a setting costs no request.
  */
 object SettingsMenuDrafts {
     private val drafts = ConcurrentHashMap<UUID, ConcurrentHashMap<String, PlayerSetting>>()
 
     /**
-     * The boolean settings of [category] with the values of [playerUuid], in display order.
+     * The settings of [category] with the values of [playerUuid], in display order. Only settings
+     * whose default value is one of their menu options are shown.
      */
     fun categorySettings(playerUuid: UUID, category: SettingCategory): List<PlayerSetting> =
         SettingsService.getLoadedSettingsWithDefaults(playerUuid)
-            .filter { it.setting.defaultValue.toBooleanStrictOrNull() != null }
-            .filter { settingKeyMappings[it.setting.name]?.category == category }
+            .filter { playerSetting ->
+                val display = settingKeyMappings[playerSetting.setting.name]
+                display?.category == category &&
+                        display.optionOf(playerSetting.setting.defaultValue) != null
+            }
             .sortedBy { settingKeyMappings.keys.indexOf(it.setting.name) }
 
-    /** The value [playerUuid] sees for [playerSetting], including changes not yet saved. */
-    fun currentValue(playerUuid: UUID, playerSetting: PlayerSetting): Boolean =
-        drafts[playerUuid]?.get(playerSetting.setting.name)?.getBoolean()
-            ?: playerSetting.getBoolean()
+    /**
+     * The option [playerUuid] sees selected for [playerSetting], including changes not yet saved.
+     * A stored value that is none of the options shows as the option of the default value.
+     */
+    fun currentOption(
+        playerUuid: UUID,
+        playerSetting: PlayerSetting,
+        display: SettingKeyDisplay,
+    ): SettingOption {
+        val value = drafts[playerUuid]?.get(playerSetting.setting.name)?.settingValue
+            ?: playerSetting.settingValue
 
-    fun toggle(playerUuid: UUID, playerSetting: PlayerSetting) {
-        val newValue = !currentValue(playerUuid, playerSetting)
+        return display.optionOf(value)
+            ?: display.optionOf(playerSetting.setting.defaultValue)
+            ?: display.options.first()
+    }
+
+    /** Selects the option after the current one of [playerSetting] for [playerUuid]. */
+    fun selectNext(playerUuid: UUID, playerSetting: PlayerSetting, display: SettingKeyDisplay) {
+        val newValue = display.nextValue(currentOption(playerUuid, playerSetting, display).value)
 
         drafts.computeIfAbsent(playerUuid) { ConcurrentHashMap() }[playerSetting.setting.name] =
-            PlayerSetting(playerSetting.setting, newValue.toString())
+            PlayerSetting(playerSetting.setting, newValue)
     }
 
     /**

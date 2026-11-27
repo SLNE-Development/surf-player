@@ -7,7 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 
 object AdvancementListener : Listener {
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     fun onAdvancementDone(event: PlayerAdvancementDoneEvent) {
         if (event.player.isVanished) {
             event.message(null)

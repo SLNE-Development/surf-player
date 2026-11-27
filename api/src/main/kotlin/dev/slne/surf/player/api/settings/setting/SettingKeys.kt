@@ -10,8 +10,10 @@ object SettingKeys {
     val CHAT_PINGS = SettingKey.ofBoolean(key("chat", "pings"), defaultValue = true)
     val CHAT_DEATH_MESSAGES =
         SettingKey.ofBoolean(key("chat", "death-messages"), defaultValue = true)
-    val CHAT_ADVANCEMENTS =
-        SettingKey.ofBoolean(key("chat", "advancements"), defaultValue = true)
+    val CHAT_ADVANCEMENT_MESSAGES = SettingKey.ofEnum(
+        key("chat", "advancement-messages"),
+        defaultValue = AdvancementMessageVisibility.ALL
+    )
     val DIRECT_MESSAGES =
         SettingKey.ofBoolean(key("chat", "direct-messages"), defaultValue = true)
     val CONNECTION_MESSAGES = SettingKey.ofBoolean(
